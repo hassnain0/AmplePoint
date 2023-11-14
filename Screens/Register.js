@@ -8,19 +8,15 @@ import {
   Image,
 } from 'react-native';
 import { StyleSheet,} from 'react-native';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import {Colors, Metrics} from '../themes';
 import MainTextInput from '../components/MainTextInput';
 import NetInfo from '@react-native-community/netinfo'
 import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
-import { auth, db } from './Firebase';
-import { createUserWithEmailAndPassword } from '@firebase/auth';
-import { CheckBox } from 'react-native-elements';
 import Login from './Login';
+import OTP from './OTP';
  
-
 const Register=({navigation})=> {
  const [isChecked,setChecked]=useState(false)
  const [loader,setLoader]=React.useState(false);
@@ -91,6 +87,7 @@ const Register=({navigation})=> {
   };
   const onRegister = () => {
     setLoader(true);
+navigation.navigate('OTP')
     if (!_validation()) {
       return false;
     } else{
@@ -158,11 +155,10 @@ const Register=({navigation})=> {
 
   return (
       <SafeAreaView style={styles.container}>
+     <ScrollView>
          <View style={styles.logoView}>
-         <Text style={{fontSize:30,color:'black'}}>Register Screen</Text>
+        <Image style={{width:Metrics.ratio(300),height:Metrics.ratio(70)}} source={require('../assets/Ample.png')}></Image>
         </View>
-        
-        <ScrollView>
           <View style={styles.registeredContainer}>
             <MainTextInput
              
@@ -239,8 +235,7 @@ const Register=({navigation})=> {
             keyboardType="number-pad"
             autoCapitalize={'none'}
           />
-
-            <View style={styles.bottomContainer}>
+     <View style={styles.bottomContainer}>
               <View style={styles.buttonView}>
                 <Button loader={loader}
                   btnPress={onRegister}
@@ -250,16 +245,16 @@ const Register=({navigation})=> {
             </View>
             
           </View>
-          
-         
-            <View style={styles.socialButtonContainer}>
-          
-            <View style={{flexDirection:'row',}}>
-  <Text style={{ color: 'black', fontSize: 15 }}>Have an account?</Text>
-  <TouchableOpacity onPress={LoginScreen} style={{ paddingRight: Metrics.ratio(10) }}>
-    <Text style={{ color: '#FF2F00', fontSize: 15, fontWeight: '600' }}>Login</Text>
-  </TouchableOpacity>
+<View style={styles.socialButtonContainer}>
+<View style={{flexDirection:'row',}}>
 </View>
+        </View>
+        <Text style={{ color: 'black', fontSize: 15,fontWeight:'500',left:Metrics.ratio(120) }}>Continue with Google</Text>
+        <View style={styles.socialButtonContainer}>
+          
+          <TouchableOpacity style={styles.socialButton}>  
+            <Image source={require('../assets/google.png')} style={styles.socialButtonIcon} />
+          </TouchableOpacity>
         </View>
         </ScrollView>
         <Toast ref={ref => Toast.setRef(ref)} />
@@ -293,9 +288,7 @@ const styles=StyleSheet.create({
       logoView: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: Metrics.ratio(5),
-    
-        marginBottom: Metrics.ratio(20),
+        marginTop: Metrics.ratio(5)
       },
       textHeader: {
         textAlign:'center',
@@ -306,7 +299,8 @@ const styles=StyleSheet.create({
         paddingLeft: Metrics.ratio(20),
       },
       socialButtonContainer: {
-        marginTop:Metrics.ratio(20),
+        marginTop:Metrics.ratio(10),
+        paddingBottom:Metrics.ratio(20),
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         
@@ -408,10 +402,7 @@ borderRadius:Metrics.ratio(30),
         paddingLeft: Metrics.ratio(5),
         paddingRight: Metrics.ratio(5),
       },
-      registeredContainer: {
-        marginTop: Metrics.ratio(10),
-      },
-      rowView: {
+rowView: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
@@ -435,4 +426,3 @@ borderRadius:Metrics.ratio(30),
     }
 })
 export default Register;
-

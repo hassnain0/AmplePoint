@@ -1,314 +1,264 @@
-import { useFocusEffect } from "@react-navigation/native"
-import { BackHandler, StyleSheet } from "react-native";
-import { Colors, Metrics } from '../themes';
-import  React, { useEffect } from 'react';
-import {View, Text, SafeAreaView, TouchableOpacity, Image,Alert} from 'react-native';
-import MainTextInput from '../components/MainTextInput';
-import Icon from '../helpers/Icons';
+import React,{useState} from 'react';
+import {View,Text, StyleSheet,Image,TouchableOpacity, ImageBackground} from 'react-native';
+import { Metrics } from '../themes';
 import Button from '../components/Button';
-import Toast from 'react-native-toast-message';
+import MainTextInput from '../components/MainTextInput';
+import Register from './Register';
 import util from '../helpers/util';
-import { signInWithEmailAndPassword, } from "@firebase/auth";
-import NetInfo from '@react-native-community/netinfo'
-import { useState } from "react";
-import Register from "./Register";
-import Home from "./Home";
-import { auth,  } from "./Firebase";
+import Toast from 'react-native-toast-message';
 
 
-const   Login=({navigation}) =>{
-
-  const [loader, setLoader] = React.useState(false);
-  const [state, setState] = React.useState({email: '', password: ''});
+const Login=({navigation})=>{
   const _handleTextChange = (name, val) => {
     setState({
       ...state,
       [name]: val,
     });
   };
-
-const [isConnected,setIsConnected]=useState(true)
-                   
- 
-React.useEffect(()=>{
-  
-  const unsubscribe=NetInfo.addEventListener(state=>{
-  setIsConnected(state.isConnected);
-  })
-  return ()=>{
-    unsubscribe();
+  const SignUPScreen=()=>{
+    navigation.navigate("Register")
   }
-}) 
-
-const RegisterScreen=()=>{
-  navigation.navigate('Register')
-}
-// const checkUser=async(email)=>{
-//   try {
-//     const mechanicsCollection = db.collection('Registration');
-//     const querySnapshot = await mechanicsCollection.where('Email', '==', email).get();
-
-    
-//   // Check if there's a matching document
-//   if (!querySnapshot.empty) {
-//     // Assuming there's only one matching document
-//     const doc = querySnapshot.docs[0];
-
-//     // Access the "Identity" field from the document data
-//     const value = doc.data().Identity;
-   
-    
-//         if (doc.exists) {
-       
-//           if(value=='Admin'){
-//           return value;
-//           }
-//           else if(value=='User'){
-        
-//             return value;
-//           }
-//           else if(value=='Mechanic'){
-//             if(doc.data().Status=='Enabled'){
-//               return value;
-//             }
-//             else
-//             { 
-//               util.errorMsg("Please wait until adminsitrator allows you") 
-//               return  false;
-//               }
-//           }
-//           else{
-//             return false
-//           }
-//     }
-//   };
-
-//   } catch (error) {
-//     console.error('Error fetching identity:', error);
-//     return null; // Return null in case of an error.
-//   }
-// }
-const SignUpUser=()=>{
-  navigation.navigate("Register")
-}
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const onBackPress = () => {
-        Alert.alert(
-          'Exit App',
-          'Are you sure you want to exit?',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => null,
-              style: 'cancel'
-            },
-            {
-              text: 'Exit',
-              onPress: () => BackHandler.exitApp()
-            }
-          ],
-          { cancelable: false }
-        );
-        return true;
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [])
-  );
-  const loginUserCheck = async () => {
-    if(!isConnected){
-      util.errorMsg("Please connect Internet Connection")
-      return false;
-    }
-    setLoader(true)
-    try {
-      if (state.email == '') {
-        setLoader(false)
-        util.errorMsg('Enter Email Address');
-        return;
-      } else if (state.password == '') {
-        setLoader(false)
-        util.errorMsg('Enter Password');
-        return;
-      }
-      await login();
-    } catch (error) {
-      console.log('exception', error);
-    }
-  };
-
-  const login = async () => {
-    navigation.navigate("GiftCard");
-    try {
-      
-      
-      
-    } catch (e) {
+  const [loader,setLoader]=useState(false);
+  const [isFavorite, setFavorite] = useState(false);
+    const [state, setState] = React.useState({
+      email: '',
+      password: '',  
+      name: '',
+      birthday:'',
+     confirmPassword:'',
   
-      console.log('Exception => login', e);
+    });
+
+    const _validation = () => {
+      const {email, name, confirmPassword,password,birthday } =
+        state;
+    
+      if (util.stringIsEmpty(email)) {
+          util.errorMsg('Enter Email Address');
+          setLoader(false);
+          return false;
+        }
+        if (util.stringIsEmpty(password)) {
+          util.errorMsg('Enter Password');
+          setLoader(false);
+          return false;
+        }
+     
+      return true;
+    };
+    const onRegister = () => {
+      setLoader(true);
+  navigation.navigate('OTP')
+      if (!_validation()) {
+        return false;
+      } 
     }
+    const HomeScreen=()=>{
+      navigation.navigate("DemoScreen")
+    }
+return (
 
-
-  };
-
-  const resetForm=()=>{
-    setState({
-      email:'',
-      password:'',
-    })
-  }
-  return (
-   
-      <SafeAreaView style={styles.container}>
-        <View style={styles.logoView}>
-       <Text style={{fontSize:30,color:'black'}}>Login Screen</Text>
-        </View>
-        
-        <MainTextInput
-          Icon={
-            <Icon.MaterialCommunityIcons
-              name="email"
-              style={styles.iconStyle}
-            />
-          }
-          onChangeText={t => _handleTextChange('email', t)}
-          value={state.email}
-          label={'Email'}
-          
-          placeholder=""
-          keyboardType={'email-address'}
-          autoCapitalize={'none'}
-        />
-
-        <MainTextInput
-          secureTextEntry={true}
-          onChangeText={t => _handleTextChange('password', t)}
-          value={state.password}
-          label={'Password'}
-          color={Colors.themeColor}
-          autoCapitalize={'none'}
-          rightIcon={true}
-          passowrdhide={true}
-        />
-
-        <View style={styles.bottomContainer}>
-          <View style={styles.buttonView}>
-            <Button loader={loader} btnPress={login}  label={'Login'} />
-          </View>
-        
-          
-        <TouchableOpacity
-           
-            style={styles.RegisterView}>
-            <Text style={styles.registerText}>Forgot Password ?</Text>
-          </TouchableOpacity>
-          <View style={{flexDirection:'row',paddingTop:Metrics.ratio(20), alignContent:'center',alignSelf:'center'}}>
-  <Text style={{ color: 'black', fontSize: 15 , }}>Don't have an account?</Text>
-  <TouchableOpacity onPress={RegisterScreen} style={{ paddingRight: Metrics.ratio(10) }}>
-    <Text style={{ color: '#FF2F00', fontSize: 15, fontWeight: '600'  }}>Sign UP</Text>
+  <ImageBackground style={styles.ImageContainer} source={require('../assets/BackgroundImage.png')}>
+  <TouchableOpacity onPress={SignUPScreen} style={styles.TouchContainer}>
+  <Text style={styles.TextContainer}>Sign In</Text>
   </TouchableOpacity>
+  <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',top:Metrics.ratio(320), padding: Metrics.ratio(20)}}>
+  <View style={styles.ViewContainer2}>
+    <Text style={{fontSize: 30, color: 'black', fontWeight: '500', paddingLeft: Metrics.ratio(30)}}>Login</Text>
+    
+    <MainTextInput
+      onChangeText={t => _handleTextChange('email', t)}
+      value={state.birthday}
+      label="Email"
+      placeholder=""
+      autoCapitalize={'none'}
+    />
+    
+    <MainTextInput
+      onChangeText={t => _handleTextChange('password', t)}
+      value={state.birthday}
+      label="Password"
+      placeholder=""
+      autoCapitalize={'none'}
+    />
+
+    <View style={styles.buttonView}>
+      <Button
+        loader={loader}
+        btnPress={HomeScreen}
+        label={"SignUp"}
+      />
+    </View>
+
+    <TouchableOpacity>
+      <Image style={styles.trolleyIcon} source={require('../assets/Lock.png')}></Image>
+      <Text style={{fontSize: 13, color: 'black', paddingLeft: Metrics.ratio(130), bottom: Metrics.ratio(4), fontWeight: '500'}}>Forgot Password</Text>
+    </TouchableOpacity>
+
+    <View>
+    <View style={styles.socialButtonContainer}>
+<View style={{flexDirection:'row',}}>
 </View>
         </View>
-        
-        <Toast ref={ref => Toast.setRef(ref)} />
-      </SafeAreaView>
-   
-  );
+        <Text style={{ color: 'black', fontSize: 15,fontWeight:'500',left:Metrics.ratio(100) }}>Continue with Google</Text>
+        <View style={styles.socialButtonContainer}>
+          
+          <TouchableOpacity style={styles.socialButton}>  
+            <Image source={require('../assets/google.png')} style={styles.socialButtonIcon} />
+          </TouchableOpacity>
+        </View>
+    </View>
+  </View>
+</View>
+<Toast ref={ref => Toast.setRef(ref)} />
+</ImageBackground>
+  
+)
 }
-
 const styles=StyleSheet.create({
-    container: {
-        flex: 1,
-        // backgroundColor: Colors.background.primary,
-      },
-      scrollContainer: {
-        flex: 1,
-        paddingHorizontal: Metrics.smallMargin,
-      },
-      logoView: {
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: Metrics.ratio(10),
-        height: Metrics.screenHeight * 0.3,
-        // marginBottom: Metrics.ratio(10),
-        // backgroundColor: "red",
-      },
+  ViewContainer2:{
+  borderRadius:Metrics.ratio(20),
+  backgroundColor:'#F0F1EC',
+  },
+  socialButtonContainer: {
+    marginTop:Metrics.ratio(10),
+    paddingBottom:Metrics.ratio(20),
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
     
-      logo: {
-        resizeMode: "contain",
-        width: Metrics.ratio(200),
-        height: Metrics.ratio(900),
-      },
-      logoText: {
-        color: Colors.descriptionColor,
-        marginTop: Metrics.ratio(-20),
-        marginBottom: Metrics.ratio(20),
-      },
-      forgotPassowordView: {
-        alignItems: "flex-end",
-        padding: Metrics.ratio(10),
-      },
-      forgotPasswordText: {
-        color: Colors.descriptionColor,
-        textDecorationLine: "underline",
-        fontSize: Metrics.ratio(12),
-      },
-      buttonView: {
+  },
+  socialButton: {
+    backgroundColor: 'white', // Set your desired background color for the buttons
+    width: Metrics.vw * 18,
+    height: Metrics.vh * 6,
+    borderRadius: Metrics.ratio(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  socialButtonIcon: {
+    width: Metrics.ratio(95),
+    height: Metrics.ratio(25),
+    resizeMode: 'contain',
+  }, 
+  buttonView: {
+    top:Metrics.ratio(15),
         height:Metrics.vh*5,
         backgroundColor:'#FF2F00',
-borderRadius:Metrics.ratio(70),
-        marginTop: Metrics.ratio(20),
-        width: Metrics.vw * 80,
+        borderRadius:Metrics.ratio(70),        
+        marginBottom: Metrics.ratio(10),
+        width: Metrics.vw * 50,
         marginHorizontal: Metrics.vw * 20,
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center'
       },
-      RegisterView:{ 
-      
+    ViewContainer:{
+      borderRadius:Metrics.ratio(20),
+      backgroundColor:'#FDFDFD',
+    },
+    ImageContainer: {
+      // Your image styles here
+      width: Metrics.ratio(300), // Adjust as needed
+      height: Metrics.ratio(200), // Adjust as needed
 
-        marginTop: Metrics.ratio(10),
-        width: Metrics.vw * 60,
-        marginHorizontal: Metrics.vw * 20,
-        justifyContent: "center",
-        alignItems: "center",
+    },
+    TextContainer: {
+      fontSize:15,
+      color: '#FF4001', // Optional: set the text color
+      fontWeight:'bold'
+    },
+    TouchContainer:{
+      position: 'absolute',
+      top: Metrics.ratio(5), // Adjust as needed
+      right: 5, // Adjust as needed// Optional: add a background color to make the text more readable
+      paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+    },
+    Text2Container:{
+        paddingTop:Metrics.ratio(20),
+        paddingLeft:Metrics.ratio(190),
+        fontSize:15,
+        color:'#EC6A31',
+        fontWeight:'bold', 
       },
-      registerText:{
-        marginLeft:Metrics.smallMargin,
-        textAlign:'right',
-        paddingTop:Metrics.ratio(10),
-        fontSize:Metrics.ratio(16),
+      ImageContainer:{
+       backgroundColor:'white',
+        width: Metrics.ratio(380), 
+        height: Metrics.ratio(420),
       },
-      iconStyle: {
-        fontSize: Metrics.ratio(20),
+      textContainer: {
+        fontSize: 20,
+        fontWeight: 'bold',
         color: '#083166',
+        marginLeft: Metrics.ratio(20),
       },
-      bottomContainer: {
-        flex: 1,
-        marginBottom: Metrics.baseMargin,
-        // backgroundColor: "red",
-      },
-      socialButtonContainer: {
+      productList: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginTop: Metrics.ratio(20),
-      },
-      socialButton: {
-        backgroundColor: 'white', // Set your desired background color for the buttons
-        width: Metrics.vw * 18,
-        height: Metrics.vh * 6,
-        borderRadius: Metrics.ratio(10),
-        justifyContent: 'center',
         alignItems: 'center',
       },
-      socialButtonIcon: {
-        width: Metrics.ratio(95),
-        height: Metrics.ratio(25),
-        resizeMode: 'contain',
-      }, 
+      
+      productItem: {
+        backgroundColor:'#FFFF',
+        margin: Metrics.ratio(10),
+        borderRadius:5,
+        elevation:3
+      },
+      productImage: {
+        alignContent:'center',
+        alignItems:'center',
+        alignSelf:'center',
+        marginTop:Metrics.smallMargin,
+        width: Metrics.ratio(80),
+        height: Metrics.ratio(80),
+        
+      },
+      ProductContainer:{
+        color:'black',
+            },
+      heartButton: {
+        width: Metrics.ratio(30),
+        height: Metrics.ratio(30),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor:'white',
+        borderRadius: Metrics.borderRadius,
+      },
+     
+      trolleyIconContainer: {
+        position: 'absolute',
+        bottom: Metrics.ratio(5),
+        right: Metrics.ratio(5),
+        backgroundColor: 'transparent',
+      },
+    trolleyIcon: {
+    
+    width: Metrics.ratio(20),
+    height: Metrics.ratio(20),
+    left:Metrics.ratio(100),
+    top:Metrics.ratio(15)
+  },
+  colorContainer: {
+    width: Metrics.ratio(15),
+    height: Metrics.ratio(15),
+    borderColor:'black',
+    borderWidth: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:Metrics.ratio(5),
+    margin:Metrics.ratio(1),
+  },
+  OptionContainer:{
+    
+  flexDirection:'row',
+  justifyContent:'left'
+  }  ,
+  SizeContainer:{
+    borderColor:'black',
+    
+    marginLeft:Metrics.ratio(25)
+  },
+  OptionTextContainer:{
+    color:'#E8A08D'
+  }
 })
-export default Login;
-
+export default Login;

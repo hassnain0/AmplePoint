@@ -1,30 +1,34 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {View,Text, StyleSheet,FlatList,ScrollView,Image, TouchableOpacity,} from 'react-native';
 import { Metrics } from '../themes';
+import GiftDetails from './GiftDetails';
+import axios from 'axios';
 
 
 const products = [
   
-  { id: '1', imageSource: require('../assets/Image1.png'), price:'$ 15 GIFT CARD',text:'$ 15.00',imageSource2: require('../assets/Location.png'), name: ' Havana Express Cuban', },
-   { id: '2', imageSource: require('../assets/Image2.png'), price:'$ 25 GIFT CARD',text:'$ 25.00', imageSource2: require('../assets/Location.png'), imageSource3: require('../assets/Orange.png'), name: ' Havana Express Cuban' },
-   { id: '3', imageSource: require('../assets/Image3.png'),  price:'$ 50 GIFT CARD',text:'$ 50.00',imageSource2: require('../assets/Location.png'), imageSource3: require('../assets/Orange.png'), name: ' Havana Express Cuban'  },
+  { id: '1', imageSource: require('../assets/Gift2.png'),giftPrice:'$15', price:'$ 15 GIFT CARD',text:'$ 15.00',imageSource2: require('../assets/Location.png'), name: ' Havana Express Cuban', },
+   { id: '2', imageSource: require('../assets/Gift2.png'),giftPrice:'$25', price:'$ 25 GIFT CARD',text:'$ 25.00', imageSource2: require('../assets/Location.png'), imageSource3: require('../assets/Orange.png'), name: ' Havana Express Cuban' },
+   { id: '3', imageSource: require('../assets/Gift2.png'),giftPrice:'$50',  price:'$ 50 GIFT CARD',text:'$ 50.00',imageSource2: require('../assets/Location.png'), imageSource3: require('../assets/Orange.png'), name: ' Havana Express Cuban'  },
  
 ];
 
-const ProductItem = ({ product }) => {
 
-    const [isFavorite, setFavorite] = useState(false);
-  const Display=()=>
-  {
-  
-  }  
+const ProductItem = ({ product }) => {
+  console.log("product")
   return (
-        <TouchableOpacity onPress={Display}> 
+        <TouchableOpacity > 
     <View style={styles.productItem}>
      
     <Text style={{fontSize:12,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.price}</Text>
         <View >
-        <Image source={product.imageSource} style={styles.productImage} />
+            <Image source={product.image_name} style={styles.productImage} />
+          <View style={styles.TouchContainer}>
+  <Text style={styles.TextContainer}>{product.giftPrice}</Text>
+  </View>
+  <View style={styles.TouchContainer2}>
+  <Text style={styles.TextContainer2}>Gift Card</Text>
+  </View>
         </View>
       <Text style={styles.ProductContainer}>{product.name}</Text>
        <Text >2590 E Tropicana Ave, Las Vegas,</Text>
@@ -47,47 +51,79 @@ const ProductItem = ({ product }) => {
   );
 };
 
-const DemoScreen=()=>{
-    console.log("Hello It works")
-const handleProductPress = (product) => {
-    console.log(`Product pressed: ${product.name}`);
-    // Perform additional actions as needed
-  };
+const DemoScreen=({navigation})=>{
+  useEffect(()=>{
+    getProductDetails();
+  },[])
+
+  const [storeproducts,setStoreProducts]=useState('');
+const DetailShow=()=>{
+  navigation.navigate('GiftDetails')
+}
+
+const getProductDetails = async () => {
+      const vendorId = 182;
+      const page = 1;
+       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller'; 
+        await axios.get(apiUrl, {
+          params: {
+            vendor_id: vendorId,
+            page: page
+          }
+        })
+        .then(response => {
+          // Handle the successful response
+          console.log('Response:', response.data);
+          if (setStoreProducts && typeof setStoreProducts === 'function') {
+            setStoreProducts(response.data);
+          }
+          
+        })
+        .catch(error => {
+          // Handle the error
+          console.error('Error:', error);
+        });
+        console.log("Product Data",storeproducts);
+    }
+
     return (
   <ScrollView>
     <View >
       
   
     <View style={styles.productList}>
-    <FlatList
-            data={products}
+      <TouchableOpacity onPress={DetailShow}>
+<FlatList
+            data={storeproducts}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <ProductItem product={item} onPress={handleProductPress} />
+              <ProductItem product={item}  />
             )}/>
-      
+
+      </TouchableOpacity>
+
         </View>
         <View style={styles.productList}>
       
       <FlatList
-        data={products}
+        data={storeproducts}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductItem product={item}  onPress={handleProductPress}/>}
+        renderItem={({ item }) => <ProductItem product={item}  />}
       />
       
     </View>
     <View style={styles.productList}>
       
       <FlatList
-        data={products}
+        data={storeproducts}
         horizontal
-        showsHorizontalScrollIndicator={false}
+        showsHori5ontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductItem product={item}  onPress={handleProductPress}/>}
+        renderItem={({ item }) => <ProductItem product={item}  />}
       />
     </View>
     </View>
@@ -95,15 +131,10 @@ const handleProductPress = (product) => {
 )
 }
 const styles=StyleSheet.create({
-    TextContainer:{
-        fontSize:20,
-        fontWeight:'bold', 
-        
-        left:Metrics.ratio(20),
-      },
+   
       ImageContainer:{
-        width: Metrics.ratio(400), 
-        height: Metrics.ratio(150),
+        width: Metrics.ratio(200), 
+        height: Metrics.ratio(130),
         borderRadius:20, 
       },
       textContainer: {
@@ -116,12 +147,34 @@ const styles=StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
       },
+      TouchContainer2:{
+        position: 'absolute',
+        top: Metrics.ratio(10), // Adjust as needed
+        right: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
+        paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+      },
+      TextContainer2:{
+        fontSize:20,
+        color: 'black', // Optional: set the text color
+        fontWeight:'bold'
+      },
       
       productItem: {
         backgroundColor:'#FFFF',
         margin: Metrics.ratio(10),
         borderRadius:5,
         elevation:3
+      },
+      TextContainer: {
+        fontSize:20,
+        color: 'black', // Optional: set the text color
+        fontWeight:'bold'
+      },
+      TouchContainer:{
+        position: 'absolute',
+        bottom: Metrics.ratio(10), // Adjust as needed
+        left: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
+        paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       productImage: {
         borderRadius:10,
@@ -130,7 +183,7 @@ const styles=StyleSheet.create({
         alignSelf:'center',
         marginTop:Metrics.smallMargin,
         width: Metrics.ratio(200),
-        height: Metrics.ratio(130),
+        height: Metrics.ratio(180),
         
       },
       ProductContainer:{
