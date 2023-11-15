@@ -5,15 +5,40 @@ import Button from '../components/Button';
 
 
 const GiftDetails=()=>{
-    const [isFavorite, setFavorite] = useState(false);
+ 
+    
+  const starWidth = (1000 / 5) * 20;
 
-    const toggleFavorite = () => {
-      setFavorite(!isFavorite);
-    };
-  
+  const renderStar = () => {
+    return (
+      <View style={{ overflow: 'hidden', width: Metrics.ratio(100), height: Metrics.ratio(100) }}>
+        <Text style={{ color: 'gold', fontSize: 50, width: 40 }}>
+          ★
+        </Text>
+        {/* <Text style={{ color: 'black', fontSize: 30, position: 'absolute' }}>
+          ★
+        </Text> */}
+      </View>
+    );
+  };
+
+  const renderStars = () => {
+    const stars = [];
+    for (let i = 5; i >= 1; i--) {
+      stars.push(
+        <View key={i} style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.starText}>{i}</Text>
+          <Text style={i <= 10? styles.starFilled : styles.starEmpty}>★</Text>
+        </View>
+      );
+    }
+    return stars;
+  };
+
 return (
   <ScrollView>
-    <View>
+      <View>
+    <View >
    <View style={styles.ViewContainer}>
    
     <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
@@ -42,18 +67,20 @@ return (
         }}>By:Cafe De Manila</Text>
         <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, flexDirection:'row'}}>
+<Image source={require('../assets/ColorOptions.png')} style={{width:Metrics.ratio(29),height:Metrics.ratio(27),top:Metrics.ratio(5),left:Metrics.ratio(15)}}></Image>
    <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
+        left:Metrics.ratio(15),
         fontSize:15,
         fontWeight:'300',
         color:'black'
         }}>Color Options</Text>
+   <Image source={require('../assets/Sale2.png')} style={{marginLeft:Metrics.ratio(10),width:Metrics.ratio(35),height:Metrics.ratio(10),top:Metrics.ratio(15),left:Metrics.ratio(35)}}></Image>
    <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(190),
+        left:Metrics.ratio(40),
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>Size</Text>
+        }}>Size Chart(US)</Text>
    </View>
    </View>
    <Text style={{  paddingTop:Metrics.ratio(10),
@@ -167,37 +194,107 @@ return (
         fontWeight:'300',
         color:'black'
         }}>CD001</Text>
+
     </View>
-    <View style={{flex:1, flexDirection:'row'}}>
-  <Text  style={{  paddingTop:Metrics.ratio(10),
+<View>
+  <TouchableOpacity>
+  <Text  style={{  top:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(290),
         fontSize:15,
         fontWeight:'600',
         color:'#EC6A31'
         }}>Know More</Text>
-    </View>
+        </TouchableOpacity>
+  </View>    
    </View>
-   <View style={{paddingTop:Metrics.ratio(20)}}> 
+   <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
     <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20}}>Rating & Reviews</Text>
+    <View style={{paddingLeft:Metrics.ratio(90),}}>
+      <TouchableOpacity>
+        <Text style={{alignItems:'center',borderColor:"black",borderWidth:1,borderRadius:5,color:'black',fontWeight:'400',fontSize:15}}>Write your review</Text>
+        </TouchableOpacity>
+        </View>
+       
    </View>
-   <View style={styles.buttonView}>
+   <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(40),top:Metrics.ratio(20)}}>
+          <Text style={{fontSize:25,color:'black',fontWeight:'500',top:Metrics.ratio(25)}}>5.00</Text>
+          {renderStar()}
+            </View>
+  
+        <View style={{left:Metrics.ratio(70)}}>
+          <Text style={{fontSize:13,color:'black',fontWeight:'400',bottom:Metrics.ratio(20)}}>Average Customer </Text>
+          <Text style={{fontSize:13,color:'black',fontWeight:'400',bottom:Metrics.ratio(20),left:Metrics.ratio(30)}}>Rating</Text>
+          
+          <View style={styles.container}>
+          <View style={styles.line} />
+      <View style={styles.starsContainer}>{renderStars()}</View>
+  
+    </View>
+        </View>
+      
+        {/* {[1, 2, 3, 4, 5].map((index) => (
+          <Text key={index} style={{ color: index <= 10 ? 'gold' : 'black', fontSize: 20 }}>
+            ★
+          </Text>
+))} */}
+ 
+        </View>
+        <View style={styles.buttonView}>
                 <Button 
                 //   btnPress={onRegister}
                   label={"Add to Cart"}
                 />
               </View>
     </ScrollView>
+
 )
 }
+//Vertical Line
+
+
 const styles=StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  starsContainer: {
+    flexDirection: 'column', // Render stars vertically
+    right: Metrics.ratio(10), // Adjust the margin as needed
+    bottom:Metrics.ratio(120),
+  },
+  starFilled: {
+    left:Metrics.ratio(5),
+    color: 'gold', // Change the color of filled stars as needed
+    fontSize: 20,
+  },
+  starEmpty: {
+    left:Metrics.ratio(5),
+    color: 'black', // Change the color of empty stars as needed
+    fontSize: 20,
+  },
+  line: {
+    height: '100%', // Adjust the height of the line
+    width: Metrics.ratio(1), // Adjust the width of the line
+    backgroundColor: '#D1D3D0',
+    bottom:Metrics.ratio(100),
+    right:Metrics.ratio(50)
+    // Change the color of the line
+  },
+  ratingText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',  // This ensures the line is placed vertically
+    justifyContent: 'center',  // Adjust as needed
+    alignItems: 'center',  // Adjust as needed
+  },
     buttonView: {
         height:Metrics.vh*5,
         backgroundColor:'#FF2F00',
 borderRadius:Metrics.ratio(70),
-        
-        marginBottom: Metrics.ratio(20),
         width: Metrics.vw * 90,
-        marginHorizontal: Metrics.vw * 20,
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center'

@@ -1,46 +1,40 @@
 import React,{useState,useEffect} from 'react';
-import {View,Text, StyleSheet,FlatList,ScrollView,Image, TouchableOpacity,} from 'react-native';
+import {View,Text, StyleSheet,FlatList, ActivityIndicator,ScrollView,Image, TouchableOpacity,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 
 
-const products = [
-  
-  { id: '1', imageSource: require('../assets/Gift2.png'),giftPrice:'$15', price:'$ 15 GIFT CARD',text:'$ 15.00',imageSource2: require('../assets/Location.png'), name: ' Havana Express Cuban', },
-   { id: '2', imageSource: require('../assets/Gift2.png'),giftPrice:'$25', price:'$ 25 GIFT CARD',text:'$ 25.00', imageSource2: require('../assets/Location.png'), imageSource3: require('../assets/Orange.png'), name: ' Havana Express Cuban' },
-   { id: '3', imageSource: require('../assets/Gift2.png'),giftPrice:'$50',  price:'$ 50 GIFT CARD',text:'$ 50.00',imageSource2: require('../assets/Location.png'), imageSource3: require('../assets/Orange.png'), name: ' Havana Express Cuban'  },
- 
-];
+
+
 
 
 const ProductItem = ({ product }) => {
-  console.log("product")
   return (
         <TouchableOpacity > 
     <View style={styles.productItem}>
      
     <Text style={{fontSize:12,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.price}</Text>
         <View >
-            <Image source={product.image_name} style={styles.productImage} />
+            <Image   source={{ uri: `data:image/png;base64,${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
           <View style={styles.TouchContainer}>
-  <Text style={styles.TextContainer}>{product.giftPrice}</Text>
+  <Text style={styles.TextContainer}>{product.pprice}$</Text>
   </View>
   <View style={styles.TouchContainer2}>
   <Text style={styles.TextContainer2}>Gift Card</Text>
   </View>
         </View>
-      <Text style={styles.ProductContainer}>{product.name}</Text>
-       <Text >2590 E Tropicana Ave, Las Vegas,</Text>
+      <Text style={styles.ProductContainer}>{product.pname}</Text>
+
        <View style={{flex:1, flexDirection:'row'}}>
-       <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >{product.text}</Text>
-       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5}} >
-       <Text style={{color:'#618ED7',fontWeight:'600',}} >50 % Back</Text>
+       <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >$ {product.pprice}</Text>
+       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}} >
+       <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscountprice} % Back</Text>
        </View>
        </View>
        <View>
   <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-    Get <Text style={{color: '#CC8C63'}}>62.50</Text> AmplePoints $<Text style={{color: '#CC8C63'}}>7.50</Text>
+    Get <Text style={{color: '#CC8C63'}}>{product.pamples}</Text> AmplePoints $<Text style={{color: '#CC8C63'}}>7.50</Text>
   </Text>
 </View>
 <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
@@ -52,16 +46,15 @@ const ProductItem = ({ product }) => {
 };
 
 const DemoScreen=({navigation})=>{
+  
   useEffect(()=>{
     getProductDetails();
   },[])
-
-  const [storeproducts,setStoreProducts]=useState('');
-const DetailShow=()=>{
-  navigation.navigate('GiftDetails')
-}
+  const [storeProducts, setStoreProducts] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 const getProductDetails = async () => {
+  try{
       const vendorId = 182;
       const page = 1;
        const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller'; 
@@ -83,53 +76,54 @@ const getProductDetails = async () => {
           // Handle the error
           console.error('Error:', error);
         });
-        console.log("Product Data",storeproducts);
+  }
+  catch(err){
+    setLoading(false);  
+    console.log(err)
     }
+    finally {
+      // Set loading to false when the API call is complete
+      setLoading(false);
+    }
+  }
+
+    const renderFlatList = (data) => (
+      <FlatList
+      data={storeProducts?.data}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      keyExtractor={(item) => item.pid}
+      renderItem={({ item }) => <ProductItem product={item}  />}
+    />
+    );
+    const chunkArray = (array, chunkSize) => {
+      const chunks = [];
+      for (let i = 0; i < array.length; i += chunkSize) {
+        chunks.push(array.slice(i, i + chunkSize));
+      }
+      return chunks;
+    };
+
+    const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
   <ScrollView>
-    <View >
-      
-  
-    <View style={styles.productList}>
-      <TouchableOpacity onPress={DetailShow}>
-<FlatList
-            data={storeproducts}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <ProductItem product={item}  />
-            )}/>
-
-      </TouchableOpacity>
-
+      <View style={styles.container}>
+      {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
-        <View style={styles.productList}>
-      
-      <FlatList
-        data={storeproducts}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductItem product={item}  />}
-      />
-      
-    </View>
-    <View style={styles.productList}>
-      
-      <FlatList
-        data={storeproducts}
-        horizontal
-        showsHori5ontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductItem product={item}  />}
-      />
-    </View>
+      )}
+      {chunkedData.map((chunk, index) => (
+        <View key={index}>
+          {renderFlatList(chunk)}
+        </View>
+      ))}
     </View>
     </ScrollView>
 )
-}
+      }
+
 const styles=StyleSheet.create({
    
       ImageContainer:{
@@ -154,7 +148,7 @@ const styles=StyleSheet.create({
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       TextContainer2:{
-        fontSize:20,
+        fontSize:15,
         color: 'black', // Optional: set the text color
         fontWeight:'bold'
       },
@@ -166,7 +160,7 @@ const styles=StyleSheet.create({
         elevation:3
       },
       TextContainer: {
-        fontSize:20,
+        fontSize:15,
         color: 'black', // Optional: set the text color
         fontWeight:'bold'
       },
