@@ -24,6 +24,7 @@ const Register=({navigation})=> {
     email: '',
     password: '',  
     name: '',
+    Lastname: '',
     birthday:'',
    confirmPassword:'',
 
@@ -52,7 +53,7 @@ const Register=({navigation})=> {
  
 
   const _validation = () => {
-    const {email, name, confirmPassword,password,birthday } =
+    const {email,Lastname, name, confirmPassword,password,birthday } =
       state;
     if (util.stringIsEmpty(name)) {
       util.errorMsg('Enter User Name');
@@ -161,7 +162,6 @@ navigation.navigate('OTP')
         </View>
           <View style={styles.registeredContainer}>
             <MainTextInput
-             
               onChangeText={t => _handleTextChange('name', t)}
               value={state.name}
               label="First Name"

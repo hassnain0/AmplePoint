@@ -69,12 +69,12 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
-    ndkVersion rootProject.ext.ndkVersion
+      ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     
 
-    namespace "com.amplepoint"
+    namespace "com.amplepoint"  
     defaultConfig {
         applicationId "com.amplepoint"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -103,6 +103,9 @@ android {
         }
     }
 }
+project.ext.react = [
+  enableHermes: true  // <- here | clean and rebuild if changing
+]
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin

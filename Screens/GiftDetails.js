@@ -7,7 +7,17 @@ import Button from '../components/Button';
 const GiftDetails=()=>{
  
     
-  const starWidth = (1000 / 5) * 20;
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   const renderStar = () => {
     return (
@@ -207,7 +217,7 @@ return (
   </View>    
    </View>
    <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
-    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20}}>Rating & Reviews</Text>
+    <Text style={{color:'black',fontWeight:'900',left:Metrics.ratio(20),fontSize:20}}>Rating & Reviews</Text>
     <View style={{paddingLeft:Metrics.ratio(90),}}>
       <TouchableOpacity>
         <Text style={{alignItems:'center',borderColor:"black",borderWidth:1,borderRadius:5,color:'black',fontWeight:'400',fontSize:15}}>Write your review</Text>
@@ -233,15 +243,137 @@ return (
         <View>
           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
         </View>
- <View style={{bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(30)}}>Day</Text>
+ <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Day</Text>
+        <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open/CLose</Text>
+        <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(145),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Monday</Text>
+        <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(135),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Tuesday</Text>
+        <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(140),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Wednesday</Text>
+        <Text style={{left:Metrics.ratio(50),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(142),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Thursday</Text>
+        <Text style={{left:Metrics.ratio(65),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(130),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(155),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>        
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Friday</Text>
+        <Text style={{left:Metrics.ratio(85),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(150),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(175),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Saturday</Text>
+        <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(130),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(155),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Sunday</Text>
+        <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open</Text>
+        <Text style={{left:Metrics.ratio(140),top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{left:Metrics.ratio(165),top:Metrics.ratio(10)}}>End Time</Text>
+        </View>
+        <View style={{top:Metrics.ratio(50)}}>
+          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
+          <Text style={{fontSize:15,alignContent:'center',alignSelf:'center',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
+          <Text style={{fontSize:15,alignContent:'center',alignSelf:'center',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(20),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
+          <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
+          <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>6. Cannot be combined with any other offers</Text>
+          <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
+        </View>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ample Points Calculator</Text>
+        <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(40)}}>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(20),
+        fontSize:15,
+        fontWeight:'300',
+        color:'black'
+        }}>Price</Text>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(290),
+        fontSize:15,
+        fontWeight:'500',
+        color:'black'
+        }}>$25.00</Text>
+        </View>
+        <View style={{flex:1,flexDirection:'row'}}>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(20),
+        fontSize:15,
+        fontWeight:'300',
+        color:'black'
+        }}>Buy & Earn</Text>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(215),
+        fontSize:15,
+        fontWeight:'500',
+        color:'black'
+        }}>104.17 Amples</Text>
+        </View>
+        <View style={{flex:1,flexDirection:'row'}}>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(20),
+        fontSize:15,
+        fontWeight:'300',
+        color:'black'
+        }}>Ample Needed to Redeem</Text>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(125),
+        fontSize:15,
+        fontWeight:'500',
+        color:'black'
+        }}>208.33Amples</Text>
+        </View>
+        <View style={{flex:1,flexDirection:'row'}}>
+        <Text style={{  paddingTop:Metrics.ratio(10),
+        left:Metrics.ratio(20),
+        fontSize:15,
+        fontWeight:'300',
+        color:'black'
+        }}>Qty</Text>
+     
+     <View style={styles.container2}>
+      <TouchableOpacity style={styles.button} onPress={decreaseQuantity}>
+        <Image source={require('../assets/Minus.png')} style={styles.icon} />
+      </TouchableOpacity>
+     
+        <Text style={styles.quantityText}>{quantity}</Text>
+
+      <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
+        <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
+      </TouchableOpacity>
+    </View>
+
         </View>
         <View style={styles.buttonView}>
                 <Button 
                 //   btnPress={onRegister}
                   label={"Add to Cart"}
                 />
+              </View>
               </View>
     </ScrollView>
 
@@ -257,7 +389,7 @@ const styles=StyleSheet.create({
   },
   horizontalLine: {
     height: Metrics.ratio(5),
-    width: Metrics.ratio(50), // Adjust the width of the line
+    width: Metrics.ratio(70), // Adjust the width of the line
     backgroundColor: '#D1D3D0', // Change the color of the line
     marginVertical: Metrics.ratio(5),
     left:Metrics.ratio(20),
@@ -271,6 +403,33 @@ const styles=StyleSheet.create({
     left:Metrics.ratio(5),
     color: 'gold', // Change the color of filled stars as needed
     fontSize: 15,
+  },
+  container2: {
+    left:Metrics.ratio(300),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    justifyContent: 'space-around',
+    backgroundColor: '#FF2E00',
+  },
+  button: {
+    backgroundColor: 'white',
+
+    borderRadius: 1,
+  },
+  icon: {
+    width: Metrics.ratio(10),
+    height:  Metrics.ratio(10),
+  },
+  quantityContainer: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+  },
+  quantityText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FF2E00',
   },
   starEmpty: {
     left:Metrics.ratio(5),
