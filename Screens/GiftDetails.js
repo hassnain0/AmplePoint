@@ -15,9 +15,6 @@ const GiftDetails=()=>{
         <Text style={{ color: 'gold', fontSize: 50, width: 40 }}>
           ★
         </Text>
-        {/* <Text style={{ color: 'black', fontSize: 30, position: 'absolute' }}>
-          ★
-        </Text> */}
       </View>
     );
   };
@@ -29,6 +26,8 @@ const GiftDetails=()=>{
         <View key={i} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.starText}>{i}</Text>
           <Text style={i <= 10? styles.starFilled : styles.starEmpty}>★</Text>
+           <View style={styles.horizontalLine} />
+           <Text style={{left:Metrics.ratio(30)}}>5</Text>
         </View>
       );
     }
@@ -216,7 +215,7 @@ return (
         </View>
        
    </View>
-   <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(40),top:Metrics.ratio(20)}}>
+   <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(70),top:Metrics.ratio(20)}}>
           <Text style={{fontSize:25,color:'black',fontWeight:'500',top:Metrics.ratio(25)}}>5.00</Text>
           {renderStar()}
             </View>
@@ -231,13 +230,12 @@ return (
   
     </View>
         </View>
-      
-        {/* {[1, 2, 3, 4, 5].map((index) => (
-          <Text key={index} style={{ color: index <= 10 ? 'gold' : 'black', fontSize: 20 }}>
-            ★
-          </Text>
-))} */}
- 
+        <View>
+          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
+        </View>
+ <View style={{bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),backgroundColor:'#CED0CD'}}>
+        <Text style={{left:Metrics.ratio(30)}}>Day</Text>
+        </View>
         </View>
         <View style={styles.buttonView}>
                 <Button 
@@ -257,26 +255,33 @@ const styles=StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  horizontalLine: {
+    height: Metrics.ratio(5),
+    width: Metrics.ratio(50), // Adjust the width of the line
+    backgroundColor: '#D1D3D0', // Change the color of the line
+    marginVertical: Metrics.ratio(5),
+    left:Metrics.ratio(20),
+  },
   starsContainer: {
     flexDirection: 'column', // Render stars vertically
-    right: Metrics.ratio(10), // Adjust the margin as needed
+    right: Metrics.ratio(30), // Adjust the margin as needed
     bottom:Metrics.ratio(120),
   },
   starFilled: {
     left:Metrics.ratio(5),
     color: 'gold', // Change the color of filled stars as needed
-    fontSize: 20,
+    fontSize: 15,
   },
   starEmpty: {
     left:Metrics.ratio(5),
     color: 'black', // Change the color of empty stars as needed
-    fontSize: 20,
+    fontSize: 15,
   },
   line: {
     height: '100%', // Adjust the height of the line
-    width: Metrics.ratio(1), // Adjust the width of the line
+    width: Metrics.ratio(2), // Adjust the width of the line
     backgroundColor: '#D1D3D0',
-    bottom:Metrics.ratio(100),
+    bottom:Metrics.ratio(120),
     right:Metrics.ratio(50)
     // Change the color of the line
   },
