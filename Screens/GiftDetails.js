@@ -39,16 +39,10 @@ const GiftDetails=({navigation})=>{
     }
   };
 
-   const DatePickerSet=()=>{
-    setShowDatePicker(true)
-   }
-   const TimePickerSet=()=>{
-    setShowTimePicker(true)
-   }
-   
   const handleTimeChange = (event, time) => {
     setShowTimePicker(Platform.OS === 'ios');
     if (time) {
+
       setSelectedTime(time);
     }
   }    
@@ -423,7 +417,7 @@ return (
         style={styles.textField}
         placeholder="Apply Amples"
         placeholderTextColor="grey"
-      /><TouchableOpacity  style={styles.button3}>
+      /><TouchableOpacity style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 
@@ -452,11 +446,11 @@ return (
             
             <View style={styles.dateTimeContainer}>
             <View style={styles.datePickerContainer}>
-              <Text style={{textAlign:'center',top:Metrics.ratio(10)}}>Select Date:</Text>
-              <TouchableOpacity
+              <Text style={{textAlign:'center'}}>Select Date:</Text>
+              {/* <TouchableOpacity
               style={{bottom:Metrics.ratio(50)}}
                 title="Select Date"
-                onPress={DatePickerSet}
+                onPress={() => setShowDatePicker(true)}
               />
               {showDatePicker && (
                 <DateTimePicker
@@ -469,10 +463,10 @@ return (
             </View>
 
             <View style={styles.timePickerContainer}>
-              <Text style={{textAlign:'center',top:Metrics.ratio(10)}}>Select Time:</Text>
+              <Text>Select Time:</Text>
               <TouchableOpacity
                 title="Select Time"
-                onPress={TimePickerSet}
+                onPress={() => setShowTimePicker(true)}
               />
               {showTimePicker && (
                 <DateTimePicker
@@ -481,7 +475,7 @@ return (
                   display="default"
                   onChange={handleTimeChange}
                 />
-              )}
+              )} */}
               <View>
               <TouchableOpacity style={styles.button4}>
       <Text style={styles.buttonText}>Submit</Text>
