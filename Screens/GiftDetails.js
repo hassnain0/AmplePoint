@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {View,Text, StyleSheet,FlatList,ScrollView,Image,TouchableOpacity} from 'react-native';
+import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 
@@ -317,7 +317,7 @@ return (
         fontSize:15,
         fontWeight:'500',
         color:'black'
-        }}>$25.00</Text>
+        }}>${25*quantity}.00</Text>
         </View>
         <View style={{flex:1,flexDirection:'row'}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
@@ -356,7 +356,7 @@ return (
         }}>Qty</Text>
      
      <View style={styles.container2}>
-      <TouchableOpacity style={styles.button} onPress={decreaseQuantity}>
+      <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
         <Image source={require('../assets/Minus.png')} style={styles.icon} />
       </TouchableOpacity>
      
@@ -366,14 +366,30 @@ return (
         <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
       </TouchableOpacity>
     </View>
+    </View>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Apply Ample</Text>
+        <View style={styles.container3}>
+      {/* Text Field */}
+      <TextInput
+        style={styles.textField}
+        placeholder="Apply Amples"
+        placeholderTextColor="grey"
+      /><TouchableOpacity style={styles.button3}>
+      <Text style={styles.buttonText}>Apply</Text>
+    </TouchableOpacity>
 
-        </View>
-        <View style={styles.buttonView}>
+    </View>
+    <View style={{top:Metrics.ratio(50),flex:1, flexDirection:'row',left:Metrics.ratio(40)}}>
+      <Text>Reward Value</Text>
+      <Text>$12.5</Text>
+      
+    </View>   
+        {/* <View style={styles.buttonView}>
                 <Button 
                 //   btnPress={onRegister}
                   label={"Add to Cart"}
                 />
-              </View>
+              </View> */}
               </View>
     </ScrollView>
 
@@ -383,7 +399,9 @@ return (
 
 
 const styles=StyleSheet.create({
+  
   container: {
+    left:Metrics.ratio(50),
     alignItems: 'center',
     marginBottom: 10,
   },
@@ -405,21 +423,74 @@ const styles=StyleSheet.create({
     fontSize: 15,
   },
   container2: {
-    left:Metrics.ratio(300),
+    left:Metrics.ratio(320),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     justifyContent: 'space-around',
-    backgroundColor: '#FF2E00',
+  },
+  button1: {
+    backgroundColor: '#C9CBC8',
+borderRadius: 1,
+  },button3: {
+    color:'white',
+    backgroundColor: '#FC3F01',
+borderRadius: 5,
+width:Metrics.ratio(80),
+height:Metrics.ratio(40)
   },
   button: {
-    backgroundColor: 'white',
-
-    borderRadius: 1,
+    color:'white',
+    backgroundColor: '#FC3F01',
+borderRadius: 5,
+  },container3: {
+    right:Metrics.ratio(30),
+  left:Metrics.ratio(30),
+   top:Metrics.ratio(20),
+    alignItems: 'center',
+    flex:1,
+    flexDirection:'row'
+  },
+  textField: {
+    height: Metrics.ratio(40),
+    borderColor: 'black',
+    borderWidth: 0.4,
+    width: Metrics.ratio(290),
+    marginBottom: Metrics.ratio(10),
+    marginRight:Metrics.ratio(10),
+    paddingLeft: Metrics.ratio(10),
+    borderRadius:Metrics.ratio(10),
+    top:Metrics.ratio(5),
+    color: 'white',
+    backgroundColor:'#B6B8B5'
+    
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button2: {
+    marginLeft:Metrics.ratio(10),
+    flex: 1,
+     width:Metrics.ratio(70),
+    backgroundColor: '#FC3F01',
+    borderWidth: 1,
+    borderColor: 'black',
+    right: Metrics.ratio(10),
+    marginHorizontal: Metrics.ratio(5),
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize:15,
+    top:Metrics.ratio(5),
+    textAlign:'center',
+    borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(10),
-    height:  Metrics.ratio(10),
+    width: Metrics.ratio(15),
+    height:  Metrics.ratio(15),
   },
   quantityContainer: {
     backgroundColor: 'white',
@@ -427,9 +498,11 @@ const styles=StyleSheet.create({
     borderRadius: 5,
   },
   quantityText: {
-    fontSize: 20,
+    backgroundColor:'white',
+    fontSize: 15,
     fontWeight: 'bold',
-    color: '#FF2E00',
+    color: 'black',
+    margin:Metrics.ratio(5)
   },
   starEmpty: {
     left:Metrics.ratio(5),
@@ -441,7 +514,8 @@ const styles=StyleSheet.create({
     width: Metrics.ratio(2), // Adjust the width of the line
     backgroundColor: '#D1D3D0',
     bottom:Metrics.ratio(120),
-    right:Metrics.ratio(50)
+    right:Metrics.ratio(50),
+
     // Change the color of the line
   },
   ratingText: {
