@@ -8,6 +8,7 @@ import DemoScreen from './Screens/DemoScreen';
 import GiftDetails from './Screens/GiftDetails';
 import OTP from './Screens/OTP';
 import SplashScreen from './Screens/SplashScreen';
+import Cart from './Screens/Cart';
 
 
 const Stack=createNativeStackNavigator();
@@ -16,6 +17,7 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name='Cart' component={Cart}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
       <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00', headerShown:false,}}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>

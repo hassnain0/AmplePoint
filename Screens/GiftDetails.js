@@ -4,8 +4,11 @@ import { Metrics } from '../themes';
 import Button from '../components/Button';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Toast from 'react-native-toast-message';
+import util from '../helpers/util';
+import Cart from './Cart';
 
-const GiftDetails=()=>{
+const GiftDetails=({navigation})=>{
  
     
   const [quantity, setQuantity] = useState(1);
@@ -28,20 +31,20 @@ const GiftDetails=()=>{
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
+
   const handleDateChange = (event, date) => {
-    setShowDatePicker(false);
+    setShowDatePicker(Platform.OS === 'ios');
     if (date) {
       setSelectedDate(date);
     }
   };
 
   const handleTimeChange = (event, time) => {
-    setShowTimePicker(false);
+    setShowTimePicker(Platform.OS === 'ios');
     if (time) {
       setSelectedTime(time);
     }
-  };
-
+  }    
 
   const renderStar = () => {
     return (
@@ -68,6 +71,10 @@ const GiftDetails=()=>{
     return stars;
   };
 
+  const AddtoCart=()=>{
+    util.successMsg("Successfully Added to Cart")
+    navigation.navigate("Cart")
+  }
 return (
   <ScrollView>
       <View>
@@ -458,7 +465,11 @@ return (
               )}
               <View>
               <TouchableOpacity style={styles.button4}>
-      <Text style={styles.buttonText}>Apply</Text>
+      <Text style={styles.buttonText}>Submit</Text>
+    </TouchableOpacity>
+    <TouchableOpacity >
+       <Text style={{color:'black',fontWeight:'900',right:Metrics.ratio(200),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ask Questions</Text>
+       <Image source={require('../assets/Arrow.png')} style={{width:Metrics.ratio(15),height:Metrics.ratio(15),left:Metrics.ratio(160)}}/>
     </TouchableOpacity>
     </View>
             </View>
@@ -466,12 +477,13 @@ return (
           </View>
         </View>
       )}
-        {/* <View style={styles.buttonView}>
+        <View style={styles.buttonView}>
                 <Button 
-                //   btnPress={onRegister}
+                  btnPress={AddtoCart}
                   label={"Add to Cart"}
                 />
-              </View> */}
+              </View>
+              <Toast ref={ref => Toast.setRef(ref)} />
               </View>
     </ScrollView>
 
@@ -530,14 +542,15 @@ borderRadius: 1,
     backgroundColor: '#FC3F01',
 borderRadius: 5,
 width:Metrics.ratio(80),
-height:Metrics.ratio(40)
+height:Metrics.ratio(40),
   },
   button4: {
     color:'white',
     backgroundColor: '#FC3F01',
-    borderRadius: 5,
+borderRadius: 5,
 width:Metrics.ratio(80),
-height:Metrics.ratio(40)
+height:Metrics.ratio(40),
+left:Metrics.ratio(110)
   },
   button: {
     color:'white',
@@ -646,7 +659,9 @@ borderRadius:Metrics.ratio(70),
         width: Metrics.vw * 90,
         justifyContent: "center",
         alignItems: "center",
-        alignSelf:'center'
+        alignSelf:'center',
+        top:Metrics.ratio(10),
+        bottom:Metrics.ratio(20)
       },
     ViewContainer:{
   
