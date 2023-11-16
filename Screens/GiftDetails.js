@@ -1,8 +1,8 @@
 import React,{useState} from 'react';
-import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput} from 'react-native';
-import { Metrics } from '../themes';
+import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView} from 'react-native';
+import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
-import { RadioButton } from 'react-native-paper';
+import { Icon, RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
@@ -39,6 +39,13 @@ const GiftDetails=({navigation})=>{
     }
   };
 
+   const DatePickerSet=()=>{
+    setShowDatePicker(true)
+   }
+   const TimePickerSet=()=>{
+    setShowTimePicker(true)
+   }
+   
   const handleTimeChange = (event, time) => {
     setShowTimePicker(Platform.OS === 'ios');
     if (time) {
@@ -76,7 +83,18 @@ const GiftDetails=({navigation})=>{
     navigation.navigate("Cart")
   }
 return (
+  <SafeAreaView>
+  {/* <View style={styles.header}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.leftIconView}
+            onPress={() => console.log('navigation', navigation.goBack())}>
+            <Icon.Ionicons name="arrow-back" color={Colors.white} size={28} />
+          </TouchableOpacity>
+          <Text style={styles.textHeader}>Register</Text>
+        </View> */}
   <ScrollView>
+  
       <View>
     <View >
    <View style={styles.ViewContainer}>
@@ -272,7 +290,7 @@ return (
     </View>
         </View>
         <View>
-          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
+          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
         </View>
  <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Day</Text>
@@ -323,7 +341,7 @@ return (
         <Text style={{left:Metrics.ratio(165),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
         <View style={{top:Metrics.ratio(50)}}>
-          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
+          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
           <Text style={{fontSize:15,alignContent:'center',alignSelf:'center',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
           <Text style={{fontSize:15,alignContent:'center',alignSelf:'center',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
@@ -335,7 +353,7 @@ return (
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
         </View>
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ample Points Calculator</Text>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ample Points Calculator</Text>
         <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(40)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
@@ -398,14 +416,14 @@ return (
       </TouchableOpacity>
     </View>
     </View>
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Apply Ample</Text>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Apply Ample</Text>
         <View style={styles.container3}>
       {/* Text Field */}
       <TextInput
         style={styles.textField}
         placeholder="Apply Amples"
         placeholderTextColor="grey"
-      /><TouchableOpacity style={styles.button3}>
+      /><TouchableOpacity  style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 
@@ -417,11 +435,11 @@ return (
    <Text style={styles.Text6Container}>You Earn :</Text>
    <Text style={styles.Text5Container}>50.00%</Text>
     </View>
-    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
+    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
     <View>
         <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
           <View style={{top:Metrics.ratio(10)}}>
-            <RadioButton.Item label="PickUp/Dining" value="true" />
+            <RadioButton.Item color='#FF2E00' label="PickUp/Dining" value="true" />
           </View>
         </RadioButton.Group>
       </View>
@@ -429,15 +447,16 @@ return (
       {isShippingSelected && (
         
         <View>
-            <View>
-            <RadioButton.Item label="4155 Buffalo Dr Ste 103 Las Vegas,NY" value="true"  color={"#FF2E00"} />
+            <View >
+            <RadioButton.Item color='#FF2E00' label="4155 Buffalo Dr Ste 103 Las Vegas,NY" value="true"   />
             
             <View style={styles.dateTimeContainer}>
             <View style={styles.datePickerContainer}>
-              <Text>Select Date:</Text>
+              <Text style={{textAlign:'center',top:Metrics.ratio(10)}}>Select Date:</Text>
               <TouchableOpacity
+              style={{bottom:Metrics.ratio(50)}}
                 title="Select Date"
-                onPress={() => setShowDatePicker(true)}
+                onPress={DatePickerSet}
               />
               {showDatePicker && (
                 <DateTimePicker
@@ -450,10 +469,10 @@ return (
             </View>
 
             <View style={styles.timePickerContainer}>
-              <Text>Select Time:</Text>
+              <Text style={{textAlign:'center',top:Metrics.ratio(10)}}>Select Time:</Text>
               <TouchableOpacity
                 title="Select Time"
-                onPress={() => setShowTimePicker(true)}
+                onPress={TimePickerSet}
               />
               {showTimePicker && (
                 <DateTimePicker
@@ -468,7 +487,7 @@ return (
       <Text style={styles.buttonText}>Submit</Text>
     </TouchableOpacity>
     <TouchableOpacity >
-       <Text style={{color:'black',fontWeight:'900',right:Metrics.ratio(200),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ask Questions</Text>
+       <Text style={{color:'black',fontWeight:'900',right:Metrics.ratio(180),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ask Questions</Text>
        <Image source={require('../assets/Arrow.png')} style={{width:Metrics.ratio(15),height:Metrics.ratio(15),left:Metrics.ratio(160)}}/>
     </TouchableOpacity>
     </View>
@@ -486,7 +505,7 @@ return (
               <Toast ref={ref => Toast.setRef(ref)} />
               </View>
     </ScrollView>
-
+</SafeAreaView>
 )
 }
 //Vertical Line
@@ -499,10 +518,23 @@ const styles=StyleSheet.create({
   },
   datePickerContainer: {
     flex: 1,
-    marginRight: 10,
+    marginRight: Metrics.ratio(10),
+    left:Metrics.ratio(15),
+    borderColor:'black',
+    borderWidth:Metrics.ratio(0.4),
+    borderRadius:10,
+    borderRadius:Metrics.ratio(10),
+    backgroundColor:'#D1D3D0'
   },
   timePickerContainer: {
     flex: 1,
+    borderColor:'black',
+    left:Metrics.ratio(10),
+    height:Metrics.ratio(40),
+    right:Metrics.ratio(30),
+    borderWidth:Metrics.ratio(0.4),
+    borderRadius:Metrics.ratio(10),
+    backgroundColor:'#D1D3D0'
   },
   
   container: {
@@ -548,6 +580,7 @@ height:Metrics.ratio(40),
     color:'white',
     backgroundColor: '#FC3F01',
 borderRadius: 5,
+top:Metrics.ratio(40),
 width:Metrics.ratio(80),
 height:Metrics.ratio(40),
 left:Metrics.ratio(110)
@@ -660,7 +693,7 @@ borderRadius:Metrics.ratio(70),
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center',
-        top:Metrics.ratio(10),
+        top:Metrics.ratio(0),
         bottom:Metrics.ratio(20)
       },
     ViewContainer:{
