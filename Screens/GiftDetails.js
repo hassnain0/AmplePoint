@@ -2,7 +2,8 @@ import React,{useState} from 'react';
 import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
-
+import { RadioButton } from 'react-native-paper';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const GiftDetails=()=>{
  
@@ -18,6 +19,29 @@ const GiftDetails=()=>{
       setQuantity(quantity - 1);
     }
   };
+  const [isShippingSelected, setIsShippingSelected] = useState(false);
+
+  const showShippingDetails = () => {
+    setIsShippingSelected(!isShippingSelected);
+  };
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false);
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
+
+  const handleTimeChange = (event, time) => {
+    setShowTimePicker(false);
+    if (time) {
+      setSelectedTime(time);
+    }
+  };
+
 
   const renderStar = () => {
     return (
@@ -379,11 +403,69 @@ return (
     </TouchableOpacity>
 
     </View>
-    <View style={{top:Metrics.ratio(50),flex:1, flexDirection:'row',left:Metrics.ratio(40)}}>
-      <Text>Reward Value</Text>
-      <Text>$12.5</Text>
-      
-    </View>   
+    <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(10)}}>
+   <Text style={styles.Text4Container}>Reward Value :</Text>
+   <Text style={styles.Text3Container}>$12.05</Text>
+   <View style={styles.line1} />
+   <Text style={styles.Text6Container}>You Earn :</Text>
+   <Text style={styles.Text5Container}>50.00%</Text>
+    </View>
+    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
+    <View>
+        <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
+          <View style={{top:Metrics.ratio(10)}}>
+            <RadioButton.Item label="PickUp/Dining" value="true" />
+          </View>
+        </RadioButton.Group>
+      </View>
+
+      {isShippingSelected && (
+        
+        <View>
+            <View>
+            <RadioButton.Item label="4155 Buffalo Dr Ste 103 Las Vegas,NY" value="true"  color={"#FF2E00"} />
+            
+            <View style={styles.dateTimeContainer}>
+            <View style={styles.datePickerContainer}>
+              <Text>Select Date:</Text>
+              <TouchableOpacity
+                title="Select Date"
+                onPress={() => setShowDatePicker(true)}
+              />
+              {showDatePicker && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="date"
+                  display="default"
+                  onChange={handleDateChange}
+                />
+              )}
+            </View>
+
+            <View style={styles.timePickerContainer}>
+              <Text>Select Time:</Text>
+              <TouchableOpacity
+                title="Select Time"
+                onPress={() => setShowTimePicker(true)}
+              />
+              {showTimePicker && (
+                <DateTimePicker
+                  value={selectedTime}
+                  mode="time"
+                  display="default"
+                  onChange={handleTimeChange}
+                />
+              )}
+              <View>
+              <TouchableOpacity style={styles.button4}>
+      <Text style={styles.buttonText}>Apply</Text>
+    </TouchableOpacity>
+    </View>
+            </View>
+            </View>
+          </View>
+        </View>
+      )}
         {/* <View style={styles.buttonView}>
                 <Button 
                 //   btnPress={onRegister}
@@ -399,6 +481,17 @@ return (
 
 
 const styles=StyleSheet.create({
+  dateTimeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  datePickerContainer: {
+    flex: 1,
+    marginRight: 10,
+  },
+  timePickerContainer: {
+    flex: 1,
+  },
   
   container: {
     left:Metrics.ratio(50),
@@ -439,13 +532,20 @@ borderRadius: 5,
 width:Metrics.ratio(80),
 height:Metrics.ratio(40)
   },
+  button4: {
+    color:'white',
+    backgroundColor: '#FC3F01',
+    borderRadius: 5,
+width:Metrics.ratio(80),
+height:Metrics.ratio(40)
+  },
   button: {
     color:'white',
     backgroundColor: '#FC3F01',
 borderRadius: 5,
   },container3: {
     right:Metrics.ratio(30),
-  left:Metrics.ratio(30),
+  left:Metrics.ratio(20),
    top:Metrics.ratio(20),
     alignItems: 'center',
     flex:1,
@@ -458,7 +558,7 @@ borderRadius: 5,
     width: Metrics.ratio(290),
     marginBottom: Metrics.ratio(10),
     marginRight:Metrics.ratio(10),
-    paddingLeft: Metrics.ratio(10),
+    paddingLeft: Metrics.ratio(5),
     borderRadius:Metrics.ratio(10),
     top:Metrics.ratio(5),
     color: 'white',
@@ -518,6 +618,17 @@ borderRadius: 5,
 
     // Change the color of the line
   },
+  line1: {
+    height: Metrics.ratio(30), // Adjust the height of the line
+    width: Metrics.ratio(2), // Adjust the width of the line
+    backgroundColor: '#D1D3D0',
+    top:Metrics.ratio(15),
+    bottom:Metrics.ratio(5),
+    right:Metrics.ratio(1),
+    left:Metrics.ratio(10)
+
+    // Change the color of the line
+  },
   ratingText: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -546,14 +657,49 @@ borderRadius:Metrics.ratio(70),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         color:'black',
-        fontWeight:'bold',
+        fontWeight:'400',
     },
+    Text4Container:{
+      paddingTop:Metrics.ratio(20),
+      paddingLeft:Metrics.ratio(60),
+      fontSize:15,
+      color:'black',
+      fontWeight:'400',
+  },
+  Text6Container:{
+    paddingTop:Metrics.ratio(20),
+    paddingLeft:Metrics.ratio(20),
+    fontSize:15,
+    color:'black',
+    fontWeight:'400',
+},
+  TextContainer:{
+    paddingTop:Metrics.ratio(20),
+    paddingLeft:Metrics.ratio(20),
+    fontSize:15,
+    color:'black',
+    fontWeight:'400',
+},
     Text2Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(190),
         fontSize:15,
         color:'#EC6A31',
         fontWeight:'bold', 
+      },
+      Text3Container:{
+        paddingTop:Metrics.ratio(20),
+        paddingLeft:Metrics.ratio(10),
+        fontSize:15,
+        color:'#EC6A31',
+        fontWeight:'400', 
+      },
+      Text5Container:{
+        paddingTop:Metrics.ratio(20),
+        paddingLeft:Metrics.ratio(5),
+        fontSize:15,
+        color:'#EC6A31',
+        fontWeight:'400', 
       },
       ImageContainer:{
 
