@@ -1,11 +1,20 @@
-import React from 'react'
+import {React,useState} from 'react'
 import { TextInput,Text,ScrollView,StyleSheet, View,Image } from 'react-native'
 import { Metrics } from '../themes'
 import Button from '../components/Button'
 import util from '../helpers/util'
-
-
+import Toast from 'react-native-toast-message';
+import CheckBox from 'react-native-check-box'
 const Payement=()=>{
+    const [isChecked, setIsChecked] = useState(false);
+
+    // Function to handle checkbox toggle
+    const toggleCheckbox = () => {
+      setIsChecked(!isChecked);
+    };
+  
+//Fields 
+const [toggleCheckBox,setToggleCheckBox]=useState(false)
     const AddtoCart=()=>{
         util.successMsg('Payment Verified')
     }
@@ -31,7 +40,7 @@ return(
 <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>CVV</Text>
     <TextInput placeholder='CVV'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
 </View>
-<View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(50)}}>
+<View  style={{width:'100%',flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(50),right:Metrics.ratio(10)}}>
       <Text style={{top:Metrics.ratio(10),color:'black',fontSize:18,fontWeight:'600',textAlign:'center',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Order Summary</Text>
         </View>
     </View>
@@ -40,7 +49,6 @@ return(
         <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
        <View style={{flex:1, flexDirection:'row'}}>
        </View>
-     
         </View>
         <View style={{flex:1, flexDirection:'row'}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
@@ -49,6 +57,8 @@ return(
         fontWeight:'500',
         color:'black'
         }}>Pickup / Deleivery</Text>
+      <CheckBox value={isChecked} onValueChange={toggleCheckbox} />
+
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(140),
         fontSize:15,
@@ -63,6 +73,7 @@ return(
         fontWeight:'500',
         color:'black'
         }}>type</Text>
+          
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(235),
         fontSize:15,
@@ -140,17 +151,41 @@ return(
         color:'black'
         }}>$0.00</Text>
        </View>
-       
+       <View style={styles.line} />
+       <View style={{flex:1, flexDirection:'row',marginBottom:Metrics.ratio(10)}}>
+   <Text  style={{  paddingTop:Metrics.ratio(10),
+        paddingLeft:Metrics.ratio(10),
+        fontSize:15,
+        fontWeight:'700',
+        color:'black'
+        }}>Amount Payable</Text>
+  <Text  style={{  paddingTop:Metrics.ratio(10),
+        paddingLeft:Metrics.ratio(225),
+        fontSize:15,
+        fontWeight:'700',
+        color:'black'
+        }}>$0.00</Text>
+       </View>
        <View style={styles.buttonView}>
                 <Button 
                   btnPress={AddtoCart}
                   label={"Pay"}
                 />
               </View>   
+              <Toast ref={ref => Toast.setRef(ref)} />
     </ScrollView>
 )}
 export default Payement;
 const styles=StyleSheet.create({
+    line: {
+        width: '100%',
+        height:Metrics.ratio(2), // Adjust the height of the line
+ // Adjust the width of the line
+        backgroundColor: '#D1D3D0',
+        top:Metrics.ratio(10),
+        marginBottom:Metrics.ratio(10)
+        // Change the color of the line
+      },
     buttonView: {
         height:Metrics.vh*5,
         backgroundColor:'#FF2F00',
@@ -160,7 +195,7 @@ borderRadius:Metrics.ratio(70),
         alignItems: "center",
         alignSelf:'center',
         top:Metrics.ratio(0),
-        bottom:Metrics.ratio(20)
+        bottom:Metrics.ratio(25)
       },
     InputContainer:{
         marginTop:Metrics.ratio(3),

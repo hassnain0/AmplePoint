@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text,Image, StyleSheet, ScrollView,TouchableOpacity} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
+import util from '../helpers/util';
+import Toast from 'react-native-toast-message';
 
 const Cart= ({navigation}) => {
    
@@ -204,7 +206,8 @@ borderRadius: 10,}}>
                   btnPress={CheckOutScreen}
                   label={"Check Out"}
                 />
-              </View>  
+              </View>
+              <Toast ref={ref => Toast.setRef(ref)} />  
   </ScrollView>
 );
 };
