@@ -3,7 +3,7 @@ import { View, Text,Image, StyleSheet, ScrollView,TouchableOpacity} from 'react-
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 
-const Cart= ({navigation}) => {
+const Checkout= ({navigation}) => {
    
   const [quantity, setQuantity] = useState(1);
 
@@ -17,9 +17,7 @@ const Cart= ({navigation}) => {
     }
   };
  
-  const CheckOutScreen=()=>{
-    navigation.navigate("Checkout")
-  }
+ 
 
   return (
     <ScrollView>
@@ -349,4 +347,4 @@ TextContainer2:{
 },
 });
 
-export default Cart;
+export default Checkout;

@@ -40,12 +40,16 @@ const GiftDetails=({navigation})=>{
   };
 
   const handleTimeChange = (event, time) => {
+    
     setShowTimePicker(Platform.OS === 'ios');
     if (time) {
 
       setSelectedTime(time);
     }
   }    
+  const SubmitButton=()=>{
+    util.successMsg("Successfully Added to Cart")
+  }
 
   const renderStar = () => {
     return (
@@ -73,7 +77,7 @@ const GiftDetails=({navigation})=>{
   };
 
   const AddtoCart=()=>{
-    util.successMsg("Successfully Added to Cart")
+
     navigation.navigate("Cart")
   }
 return (
@@ -437,17 +441,17 @@ return (
           </View>
         </RadioButton.Group>
       </View>
-
       {isShippingSelected && (
-        
         <View>
-            <View >
-            <RadioButton.Item color='#FF2E00' label="4155 Buffalo Dr Ste 103 Las Vegas,NY" value="true"   />
-            
-            <View style={styles.dateTimeContainer}>
+            <View>
+            <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
+          <View style={{top:Metrics.ratio(10)}}>
+            <RadioButton.Item color='#FF2E00' label="PickUp/Dining" value="true" />
+          </View>
+        </RadioButton.Group> <View style={styles.dateTimeContainer}>
             <View style={styles.datePickerContainer}>
               <Text style={{textAlign:'center'}}>Select Date:</Text>
-              {/* <TouchableOpacity
+              <TouchableOpacity
               style={{bottom:Metrics.ratio(50)}}
                 title="Select Date"
                 onPress={() => setShowDatePicker(true)}
@@ -461,7 +465,6 @@ return (
                 />
               )}
             </View>
-
             <View style={styles.timePickerContainer}>
               <Text>Select Time:</Text>
               <TouchableOpacity
@@ -475,27 +478,26 @@ return (
                   display="default"
                   onChange={handleTimeChange}
                 />
-              )} */}
+              )}
               <View>
-              <TouchableOpacity style={styles.button4}>
+              <TouchableOpacity onPress={SubmitButton} style={styles.button4}>
       <Text style={styles.buttonText}>Submit</Text>
-    </TouchableOpacity>
-    <TouchableOpacity >
-       <Text style={{color:'black',fontWeight:'900',right:Metrics.ratio(180),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ask Questions</Text>
-       <Image source={require('../assets/Arrow.png')} style={{width:Metrics.ratio(15),height:Metrics.ratio(15),left:Metrics.ratio(160)}}/>
     </TouchableOpacity>
     </View>
             </View>
+            
             </View>
           </View>
         </View>
       )}
+{/*         
+
         <View style={styles.buttonView}>
                 <Button 
                   btnPress={AddtoCart}
                   label={"Add to Cart"}
                 />
-              </View>
+              </View>   */}
               <Toast ref={ref => Toast.setRef(ref)} />
               </View>
     </ScrollView>
