@@ -6831,6 +6831,13 @@
   dependencies:
     "moment" "^2.22.0"
 
+"react-native-element-dropdown@^2.10.0":
+  "integrity" "sha512-aFjw0JbUIKGkqklHxDm8aDCZW6Q1GICP7pIHc0sllvpWpEamItzOwAMV4G1mBIKxED77Mp+nkq9p0Dhsr/faVw=="
+  "resolved" "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-2.10.0.tgz"
+  "version" "2.10.0"
+  dependencies:
+    "lodash" "^4.17.21"
+
 "react-native-gesture-handler@^2.13.4", "react-native-gesture-handler@>= 1.0.0":
   "integrity" "sha512-smpYOVbvWABpq2H+lmDnfOLCTH934aUPO1w2/pQXvm1j+M/vmGQmvgRDJOpXcks17HLtNNKXD6tcODf3aPqDfA=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.13.4.tgz"

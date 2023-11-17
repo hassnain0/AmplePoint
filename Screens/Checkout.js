@@ -1,100 +1,108 @@
-import {React,useState} from 'react';
-import { View, Text,Image, StyleSheet,StatusBar, ScrollView,TextInput,SafeAreaView} from 'react-native';
-import { Metrics } from '../themes';
-import Button from '../components/Button';
-import {
-  Appbar,
-  DarkTheme,
-  DefaultTheme,
-  Provider,
-  Surface,
-  ThemeProvider,
-} from "react-native-paper";
-import DropDown from "react-native-paper-dropdown";
-const Checkout= ({navigation}) => {
-  const colorList = [
-    {
-      label: "White",
-      value: "white",
-    },
-    {
-      label: "Red",
-      value: "red",
-    },
-    {
-      label: "Blue",
-      value: "blue",
-    },
-    {
-      label: "Green",
-      value: "green",
-    },
-    {
-      label: "Orange",
-      value: "orange",
-    },
-  ];
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import {AntDesign} from 'react-native-vector-icons/AntDesign'
 
-  const [nightMode, setNightmode] = useState(false);
-  const [showDropDown, setShowDropDown] = useState(false);
- 
-  const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
+const data = [
+  { label: 'Item 1', value: '1' },
+  { label: 'Item 2', value: '2' },
+  { label: 'Item 3', value: '3' },
+  { label: 'Item 4', value: '4' },
+  { label: 'Item 5', value: '5' },
+  { label: 'Item 6', value: '6' },
+  { label: 'Item 7', value: '7' },
+  { label: 'Item 8', value: '8' },
+];
+
+const Checkout=()=> {
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
+  const renderLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+          Dropdown label
+        </Text>
+      );
+    }
+    return null;
+  };
 
   return (
-    <ScrollView>
-      
-      <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(50)}}>
-        <Text style={{top:Metrics.ratio(10),left:0,color:'black',fontSize:20,fontWeight:'500',textAlign:'center',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Billing Details</Text>
-          </View>
-          <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
-          <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),}}>First Name</Text>
-      <TextInput placeholder='First Name'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
-      <Text style={{fontSize:15,color:'#7D7D7D',}}>Last Name</Text>
-      <TextInput placeholder='Last Name'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
-      <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),}}>Email</Text>
-      <TextInput placeholder='Email'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
-      <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),}}>Phone</Text>
-      <TextInput placeholder='Phone Number'  keyboardType='numeric' textAlign='left' auto style={styles.InputContainer} ></TextInput>
-      <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),}}>First Name</Text>
-      <Provider theme={nightMode ? DarkTheme : DefaultTheme}>
-      <ThemeProvider theme={nightMode ? DarkTheme : DefaultTheme}>
-        <StatusBar
-          backgroundColor={"black"}
-          barStyle={"light-content"}
-        />
-        <Appbar.Header>
-          <Appbar.Content title="React Native Paper Dropdown" />
-          <Appbar.Action
-            icon={nightMode ? "brightness-7" : "brightness-3"}
-            onPress={() => setNightmode(!nightMode)}
+    <View style={styles.container}>
+      {renderLabel()}
+      <Dropdown
+        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={data}
+        search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocus ? 'Select item' : '...'}
+        searchPlaceholder="Search..."
+        value={value}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={item => {
+          setValue(item.value);
+          setIsFocus(false);
+        }}
+        renderLeftIcon={() => (
+          <AntDesign
+            style={styles.icon}
+            color={isFocus ? 'blue' : 'black'}
+            name="Safety"
+            size={20}
           />
-        </Appbar.Header>
-        <Surface style={styles.containerStyle}>
-          <SafeAreaView style={styles.safeContainerStyle}>
-           
-            <View style={styles.spacerStyle} />
-            
-          </SafeAreaView>
-        </Surface>
-      </ThemeProvider>
-    </Provider>
-      </View>
-  </ScrollView>
-);
+        )}
+      />
+    </View>
+  );
 };
 
+export default Checkout;
+
 const styles = StyleSheet.create({
-  
-  InputContainer:{
-    marginTop:Metrics.ratio(3),
-    marginBottom:Metrics.ratio(10),
-    backgroundColor:'#EBECF0',
-    margin:Metrics.ratio(5),
-    borderRadius:20,
-    fontSize:15,
-   width:'100%',
-   height:Metrics.ratio(50),
+  container: {
+    backgroundColor: 'white',
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
-
-export default Checkout;

@@ -17,6 +17,15 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Payment',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
+        backgroundColor: '#FF2F00',    
+        }, headerTitleContainerStyle: {
+          top: 800,
+        }, headerTitleStyle: {
+          
+          fontWeight: '600',fontSize:20 ,// Optionally customize the header title's style
+        },           
+})}/>
       <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleContainerStyle: {
@@ -26,15 +35,7 @@ export default function App() {
           fontWeight: '600',fontSize:20 ,// Optionally customize the header title's style
         },           
 })}/> 
- <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Payment',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
-        backgroundColor: '#FF2F00',    
-        }, headerTitleContainerStyle: {
-          top: 800,
-        }, headerTitleStyle: {
-          
-          fontWeight: '600',fontSize:20 ,// Optionally customize the header title's style
-        },           
-})}/>
+
       <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00', headerShown:false,}}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
