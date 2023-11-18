@@ -16,20 +16,20 @@ import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
 import Login from './Login';
 import OTP from './OTP';
- 
+ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 const Register=({navigation})=> {
  const [loader,setLoader]=React.useState(false);
   const [state, setState] = React.useState({
-    email: '',
-    password: '', 
-    confirmPassword: '',  
-    first_name: '',
-    last_name: '',
-    mobile:'',
-    referral_no:'',
-    store_referral_no:'',
-    term_accepted:'',
-   confirmPassword:'',
+    Email: '',
+    Password: '', 
+    ConfirmPassword: '',  
+    First_name: '',
+    Last_name: '',
+    Mobile:'',
+    Referral_no:'',
+    Store_referral_no:'',
+    Term_accepted:'',
+    ConfirmPassword:'',
 
   });
   const [isConnected,setIsConnected]=React.useState(true)
@@ -53,116 +53,109 @@ const Register=({navigation})=> {
       unsubscribe();
     }
 }) 
- 
+const [isChecked, setIsChecked] = useState(false);
 
   const _validation = () => {
-    const {email,last_name, first_name, referral_no,password,mobile,store_referral_no,term_accepted } =
+    if(!isConnected){
+      setLoader(false)
+      util.errorMsg("Please connect your internet Connection");
+      return false;
+    }
+    const {Email,Last_name, First_name, Referral_no,Password,ConfirmPassword,Mobile,Store_referral_no,} =
       state;
-    if (util.stringIsEmpty(name)) {
-      util.errorMsg('Enter User Name');
+    if (util.stringIsEmpty(First_name)) {
+      util.errorMsg('Enter First Name');
       setLoader(false);
       return false;
     }
-    if (util.stringIsEmpty(email)) {
+    if (util.stringIsEmpty(Last_name)) {
+      util.errorMsg('Enter Last Name');
+      setLoader(false);
+      return false;
+    }
+    if (util.stringIsEmpty(Email)) {
         util.errorMsg('Enter Email Address');
         setLoader(false);
         return false;
       }
-      if (util.stringIsEmpty(password)) {
+      if (util.stringIsEmpty(Password)) {
         util.errorMsg('Enter Password');
         setLoader(false);
         return false;
       }
-    if (util.stringIsEmpty(confirmPassword)) {
+    if (util.stringIsEmpty(ConfirmPassword)) {
       util.errorMsg('Enter Confirm Password');
       setLoader(false);
       return false;
     }
+    if (util.stringIsEmpty(Mobile)) {
+      util.errorMsg('Enter Mobile Number');
+      setLoader(false);
+      return false;
+    }
   
-    if (util.stringIsEmpty(birthday)) {
-        util.errorMsg('Enter Birthday Date');
+    if (util.stringIsEmpty(Referral_no)) {
+        util.errorMsg('Enter Referral Number');
         setLoader(false);
         return false;
       }
 
-   
-     
+      if (util.stringIsEmpty(Store_referral_no)) {
+        util.errorMsg('Enter Store Referral Number');
+        setLoader(false);
+        return false;
+      }
+
+      if (util.stringIsEmpty(isChecked)) {
+        util.errorMsg('Please Accept terms and condition');
+        setLoader(false);
+        return false;
+      }
     return true;
   };
-  const onRegister = () => {
+  const onRegister = async() => {
     setLoader(true);
     if (!_validation()) {
       return false;
     } else{
-        if(isConnected){
-     createUserWithEmailAndPassword(auth,state.email,state.password).then(userCredentials=>{
-        onRegisterApiCall();
-      
-     })
-     .catch((err) => {
-      console.log(err)
-      if (err.code === 'auth/email-already-in-use') {
-        util.errorMsg("Email Already in use")
-        setLoader(false);
-        return false;
-    
-      }
-      if (err.code === 'auth/wrong-password') {
-        util.errorMsg("Wrong Password")
-        setLoader(false);
-        return false;
-    
-      }
-      if (err.code === 'auth/invalid-email') {
-    util.errorMsg("Invalid Email");
-    setLoader(false);
-    return false;
-      }
-    });}
-    
-    else{
-      util.errorMsg("Please connect internet connection");
-      setLoader(false);
-      return false;
-    }
-}  
+          try {
+  const apiUrl = 'https://amplepoints.com/apiendpoint/register'; 
+
+  const requestData = {
+      first_name: state.First_name,
+      last_name: state.Last_name,
+      email:state.Email,
+      password: state.Password,
+      mobile:state.Mobile,
+      referral_no:state.Referral_no,
+      store_referral_no:state.Store_referral_no,
+      term_accepted:isChecked,
   };
 
-  const onRegisterApiCall = async ()=> {
-    try {
-      const apiUrl = 'https://amplepoints.com/apiendpoint/register'; 
+  const response = await axios.post(apiUrl, requestData);
 
-      const requestData = {
-          fullname: "sample",
-          email: "sample@gmail.com",
-          password: "sample",
-          phone:"sample",
-          location:"sample",
-      };
+  // this.setState({ responseData: response.data, error: null });
 
-      const response = await axios.post(apiUrl, requestData);
+  console.log(response)
+} catch (error) {
+  console.log(error)
+}
 
-      // this.setState({ responseData: response.data, error: null });
-
-      console.log(response.data)
-  } catch (error) {
-      console.log(error)
-      // Handle any errors
-      this.setState({ responseData: null, error: error.message });
-  }
-   
+resetForm();
   };
+}
 
   const resetForm = () => {
     setState({
-        email: '',
-        password: '',
-        cnic: '',
-        name: '',
-        phone: '',
-     vehcile:'',
-             password: '',
-      
+        first_name: '',
+        Last_name: '',
+        Mobile: '',
+        Email: '',
+        Password: '',
+        ConfirmPassword:'',
+        Referral_no: '',
+        Store_referral_no:'',
+      Term_accepted:'',
     });
   };
 
@@ -174,8 +167,8 @@ const Register=({navigation})=> {
         </View>
           <View style={styles.registeredContainer}>
             <MainTextInput
-              onChangeText={t => _handleTextChange('name', t)}
-              value={state.name}
+              onChangeText={t => _handleTextChange('First_name', t)}
+              value={state.First_name}
               label="First Name"
               placeholder=""
               //   keyboardType=''
@@ -183,8 +176,8 @@ const Register=({navigation})=> {
             />
               <MainTextInput
              
-             onChangeText={t => _handleTextChange('name', t)}
-             value={state.name}
+             onChangeText={t => _handleTextChange('Last_name', t)}
+             value={state.Last_name}
              label="Last Name"
              placeholder=""
              //   keyboardType=''
@@ -193,8 +186,8 @@ const Register=({navigation})=> {
 
             <MainTextInput
               
-              onChangeText={t => _handleTextChange('email', t)}
-              value={state.email}
+              onChangeText={t => _handleTextChange('Email', t)}
+              value={state.Email}
               label="Email"
               placeholder=""
               keyboardType={'email-address'}
@@ -203,8 +196,8 @@ const Register=({navigation})=> {
             <MainTextInput
             
               secureTextEntry={true}
-              onChangeText={t => _handleTextChange('password', t)}
-              value={state.password}
+              onChangeText={t => _handleTextChange('Password', t)}
+              value={state.Password}
               label="Password"
               autoCapitalize={'none'}
               rightIcon={true}
@@ -213,8 +206,8 @@ const Register=({navigation})=> {
              <MainTextInput
              
               secureTextEntry={true}
-              onChangeText={t => _handleTextChange('confirmPassword', t)}
-              value={state.confirmPassword}
+              onChangeText={t => _handleTextChange('ConfirmPassword', t)}
+              value={state.ConfirmPassword}
               label="Confirm Password"
               autoCapitalize={'none'}
               rightIcon={true}
@@ -222,8 +215,8 @@ const Register=({navigation})=> {
             />
             <MainTextInput
             
-              onChangeText={t => _handleTextChange('birthday', t)}
-              value={state.birthday}
+              onChangeText={t => _handleTextChange('Mobile', t)}
+              value={state.Mobile}
               label="Mobile "
               placeholder=""
               keyboardType="number-pad"
@@ -231,8 +224,8 @@ const Register=({navigation})=> {
             />
               <MainTextInput
             
-            onChangeText={t => _handleTextChange('birthday', t)}
-            value={state.birthday}
+            onChangeText={t => _handleTextChange('Referral_no', t)}
+            value={state.Referral_no}
             label="Referral No"
             placeholder=""
             keyboardType="number-pad"
@@ -240,13 +233,27 @@ const Register=({navigation})=> {
           />
            <MainTextInput
             
-            onChangeText={t => _handleTextChange('birthday', t)}
-            value={state.birthday}
-            label="Store ReferralNo"
+            onChangeText={t => _handleTextChange('Store_referral_no', t)}
+            value={state.Store_referral_no}
+            label="Store Referral No"
             placeholder=""
             keyboardType="number-pad"
             autoCapitalize={'none'}
           />
+          <View style={{flex:1,flexDirection:'row'}}><BouncyCheckbox
+        style={{ marginTop: Metrics.ratio(16),left:Metrics.ratio(40)}}
+        isChecked={isChecked}
+        disableBuiltInState
+        onPress={() => setIsChecked(!isChecked)}/>
+           <View>
+  <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>By Creating an account, you agree to AmplePoint.com's  </Text>
+</View>
+<View>
+<Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
+  or get it <Text style={{color: '#CC8C63'}}>FREE</Text> with <Text style={{color: '#CC8C63'}}>125.00</Text> points
+</Text>
+    </View>
+      </View>
      <View style={styles.bottomContainer}>
               <View style={styles.buttonView}>
                 <Button loader={loader}
