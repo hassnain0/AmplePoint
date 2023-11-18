@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
 import { Metrics } from '../themes';
-
+import OTPInputView from '@twotalltotems/react-native-otp-input'
 
 const OTP= () => {
   const [otp, setOTP] = useState('');
@@ -13,71 +13,39 @@ const OTP= () => {
   };
 
   return (
-    <ScrollView
-    contentContainerStyle={styles.container}
-    keyboardShouldPersistTaps="handled"
-  >
-    <Text style={styles.title}>Enter OTP</Text>
+    <OTPInputView
+    style={{width: '80%', height: Metrics.ratio(200)}}
+    pinCount={4}
+    autoFocusOnLoad
+    codeInputFieldStyle={styles.underlineStyleBase}
+    codeInputHighlightStyle={styles.underlineStyleHighLighted}
+    onCodeFilled = {(code => {
+        console.log(`Code is ${code}, you are good to go!`)
+    })}
+/>
 
-    <View style={styles.otpContainer}>
-      {[1, 2, 3, 4].map((_, index) => (
-        <TextInput
-          key={index}
-          style={styles.otpInput}
-          maxLength={1}
-          keyboardType="numeric"
-          value={otp[index]}
-          onChangeText={(text) => {
-            const newOTP = [...otp];
-            newOTP[index] = text;
-            setOTP(newOTP);
-          }}
-        />
-      ))}
-    </View>
-
-    <TouchableOpacity style={styles.submitButton} onPress={handleOTPEnter}>
-      <Text style={styles.submitButtonText}>Submit OTP</Text>
-    </TouchableOpacity>
-  </ScrollView>
 );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: Metrics.ratio(20),
+  borderStyleBase: {
+    width: 30,
+    height: 45
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: Metrics.ratio(20),
+
+  borderStyleHighLighted: {
+    borderColor: "#03DAC6",
   },
-  otpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '60%',
-    marginBottom: Metrics.ratio(20),
+
+  underlineStyleBase: {
+    width: 30,
+    height: 45,
+    borderWidth: 0,
+    borderBottomWidth: 1,
   },
-  otpInput: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#333',
-    fontSize: 20,
-    textAlign: 'center',
-    width: '20%',
-  },
-  submitButton: {
-    backgroundColor: '#FF4001',
-    paddingVertical: Metrics.ratio(12),
-    paddingHorizontal: Metrics.ratio(20),
-    borderRadius: Metrics.ratio(8),
-  },
-  submitButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+
+  underlineStyleHighLighted: {
+    borderColor: "#03DAC6",
   },
 });
 

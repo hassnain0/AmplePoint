@@ -17,6 +17,7 @@ import util from '../helpers/util';
 import Login from './Login';
 import OTP from './OTP';
  import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import axios from 'axios';
 const Register=({navigation})=> {
  const [loader,setLoader]=React.useState(false);
   const [state, setState] = React.useState({
@@ -138,10 +139,12 @@ const [isChecked, setIsChecked] = useState(false);
 
   console.log(response)
 } catch (error) {
+  setLoader(false)
   console.log(error)
 }
 
 resetForm();
+navigation.navigate('OTP')
   };
 }
 
@@ -240,20 +243,18 @@ resetForm();
             keyboardType="number-pad"
             autoCapitalize={'none'}
           />
-          <View style={{flex:1,flexDirection:'row'}}><BouncyCheckbox
-        style={{ marginTop: Metrics.ratio(16),left:Metrics.ratio(40)}}
+          <View style={{flex:1,flexDirection:'row',top:Metrics.ratio(10)}}>
+        <BouncyCheckbox
+        style={{marginTop: Metrics.ratio(1),left:Metrics.ratio(15)}}
         isChecked={isChecked}
         disableBuiltInState
         onPress={() => setIsChecked(!isChecked)}/>
            <View>
-  <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>By Creating an account, you agree to AmplePoint.com's  </Text>
+  <Text style={{paddingRight: Metrics.ratio(5), fontWeight: '600', color: 'black',left:Metrics.ratio(1)}}>By Creating an account, you agree to AmplePoint.com's  </Text>
 </View>
-<View>
-<Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-  or get it <Text style={{color: '#CC8C63'}}>FREE</Text> with <Text style={{color: '#CC8C63'}}>125.00</Text> points
-</Text>
-    </View>
       </View>
+      <Text style={{fontWeight: '600', color: 'black',left:Metrics.ratio(40)}}> <Text style={{color: '#487BBC'}}>Terms of Use </Text>AND<Text style={{color: '#487BBC'}}>Privacy Policy</Text>
+</Text>
      <View style={styles.bottomContainer}>
               <View style={styles.buttonView}>
                 <Button loader={loader}
