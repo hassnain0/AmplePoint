@@ -4,7 +4,8 @@ import { Metrics } from '../themes'
 import Button from '../components/Button'
 import util from '../helpers/util'
 import Toast from 'react-native-toast-message';
-import CheckBox from 'react-native-check-box'
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+
 const Payement=()=>{
     const [isChecked, setIsChecked] = useState(false);
 
@@ -57,8 +58,15 @@ return(
         fontWeight:'500',
         color:'black'
         }}>Pickup / Deleivery</Text>
-      <CheckBox value={isChecked} onValueChange={toggleCheckbox} />
-
+    <BouncyCheckbox
+  size={15}
+  fillColor="red"
+  unfillColor="#FFFFFF"
+  iconStyle={{ borderColor: "red" }}
+  innerIconStyle={{ borderWidth: 2 }}
+  textStyle={{ fontFamily: "JosefinSans-Regular" }}
+  onPress={toggleCheckBox}
+/>
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(140),
         fontSize:15,

@@ -18,14 +18,17 @@ import Login from './Login';
 import OTP from './OTP';
  
 const Register=({navigation})=> {
- const [isChecked,setChecked]=useState(false)
  const [loader,setLoader]=React.useState(false);
   const [state, setState] = React.useState({
     email: '',
-    password: '',  
-    name: '',
-    Lastname: '',
-    birthday:'',
+    password: '', 
+    confirmPassword: '',  
+    first_name: '',
+    last_name: '',
+    mobile:'',
+    referral_no:'',
+    store_referral_no:'',
+    term_accepted:'',
    confirmPassword:'',
 
   });
@@ -53,7 +56,7 @@ const Register=({navigation})=> {
  
 
   const _validation = () => {
-    const {email,Lastname, name, confirmPassword,password,birthday } =
+    const {email,last_name, first_name, referral_no,password,mobile,store_referral_no,term_accepted } =
       state;
     if (util.stringIsEmpty(name)) {
       util.errorMsg('Enter User Name');
@@ -88,7 +91,6 @@ const Register=({navigation})=> {
   };
   const onRegister = () => {
     setLoader(true);
-navigation.navigate('OTP')
     if (!_validation()) {
       return false;
     } else{
@@ -127,18 +129,28 @@ navigation.navigate('OTP')
   };
 
   const onRegisterApiCall = async ()=> {
-  
-    await db.collection("Registration").add({
-        Name:state.name,
-        Email:state.email,
-        BirthdayDate:state.birthday,
-       }).then(()=>{
-        setLoader(true);
-        navigation.navigate("Login") 
-       }).catch((error)=>console.log(error))
-  
-   resetForm();
-   util.successMsg("Successfully Registered")
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/register'; 
+
+      const requestData = {
+          fullname: "sample",
+          email: "sample@gmail.com",
+          password: "sample",
+          phone:"sample",
+          location:"sample",
+      };
+
+      const response = await axios.post(apiUrl, requestData);
+
+      // this.setState({ responseData: response.data, error: null });
+
+      console.log(response.data)
+  } catch (error) {
+      console.log(error)
+      // Handle any errors
+      this.setState({ responseData: null, error: error.message });
+  }
+   
   };
 
   const resetForm = () => {

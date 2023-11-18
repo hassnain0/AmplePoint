@@ -18,6 +18,7 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='Payement' component={Payement} options={( ) => ({headerTintColor:'white',title:'Payement',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleStyle: {
@@ -51,7 +52,6 @@ export default function App() {
       <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>    
       <Stack.Screen name='OTP' component={OTP}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
       <Stack.Screen name='GiftCard' component={GiftCard}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
-      <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       </Stack.Navigator>
        </NavigationContainer>
 );
