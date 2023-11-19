@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
 import { Metrics } from '../themes';
-import OTPInputView from '@twotalltotems/react-native-otp-input'
-
+import { OtpInput } from "react-native-otp-entry";
 const OTP= () => {
   const [otp, setOTP] = useState('');
 
@@ -11,42 +10,36 @@ const OTP= () => {
     console.log('Entered OTP:', otp);
     // You can validate the OTP and navigate to the next screen
   };
-
+const [count,setCount]=useState(60);
+useEffect(()=>{
+  setInterval(()=>{
+    setCount(count-1) 
+  })
+})
   return (
-    <OTPInputView
-    style={{width: '80%', height: Metrics.ratio(200)}}
-    pinCount={4}
-    autoFocusOnLoad
-    codeInputFieldStyle={styles.underlineStyleBase}
-    codeInputHighlightStyle={styles.underlineStyleHighLighted}
-    onCodeFilled = {(code => {
-        console.log(`Code is ${code}, you are good to go!`)
-    })}
+    <View>
+      <Text style={{color:'black',fontSize:20,alignSelf:'center',alignContent:'center',marginBottom:Metrics.ratio(50)}}>OTP Verification</Text>
+ <OtpInput
+  numberOfDigits={4}
+  focusColor="orange"
+  focusStickBlinkingDuration={500}
+  onTextChange={(text) => console.log(text)}
+  onFilled={(text) => console.log(`OTP is ${text}`)}
 />
-
+<Text style={{alignItems:'center',alignSelf:"center",marginTop:Metrics.ratio(20)}}>Resend</Text>
+<Text style={{alignItems:'center',alignSelf:"center",marginTop:Metrics.ratio(20)}}>{count}</Text>
+</View>
 );
 };
 
 const styles = StyleSheet.create({
-  borderStyleBase: {
-    width: 30,
-    height: 45
-  },
-
-  borderStyleHighLighted: {
-    borderColor: "#03DAC6",
-  },
-
-  underlineStyleBase: {
-    width: 30,
-    height: 45,
-    borderWidth: 0,
-    borderBottomWidth: 1,
-  },
-
-  underlineStyleHighLighted: {
-    borderColor: "#03DAC6",
-  },
+  resendView:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+    marginTop:Metrics.ratio(30),
+    marginLeft:Metrics.ratio(10),
+  }
 });
 
 export default OTP;
