@@ -86,14 +86,22 @@ const getProductDetails = async () => {
       setLoading(false);
     }
   }
-
+  const handleProductPress = (productId) => {
+    console.log("Pressed")
+    // Navigate to the next screen, passing the productId as a parameter
+    navigation.navigate('GiftDetails');
+  };
     const renderFlatList = (data) => (
       <FlatList
       data={storeProducts?.data}
       horizontal
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.pid}
-      renderItem={({ item }) => <ProductItem product={item}  />}
+      renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => handleProductPress(item.pid)}>
+          <ProductItem product={item} />
+        </TouchableOpacity>
+      )}
     />
     );
     const chunkArray = (array, chunkSize) => {
@@ -111,6 +119,7 @@ const getProductDetails = async () => {
       <View style={styles.container}>
       {loading && (
         <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}

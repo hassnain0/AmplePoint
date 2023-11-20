@@ -6,6 +6,8 @@ import MainTextInput from '../components/MainTextInput';
 import Register from './Register';
 import util from '../helpers/util';
 import Toast from 'react-native-toast-message';
+import axios from 'axios';
+import DemoScreen from './DemoScreen';
 
 
 const Login=({navigation})=>{
@@ -16,7 +18,7 @@ const Login=({navigation})=>{
     });
   };
   const SignUPScreen=()=>{
-    navigation.navigate("Register")
+   navigation.navigate("Register")
   }
   const [loader,setLoader]=useState(false);
   const [isFavorite, setFavorite] = useState(false);
@@ -30,7 +32,7 @@ const Login=({navigation})=>{
     });
 
     const _validation = () => {
-      const {email, name, confirmPassword,password,birthday } =
+      const {email,password, } =
         state;
     
       if (util.stringIsEmpty(email)) {
@@ -46,12 +48,41 @@ const Login=({navigation})=>{
      
       return true;
     };
-    const onRegister = () => {
+    const onRegister =async () => {
+      
       setLoader(true);
-  navigation.navigate('OTP')
+      navigation.navigate("DemoScreen")
       if (!_validation()) {
         return false;
       } 
+      else{
+       
+          try{
+               const apiUrl = 'https://amplepoints.com/apiendpoint/login'; 
+                await axios.get(apiUrl, {
+                  params: {
+                    username:state.email,
+                    password:state.password
+                  }
+                })
+                .then(response => {
+                  // Handle the successful response
+                  console.log('Response:', response.data);  
+                })
+                .catch(error => {
+                  // Handle the error
+                  console.error('Error:', error);
+                });
+          }
+          catch(err){
+            setLoader(false);  
+            console.log(err)
+            }
+            finally {
+              // Set loading to false when the API call is complete
+              setLoader(false);
+            }
+          }
     }
     const HomeScreen=()=>{
       navigation.navigate("DemoScreen")
@@ -60,7 +91,7 @@ return (
 
   <ImageBackground style={styles.ImageContainer} source={require('../assets/BackgroundImage.png')}>
   <TouchableOpacity onPress={SignUPScreen} style={styles.TouchContainer}>
-  <Text style={styles.TextContainer}>Sign In</Text>
+  <Text style={styles.TextContainer}>Sign Up</Text>
   </TouchableOpacity>
   <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',top:Metrics.ratio(320), padding: Metrics.ratio(20)}}>
   <View style={styles.ViewContainer2}>
@@ -68,7 +99,7 @@ return (
     
     <MainTextInput
       onChangeText={t => _handleTextChange('email', t)}
-      value={state.birthday}
+      value={state.email}
       label="Email"
       placeholder=""
       autoCapitalize={'none'}
@@ -76,8 +107,9 @@ return (
     
     <MainTextInput
       onChangeText={t => _handleTextChange('password', t)}
-      value={state.birthday}
+      value={state.password}
       label="Password"
+      secureTextEntry={true}
       placeholder=""
       autoCapitalize={'none'}
     />
@@ -85,8 +117,8 @@ return (
     <View style={styles.buttonView}>
       <Button
         loader={loader}
-        btnPress={HomeScreen}
-        label={"SignUp"}
+        btnPress={onRegister}
+        label={"Login"}
       />
     </View>
 
@@ -109,8 +141,8 @@ return (
         </View>
     </View>
   </View>
+  <Toast ref={ref => Toast.setRef(ref)} />
 </View>
-<Toast ref={ref => Toast.setRef(ref)} />
 </ImageBackground>
   
 )

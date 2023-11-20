@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ImageBackground,
 } from 'react-native';
 import { StyleSheet,} from 'react-native';
 import {Colors, Metrics} from '../themes';
@@ -164,11 +165,11 @@ navigation.navigate('OTP')
 
   return (
       <SafeAreaView style={styles.container}>
+       <ImageBackground style={styles.ImageContainer} source={require('../assets/Register.jpg')}>
+
      <ScrollView>
-         <View style={styles.logoView}>
-        <Image style={{width:Metrics.ratio(300),height:Metrics.ratio(70)}} source={require('../assets/Ample.png')}></Image>
-        </View>
-          <View style={styles.registeredContainer}>
+        
+          <View style={{top:Metrics.ratio(120)}}>
             <MainTextInput
               onChangeText={t => _handleTextChange('First_name', t)}
               value={state.First_name}
@@ -263,9 +264,7 @@ navigation.navigate('OTP')
                 />
               </View>
             </View>
-            
-          </View>
-<View style={styles.socialButtonContainer}>
+            <View style={styles.socialButtonContainer}>
 <View style={{flexDirection:'row',}}>
 </View>
         </View>
@@ -275,9 +274,12 @@ navigation.navigate('OTP')
           <TouchableOpacity style={styles.socialButton}>  
             <Image source={require('../assets/google.png')} style={styles.socialButtonIcon} />
           </TouchableOpacity>
-        </View>
+        </View>            
+          </View>
+
         </ScrollView>
         <Toast ref={ref => Toast.setRef(ref)} />
+        </ImageBackground>
       </SafeAreaView>
     
   );
@@ -309,6 +311,13 @@ const styles=StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: Metrics.ratio(5)
+      },
+      ImageContainer: {
+        bottom:Metrics.ratio(60),
+        // Your image styles here
+        width: Metrics.ratio(400), // Adjust as needed
+        height: Metrics.ratio(800), // Adjust as needed
+  
       },
       textHeader: {
         textAlign:'center',
