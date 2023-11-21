@@ -3,6 +3,7 @@ import {View,Text, StyleSheet,Image,TouchableOpacity, ImageBackground} from 'rea
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 import MainTextInput from '../components/MainTextInput';
+import NetInfo from '@react-native-community/netinfo'
 import Register from './Register';
 import util from '../helpers/util';
 import Toast from 'react-native-toast-message';
@@ -49,9 +50,33 @@ const Login=({navigation})=>{
      
       return true;
     };
+    const [isConnected,setIsConnected]=React.useState(true);
+    React.useEffect(()=>{
+  
+      const unsubscribe=NetInfo.addEventListener(state=>{
+      setIsConnected(state.isConnected);
+      })
+      return ()=>{
+        unsubscribe();
+      }
+  }) 
+  
+    const resetForm = () => {
+      setState({
+                    Email: '',
+          Password: '',
+      });
+    };
+  
+  
     const onRegister =async () => {
-      
-      setLoader(true);
+      setLoader(true);  
+      if(!isConnected){
+        setLoader(false);
+        util.errorMsg("Please connect your internet connection");
+        return false;
+      }
+      setLoader(false)
       navigation.navigate("DemoScreen")
       if (!_validation()) {
         return false;
@@ -67,8 +92,15 @@ const Login=({navigation})=>{
                   }
                 })
                 .then(response => {
+                  console.log("Response",response.data)
                   // Handle the successful response
-                  console.log('Response:', response.data);  
+                  if (response.data.status === "F") {
+                  util.errorMsg("Invalid Email and Password")
+                  resetForm();
+                  }
+                  else{
+                    navigation.navigate("DemoScreen")
+                  }
                 })
                 .catch(error => {
                   // Handle the error

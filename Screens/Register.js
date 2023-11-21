@@ -145,7 +145,7 @@ const [isChecked, setIsChecked] = useState(false);
 }
 
 resetForm();
-navigation.navigate('OTP')
+navigation.navigate('Login')
   };
 }
 

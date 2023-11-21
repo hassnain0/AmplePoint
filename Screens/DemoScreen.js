@@ -92,7 +92,11 @@ const getProductDetails = async () => {
     }
   }
   
+  const Display=()=>{
+    console.log("Hello")
+  }
     const renderFlatList = (data) => (
+      <TouchableOpacity onPress={Display}>
       <FlatList
       data={storeProducts?.data}
       horizontal
@@ -104,6 +108,7 @@ const getProductDetails = async () => {
         </TouchableOpacity>
       )}
     />
+    </TouchableOpacity>
     );
     const chunkArray = (array, chunkSize) => {
       const chunks = [];

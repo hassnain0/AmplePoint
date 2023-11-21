@@ -49,6 +49,7 @@ const GiftDetails=({navigation})=>{
   }    
   const SubmitButton=()=>{
     util.successMsg("Successfully Added to Cart")
+    navigation.navigate("Cart")
   }
 
   const renderStar = () => {
@@ -288,7 +289,7 @@ return (
     </View>
         </View>
         <View>
-          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
+          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
         </View>
  <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Day</Text>
@@ -490,14 +491,12 @@ return (
           </View>
         </View>
       )}
-{/*         
-
         <View style={styles.buttonView}>
                 <Button 
                   btnPress={AddtoCart}
                   label={"Add to Cart"}
                 />
-              </View>   */}
+              </View>   
               <Toast ref={ref => Toast.setRef(ref)} />
               </View>
     </ScrollView>

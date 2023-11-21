@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View ,ScrollView,TextInput} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import {AntDesign} from 'react-native-vector-icons/AntDesign'
+import { Metrics } from '../themes';
+import Button from '../components/Button';
+import Payement from './Payement';
+import Toast from 'react-native-toast-message';
+import Cart from './Cart';
 
 const data = [
   { label: 'Item 1', value: '1' },
@@ -14,60 +18,80 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
-const Checkout=()=> {
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
 
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-          Dropdown label
-        </Text>
-      );
-    }
-    return null;
-  };
+const Checkout=({navigation})=> {
+  const Navigate=()=>{
+    navigation.navigate("Payement")
+  }
+  const [value, setValue] = useState(null);
+  // const [isFocus, setIsFocus] = useState(false);
+
+  // const renderLabel = () => {
+  //   if (value || isFocus) {
+  //     return (
+  //       <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+  //         Dropdown label
+  //       </Text>
+  //     );
+  //   }
+  //   return null;
+  // };
 
   return (
-    <View style={styles.container}>
-      {renderLabel()}
-      <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select item' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-          setIsFocus(false);
-        }}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color={isFocus ? 'blue' : 'black'}
-            name="Safety"
-            size={20}
-          />
-        )}
-      />
-    </View>
+  
+    <ScrollView>
+    <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(50)}}>
+      <Text style={{top:Metrics.ratio(10),left:0,color:'black',fontSize:20,fontWeight:'500',textAlign:'center',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Biling Details</Text>
+        </View>
+        <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
+        <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>First Name</Text>
+    <TextInput placeholder='First Name'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>Last Name</Text>
+    <TextInput placeholder='Last Name'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+<Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Email</Text>
+    <TextInput placeholder='Email'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+</View>
+<View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
+        <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Phone</Text>
+    <TextInput placeholder='Phone' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>Country</Text>
+    <TextInput placeholder='Country'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+<Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>State</Text>
+    <TextInput placeholder='State'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+</View>
+<View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
+        <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Zip Code</Text>
+    <TextInput placeholder='Zip Code'   textAlign='left' keyboardType='numeric' auto style={styles.InputContainer} ></TextInput>
+    <Text style={{fontSize:15,color:'#F0F0F0',fontWeight:'400',color:'black'}}>Fax</Text>
+    <TextInput placeholder='Fax'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+<Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Address</Text>
+    <TextInput placeholder='Address'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+</View>
+<View style={styles.buttonView}>
+                <Button 
+                  btnPress={Navigate}
+                  label={"Pay"}
+                />
+              </View> 
+              <Toast ref={ref => Toast.setRef(ref)} /> 
+    </ScrollView>
   );
 };
 
 export default Checkout;
 
 const styles = StyleSheet.create({
+  InputContainer:{
+  marginTop:Metrics.ratio(3),
+  marginBottom:Metrics.ratio(10),
+  backgroundColor:'#CED0CD',
+  margin:Metrics.ratio(5),
+  right:Metrics.ratio(10),
+  borderRadius:10,
+  fontSize:15,
+ width:Metrics.ratio(380),
+ height:Metrics.ratio(50),
+},
   container: {
     backgroundColor: 'white',
     padding: 16,
@@ -90,6 +114,17 @@ const styles = StyleSheet.create({
     zIndex: 999,
     paddingHorizontal: 8,
     fontSize: 14,
+  },
+  buttonView: {
+    height:Metrics.vh*5,
+    backgroundColor:'#FF2F00',
+borderRadius:Metrics.ratio(70),
+    width: Metrics.vw * 90,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf:'center',
+    top:Metrics.ratio(0),
+    bottom:Metrics.ratio(25)
   },
   placeholderStyle: {
     fontSize: 16,
