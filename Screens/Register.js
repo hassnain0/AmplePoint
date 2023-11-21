@@ -135,7 +135,7 @@ const [isChecked, setIsChecked] = useState(false);
   };
 
   const response = await axios.post(apiUrl, requestData);
-
+  
   // this.setState({ responseData: response.data, error: null });
 
   console.log(response)
@@ -246,15 +246,15 @@ navigation.navigate('OTP')
           />
           <View style={{flex:1,flexDirection:'row',top:Metrics.ratio(10)}}>
         <BouncyCheckbox
-        style={{marginTop: Metrics.ratio(1),left:Metrics.ratio(15)}}
+        style={{marginTop: Metrics.ratio(1),left:Metrics.ratio(10)}}
         isChecked={isChecked}
         disableBuiltInState
         onPress={() => setIsChecked(!isChecked)}/>
            <View>
-  <Text style={{paddingRight: Metrics.ratio(5), fontWeight: '600', color: 'black',left:Metrics.ratio(1)}}>By Creating an account, you agree to AmplePoint.com's  </Text>
+  <Text style={{right: Metrics.ratio(5), fontWeight: '600', color: 'black',}}>By Creating an account, you agree to AmplePoint.com's  </Text>
 </View>
       </View>
-      <Text style={{fontWeight: '600', color: 'black',left:Metrics.ratio(40)}}> <Text style={{color: '#487BBC'}}>Terms of Use </Text>AND<Text style={{color: '#487BBC'}}>Privacy Policy</Text>
+      <Text style={{fontWeight: '600', color: 'black',left:Metrics.ratio(30)}}> <Text style={{color: '#487BBC'}}>Terms of Use </Text>AND<Text style={{color: '#487BBC'}}>Privacy Policy</Text>
 </Text>
      <View style={styles.bottomContainer}>
               <View style={styles.buttonView}>

@@ -8,9 +8,14 @@ import util from '../helpers/util';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import DemoScreen from './DemoScreen';
+import ForgotScreen from './ForgotPassword';
 
 
 const Login=({navigation})=>{
+
+  const ForgotScreenMove=()=>{
+    navigation.navigate("ForgotScreen")
+  }
   const _handleTextChange = (name, val) => {
     setState({
       ...state,
@@ -21,13 +26,9 @@ const Login=({navigation})=>{
    navigation.navigate("Register")
   }
   const [loader,setLoader]=useState(false);
-  const [isFavorite, setFavorite] = useState(false);
     const [state, setState] = React.useState({
       email: '',
       password: '',  
-      name: '',
-      birthday:'',
-     confirmPassword:'',
   
     });
 
@@ -122,7 +123,7 @@ return (
       />
     </View>
 
-    <TouchableOpacity>
+    <TouchableOpacity onPress={ForgotScreenMove}>
       <Image style={styles.trolleyIcon} source={require('../assets/Lock.png')}></Image>
       <Text style={{fontSize: 13, color: 'black', paddingLeft: Metrics.ratio(130), bottom: Metrics.ratio(4), fontWeight: '500'}}>Forgot Password</Text>
     </TouchableOpacity>

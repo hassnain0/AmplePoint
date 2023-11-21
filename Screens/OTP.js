@@ -26,8 +26,8 @@ useEffect(()=>{
   onTextChange={(text) => console.log(text)}
   onFilled={(text) => console.log(`OTP is ${text}`)}
 />
-<Text style={{alignItems:'center',alignSelf:"center",marginTop:Metrics.ratio(20)}}>Resend</Text>
-<Text style={{alignItems:'center',alignSelf:"center",marginTop:Metrics.ratio(20)}}>{count}</Text>
+{/* <Text style={{alignItems:'center',alignSelf:"center",marginTop:Metrics.ratio(20)}}>Resend</Text>
+<Text style={{alignItems:'center',alignSelf:"center",marginTop:Metrics.ratio(20)}}>{count}</Text> */}
 </View>
 );
 };

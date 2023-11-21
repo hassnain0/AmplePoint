@@ -10,6 +10,7 @@ import axios from 'axios';
 
 
 const ProductItem = ({ product }) => {
+
   return (
         <TouchableOpacity > 
     <View style={styles.productItem}>
@@ -47,6 +48,10 @@ const ProductItem = ({ product }) => {
 
 const DemoScreen=({navigation})=>{
   
+  const handleProductPress = () => {
+    // Navigate to the next screen, passing the productId as a parameter
+    navigation.navigate('GiftDetails');
+  };
   useEffect(()=>{
     getProductDetails();
   },[])
@@ -86,11 +91,7 @@ const getProductDetails = async () => {
       setLoading(false);
     }
   }
-  const handleProductPress = (productId) => {
-    console.log("Pressed")
-    // Navigate to the next screen, passing the productId as a parameter
-    navigation.navigate('GiftDetails');
-  };
+  
     const renderFlatList = (data) => (
       <FlatList
       data={storeProducts?.data}
@@ -98,7 +99,7 @@ const getProductDetails = async () => {
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.pid}
       renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleProductPress(item.pid)}>
+        <TouchableOpacity onPress={() => handleProductPress}>
           <ProductItem product={item} />
         </TouchableOpacity>
       )}

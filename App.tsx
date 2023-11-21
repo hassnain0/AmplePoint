@@ -11,6 +11,7 @@ import SplashScreen from './Screens/SplashScreen';
 import Cart from './Screens/Cart';
 import Checkout from './Screens/Checkout';
 import Payement from './Screens/Payement';
+import ForgotScreen from './Screens/ForgotPassword';
 
 
 const Stack=createNativeStackNavigator();
@@ -48,6 +49,15 @@ export default function App() {
 })}/>
 
       <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
+        backgroundColor: '#FF2F00',    
+        }, headerTitleContainerStyle: {
+          top: 800,
+        }, headerTitleStyle: {
+          
+          fontWeight: '600',fontSize:15 ,// Optionally customize the header title's style
+        },           
+})}/> 
+   <Stack.Screen name='ForgotScreen' component={ForgotScreen} options={( ) => ({headerTintColor:'white',title:'Forgot Password',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleContainerStyle: {
           top: 800,
