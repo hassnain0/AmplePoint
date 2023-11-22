@@ -57,6 +57,26 @@ const Register=({navigation})=> {
 }) 
 const [isChecked, setIsChecked] = useState(false);
 
+const isStrongPassword = (password) => {
+  // This function checks if the password contains at least one special character, one uppercase letter, and one lowercase letter
+  const specialChars = '!@#$%^&*()_-+={}[]|:;"<>,.?/~`';
+  let hasSpecialChar = false;
+  let hasUppercase = false;
+  let hasLowercase = false;
+
+  for (let char of password) {
+    if (specialChars.includes(char)) {
+      hasSpecialChar = true;
+    } else if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+      hasUppercase = true;
+    } else if (char === char.toLowerCase() && char !== char.toUpperCase()) {
+      hasLowercase = true;
+    }
+  }
+
+  return hasSpecialChar && hasUppercase && hasLowercase;
+};
+
   const _validation = () => {
     if(!isConnected){
       setLoader(false)
@@ -85,9 +105,19 @@ const [isChecked, setIsChecked] = useState(false);
         setLoader(false);
         return false;
       }
+      if(!isStrongPassword(Password)){
+        setLoader(false)
+        util.errorMsg("Password must contain special character capital and small letters")
+        return false;
+      }
     if (util.stringIsEmpty(ConfirmPassword)) {
       util.errorMsg('Enter Confirm Password');
       setLoader(false);
+      return false;
+    }
+    if(Password!=ConfirmPassword){
+      setLoader(false);
+      util.errorMsg("Password and Confirm Password must be same")
       return false;
     }
     if (util.stringIsEmpty(Mobile)) {
@@ -113,6 +143,8 @@ const [isChecked, setIsChecked] = useState(false);
         setLoader(false);
         return false;
       }
+
+    
     return true;
   };
   const onRegister = async() => {
@@ -134,12 +166,10 @@ const [isChecked, setIsChecked] = useState(false);
       term_accepted:isChecked,
   };
 
-  const response = await axios.post(apiUrl, requestData);
-  
-  // this.setState({ responseData: response.data, error: null });
-
-  console.log(response)
-} catch (error) {
+ const respone=await axios.post(apiUrl, requestData);
+ console.log(respone)
+}
+  catch (error) {
   setLoader(false)
   console.log(error)
 }
@@ -149,6 +179,9 @@ navigation.navigate('Login')
   };
 }
 
+const EmailVerification=()=>{
+
+}
   const resetForm = () => {
     setState({
         first_name: '',

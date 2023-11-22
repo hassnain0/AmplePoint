@@ -8,20 +8,43 @@ import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
 import Cart from './Cart';
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 const GiftDetails=({navigation})=>{
  
 
   const route=useRoute();
   const [data,setData]=useState(null);
-const [loading,setLoading]=useState(false);
+  const [actual_data,setactual_Data]=useState(null);
+const [loading,setLoading]=useState(true);
   useEffect(()=>{
-    setLoading(true);
+    const getProductDetails = async () => {
+      try {
+        const productid = route.params.productData.pid;
+        const userid = data.vendor_key;
+        const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
+  
+        const response = await axios.get(apiUrl, {
+          params: {
+            product_id: productid,
+            user_id: userid,
+          },
+        });
+  
+        // Handle the successful response
+        setactual_Data(response.data);
+        console.log('Actual Data', actual_data);
+      } catch (error) {
+        // Handle the error
+        console.error('Error:', error);
+      }
+    };
     DataFind();
-    setData(route.params)
-    console.log(data)
+    getProductDetails();
+    setLoading(false)
     
-  })
+  },[])
+  
   const [quantity, setQuantity] = useState(1);
 
   const DataFind=()=>{
@@ -43,10 +66,13 @@ const [loading,setLoading]=useState(false);
   const showShippingDetails = () => {
     setIsShippingSelected(!isShippingSelected);
   };
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(new Date());
+
+  //Method to get Product Details 
+  
+  // const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [selectedDate, setSelectedDate] = useState(new Date());
+  // const [showTimePicker, setShowTimePicker] = useState(false);
+  // const [selectedTime, setSelectedTime] = useState(new Date());
 
   const handleDateChange = (event, date) => {
     setShowDatePicker(Platform.OS === 'ios');
@@ -93,9 +119,8 @@ const [loading,setLoading]=useState(false);
     }
     return stars;
   };
-
+ 
   const AddtoCart=()=>{
-
     navigation.navigate("Cart")
   }
   const MoreShown=()=>{
@@ -103,52 +128,46 @@ const [loading,setLoading]=useState(false);
   }
 return (
   <SafeAreaView>
-     
-  <ScrollView>
   {loading && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
-       {data==null && (
-        <View style={{alignSelf:'center',alignContent:"center"}}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Data Not found</Text>
-          
-        </View>
-      )}
-
+       
+     {actual_data  && (
+  <ScrollView>
       <View>
     <View >
    <View style={styles.ViewContainer}>
    
-    <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
+    <Image style={styles.ImageContainer}  source={{  uri:'https://amplepoints_product_1700662135_q1_700x850 (1).jpg'  }}></Image>
     <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>$</Text>
+  <Text style={styles.TextContainer1}>{actual_data?.data?.product_info?.single_price}$</Text>
   </View>
   <View style={styles.TouchContainer2}>
   <Text style={styles.TextContainer2}>Gift Card</Text>
   </View>
    </View>
    <View style={{flex:1, flexDirection:'row'}}>
-   <Text style={styles.TextContainer}>$ Gift Card</Text>
-   <Text style={styles.Text2Container}>$</Text>
+   <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
+   <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
     </View>
    <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>FREE with  AmplePoints</Text>
+        }}>FREE with {actual_data?.data?.product_info?.pamples} AmplePoints</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         fontWeight:'500',
         color:'#EC6A31'
-        }}>By:Cafe De Manila</Text>
+        }}>By:{actual_data?.data?.product_info?.pvendor}</Text>
         <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, flexDirection:'row'}}>
-<Image source={require('../assets/ColorOptions.png')} style={{width:Metrics.ratio(29),height:Metrics.ratio(27),top:Metrics.ratio(5),left:Metrics.ratio(15)}}></Image>
+<Image  source={{ uri:actual_data?.data?.product_info?.pimage }} style={{width:Metrics.ratio(29),height:Metrics.ratio(27),top:Metrics.ratio(5),left:Metrics.ratio(15)}}></Image>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(15),
         fontSize:15,
@@ -478,7 +497,7 @@ return (
           </View>
         </RadioButton.Group>
       </View>
-      {isShippingSelected && (
+      {/* {isShippingSelected && (
         <View>
             <View>
             <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
@@ -525,7 +544,7 @@ return (
             </View>
           </View>
         </View>
-      )}
+      )} */}
         <View style={styles.buttonView}>
                 <Button 
                   btnPress={AddtoCart}
@@ -535,6 +554,7 @@ return (
               <Toast ref={ref => Toast.setRef(ref)} />
               </View>
     </ScrollView>
+    )}
 </SafeAreaView>
 )
 }
@@ -735,7 +755,7 @@ borderRadius:Metrics.ratio(70),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         color:'black',
-        fontWeight:'bold',
+        fontWeight:'800',
     },
     Text4Container:{
       paddingTop:Metrics.ratio(20),

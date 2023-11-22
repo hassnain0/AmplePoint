@@ -66,7 +66,7 @@ const getProductDetails = async () => {
         })
         .then(response => {
           // Handle the successful response
-         
+         console.log("Response",response)
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
