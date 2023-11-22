@@ -76,8 +76,7 @@ const Login=({navigation})=>{
         util.errorMsg("Please connect your internet connection");
         return false;
       }
-      setLoader(false)
-      navigation.navigate("DemoScreen")
+     
       if (!_validation()) {
         return false;
       } 
@@ -223,7 +222,7 @@ const styles=StyleSheet.create({
     },
     ImageContainer: {
       // Your image styles here
-      width: Metrics.ratio(300), // Adjust as needed
+      width:300, // Adjust as needed
       height: Metrics.ratio(200), // Adjust as needed
 
     },

@@ -1,5 +1,5 @@
 import {React,useState} from 'react'
-import { TextInput,Text,ScrollView,StyleSheet, View,Image } from 'react-native'
+import { TextInput,Text,ScrollView,StyleSheet, View,Image, Alert } from 'react-native'
 import { Metrics } from '../themes'
 import Button from '../components/Button'
 import util from '../helpers/util'
@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const Payement=()=>{
+  
     const [isChecked, setIsChecked] = useState(false);
 
     // Function to handle checkbox toggle
@@ -211,6 +212,7 @@ borderRadius:Metrics.ratio(70),
         backgroundColor:'#CED0CD',
         margin:Metrics.ratio(5),
         borderRadius:10,
+        right:Metrics.ratio(10),
         fontSize:15,
        width:Metrics.ratio(380),
        height:Metrics.ratio(50),

@@ -5,16 +5,11 @@ import GiftDetails from './GiftDetails';
 import axios from 'axios';
 
 
-
-
-
-
 const ProductItem = ({ product }) => {
 
   return (
-        <TouchableOpacity > 
-    <View style={styles.productItem}>
-     
+
+    <View style={styles.productItem}>     
     <Text style={{fontSize:12,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.price}</Text>
         <View >
             <Image   source={{ uri: `data:image/png;base64,${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
@@ -29,7 +24,7 @@ const ProductItem = ({ product }) => {
 
        <View style={{flex:1, flexDirection:'row'}}>
        <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >$ {product.pprice}</Text>
-       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}} >
+       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}}>
        <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscountprice} % Back</Text>
        </View>
        </View>
@@ -42,15 +37,15 @@ const ProductItem = ({ product }) => {
   or get it <Text style={{color: '#CC8C63'}}>FREE</Text> with <Text style={{color: '#CC8C63'}}>125.00</Text> points
 </Text>
     </View>
-    </TouchableOpacity>
+
   );
 };
 
 const DemoScreen=({navigation})=>{
   
-  const handleProductPress = () => {
+  const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
-    navigation.navigate('GiftDetails');
+    navigation.navigate('GiftDetails',{ productData });
   };
   useEffect(()=>{
     getProductDetails();
@@ -71,7 +66,7 @@ const getProductDetails = async () => {
         })
         .then(response => {
           // Handle the successful response
-          console.log('Response:', response.data);
+         
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
@@ -91,24 +86,19 @@ const getProductDetails = async () => {
       setLoading(false);
     }
   }
-  
-  const Display=()=>{
-    console.log("Hello")
-  }
     const renderFlatList = (data) => (
-      <TouchableOpacity onPress={Display}>
+   
       <FlatList
       data={storeProducts?.data}
       horizontal
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.pid}
       renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleProductPress}>
+        <TouchableOpacity onPress={() => handleProductPress(item)}>
           <ProductItem product={item} />
-        </TouchableOpacity>
-      )}
-    />
-    </TouchableOpacity>
+          </TouchableOpacity>
+           )}/>
+   
     );
     const chunkArray = (array, chunkSize) => {
       const chunks = [];

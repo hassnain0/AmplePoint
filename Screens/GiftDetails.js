@@ -1,18 +1,34 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
-import { Icon, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, Icon, RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
 import Cart from './Cart';
+import { useRoute } from '@react-navigation/native';
 
 const GiftDetails=({navigation})=>{
  
+
+  const route=useRoute();
+  const [data,setData]=useState(null);
+const [loading,setLoading]=useState(false);
+  useEffect(()=>{
+    setLoading(true);
+    DataFind();
+    setData(route.params)
+    console.log(data)
     
+  })
   const [quantity, setQuantity] = useState(1);
 
+  const DataFind=()=>{
+    if(!data || data==null){
+      setLoading(false);
+    }
+  }
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
   };
@@ -39,6 +55,7 @@ const GiftDetails=({navigation})=>{
     }
   };
 
+  const [showMore,setShowMore]=useState(false)
   const handleTimeChange = (event, time) => {
     
     setShowTimePicker(Platform.OS === 'ios');
@@ -81,41 +98,48 @@ const GiftDetails=({navigation})=>{
 
     navigation.navigate("Cart")
   }
+  const MoreShown=()=>{
+    setShowMore(true);
+  }
 return (
   <SafeAreaView>
-  {/* <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.leftIconView}
-            onPress={() => console.log('navigation', navigation.goBack())}>
-            <Icon.Ionicons name="arrow-back" color={Colors.white} size={28} />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>Register</Text>
-        </View> */}
+     
   <ScrollView>
-  
+  {loading && (
+        <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+       {data==null && (
+        <View style={{alignSelf:'center',alignContent:"center"}}>
+          <Text style={{textAlign:'center',alignSelf:'center'}}>Data Not found</Text>
+          
+        </View>
+      )}
+
       <View>
     <View >
    <View style={styles.ViewContainer}>
    
     <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
     <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>$15</Text>
+  <Text style={styles.TextContainer1}>$</Text>
   </View>
   <View style={styles.TouchContainer2}>
   <Text style={styles.TextContainer2}>Gift Card</Text>
   </View>
    </View>
    <View style={{flex:1, flexDirection:'row'}}>
-   <Text style={styles.TextContainer}>$15 GIFT CARD</Text>
-   <Text style={styles.Text2Container}>$15.00</Text>
+   <Text style={styles.TextContainer}>$ Gift Card</Text>
+   <Text style={styles.Text2Container}>$</Text>
     </View>
    <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>FREE with 208.33 AmplePoints</Text>
+        }}>FREE with  AmplePoints</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -262,8 +286,20 @@ return (
         color:'#EC6A31'
         }}>Know More</Text>
         </TouchableOpacity>
-  </View>    
+  </View>  
    </View>
+   {showMore && (
+  <View>
+  <TouchableOpacity onPress={MoreShown}>
+  <Text  style={{  top:Metrics.ratio(10),
+        paddingLeft:Metrics.ratio(290),
+        fontSize:15,
+        fontWeight:'600',
+        color:'#EC6A31'
+        }}>Show Less</Text>
+        </TouchableOpacity>
+  </View>  
+  )} 
    <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
     <Text style={{color:'black',fontWeight:'900',left:Metrics.ratio(20),fontSize:20}}>Rating & Reviews</Text>
     <View style={{paddingLeft:Metrics.ratio(90),}}>
@@ -291,49 +327,49 @@ return (
         <View>
           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
         </View>
- <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+ <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Day</Text>
         <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open/CLose</Text>
         <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(145),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Monday</Text>
         <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(135),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Tuesday</Text>
         <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(140),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Wednesday</Text>
         <Text style={{left:Metrics.ratio(50),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(142),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Thursday</Text>
         <Text style={{left:Metrics.ratio(65),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(130),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(155),top:Metrics.ratio(10)}}>End Time</Text>
         </View>        
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Friday</Text>
         <Text style={{left:Metrics.ratio(85),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(150),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(175),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Saturday</Text>
         <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(130),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(155),top:Metrics.ratio(10)}}>End Time</Text>
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(40),backgroundColor:'#CED0CD'}}>
+        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Sunday</Text>
         <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(140),top:Metrics.ratio(10)}}>Start Time</Text>
@@ -486,7 +522,6 @@ return (
     </TouchableOpacity>
     </View>
             </View>
-            
             </View>
           </View>
         </View>
@@ -568,7 +603,7 @@ borderRadius: 1,
     color:'white',
     backgroundColor: '#FC3F01',
 borderRadius: 5,
-width:Metrics.ratio(80),
+width:Metrics.ratio(60),
 height:Metrics.ratio(40),
   },
   button4: {
@@ -700,7 +735,7 @@ borderRadius:Metrics.ratio(70),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         color:'black',
-        fontWeight:'400',
+        fontWeight:'bold',
     },
     Text4Container:{
       paddingTop:Metrics.ratio(20),

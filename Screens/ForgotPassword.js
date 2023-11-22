@@ -38,7 +38,8 @@ const ForgotScreen = ({ navigation }) => {
       const requestData = {
           email:email_password
       };
-      await axios.post(apiUrl, requestData);
+     const respone=await axios.post(apiUrl, requestData);
+      console.log("Respone",respone)
       // this.setState({ responseData: response.data, error: null });
     setEmail('');
     util.successMsg("Done")
