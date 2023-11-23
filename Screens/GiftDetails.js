@@ -21,7 +21,7 @@ const [loading,setLoading]=useState(true);
     const getProductDetails = async () => {
       try {
         const productid = route.params.productData.pid;
-        const userid = data.vendor_key;
+        const userid = route.params.productData.vendor_key;
         const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
   
         const response = await axios.get(apiUrl, {
@@ -69,10 +69,10 @@ const [loading,setLoading]=useState(true);
 
   //Method to get Product Details 
   
-  // const [showDatePicker, setShowDatePicker] = useState(false);
-  // const [selectedDate, setSelectedDate] = useState(new Date());
-  // const [showTimePicker, setShowTimePicker] = useState(false);
-  // const [selectedTime, setSelectedTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(new Date());
 
   const handleDateChange = (event, date) => {
     setShowDatePicker(Platform.OS === 'ios');
@@ -420,7 +420,7 @@ return (
         fontSize:15,
         fontWeight:'500',
         color:'black'
-        }}>${25*quantity}.00</Text>
+        }}>${actual_data?.data?.product_info?.single_price*quantity}</Text>
         </View>
         <View style={{flex:1,flexDirection:'row'}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
@@ -434,7 +434,7 @@ return (
         fontSize:15,
         fontWeight:'500',
         color:'black'
-        }}>104.17 Amples</Text>
+        }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
         </View>
         <View style={{flex:1,flexDirection:'row'}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
@@ -477,7 +477,8 @@ return (
         style={styles.textField}
         placeholder="Apply Amples"
         placeholderTextColor="grey"
-      /><TouchableOpacity style={styles.button3}>
+      />
+      <TouchableOpacity style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 
@@ -497,21 +498,22 @@ return (
           </View>
         </RadioButton.Group>
       </View>
-      {/* {isShippingSelected && (
+       {isShippingSelected && (
         <View>
             <View>
             <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
           <View style={{top:Metrics.ratio(10)}}>
-            <RadioButton.Item color='#FF2E00' label="PickUp/Dining" value="true" />
+            <RadioButton.Item color='#FF2E00' label={actual_data?.data?.product_info?.pickup_address} value="true" />
           </View>
-        </RadioButton.Group> <View style={styles.dateTimeContainer}>
-            <View style={styles.datePickerContainer}>
-              <Text style={{textAlign:'center'}}>Select Date:</Text>
-              <TouchableOpacity
-              style={{bottom:Metrics.ratio(50)}}
+        </RadioButton.Group>
+        <View style={styles.dateTimeContainer}> 
+        <View style={styles.datePickerContainer}>
+              <TouchableOpacity style={{bottom:Metrics.ratio(50)}}
                 title="Select Date"
                 onPress={() => setShowDatePicker(true)}
-              />
+>
+              <Text style={{textAlign:'center'}}>Select Date:</Text>
+              </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
                   value={selectedDate}
@@ -522,35 +524,38 @@ return (
               )}
             </View>
             <View style={styles.timePickerContainer}>
-              <Text>Select Time:</Text>
-              <TouchableOpacity
+            <TouchableOpacity
                 title="Select Time"
                 onPress={() => setShowTimePicker(true)}
-              />
+            >
+              <Text>Select Time:</Text>
+              </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
+                style={{ color: 'black' }} 
                   value={selectedTime}
                   mode="time"
                   display="default"
                   onChange={handleTimeChange}
                 />
               )}
-              <View>
-              <TouchableOpacity onPress={SubmitButton} style={styles.button4}>
-      <Text style={styles.buttonText}>Submit</Text>
+   <TouchableOpacity style={styles.buttonSubmit}>
+      <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
-    </View>
+           
             </View>
             </View>
           </View>
-        </View>
-      )} */}
-        <View style={styles.buttonView}>
+          <View style={styles.buttonView}>
                 <Button 
                   btnPress={AddtoCart}
                   label={"Add to Cart"}
                 />
-              </View>   
+              </View>
+        </View>
+        
+      )} 
+          
               <Toast ref={ref => Toast.setRef(ref)} />
               </View>
     </ScrollView>
@@ -625,6 +630,15 @@ borderRadius: 1,
 borderRadius: 5,
 width:Metrics.ratio(60),
 height:Metrics.ratio(40),
+  },
+  buttonSubmit: {
+    color:'white',
+    top:Metrics.ratio(20),
+    backgroundColor: '#FC3F01',
+borderRadius: Metrics.borderRadius,
+width:Metrics.ratio(60),
+height:Metrics.ratio(40),
+marginBottom:Metrics.ratio(20)
   },
   button4: {
     color:'white',
