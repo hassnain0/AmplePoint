@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView} from 'react-native';
+import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Modal} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
 import { ActivityIndicator, Icon, RadioButton } from 'react-native-paper';
@@ -12,11 +12,30 @@ import axios from 'axios';
 
 const GiftDetails=({navigation})=>{
  
-
+  const [isVisible,setIsVisible]=useState(false)
+const WritFeedback=()=>{
+  setIsVisible(true);
+}
   const route=useRoute();
   const [data,setData]=useState(null);
+  
   const [actual_data,setactual_Data]=useState(null);
-const [loading,setLoading]=useState(true);
+
+   const ShowMoreDetail=()=>{
+    setKnowMore(false);
+    setShowMore(true);
+   }
+   const [knowMore,setKnowMore]=useState(true)
+
+   const KnowMoreDetails=()=>{
+    setShowMore(false);
+    setKnowMore(true);
+    
+   }
+   const onClose=()=>{
+    setIsVisible(false);
+   }
+  const [loading,setLoading]=useState(true);
   useEffect(()=>{
     const getProductDetails = async () => {
       try {
@@ -126,8 +145,51 @@ const [loading,setLoading]=useState(true);
   const MoreShown=()=>{
     setShowMore(true);
   }
+  const [rating, setRating] = useState(0);
+  const [feedback, setFeedback] = useState('');
+
+  const handleSave = () => {
+    // Implement your save logic here
+    console.log(`Rating: ${rating}, Feedback: ${feedback}`);
+    onClose();
+  };
+
+  const MyrenderStars = () => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      const starColor = i <= rating ? '' : 'gray';
+      stars.push(
+        <TouchableOpacity key={i} onPress={() => setRating(i)}>
+          <Text style={{ color: starColor, fontSize: 30 }}>★</Text>
+        </TouchableOpacity>
+      );
+    }
+    return stars;
+  };
 return (
   <SafeAreaView>
+     <Modal
+      visible={isVisible}
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Feedback</Text>
+          <View style={styles.MystarsContainer}>{MyrenderStars()}</View>
+          <TextInput
+            placeholder="Enter your feedback"
+            value={feedback}
+            onChangeText={(text) => setFeedback(text)}
+            style={styles.feedbackInput}
+          />
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveButtonText}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
   {loading && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
@@ -158,7 +220,7 @@ return (
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>FREE with {actual_data?.data?.product_info?.pamples} AmplePoints</Text>
+        }}>FREE with {actual_data?.data?.product_info?.pfwamples} AmplePoints</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -201,7 +263,7 @@ return (
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>104.17 Amples</Text>
+        }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
      </View>
      <View style={{flex:1, flexDirection:'row'}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
@@ -215,7 +277,7 @@ return (
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>$12.50</Text>
+        }}>{actual_data?.data?.product_info?.pdiscountprice}</Text>
    </View>
    <View style={{flex:1, flexDirection:'row'}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
@@ -229,7 +291,7 @@ return (
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>50.00%</Text>
+        }}>{actual_data?.data?.product_info?.pdiscount}</Text>
     
    </View>
    <View style={{flex:1, flexDirection:'row'}}>
@@ -273,7 +335,7 @@ return (
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>PROMOTION CARD MUST CHECK </Text>  
+        }}>{actual_data?.data?.product_info?.pro_mess}</Text>  
    </View>
     <Text  style={{  paddingTop:Metrics.ratio(1),
         paddingLeft:Metrics.ratio(200),
@@ -293,23 +355,25 @@ return (
         fontSize:15,
         fontWeight:'300',
         color:'black'
-        }}>CD001</Text>
+        }}>{actual_data?.data?.product_info?.product_sku}</Text>
 
     </View>
 <View>
-  <TouchableOpacity>
-  <Text  style={{  top:Metrics.ratio(10),
+  <TouchableOpacity onPress={ShowMoreDetail}>
+ 
+ {knowMore && ( <Text  style={{  top:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(290),
         fontSize:15,
         fontWeight:'600',
         color:'#EC6A31'
         }}>Know More</Text>
+        )}
         </TouchableOpacity>
   </View>  
    </View>
    {showMore && (
   <View>
-  <TouchableOpacity onPress={MoreShown}>
+  <TouchableOpacity onPress={KnowMoreDetails}>
   <Text  style={{  top:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(290),
         fontSize:15,
@@ -317,24 +381,30 @@ return (
         color:'#EC6A31'
         }}>Show Less</Text>
         </TouchableOpacity>
+        <Text  style={{  paddingTop:Metrics.ratio(10),
+        paddingLeft:Metrics.ratio(20),
+        fontSize:15,
+        fontWeight:'300',
+        color:'black'
+        }}>{actual_data?.data?.product_info?.long_desc}</Text>
   </View>  
   )} 
    <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
     <Text style={{color:'black',fontWeight:'900',left:Metrics.ratio(20),fontSize:20}}>Rating & Reviews</Text>
     <View style={{paddingLeft:Metrics.ratio(90),}}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={WritFeedback}>
         <Text style={{alignItems:'center',borderColor:"black",borderWidth:1,borderRadius:5,color:'black',fontWeight:'400',fontSize:15}}>Write your review</Text>
         </TouchableOpacity>
         </View>
        
    </View>
-   <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(70),top:Metrics.ratio(20)}}>
+   <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(60),top:Metrics.ratio(20)}}>
           <Text style={{fontSize:25,color:'black',fontWeight:'500',top:Metrics.ratio(25)}}>5.00</Text>
           {renderStar()}
             </View>
   
-        <View style={{left:Metrics.ratio(70)}}>
-          <Text style={{fontSize:13,color:'black',fontWeight:'400',bottom:Metrics.ratio(20)}}>Average Customer </Text>
+        <View style={{left:Metrics.ratio(60),}}>
+          <Text style={{fontSize:13,color:'black',paddingRight:Metrics.ratio(50),fontWeight:'400',bottom:Metrics.ratio(20)}}>Average Customer </Text>
           <Text style={{fontSize:13,color:'black',fontWeight:'400',bottom:Metrics.ratio(20),left:Metrics.ratio(30)}}>Rating</Text>
           
           <View style={styles.container}>
@@ -580,6 +650,45 @@ const styles=StyleSheet.create({
     borderRadius:10,
     borderRadius:Metrics.ratio(10),
     backgroundColor:'#D1D3D0'
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  MystarsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  feedbackInput: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: '#FF2F00',
+    padding: Metrics.ratio(10),
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  saveButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   timePickerContainer: {
     flex: 1,

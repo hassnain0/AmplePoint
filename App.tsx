@@ -20,6 +20,15 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
+        backgroundColor: '#FF2F00',    
+        }, headerTitleContainerStyle: {
+          top: 800,
+        }, headerTitleStyle: {
+          
+          fontWeight: '600',fontSize:15 ,// Optionally customize the header title's style
+        },           
+})}/> 
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00'}}/>  
       <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       {/* <Stack.Screen name='StripePayement' component={StripePayement} options={( ) => ({headerTintColor:'white',title:'Payment',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
@@ -63,15 +72,7 @@ export default function App() {
         },           
 })}/>
   
-      <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
-        backgroundColor: '#FF2F00',    
-        }, headerTitleContainerStyle: {
-          top: 800,
-        }, headerTitleStyle: {
-          
-          fontWeight: '600',fontSize:15 ,// Optionally customize the header title's style
-        },           
-})}/> 
+      
    <Stack.Screen name='ForgotScreen' component={ForgotScreen} options={( ) => ({headerTintColor:'white',title:'Forgot Password',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleContainerStyle: {
