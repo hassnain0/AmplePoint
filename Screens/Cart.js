@@ -1,214 +1,154 @@
-import React, { useState } from 'react';
-import { View, Text,Image, StyleSheet, ScrollView,TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,TouchableOpacity, SafeAreaView} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
-import util from '../helpers/util';
 import Toast from 'react-native-toast-message';
+import axios from 'axios';
 
 const Cart= ({navigation}) => {
    
+  const [actulaData,setActualData]=useState(null);
+  useEffect(()=>{
+getProductDetails();
+setLoading(false)
+  },[])
   const [quantity, setQuantity] = useState(1);
-
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+ const [loading,setLoading]=useState(true);
+ //Number of Carts recieved from API
+ const [product_no,setProduct_no]=useState(0);
+ const decreaseQuantity = (index) => {
+  setActualData((prevData) => {
+    const newData = [...prevData.data];
+    if (newData[index].item_added_quantity > 1) {
+      newData[index].item_added_quantity -= 1;
     }
-  };
- 
+    return { ...prevData, data: newData };
+  });
+};
+
+const increaseQuantity = (index) => {
+  setActualData((prevData) => {
+    const newData = [...prevData.data];
+    newData[index].item_added_quantity += 1;
+    return { ...prevData, data: newData };
+  });
+};
   const CheckOutScreen=()=>{
     navigation.navigate("Checkout")
   }
+  const getProductDetails = async () => {
+    try {
+    
+      const apiUrl = 'https://amplepoints.com/apiendpoint/getusercart?';
 
+      const response = await axios.get(apiUrl, {
+        params: {
+          user_id:126,
+        },
+      });
+
+      console.log("Response Data",response.data)
+      // Handle the successful response
+      setActualData(response.data)
+      setProduct_no(response.data.length);
+      const cart_items=response.data.data;
+      setProduct_no(cart_items.length)
+      
+    } catch (error) {
+      // Handle the error
+      console.error('Error:', error);
+    }
+  };
+  const MyComponent =()=>{
+    return (
+      <View>
+        {actulaData?.data?.map((item, index) => (
+          <View key={index} style={{ top: Metrics.ratio(50), left: Metrics.ratio(10) ,marginBottom: Metrics.ratio(20) }}>
+           
+            <View style={{ flexDirection: 'row' ,}}>
+              
+              <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>By: </Text>
+              <Text style={{ fontSize: 15, fontWeight: '350' }}>{item.supplier_name}</Text>
+              {/* <Image style={styles.ImageContainer} source={{ uri: `${urlData.product_image_base}${item.image}` }} /> */}
+              <View>
+                {/* <View style={styles.TouchContainer1}>
+                  <Text style={styles.TextContainer1}>${item.discount_price}</Text>
+                </View>
+                <View style={styles.TouchContainer2}>
+                  <Text style={styles.TextContainer2}>Gift Card</Text>
+                </View> */}
+              </View>
+            </View>
+  
+            <View>
+              <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
+                ${item.discount_price}
+              </Text>
+              <View style={styles.container2}>
+                <Text style={{ top: Metrics.ratio(-30), fontSize: 15, left: Metrics.ratio(-15), bottom: Metrics.ratio(60) }}>
+                  Free with {item.no_of_amples} amplePoints
+                </Text>
+                <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
+                  <Image source={require('../assets/Minus.png')} style={styles.icon} />
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{item.item_added_quantity}</Text>
+                <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
+                  <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
+                </TouchableOpacity>
+                
+              </View>
+              <View>
+      <TouchableOpacity style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',
+    backgroundColor: '#FC3F01',
+    width:Metrics.ratio(70),
+borderRadius: 10,}}>
+      <Text style={{fontSize:15,textAlign:'center',color:'white'}}>Remove</Text>
+      </TouchableOpacity>
+    </View>
+            </View>
+          </View>
+        ))}
+      </View>
+    );
+  }
   return (
-    <ScrollView>
+    <SafeAreaView style={{backgroundColor:'white'}}>
+     { loading && (
+        <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+         {!actulaData && (
+        <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center'}}>data not found</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+    {actulaData &&(
+
+    <ScrollView>  
     <View >
         <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD'}}>
-        <Text style={{left:0,color:'black',fontSize:15,fontWeight:'500',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Item(6)</Text>
-        <Text style={{color:'black',fontSize:15,fontWeight:'500'}}>Total : $ 1697.00</Text>
+        <Text style={{left:0,color:'black',fontSize:15,fontWeight:'500',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Item({product_no})</Text>
+        <Text style={{color:'black',fontSize:15,fontWeight:'500'}}>Total : {actulaData.cart_total} $</Text>
           </View>
-          <View style={{top:Metrics.ratio(20),left:Metrics.ratio(10)}} >
-            <Text style={{fontSize:17,color:'black',fontWeight:'bold'}}>$ 50 GIFT CARD</Text>
-        <View style={{flexDirection:'row'}}>
-            <Text style={{fontSize:15,color:'black',fontWeight:'bold'}}>By: </Text>
-            <Text style={{fontSize:15,fontWeight:'350'}}>Oyshi Sushi </Text>
-            <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
-<View>  
-            <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>$15</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-   </View>
-            </View>
-            
-          </View>
-          <View>
-            <Text style={{fontSize:20,color:'black',fontWeight:'bold',left:Metrics.ratio(12),bottom:Metrics.ratio(50)}}>$50.00</Text>
-            <View style={styles.container2}>
-            <Text style={{top:Metrics.ratio(-30),fontSize:15,left:Metrics.ratio(-15),bottom:Metrics.ratio(60)}}>Free with 416.67 amplePoints</Text>
-      <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
-        <Image source={require('../assets/Minus.png')} style={styles.icon} />
-      </TouchableOpacity>
-     
-        <Text style={styles.quantityText}>{quantity}</Text>
-
-      <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
-        <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
-      </TouchableOpacity>
-      
-    </View>
-    <View>
-      <TouchableOpacity style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',
-    backgroundColor: '#FC3F01',
-    width:Metrics.ratio(70),
-borderRadius: 10,}}>
-      <Text style={{fontSize:15,textAlign:'center',color:'white'}}>Remove</Text>
-      </TouchableOpacity>
-    </View>
-            </View>
-          
-          <View style={{top:Metrics.ratio(20),left:Metrics.ratio(10)}} >
-            <Text style={{fontSize:17,color:'black',fontWeight:'bold'}}>$ 50 GIFT CARD</Text>
-        <View style={{flexDirection:'row'}}>
-            <Text style={{fontSize:15,color:'black',fontWeight:'bold'}}>By: </Text>
-            <Text style={{fontSize:15,fontWeight:'350'}}>Oyshi Sushi </Text>
-            <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
-<View>  
-            <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>$15</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-   </View>
-            </View>
-          </View>
-          <View>
-            <Text style={{fontSize:20,color:'black',fontWeight:'bold',left:Metrics.ratio(12),bottom:Metrics.ratio(50)}}>$50.00</Text>
-            <View style={styles.container2}>
-            <Text style={{top:Metrics.ratio(-30),fontSize:15,left:Metrics.ratio(-15),bottom:Metrics.ratio(60)}}>Free with 416.67 amplePoints</Text>
-      <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
-        <Image source={require('../assets/Minus.png')} style={styles.icon} />
-      </TouchableOpacity>
-     
-        <Text style={styles.quantityText}>{quantity}</Text>
-
-      <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
-        <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
-      </TouchableOpacity>
-      
-    </View>
-    <View>
-      <TouchableOpacity style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',
-    backgroundColor: '#FC3F01',
-    width:Metrics.ratio(70),
-borderRadius: 10,}}>
-      <Text style={{fontSize:15,textAlign:'center',color:'white'}}>Remove</Text>
-      </TouchableOpacity>
-    </View>
-            </View>
-            
-            
-          <View style={{top:Metrics.ratio(20),left:Metrics.ratio(10)}} >
-            <Text style={{fontSize:17,color:'black',fontWeight:'bold'}}>$ 50 GIFT CARD</Text>
-        <View style={{flexDirection:'row'}}>
-            <Text style={{fontSize:15,color:'black',fontWeight:'bold'}}>By: </Text>
-            <Text style={{fontSize:15,fontWeight:'350'}}>Oyshi Sushi </Text>
-            <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
-<View>  
-            <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>$15</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-   </View>
-            </View>
-            
-          </View>
-          <View>
-            <Text style={{fontSize:20,color:'black',fontWeight:'bold',left:Metrics.ratio(12),bottom:Metrics.ratio(50)}}>$50.00</Text>
-            <View style={styles.container2}>
-            <Text style={{top:Metrics.ratio(-30),fontSize:15,left:Metrics.ratio(-15),bottom:Metrics.ratio(60)}}>Free with 416.67 amplePoints</Text>
-      <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
-        <Image source={require('../assets/Minus.png')} style={styles.icon} />
-      </TouchableOpacity>
-     
-        <Text style={styles.quantityText}>{quantity}</Text>
-
-      <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
-        <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
-      </TouchableOpacity>
-      
-    </View>
-    <View>
-      <TouchableOpacity style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',
-    backgroundColor: '#FC3F01',
-    width:Metrics.ratio(70),
-borderRadius: 10,}}>
-      <Text style={{fontSize:15,textAlign:'center',color:'white'}}>Remove</Text>
-      </TouchableOpacity>
-    </View>
-            </View>
-            <View  style={{flex:1,flexDirection:'row',}}>
-        <Text style={{left:0,color:'black',fontSize:15,fontWeight:'800',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Item(6)</Text>
-        <Text style={{color:'black',fontSize:15,fontWeight:'800'}}>Total : $ 1697.00</Text>
-          </View>
-          <View style={{top:Metrics.ratio(20),left:Metrics.ratio(10)}} >
-            <Text style={{fontSize:17,color:'black',fontWeight:'bold'}}>$ 50 GIFT CARD</Text>
-        <View style={{flexDirection:'row'}}>
-            <Text style={{fontSize:15,color:'black',fontWeight:'bold'}}>By: </Text>
-            <Text style={{fontSize:15,fontWeight:'350'}}>Oyshi Sushi </Text>
-            <Image style={styles.ImageContainer} source={require('../assets/Giftw.png')}></Image>
-<View>  
-            <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>$15</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-   </View>
-            </View>
-            
-          </View>
-          <View>
-            <Text style={{fontSize:20,color:'black',fontWeight:'bold',left:Metrics.ratio(12),bottom:Metrics.ratio(50)}}>$50.00</Text>
-            <View style={styles.container2}>
-            <Text style={{top:Metrics.ratio(-30),fontSize:15,left:Metrics.ratio(-15),bottom:Metrics.ratio(60)}}>Free with 416.67 amplePoints</Text>
-      <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
-        <Image source={require('../assets/Minus.png')} style={styles.icon} />
-      </TouchableOpacity>
-     
-        <Text style={styles.quantityText}>{quantity}</Text>
-
-      <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
-        <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
-      </TouchableOpacity>
-      
-    </View>
-    <View>
-      <TouchableOpacity style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',
-    backgroundColor: '#FC3F01',
-    width:Metrics.ratio(70),
-borderRadius: 10,}}>
-      <Text style={{fontSize:15,textAlign:'center',color:'white'}}>Remove</Text>
-      </TouchableOpacity>
-    </View>
-            </View>
+        
         </View>
+        <MyComponent/> 
         <View style={styles.buttonView}>
                 <Button 
                   btnPress={CheckOutScreen}
                   label={"Check Out"}
                 />
               </View>
+          
               <Toast ref={ref => Toast.setRef(ref)} />  
+             
   </ScrollView>
+    )}
+             
+  </SafeAreaView>
 );
 };
 
@@ -221,12 +161,12 @@ borderRadius:Metrics.ratio(70),
     justifyContent: "center",
     alignItems: "center",
     alignSelf:'center',
-    top:Metrics.ratio(0),
+    top:Metrics.ratio(10),
     bottom:Metrics.ratio(20)
   },
   icon: {
-    width: Metrics.ratio(20),
-    height:  Metrics.ratio(20),
+    width: Metrics.ratio(15),
+    height:  Metrics.ratio(15),
   },
   button4: {
     color:'white',
