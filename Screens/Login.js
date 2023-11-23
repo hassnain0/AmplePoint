@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import DemoScreen from './DemoScreen';
 import ForgotScreen from './ForgotPassword';
+import Verify from './Verify';
 
 
 const Login=({navigation})=>{
@@ -83,23 +84,27 @@ const Login=({navigation})=>{
       else{
        
           try{
-               const apiUrl = 'https://amplepoints.com/apiendpoint/login'; 
-                await axios.get(apiUrl, {
-                  params: {
-                    username:state.email,
-                    password:state.password
-                  }
-                })
+               const apiUrl = 'https://amplepoints.com/apiendpoint/login?username=hirenbuhecha@gmail.com&password=1234567'; 
+                await axios.get(apiUrl)
                 .then(response => {
-                  console.log("Response",response.data)
+                  const Verifed=response.data.data.is_verified;
+                 const data=response.data.data;
+                 
                   // Handle the successful response
                   if (response.data.status === "F") {
                   util.errorMsg("Invalid Email and Password")
                   resetForm();
                   }
-                  else{
-                    navigation.navigate("DemoScreen")
+                navigation.navigate("Verify",{
+                  data,
+                })
+                  if(!Verifed){
+                    console.log("Work")
+                util.errorMsg("User Not Verified");
+                setLoader(false);
+                
                   }
+                  
                 })
                 .catch(error => {
                   // Handle the error

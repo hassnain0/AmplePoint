@@ -12,6 +12,7 @@ import Cart from './Screens/Cart';
 import Checkout from './Screens/Checkout';
 import Payement from './Screens/Payement';
 import ForgotScreen from './Screens/ForgotPassword';
+import Verify from './Screens/Verify';
 // import StripePayement from './Screens/StripePayement';
 
 
@@ -20,6 +21,10 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
+  
+      <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  
+      <Stack.Screen name='Verify' component={Verify}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  
+     
         <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleContainerStyle: {
@@ -51,8 +56,7 @@ export default function App() {
           fontWeight: '600',fontSize:15 ,// Optionally customize the header title's style
         },           
 })}/>
-      <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  
-    
+  
       <Stack.Screen name='Payement' component={Payement} options={( ) => ({headerTintColor:'white',title:'Payement',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleStyle: {
