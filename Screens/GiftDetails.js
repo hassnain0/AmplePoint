@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Modal} from 'react-native';
+import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Modal,FlatList} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
 import { ActivityIndicator, Icon, RadioButton } from 'react-native-paper';
@@ -54,14 +54,15 @@ const WritFeedback=()=>{
   
         // Handle the successful response
         setactual_Data(response.data);
-       
-        if (response.data.custom_tabs) {
-        console.log(response.data.custom_tabs)
-        } else {
-          console.log('No custom tabs data available');
+        if (response.data && response.data.data && response.data.data.product_images) {
+          response.data.data.product_images.forEach((image, index) => {
+            console.log(`Image`, image);
+          });
         }
+        // console.log(response.data)
         const reviewData = actual_data.data.tabs_data.workin_hours_tab;
-        console.log("reviewData",actual_data.data.tabs_data.custom_tabs)
+        // const Address = actual_data.data.pickup_address;
+        // console.log("Address",Address)
        
         
     // Log the review ratings
@@ -100,8 +101,12 @@ const WritFeedback=()=>{
       setQuantity(quantity - 1);
     }
   };
-  const [isShippingSelected, setIsShippingSelected] = useState(false);
 
+  const [isShippingSelected,setIsShippingSelected]=useState(false);
+  const [moreButton, setMoreButton] = useState(false);
+ const MoreButtonSelect=()=>{
+  setMoreButton(!moreButton)
+ }
   const showShippingDetails = () => {
     setIsShippingSelected(!isShippingSelected);
   };
@@ -210,6 +215,10 @@ const WorkingHoursComponent = () => {
     }
     return stars;
   };
+  const [product_Images,setProductImages]=useState(null);
+  if(actual_data?.data?.product_info?.product_name)
+  {setProductImages(ac)
+  }
 return (
   <SafeAreaView>
      <Modal
@@ -246,8 +255,20 @@ return (
       <View>
     <View >
    <View style={styles.ViewContainer}>
-   
-    <Image style={styles.ImageContainer}  source={{  uri:'https://amplepoints_product_1700662135_q1_700x850 (1).jpg'  }}></Image>
+   {product_Images &&(
+   <FlatList
+        data={product_Images}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <Image
+            source={{ uri: `https://amplepoints.com/product_images/${item.filename}` }}
+            style={{ width: 200, height: 200, marginRight: 10 }}
+          />
+        )}
+      />
+      )}
     <View style={styles.TouchContainer1}>
   <Text style={styles.TextContainer1}>{actual_data?.data?.product_info?.single_price}$</Text>
   </View>
@@ -602,7 +623,7 @@ return (
        {isShippingSelected && (
         <View>
             <View>
-            <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
+            <RadioButton.Group onValueChange={ShowMoreDetail} value={moreButton.toString()}>
           <View style={{top:Metrics.ratio(10)}}>
             <RadioButton.Item color='#FF2E00' label={actual_data?.data?.product_info?.pickup_address} value="true" />
           </View>
@@ -613,7 +634,7 @@ return (
                 title="Select Date"
                 onPress={() => setShowDatePicker(true)}
 >
-              <Text style={{textAlign:'center'}}>Select Date:</Text>
+              <Text style={{top:Metrics.ratio(50)}}>Select Date:</Text>
               </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
@@ -629,7 +650,7 @@ return (
                 title="Select Time"
                 onPress={() => setShowTimePicker(true)}
             >
-              <Text>Select Time:</Text>
+              <Text >Select Time:</Text>
               </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
