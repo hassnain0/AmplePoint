@@ -13,6 +13,8 @@ import axios from 'axios';
 const GiftDetails=({navigation})=>{
  
   const [isVisible,setIsVisible]=useState(false)
+  //Rating Fields
+  const [average_rating,setAverageRating]=useState(0);
 const WritFeedback=()=>{
   setIsVisible(true);
 }
@@ -53,6 +55,18 @@ const WritFeedback=()=>{
         // Handle the successful response
         setactual_Data(response.data);
         console.log('Actual Data', actual_data);
+        const reviewData = actual_data.data.tabs_data.review_rating_tab;
+
+        setAverageRating(reviewData.average_rating)
+    // Log the review ratings
+    if (reviewData) {
+      console.log('Average Rating:', reviewData.average_rating);
+      console.log('Number of Ratings:', reviewData.no_of_ratings);
+      // You can log more details if needed
+    } else {
+      console.log('No review ratings data available');
+    }
+
       } catch (error) {
         // Handle the error
         console.error('Error:', error);
@@ -123,6 +137,7 @@ const WritFeedback=()=>{
       </View>
     );
   };
+
 
   const renderStars = () => {
     const stars = [];
@@ -389,17 +404,13 @@ return (
         }}>{actual_data?.data?.product_info?.long_desc}</Text>
   </View>  
   )} 
-   <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
+   {/* <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
     <Text style={{color:'black',fontWeight:'900',left:Metrics.ratio(20),fontSize:20}}>Rating & Reviews</Text>
-    <View style={{paddingLeft:Metrics.ratio(90),}}>
-      <TouchableOpacity onPress={WritFeedback}>
-        <Text style={{alignItems:'center',borderColor:"black",borderWidth:1,borderRadius:5,color:'black',fontWeight:'400',fontSize:15}}>Write your review</Text>
-        </TouchableOpacity>
-        </View>
+   
        
    </View>
    <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(60),top:Metrics.ratio(20)}}>
-          <Text style={{fontSize:25,color:'black',fontWeight:'500',top:Metrics.ratio(25)}}>5.00</Text>
+          <Text style={{fontSize:25,color:'black',fontWeight:'500',top:Metrics.ratio(25)}}>{average_rating}</Text>
           {renderStar()}
             </View>
   
@@ -476,7 +487,7 @@ return (
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
-        </View>
+        </View> */}
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ample Points Calculator</Text>
         <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(40)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
@@ -486,7 +497,7 @@ return (
         color:'black'
         }}>Price</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(290),
+        left:Metrics.ratio(250),
         fontSize:15,
         fontWeight:'500',
         color:'black'
@@ -500,7 +511,7 @@ return (
         color:'black'
         }}>Buy & Earn</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(215),
+        left:Metrics.ratio(200),
         fontSize:15,
         fontWeight:'500',
         color:'black'
@@ -514,7 +525,7 @@ return (
         color:'black'
         }}>Ample Needed to Redeem</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(125),
+        left:Metrics.ratio(100),
         fontSize:15,
         fontWeight:'500',
         color:'black'
@@ -724,7 +735,7 @@ const styles=StyleSheet.create({
     fontSize: 15,
   },
   container2: {
-    left:Metrics.ratio(320),
+    left:Metrics.ratio(270),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',

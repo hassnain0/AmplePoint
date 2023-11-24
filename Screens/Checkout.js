@@ -19,9 +19,7 @@ const data = [
   { label: 'Item 7', value: '7' },
   { label: 'Item 8', value: '8' },
 ];
-useEffect(()=>{
 
-},[])
 
 const Checkout= () => {
   const [value, setValue] = useState(null);
@@ -133,12 +131,12 @@ const data = [
 <Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Address</Text>
     <TextInput placeholder='Address'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
 </View>
-<View style={styles.buttonView}>
+{/* <View style={styles.buttonView}>
                 <Button 
                   btnPress={Navigate}
                   label={"Pay"}
                 />
-              </View> 
+              </View>  */}
               <Toast ref={ref => Toast.setRef(ref)} /> 
     </ScrollView>
   );
@@ -159,7 +157,8 @@ const styles = StyleSheet.create({  container: {
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
-    marginBottom:Metrics.ratio(10)
+    marginBottom:Metrics.ratio(20),
+    marginTop:Metrics.ratio(10)
   },
   icon: {
     marginRight: 5,
@@ -184,7 +183,8 @@ const styles = StyleSheet.create({  container: {
     height: 20,
   },
   inputSearchStyle: {
-    height: 40,
+    height: Metrics.ratio(40),
+    width:Metrics.ratio(200),
     fontSize: 16,
   },
   InputContainer:{
