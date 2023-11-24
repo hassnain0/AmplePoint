@@ -14,7 +14,7 @@ const GiftDetails=({navigation})=>{
  
   const [isVisible,setIsVisible]=useState(false)
   //Rating Fields
-  const [average_rating,setAverageRating]=useState(0);
+  const [average_rating,setAverageRating]=useState(null);
 const WritFeedback=()=>{
   setIsVisible(true);
 }
@@ -54,14 +54,20 @@ const WritFeedback=()=>{
   
         // Handle the successful response
         setactual_Data(response.data);
-        console.log('Actual Data', actual_data);
-        const reviewData = actual_data.data.tabs_data.review_rating_tab;
-
-        setAverageRating(reviewData.average_rating)
+       
+        if (response.data.custom_tabs) {
+        console.log(response.data.custom_tabs)
+        } else {
+          console.log('No custom tabs data available');
+        }
+        const reviewData = actual_data.data.tabs_data.workin_hours_tab;
+        console.log("reviewData",actual_data.data.tabs_data.custom_tabs)
+       
+        
     // Log the review ratings
-    if (reviewData) {
-      console.log('Average Rating:', reviewData.average_rating);
-      console.log('Number of Ratings:', reviewData.no_of_ratings);
+    if (reviewData && reviewData!=null) {
+      setAverageRating(reviewData.hours_data);
+      
       // You can log more details if needed
     } else {
       console.log('No review ratings data available');
@@ -153,7 +159,30 @@ const WritFeedback=()=>{
     }
     return stars;
   };
+ //Working hours set 
  
+const WorkingHoursComponent = () => {
+
+  return (
+    <View>
+
+{average_rating.map((day, index) => (
+        <View key={index}  style={{backgroundColor: '#CED0CD'}}>
+          {/* Display "Day" and "Open/Close" for each day */}
+  
+          
+          {/* Display the specific day's data */}
+       
+            <Text style={{ left: Metrics.ratio(20), }}>{day.day}</Text>
+            <Text style={{ left: Metrics.ratio(150),  }}>{day.open_close}</Text>
+            <Text style={{ left: Metrics.ratio(210), }}>{day.start_time}</Text>
+            <Text style={{ left: Metrics.ratio(300)}}>{day.end_time}</Text>
+       
+        </View>
+      ))}
+    </View>
+  );
+};
   const AddtoCart=()=>{
     navigation.navigate("Cart")
   }
@@ -404,37 +433,27 @@ return (
         }}>{actual_data?.data?.product_info?.long_desc}</Text>
   </View>  
   )} 
-   {/* <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
+    {/* <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
     <Text style={{color:'black',fontWeight:'900',left:Metrics.ratio(20),fontSize:20}}>Rating & Reviews</Text>
    
        
-   </View>
-   <View style={{flex:1, flexDirection:'row',left:Metrics.ratio(60),top:Metrics.ratio(20)}}>
-          <Text style={{fontSize:25,color:'black',fontWeight:'500',top:Metrics.ratio(25)}}>{average_rating}</Text>
-          {renderStar()}
-            </View>
+   </View> */}
   
-        <View style={{left:Metrics.ratio(60),}}>
-          <Text style={{fontSize:13,color:'black',paddingRight:Metrics.ratio(50),fontWeight:'400',bottom:Metrics.ratio(20)}}>Average Customer </Text>
-          <Text style={{fontSize:13,color:'black',fontWeight:'400',bottom:Metrics.ratio(20),left:Metrics.ratio(30)}}>Rating</Text>
-          
-          <View style={styles.container}>
-          <View style={styles.line} />
-      <View style={styles.starsContainer}>{renderStars()}</View>
-  
-    </View>
-        </View>
-        <View>
-          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70)}}>Working Hours</Text>
-        </View>
+         <View>
+           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70),marginTop:Metrics.ratio(100)}}>Working Hours</Text>
+         </View>
  <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
         <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Day</Text>
         <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open/CLose</Text>
         <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(145),top:Metrics.ratio(10)}}>End Time</Text>
+        
         </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Monday</Text>
+        
+        
+        {/* <View style={{flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
+      */}
+        {/* <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Monday</Text>
         <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
         <Text style={{left:Metrics.ratio(135),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
@@ -486,8 +505,9 @@ return (
           <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
-        </View> */}
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text> */}
+        {/* </View>  */}
+       
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ample Points Calculator</Text>
         <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(40)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
