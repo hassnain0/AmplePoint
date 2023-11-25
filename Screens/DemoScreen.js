@@ -10,9 +10,9 @@ const ProductItem = ({ product }) => {
   return (
 
     <View style={styles.productItem}>     
-    <Text style={{fontSize:12,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.price}</Text>
+    <Text style={{fontSize:15,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.pname}</Text>
         <View >
-            <Image   source={{ uri: `data:image/png;base64,${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
+            <Image   source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
           <View style={styles.TouchContainer}>
   <Text style={styles.TextContainer}>{product.pprice}$</Text>
   </View>
@@ -20,21 +20,21 @@ const ProductItem = ({ product }) => {
   <Text style={styles.TextContainer2}>Gift Card</Text>
   </View>
         </View>
-      <Text style={styles.ProductContainer}>{product.pname}</Text>
+      <Text style={styles.ProductContainer}>{product.pvendor}</Text>
 
        <View style={{flex:1, flexDirection:'row'}}>
        <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >$ {product.pprice}</Text>
        <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}}>
-       <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscountprice} % Back</Text>
+       <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscount} % Back</Text>
        </View>
        </View>
        <View>
   <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-    Get <Text style={{color: '#CC8C63'}}>{product.pamples}</Text> AmplePoints $<Text style={{color: '#CC8C63'}}>7.50</Text>
+    Get <Text style={{color: '#FF2E00'}}>{product.pamples}</Text> AmplePoints $<Text style={{color: '#FF2E00'}}>{product.pdiscountprice}</Text>
   </Text>
 </View>
 <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-  or get it <Text style={{color: '#CC8C63'}}>FREE</Text> with <Text style={{color: '#CC8C63'}}>125.00</Text> points
+  or get it <Text style={{color: '#FF2E00'}}>FREE</Text> with <Text style={{color: '#FF2E00'}}>{product.pfwamples}</Text> points
 </Text>
     </View>
 
@@ -66,7 +66,7 @@ const getProductDetails = async () => {
         })
         .then(response => {
           // Handle the successful response
-         console.log("Response",response)
+         console.log("Response",response.data)
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }

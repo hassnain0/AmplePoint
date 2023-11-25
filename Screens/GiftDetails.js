@@ -9,6 +9,7 @@ import util from '../helpers/util';
 import Cart from './Cart';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import Swiper from 'react-native-swiper';
 
 const GiftDetails=({navigation})=>{
  
@@ -18,6 +19,8 @@ const GiftDetails=({navigation})=>{
 const WritFeedback=()=>{
   setIsVisible(true);
 }
+
+const [imageData,setImageData]=useState(null);
   const route=useRoute();
   const [data,setData]=useState(null);
   
@@ -51,13 +54,14 @@ const WritFeedback=()=>{
             user_id: userid,
           },
         });
-  
+   
+
         // Handle the successful response
         setactual_Data(response.data);
+       
         if (response.data && response.data.data && response.data.data.product_images) {
-          response.data.data.product_images.forEach((image, index) => {
-            console.log(`Image`, image);
-          });
+         console.log("response.data.data.product_images",response.data.data.product_images)
+          setImageData(response.data.data.product_images);
         }
         // console.log(response.data)
         const reviewData = actual_data.data.tabs_data.workin_hours_tab;
@@ -79,7 +83,6 @@ const WritFeedback=()=>{
         console.error('Error:', error);
       }
     };
-    DataFind();
     getProductDetails();
     setLoading(false)
     
@@ -87,11 +90,7 @@ const WritFeedback=()=>{
   
   const [quantity, setQuantity] = useState(1);
 
-  const DataFind=()=>{
-    if(!data || data==null){
-      setLoading(false);
-    }
-  }
+  
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
   };
@@ -139,55 +138,55 @@ const WritFeedback=()=>{
     navigation.navigate("Cart")
   }
 
-  const renderStar = () => {
-    return (
-      <View style={{ overflow: 'hidden', width: Metrics.ratio(100), height: Metrics.ratio(100) }}>
-        <Text style={{ color: 'gold', fontSize: 50, width: 40 }}>
-          ★
-        </Text>
-      </View>
-    );
-  };
+  // const renderStar = () => {
+  //   return (
+  //     <View style={{ overflow: 'hidden', width: Metrics.ratio(100), height: Metrics.ratio(100) }}>
+  //       <Text style={{ color: 'gold', fontSize: 50, width: 40 }}>
+  //         ★
+  //       </Text>
+  //     </View>
+  //   );
+  // };
 
 
-  const renderStars = () => {
-    const stars = [];
-    for (let i = 5; i >= 1; i--) {
-      stars.push(
-        <View key={i} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.starText}>{i}</Text>
-          <Text style={i <= 10? styles.starFilled : styles.starEmpty}>★</Text>
-           <View style={styles.horizontalLine} />
-           <Text style={{left:Metrics.ratio(30)}}>5</Text>
-        </View>
-      );
-    }
-    return stars;
-  };
+  // const renderStars = () => {
+  //   const stars = [];
+  //   for (let i = 5; i >= 1; i--) {
+  //     stars.push(
+  //       <View key={i} style={{ flexDirection: 'row', alignItems: 'center' }}>
+  //         <Text style={styles.starText}>{i}</Text>
+  //         <Text style={i <= 10? styles.starFilled : styles.starEmpty}>★</Text>
+  //          <View style={styles.horizontalLine} />
+  //          <Text style={{left:Metrics.ratio(30)}}>5</Text>
+  //       </View>
+  //     );
+  //   }
+  //   return stars;
+  // };
  //Working hours set 
  
-const WorkingHoursComponent = () => {
+// const WorkingHoursComponent = () => {
 
-  return (
-    <View>
+//   return (
+//     <View>
 
-{average_rating.map((day, index) => (
-        <View key={index}  style={{backgroundColor: '#CED0CD'}}>
-          {/* Display "Day" and "Open/Close" for each day */}
+// {average_rating.map((day, index) => (
+//         <View key={index}  style={{backgroundColor: '#CED0CD'}}>
+//           {/* Display "Day" and "Open/Close" for each day */}
   
           
-          {/* Display the specific day's data */}
+//           {/* Display the specific day's data */}
        
-            <Text style={{ left: Metrics.ratio(20), }}>{day.day}</Text>
-            <Text style={{ left: Metrics.ratio(150),  }}>{day.open_close}</Text>
-            <Text style={{ left: Metrics.ratio(210), }}>{day.start_time}</Text>
-            <Text style={{ left: Metrics.ratio(300)}}>{day.end_time}</Text>
+//             <Text style={{ left: Metrics.ratio(20), }}>{day.day}</Text>
+//             <Text style={{ left: Metrics.ratio(150),  }}>{day.open_close}</Text>
+//             <Text style={{ left: Metrics.ratio(210), }}>{day.start_time}</Text>
+//             <Text style={{ left: Metrics.ratio(300)}}>{day.end_time}</Text>
        
-        </View>
-      ))}
-    </View>
-  );
-};
+//         </View>
+//       ))}
+//     </View>
+//   );
+// };
   const AddtoCart=()=>{
     navigation.navigate("Cart")
   }
@@ -215,13 +214,11 @@ const WorkingHoursComponent = () => {
     }
     return stars;
   };
-  const [product_Images,setProductImages]=useState(null);
-  if(actual_data?.data?.product_info?.product_name)
-  {setProductImages(ac)
-  }
+  
+  
 return (
   <SafeAreaView>
-     <Modal
+     {/* <Modal
       visible={isVisible}
       transparent
       animationType="slide"
@@ -242,44 +239,44 @@ return (
           </TouchableOpacity>
         </View>
       </View>
-    </Modal>
+    </Modal> */}
   {loading && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
-       
      {actual_data  && (
   <ScrollView>
+   
       <View>
     <View >
-   <View style={styles.ViewContainer}>
-   {product_Images &&(
-   <FlatList
-        data={product_Images}
-        keyExtractor={(item, index) => index.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <Image
-            source={{ uri: `https://amplepoints.com/product_images/${item.filename}` }}
-            style={{ width: 200, height: 200, marginRight: 10 }}
-          />
-        )}
-      />
-      )}
+   
+   <View style={styles.ViewContainer}>    
+   {imageData && (
+      <Swiper style={{height:Metrics.ratio(200),top:Metrics.ratio(20)}}>
+        {imageData.map((image, index) => (
+          <View key={index} >
+            <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${image.pid}/${image.pimage}` }} />
+          </View>
+        ))}
+      </Swiper>
+    )} 
     <View style={styles.TouchContainer1}>
   <Text style={styles.TextContainer1}>{actual_data?.data?.product_info?.single_price}$</Text>
   </View>
+
   <View style={styles.TouchContainer2}>
+
   <Text style={styles.TextContainer2}>Gift Card</Text>
   </View>
    </View>
+   
    <View style={{flex:1, flexDirection:'row'}}>
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
    <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
     </View>
+    
    <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -294,7 +291,7 @@ return (
         }}>By:{actual_data?.data?.product_info?.pvendor}</Text>
         <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, flexDirection:'row'}}>
-<Image  source={{ uri:actual_data?.data?.product_info?.pimage }} style={{width:Metrics.ratio(29),height:Metrics.ratio(27),top:Metrics.ratio(5),left:Metrics.ratio(15)}}></Image>
+        <Image source={require('../assets/ColorOptions.png')} style={{height:Metrics.ratio(25),marginLeft:Metrics.ratio(20),width:Metrics.ratio(25),top:Metrics.ratio(10),backgroundColor:'black'}}></Image>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(15),
         fontSize:15,
@@ -430,7 +427,7 @@ return (
         paddingLeft:Metrics.ratio(290),
         fontSize:15,
         fontWeight:'600',
-        color:'#EC6A31'
+        color:'#FF2E00'
         }}>Know More</Text>
         )}
         </TouchableOpacity>
@@ -443,7 +440,7 @@ return (
         paddingLeft:Metrics.ratio(290),
         fontSize:15,
         fontWeight:'600',
-        color:'#EC6A31'
+        color:'#FF2E00'
         }}>Show Less</Text>
         </TouchableOpacity>
         <Text  style={{  paddingTop:Metrics.ratio(10),
@@ -689,6 +686,18 @@ return (
 
 
 const styles=StyleSheet.create({
+  swiperContainer: {
+   height: 100, // Adjust the height as needed
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: Metrics.ratio(100),
+    height:  Metrics.ratio(100),
+  },
   dateTimeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -955,7 +964,7 @@ borderRadius:Metrics.ratio(70),
 },
     Text2Container:{
         paddingTop:Metrics.ratio(20),
-        paddingLeft:Metrics.ratio(190),
+        paddingLeft:Metrics.ratio(150),
         fontSize:15,
         color:'#EC6A31',
         fontWeight:'bold', 
@@ -964,7 +973,7 @@ borderRadius:Metrics.ratio(70),
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(10),
         fontSize:15,
-        color:'#EC6A31',
+        color:'#FF2E00',
         fontWeight:'400', 
       },
       Text5Container:{
@@ -1068,18 +1077,26 @@ borderRadius:Metrics.ratio(70),
   },
   TextContainer1:{
     paddingTop:Metrics.ratio(20),
-    paddingLeft:Metrics.ratio(20),
+    paddingLeft:Metrics.ratio(1),
     fontSize:15,
-    color:'white',
+    color:'black',
     fontWeight:'bold',
 },
 TextContainer2:{
-  paddingTop:Metrics.ratio(20),
+  paddingTop:Metrics.ratio(30),
   paddingLeft:Metrics.ratio(20),
   fontSize:15,
-  color:'white',
+  color:'black',
   fontWeight:'bold',
 },
-
+slide: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+image: {
+  width: '100%',
+  height: '100%',
+},
 })
 export default GiftDetails;

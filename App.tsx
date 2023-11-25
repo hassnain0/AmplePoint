@@ -21,7 +21,7 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
-         <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00'}}/>  
+         <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>  
       <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00', headerShown:false,}}/>
       <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
