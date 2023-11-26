@@ -4,9 +4,10 @@ import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
+import util from '../helpers/util';
 
 const Cart= ({navigation}) => {
-   
+   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
   const [product_image,setProductImage]=useState(null);
   const [product_id,setProductId]=useState(null);
@@ -14,7 +15,7 @@ const Cart= ({navigation}) => {
   useEffect(()=>{
 getProductDetails();
 setLoading(false)
-  },[])
+  },[deleteCount])
   const [quantity, setQuantity] = useState(1);
  const [loading,setLoading]=useState(true);
  //Number of Carts recieved from API
@@ -48,37 +49,39 @@ const increaseQuantity = (index) => {
         },
       });
 
-      
+      console.log("Response ", response.data)
       // Handle the successful response
       setActualData(response.data)
       setProduct_no(response.data.length);
       const cart_items=response.data.data;
       setProduct_no(cart_items.length)
-      if (response && response.data && response.data.length > 0) {
-        const firstProduct = response.data[0];
-        setProductId(firstProduct.id);
-        setProductImage(firstProduct.image);
-      }
+    
     } catch (error) {
       // Handle the error
       console.error('Error:', error);
     }
   };
-  const delProduct = async () => {
+  const delProduct = async (item) => {
     try {
     
       const apiUrl = 'https://amplepoints.com/apiendpoint/removetocart?';
 
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:126,
-         product_id:59935,
-         product_added_id:538, 
+          user_id:item.vendor_id,
+         product_id:item.product_id,
+         product_added_id:item.productaddedid 
         },
 
         
       });
-    console.log("Response",response.data);
+    console.log("Response",response.status);
+    if (response.status === 200) {
+      util.successMsg("Item SUccessfully removed")
+      // Reload your screen or perform any other actions here
+      // For example, you can force a re-render by updating a state variable
+      setDelete((prev) => prev + 1); 
+    }
       
     } catch (error) {
       // Handle the error
@@ -90,22 +93,24 @@ const increaseQuantity = (index) => {
       <View>
         {actulaData?.data?.map((item, index) => (
           <View key={index} style={{ top: Metrics.ratio(50), left: Metrics.ratio(10) ,marginBottom: Metrics.ratio(20) }}>
-           
-            <View style={{ flexDirection: 'row' ,}}>
-              
-              <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>By: </Text>
-              <Text style={{ fontSize: 15, fontWeight: '300' }}>{item.supplier_name}</Text>
-              {/* <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${image.pid}/${image.pimage}` }} /> */}
+             <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(1)}}>
+                {item.meta_description}
+              </Text>
+            <View style={{ flexDirection: 'row' ,left:Metrics.ratio(10)}}>
+              <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' ,bottom:Metrics.ratio(20)}}>By: </Text>
+              <Text style={{ fontSize: 15, fontWeight: '300',bottom:Metrics.ratio(20) }}>{item.supplier_name}</Text>
+              <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
               <View>
               </View>
             </View>
   
             <View>
+          
               <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
                 ${item.discount_price}
               </Text>
               <View style={styles.container2}>
-                <Text style={{ top: Metrics.ratio(-30), fontSize: 15, left: Metrics.ratio(-15), bottom: Metrics.ratio(60) }}>
+                <Text style={{ top: Metrics.ratio(-30), fontSize: 15, left: Metrics.ratio(-15), }}>
                   Free with {item.no_of_amples} amplePoints
                 </Text>
                 <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
@@ -118,7 +123,7 @@ const increaseQuantity = (index) => {
                 
               </View>
               <View>
-      <TouchableOpacity onPress={delProduct} style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',backgroundColor: '#FC3F01',width:Metrics.ratio(70),borderRadius: 10,}}>
+      <TouchableOpacity onPress={()=>delProduct(item)} style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',backgroundColor: '#FC3F01',width:Metrics.ratio(70),borderRadius: 10,}}>
       <Text style={{fontSize:15,textAlign:'center',color:'white'}}>Remove</Text>
       </TouchableOpacity>
     </View>
@@ -129,15 +134,9 @@ const increaseQuantity = (index) => {
     );
   }
   return (
-    <SafeAreaView style={{backgroundColor:'white'}}>
-        { loading && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
-        
-       <View style={styles.header}>
+    
+    <SafeAreaView style={{backgroundColor:'white',flex: 1,}}>
+     <View style={styles.header}>
           <TouchableOpacity
             activeOpacity={1}
             style={styles.leftIconView}
@@ -147,16 +146,23 @@ const increaseQuantity = (index) => {
           <Text style={styles.textHeader}>My Cart</Text>
         </View>
    
+        { loading && (
+        <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+        
+      
     {actulaData &&(
 <View>
     <ScrollView style={{backgroundColor:'white'}}>  
       
-    <View >
+    <View  style={{flex: 1}}>
         <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD'}}>
         <Text style={{left:0,color:'black',fontSize:15,fontWeight:'500',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Item({product_no})</Text>
         <Text style={{color:'black',fontSize:15,fontWeight:'500'}}>Total : {actulaData.cart_total} $</Text>
           </View>
-          <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${product_id}/${product_image}` }} />
         </View>
         <MyComponent/> 
                
@@ -200,7 +206,7 @@ borderRadius:Metrics.ratio(70),
     alignItems: "center",
     alignSelf:'center',
     top:Metrics.ratio(20),
-    bottom:Metrics.ratio(20)
+    bottom:Metrics.ratio(0)
   },
   icon: {
     width: Metrics.ratio(15),
@@ -224,10 +230,10 @@ left:Metrics.ratio(110)
   },
   ImageContainer:{
 
-    width: Metrics.ratio(150), 
-    height: Metrics.ratio(100),
+    width: Metrics.ratio(100), 
+    height: Metrics.ratio(50),
     borderRadius:20,
-    left:Metrics.ratio(120),
+    left:Metrics.ratio(200),
     bottom:Metrics.ratio(30)
   },
   button: {

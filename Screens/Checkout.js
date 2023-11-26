@@ -11,8 +11,35 @@ import axios from 'axios';
 
 const Checkout= () => {
   const [value, setValue] = useState(null);
+  const [countrydata,setCountryData]=useState([]);
+  const [statedata,setstate]=useState([]);
+  const [cityydata,setCity]=useState([])
   const [isFocus, setIsFocus] = useState(false);
-
+useEffect(()=>{
+  var config = {
+    method: 'get',
+    url: 'https://api.countrystatecity.in/v1/countries',
+    headers: {
+      'X-CSCAPI-KEY': 'Y05RS2ZxbHIzMXlDVndreVpWRzdUMnJ2Z1BvTGRaelk2RU10YmFNdg=='
+    }
+  };
+  
+  axios(config)
+  .then( response =>{
+    var count=Object.keys(response.data).length;
+    let countryArray=[];
+    for(var i=0; i<count; i++){
+    countryArray.push({
+      value:response.data[i].iso2,
+      label:response.data[i].name,
+    });
+    setCountryData(countryArray);
+  }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+})
 const data = [
   { label: 'Item 1', value: '1' },
   { label: 'Item 2', value: '2' },
@@ -23,6 +50,7 @@ const data = [
   { label: 'Item 7', value: '7' },
   { label: 'Item 8', value: '8' },
 ];
+
   return (
   
     <ScrollView>
@@ -48,7 +76,7 @@ const data = [
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={countrydata}
         search
         maxHeight={300}
         labelField="label"
