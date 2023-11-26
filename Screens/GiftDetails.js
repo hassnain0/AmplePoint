@@ -690,13 +690,7 @@ return (
     <View>
     <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
     </View>
-    <View style={{bottom:Metrics.ratio(10)}}>
-        <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
-          <View style={{top:Metrics.ratio(10)}}>
-            <RadioButton.Item color='#FF2E00' label="PickUp/Dining" value="true" />
-          </View>
-        </RadioButton.Group>
-      </View>
+  
        {isShippingSelected && (
         <View>
             <View>
