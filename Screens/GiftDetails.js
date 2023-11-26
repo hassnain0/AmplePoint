@@ -1,8 +1,8 @@
 import React,{useEffect, useState} from 'react';
-import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Modal,FlatList} from 'react-native';
+import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Share} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
-import { ActivityIndicator, Icon, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
@@ -10,6 +10,8 @@ import Cart from './Cart';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Swiper from 'react-native-swiper';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 const GiftDetails=({navigation})=>{
  
@@ -19,8 +21,8 @@ const GiftDetails=({navigation})=>{
 const WritFeedback=()=>{
   setIsVisible(true);
 }
-
-const [imageData,setImageData]=useState(null);
+  const [TimeData,setTimeData]=useState(null);
+  const [imageData,setImageData]=useState(null);
   const route=useRoute();
   const [data,setData]=useState(null);
   
@@ -65,17 +67,16 @@ const [imageData,setImageData]=useState(null);
         }
         // console.log(response.data)
         const reviewData = actual_data.data.tabs_data.workin_hours_tab;
-        // const Address = actual_data.data.pickup_address;
-        // console.log("Address",Address)
        
+        console.log("Review Time",reviewData.hours_data)
         
     // Log the review ratings
     if (reviewData && reviewData!=null) {
-      setAverageRating(reviewData.hours_data);
+      setTimeData(reviewData.hours_data);
       
       // You can log more details if needed
     } else {
-      console.log('No review ratings data available');
+      console.log('No Time Hours Available data available');
     }
 
       } catch (error) {
@@ -147,7 +148,25 @@ const [imageData,setImageData]=useState(null);
   //     </View>
   //   );
   // };
-
+  const TimeComponent = () => {
+  
+    return (
+      <View>
+   
+   {TimeData &&   (
+      TimeData.map((dayInfo, index) => (
+        <View key={index} style={{ height: Metrics.ratio(50), bottom: Metrics.ratio(50), flex: 1, flexDirection: 'row', left: Metrics.ratio(15), marginRight: Metrics.ratio(20), backgroundColor: '#CED0CD' }}>
+        <Text style={{ left: Metrics.ratio(10), top: Metrics.ratio(10) }}>{dayInfo.day}</Text>
+        <Text style={{ left: Metrics.ratio(80), top: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
+        <Text style={{ left: Metrics.ratio(120), top: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
+        <Text style={{ left: Metrics.ratio(145), top: Metrics.ratio(10) }}>{dayInfo.end_time}</Text>
+      </View>
+      ))
+   
+    )}
+      </View>
+    );
+  };
 
   // const renderStars = () => {
   //   const stars = [];
@@ -202,22 +221,73 @@ const [imageData,setImageData]=useState(null);
     onClose();
   };
 
-  const MyrenderStars = () => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      const starColor = i <= rating ? '' : 'gray';
-      stars.push(
-        <TouchableOpacity key={i} onPress={() => setRating(i)}>
-          <Text style={{ color: starColor, fontSize: 30 }}>★</Text>
-        </TouchableOpacity>
-      );
+  // const MyrenderStars = () => {
+  //   const stars = [];
+  //   for (let i = 1; i <= 5; i++) {
+  //     const starColor = i <= rating ? '' : 'gray';
+  //     stars.push(
+  //       <TouchableOpacity key={i} onPress={() => setRating(i)}>
+  //         <Text style={{ color: starColor, fontSize: 30 }}>★</Text>
+  //       </TouchableOpacity>
+  //     );
+  //   }
+  //   return stars;
+  // };
+  
+
+  //Store Product API CAll
+  const StoreProduct=async()=>{
+      try {
+        const productid = route.params.productData.pid;
+        const userid = route.params.productData.vendor_key;
+        const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
+  
+        const response = await axios.get(apiUrl, {
+          params: {
+            product_id: productid,
+            user_id: userid,
+          },
+        });
+      }
+      catch(err){
+        console.log(err)
+      }
+      
+  }
+  //Share Method
+  const handleShare = async () => {
+    try {
+      const deepLink = 'yourapp://YourScreen'; // Replace with your actual deep link
+
+      const result = await Share.share({
+        message: `Check out this product: ${deepLink}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log(`Shared with activity type: ${result.activityType}`);
+        } else {
+          console.log('Shared successfully');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log('Share dismissed');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error.message);
     }
-    return stars;
   };
-  
-  
+
 return (
   <SafeAreaView>
+    <View style={styles.header}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.leftIconView}
+            onPress={() => console.log('navigation', navigation.goBack())}>
+                    <Image source={require('../assets/ArrowBack.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}/>
+          </TouchableOpacity>
+          <Text style={styles.textHeader}>{actual_data?.data?.product_info?.single_price}$</Text>
+        </View>
      {/* <Modal
       visible={isVisible}
       transparent
@@ -246,9 +316,10 @@ return (
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
-     {actual_data  && (
-  <ScrollView>
-   
+   {actual_data && (
+
+  <ScrollView style={{backgroundColor:'white'}}>
+
       <View>
     <View >
    
@@ -264,15 +335,22 @@ return (
     )} 
     <View style={styles.TouchContainer1}>
   <Text style={styles.TextContainer1}>{actual_data?.data?.product_info?.single_price}$</Text>
-  </View>
 
+  </View>
   <View style={styles.TouchContainer2}>
 
   <Text style={styles.TextContainer2}>Gift Card</Text>
   </View>
    </View>
+   <View style={styles.ShareContainer}>
+  <TouchableOpacity onPress={handleShare} style={{ backgroundColor: 'transparent', padding: 10, margin: 10 }}>
+        <Image source={require('../assets/Share.png')} style={{width:Metrics.ratio(30), height:Metrics.ratio(30)}}/>
+      </TouchableOpacity>
+
+  </View>
    
    <View style={{flex:1, flexDirection:'row'}}>
+
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
    <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
     </View>
@@ -287,7 +365,7 @@ return (
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
         fontWeight:'500',
-        color:'#EC6A31'
+        color:'#FF2E00'
         }}>By:{actual_data?.data?.product_info?.pvendor}</Text>
         <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, flexDirection:'row'}}>
@@ -311,7 +389,7 @@ return (
         paddingLeft:Metrics.ratio(20),
         fontSize:30,
         fontWeight:'500',
-        color:'#EC6A31'
+        color:'#FF2E00'
         }}>Details</Text>
          <View style={{flex:1, flexDirection:'row'}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
@@ -465,9 +543,9 @@ return (
         <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open/CLose</Text>
         <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
         <Text style={{left:Metrics.ratio(145),top:Metrics.ratio(10)}}>End Time</Text>
-        
+       
         </View>
-        
+        <TimeComponent/> 
         
         {/* <View style={{flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
       */}
@@ -526,8 +604,8 @@ return (
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text> */}
         {/* </View>  */}
        
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Ample Points Calculator</Text>
-        <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(40)}}>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(1)}}>Ample Points Calculator</Text>
+        <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(20)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
         fontSize:15,
@@ -604,13 +682,15 @@ return (
     </View>
     <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(10)}}>
    <Text style={styles.Text4Container}>Reward Value :</Text>
-   <Text style={styles.Text3Container}>$12.05</Text>
+   <Text style={styles.Text3Container}>{actual_data?.data?.product_info?.pdiscountprice}</Text>
    <View style={styles.line1} />
    <Text style={styles.Text6Container}>You Earn :</Text>
-   <Text style={styles.Text5Container}>50.00%</Text>
+   <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
-    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
     <View>
+    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
+    </View>
+    <View style={{bottom:Metrics.ratio(10)}}>
         <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
           <View style={{top:Metrics.ratio(10)}}>
             <RadioButton.Item color='#FF2E00' label="PickUp/Dining" value="true" />
@@ -665,27 +745,42 @@ return (
             </View>
             </View>
           </View>
-          <View style={styles.buttonView}>
-                <Button 
-                  btnPress={AddtoCart}
-                  label={"Add to Cart"}
-                />
-              </View>
         </View>
-        
-      )} 
-          
-              <Toast ref={ref => Toast.setRef(ref)} />
+      )}
+           
               </View>
+  
     </ScrollView>
-    )}
+  )}
 </SafeAreaView>
+
 )
 }
 //Vertical Line
 
 
 const styles=StyleSheet.create({
+  leftIconView: {
+    paddingHorizontal: Metrics.ratio(10),
+    height: Metrics.ratio(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.transparent,
+  },
+  textHeader: {
+    color: Colors.white,
+    fontSize: Metrics.ratio(15),
+    fontWeight: 'bold',
+    paddingLeft: Metrics.ratio(100),
+  },
+  header: {
+    backgroundColor: '#FF2E00',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical: Metrics.ratio(15),
+    
+    // paddingHorizontal:Metrics.ratio(5),
+  },
   swiperContainer: {
    height: 100, // Adjust the height as needed
   },
@@ -792,7 +887,7 @@ const styles=StyleSheet.create({
     justifyContent: 'space-around',
   },
   button1: {
-    backgroundColor: '#C9CBC8',
+    backgroundColor: '#FF2E00',
 borderRadius: 1,
   },button3: {
     color:'white',
@@ -869,8 +964,8 @@ borderRadius: 5,
     borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(15),
-    height:  Metrics.ratio(15),
+    width: Metrics.ratio(20),
+    height:  Metrics.ratio(20),
   },
   quantityContainer: {
     backgroundColor: 'white',
@@ -964,9 +1059,9 @@ borderRadius:Metrics.ratio(70),
 },
     Text2Container:{
         paddingTop:Metrics.ratio(20),
-        paddingLeft:Metrics.ratio(150),
+        paddingLeft:Metrics.ratio(100),
         fontSize:15,
-        color:'#EC6A31',
+        color:'#FF2E00',
         fontWeight:'bold', 
       },
       Text3Container:{
@@ -980,13 +1075,13 @@ borderRadius:Metrics.ratio(70),
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(5),
         fontSize:15,
-        color:'#EC6A31',
+        color:'#FF2E00',
         fontWeight:'400', 
       },
       ImageContainer:{
 
         width: Metrics.ratio(250), 
-        height: Metrics.ratio(150),
+        height: Metrics.ratio(200),
         borderRadius:20,
         alignContent:'center',
       },
@@ -1067,6 +1162,12 @@ borderRadius:Metrics.ratio(70),
     bottom: Metrics.ratio(30), // Adjust as needed
     left: Metrics.ratio(75), // Adjust as needed// Optional: add a background color to make the text more readable
     paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+  },
+  ShareContainer:{
+    position: 'absolute',
+    top: Metrics.ratio(1), // Adjust as needed
+    right: Metrics.ratio(1), // Adjust as needed// Optional: add a background color to make the text more readable
+    paddingRight: Metrics.ratio(1), // Optional: add padding for better visibility
   },
   
   TouchContainer2:{

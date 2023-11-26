@@ -1,7 +1,8 @@
 import React ,{useEffect} from 'react';
-import {StyleSheet,ImageBackground} from 'react-native';
+import {StyleSheet,ImageBackground, View} from 'react-native';
 import Login from './Login';
-import { Metrics } from '../themes/Matrics';
+import { Metrics } from '../themes';
+
 
 const  SplashScreen = ({navigation}) => {
 
@@ -15,14 +16,17 @@ const  SplashScreen = ({navigation}) => {
     };
   }, []);
   return (
-   <ImageBackground source={require('../assets/SplashScreen.jpg')} style={styles.image}>
+   
+   <ImageBackground source={require('../assets/Another.png')} style={styles.image}>
    </ImageBackground>
+   
   );
 };
 const styles = StyleSheet.create({
     image: {
-        width:(380),
-        height: (900),
+     
+        width:(395),
+        height: (800),
       
       },
       LottieView:{

@@ -60,7 +60,7 @@ const getProductDetails = async () => {
        const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller'; 
         await axios.get(apiUrl, {
           params: {
-            vendor_id: vendorId,
+            vendor_id:vendorId,
             page: page
           }
         })
@@ -74,6 +74,7 @@ const getProductDetails = async () => {
         })
         .catch(error => {
           // Handle the error
+          setLoading(false)
           console.error('Error:', error);
         });
   }

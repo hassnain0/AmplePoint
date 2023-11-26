@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useEffect, useState }  from "react";
 import { View,ImageBackground,StyleSheet, Text, } from "react-native";
 import { Metrics } from "../themes";
 import { useRoute } from '@react-navigation/native';
@@ -7,10 +7,15 @@ import axios from "axios";
 import util from "../helpers/util";
 
 const Verify=({navigation})=>{
-    const route=useRoute();
-    const [loader,setLoader]=useState(false);
+
+  const route=useRoute();
+  useEffect(()=>{
     const data=route.params.data
-    
+    console.log("data",data)
+  },[])
+   
+    const [loader,setLoader]=useState(false);
+  
     const Resend=async()=>{
         setLoader(true);
      

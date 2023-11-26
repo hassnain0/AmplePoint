@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {View,Text, StyleSheet,Image,TouchableOpacity, ImageBackground} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
@@ -11,6 +11,7 @@ import axios from 'axios';
 import DemoScreen from './DemoScreen';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
 const Login=({navigation})=>{
@@ -27,6 +28,10 @@ const Login=({navigation})=>{
   const SignUPScreen=()=>{
    navigation.navigate("Register")
   }
+  //Variables
+  const [user,setUser]=useState({});
+
+ 
   const [loader,setLoader]=useState(false);
     const [state, setState] = React.useState({
       email: '',
@@ -79,6 +84,7 @@ const Login=({navigation})=>{
       }
      
       if (!_validation()) {
+        setLoader(false);
         return false;
       } 
       else{
@@ -87,27 +93,23 @@ const Login=({navigation})=>{
                const apiUrl = 'https://amplepoints.com/apiendpoint/login?username=hirenbuhecha@gmail.com&password=1234567'; 
                 await axios.get(apiUrl)
                 .then(response => {
-                  const Verifed=response.data.data.is_verified;
-                 const data=response.data.data;
+                //   const Verifed=response.data.data.is_verified;
+                //  const data=response.data.data;
                  
-                  // Handle the successful response
+                //   // Handle the successful response
                   if (response.data.status === "F") {
                   util.errorMsg("Invalid Email and Password")
                   resetForm();
                   }
-                navigation.navigate("Verify",{
-                  data,
-                })
-                  if(!Verifed){
-                    console.log("Work")
-                util.errorMsg("User Not Verified");
-                setLoader(false);
-                
-                  }
+
+                  if(response.data.message=='You are login Successfully'){
+                    setLoader(false);
                   
+                  }
                 })
                 .catch(error => {
                   // Handle the error
+                  setLoader(false);
                   console.error('Error:', error);
                 });
           }
@@ -165,17 +167,6 @@ return (
     </TouchableOpacity>
 
     <View>
-    <View style={styles.socialButtonContainer}>
-<View style={{flexDirection:'row',}}>
-</View>
-        </View>
-        <Text style={{ color: 'black', fontSize: 15,fontWeight:'500',left:Metrics.ratio(100) }}>Continue with Google</Text>
-        <View style={styles.socialButtonContainer}>
-          
-          <TouchableOpacity style={styles.socialButton}>  
-            <Image source={require('../assets/google.png')} style={styles.socialButtonIcon} />
-          </TouchableOpacity>
-        </View>
     </View>
   </View>
   <Toast ref={ref => Toast.setRef(ref)} />
