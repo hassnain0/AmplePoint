@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import Payement from './Payement';
 import Toast from 'react-native-toast-message';
 import Cart from './Cart';
+import {API_KEY,BASE_URL} from '@env'
 import axios from 'axios';
 
 
@@ -15,48 +16,87 @@ const Checkout= () => {
   const [statedata,setstate]=useState([]);
   const [cityydata,setCity]=useState([])
   const [isFocus, setIsFocus] = useState(false);
-useEffect(()=>{
-  var config = {
-    method: 'get',
-    url: 'https://api.countrystatecity.in/v1/countries',
-    headers: {
-      'X-CSCAPI-KEY': 'Y05RS2ZxbHIzMXlDVndreVpWRzdUMnJ2Z1BvTGRaelk2RU10YmFNdg=='
-    }
+  useEffect(() => {
+    var config = {
+      method: 'get',
+      url: `${BASE_URL}/countries`,
+      headers: {
+        'X-CSCAPI-KEY': API_KEY,
+      },
+    };
+
+    axios(config)
+      .then(response => {
+        console.log(JSON.stringify(response.data));
+        var count = Object.keys(response.data).length;
+        let countryArray = [];
+        for (var i = 0; i < count; i++) {
+          countryArray.push({
+            value: response.data[i].iso2,
+            label: response.data[i].name,
+          });
+        }
+        setCountryData(countryArray);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const handleState = countryCode => {
+    var config = {
+      method: 'get',
+      url: `${BASE_URL}/countries/${countryCode}/states`,
+      headers: {
+        'X-CSCAPI-KEY': API_KEY,
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        var count = Object.keys(response.data).length;
+        let stateArray = [];
+        for (var i = 0; i < count; i++) {
+          stateArray.push({
+            value: response.data[i].iso2,
+            label: response.data[i].name,
+          });
+        }
+        setstate(stateArray);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
-  
-  axios(config)
-  .then( response =>{
-    var count=Object.keys(response.data).length;
-    let countryArray=[];
-    for(var i=0; i<count; i++){
-    countryArray.push({
-      value:response.data[i].iso2,
-      label:response.data[i].name,
-    });
-    setCountryData(countryArray);
-  }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-})
-const handleState=(countryCode)=>{
-  var config = {
-    method: 'get',
-    url: 'https://api.countrystatecity.in/v1/countries/${}/state',
-    headers: {
-      'X-CSCAPI-KEY': 'API_KEY'
-    }
+
+  const handleCity = (countryCode, stateCode) => {
+    var config = {
+      method: 'get',
+      url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
+      headers: {
+        'X-CSCAPI-KEY': API_KEY,
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        var count = Object.keys(response.data).length;
+        let cityArray = [];
+        for (var i = 0; i < count; i++) {
+          cityArray.push({
+            value: response.data[i].id,
+            label: response.data[i].name,
+          });
+        }
+        setCity(cityArray);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
-  
-  axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data));
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+
 const data = [
   { label: 'Item 1', value: '1' },
   { label: 'Item 2', value: '2' },
@@ -106,6 +146,7 @@ const data = [
         onBlur={() => setIsFocus(false)}
         onChange={item => {
           setValue(item.value);
+          handleState(item.value)
           setIsFocus(false);
         }}
        
@@ -119,7 +160,7 @@ const data = [
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={statedata}
         search
         maxHeight={300}
         labelField="label"
@@ -131,20 +172,21 @@ const data = [
         onBlur={() => setIsFocus(false)}
         onChange={item => {
           setValue(item.value);
+  
           setIsFocus(false);
         }}
        
-      />
-      </View>
-      <View style={styles.container}>
-      <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>City</Text>
+       />
+       </View>
+       <View style={styles.container}>
+       <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>City</Text>
        <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={cityydata}
         search
         maxHeight={300}
         labelField="label"
@@ -158,8 +200,7 @@ const data = [
           setValue(item.value);
           setIsFocus(false);
         }}
-       
-      />
+       />
 </View>
     </View>
 </View>

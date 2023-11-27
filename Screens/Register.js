@@ -55,7 +55,7 @@ const Register=({navigation})=> {
       unsubscribe();
     }
 }) 
-const [isChecked, setIsChecked] = useState(false);
+const [isChecked, setIsChecked] = useState(0);
 
 const isStrongPassword = (password) => {
   // This function checks if the password contains at least one special character, one uppercase letter, and one lowercase letter
@@ -147,41 +147,76 @@ const isStrongPassword = (password) => {
     
     return true;
   };
+
+  const Bounce=()=>{
+    setIsChecked(1)
+  }
   const onRegister = async() => {
+  
     setLoader(true);
     if (!_validation()) {
       return false;
+
+      
     } else{
-          try {
-  const apiUrl = 'https://amplepoints.com/apiendpoint/register'; 
+      try {
+       
 
-  const requestData = {
-      first_name: state.First_name,
-      last_name: state.Last_name,
-      email:state.Email,
-      password: state.Password,
-      mobile:state.Mobile,
-      referral_no:state.Referral_no,
-      store_referral_no:state.Store_referral_no,
-      term_accepted:isChecked,
+        const requestData = {
+          first_name: "hiren",
+          last_name: "buhecha",
+          email: "hassnain12212@gmail.com",
+          password: "Hassnain12@g",
+          mobile: "2025550126",
+          referral_no: "12",
+          store_referral_no: "12",
+          term_accepted: "true",
+        };
+        
+        console.log("requestData", requestData);
+        
+        const apiUrl = 'https://amplepoints.com/apiendpoint/register';
+        
+        axios.post(apiUrl,{
+          params:{
+            first_name: "hiren",
+            last_name: "buhecha",
+            email: "hassnain12212@gmail.com",
+            password: "Hassnain12@g",
+            mobile: "2025550126",
+            referral_no: "12",
+            store_referral_no: "12",
+            term_accepted: "true",
+          }
+          
+        })
+          .then(function (response) {
+           console.log(response.data)
+          })
+          .catch(function (error) {
+            console.error("Error", error.message);
+            if (error.response) {
+              console.log("Response Status", error.response.status);
+              console.log("Response Data", error.response.data);
+            }
+          });
+        
+        
+
+
+        // this.setState({ responseData: response.data, error: null })
+    } catch (error) {
+        console.log(error)
+     
+        // Handle any errors
+       
+    }
+
+// resetForm();
+// navigation.navigate('Login')
   };
-
- const respone=await axios.post(apiUrl, requestData);
- console.log(respone)
-}
-  catch (error) {
-  setLoader(false)
-  console.log(error)
 }
 
-resetForm();
-navigation.navigate('Login')
-  };
-}
-
-const EmailVerification=()=>{
-
-}
   const resetForm = () => {
     setState({
         first_name: '',
@@ -281,8 +316,7 @@ const EmailVerification=()=>{
         <BouncyCheckbox
         style={{marginTop: Metrics.ratio(1),left:Metrics.ratio(10)}}
         isChecked={isChecked}
-        disableBuiltInState
-        onPress={() => setIsChecked(!isChecked)}/>
+        onPress={Bounce}/>
            <View>
   <Text style={{right: Metrics.ratio(5), fontWeight: '600', color: 'black',}}>By Creating an account, you agree to AmplePoint.com's  </Text>
 </View>

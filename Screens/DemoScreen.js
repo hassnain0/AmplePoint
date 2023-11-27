@@ -1,12 +1,37 @@
 import React,{useState,useEffect} from 'react';
-import {View,Text, StyleSheet,FlatList, ActivityIndicator,ScrollView,Image, TouchableOpacity,} from 'react-native';
+import {View,Text, StyleSheet,FlatList, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 
 
 const ProductItem = ({ product }) => {
-
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert(
+          'Exit App',
+          'Are you sure you want to exit?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => null,
+              style: 'cancel'
+            },
+            {
+              text: 'Exit',
+              onPress: () => BackHandler.exitApp()
+            }
+          ],
+          { cancelable: false }
+        );
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
   return (
 
     <View style={styles.productItem}>     

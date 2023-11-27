@@ -10,7 +10,6 @@ import Cart from './Cart';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Swiper from 'react-native-swiper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const GiftDetails=({navigation})=>{

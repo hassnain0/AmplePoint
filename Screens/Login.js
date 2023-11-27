@@ -69,8 +69,8 @@ const Login=({navigation})=>{
   
     const resetForm = () => {
       setState({
-                    Email: '',
-          Password: '',
+          email: ' ',
+          password: ' ',
       });
     };
   
@@ -84,15 +84,20 @@ const Login=({navigation})=>{
       }
      
       if (!_validation()) {
-        setLoader(false);
         return false;
       } 
       else{
        
           try{
-               const apiUrl = 'https://amplepoints.com/apiendpoint/login?username=hirenbuhecha@gmail.com&password=1234567'; 
-                await axios.get(apiUrl)
+               const apiUrl = 'https://amplepoints.com/apiendpoint/login?'; 
+                await axios.get(apiUrl,{
+                  params :{
+                    username:state.email,
+                    password:state.password,
+                  }
+                })
                 .then(response => {
+                   console.log("Response",response.status)
                 //   const Verifed=response.data.data.is_verified;
                 //  const data=response.data.data;
                  
@@ -100,9 +105,11 @@ const Login=({navigation})=>{
                   if (response.data.status === "F") {
                   util.errorMsg("Invalid Email and Password")
                   resetForm();
-                  }
-
+                  return false; 
+                }
+               
                   if(response.data.message=='You are login Successfully'){
+                    resetForm();
                     setLoader(false);
                   
                   }
@@ -110,6 +117,7 @@ const Login=({navigation})=>{
                 .catch(error => {
                   // Handle the error
                   setLoader(false);
+                  resetForm();
                   console.error('Error:', error);
                 });
           }
@@ -169,8 +177,8 @@ return (
     <View>
     </View>
   </View>
-  <Toast ref={ref => Toast.setRef(ref)} />
 </View>
+<Toast ref={ref => Toast.setRef(ref)} />
 </ImageBackground>
   
 )
