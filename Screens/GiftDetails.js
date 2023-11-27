@@ -43,7 +43,7 @@ const WritFeedback=()=>{
     setIsVisible(false);
    }
   const [loading,setLoading]=useState(true);
-  useEffect(()=>{
+  useEffect(() => {
     const getProductDetails = async () => {
       try {
         const productid = route.params.productData.pid;
@@ -56,33 +56,29 @@ const WritFeedback=()=>{
             user_id: userid,
           },
         });
-   
-
-        // Handle the successful response
-        setactual_Data(response.data);
+        console.log("Response ",response.data)
        
-        
-    // Log the review ratings
+        // Log the review ratings
+        const reviewData = response.data.data.tabs_data.workin_hours_tab;
   
-    if (response.data && response.data.data && response.data.data.product_images) {
-      setImageData(response.data.data.product_images);
-    }
-    const reviewData = actual_data.data.tabs_data.workin_hours_tab;
-    console.log("Review Time", reviewData.hours_data)
-    if (reviewData && reviewData != null) {
-      setTimeData(reviewData.hours_data);
-      // You can log more details if needed
-    }
+        if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab) {
+
+          console.log("Update")
+          setactual_Data(response.data);
+          setImageData(response.data.data.product_images);
+          setTimeData(reviewData.hours_data);
+        }
+       
       } catch (error) {
-        // Handle the error
-        console.error('Error:', error);
+        console.error('Error fetching product details:', error);
       }
     };
+  
+    // Call the function when the component mounts
     getProductDetails();
     setLoading(false)
-    
-  },[])
-  
+  }, []); 
+   
   const [quantity, setQuantity] = useState(1);
 
   
@@ -133,54 +129,6 @@ const WritFeedback=()=>{
     navigation.navigate("Cart")
   }
 
-  // const renderStar = () => {
-  //   return (
-  //     <View style={{ overflow: 'hidden', width: Metrics.ratio(100), height: Metrics.ratio(100) }}>
-  //       <Text style={{ color: 'gold', fontSize: 50, width: 40 }}>
-  //         ★
-  //       </Text>
-  //     </View>
-  //   );
-  // };
-  
-  // const renderStars = () => {
-  //   const stars = [];
-  //   for (let i = 5; i >= 1; i--) {
-  //     stars.push(
-  //       <View key={i} style={{ flexDirection: 'row', alignItems: 'center' }}>
-  //         <Text style={styles.starText}>{i}</Text>
-  //         <Text style={i <= 10? styles.starFilled : styles.starEmpty}>★</Text>
-  //          <View style={styles.horizontalLine} />
-  //          <Text style={{left:Metrics.ratio(30)}}>5</Text>
-  //       </View>
-  //     );
-  //   }
-  //   return stars;
-  // };
- //Working hours set 
- 
-// const WorkingHoursComponent = () => {
-
-//   return (
-//     <View>
-
-// {average_rating.map((day, index) => (
-//         <View key={index}  style={{backgroundColor: '#CED0CD'}}>
-//           {/* Display "Day" and "Open/Close" for each day */}
-  
-          
-//           {/* Display the specific day's data */}
-       
-//             <Text style={{ left: Metrics.ratio(20), }}>{day.day}</Text>
-//             <Text style={{ left: Metrics.ratio(150),  }}>{day.open_close}</Text>
-//             <Text style={{ left: Metrics.ratio(210), }}>{day.start_time}</Text>
-//             <Text style={{ left: Metrics.ratio(300)}}>{day.end_time}</Text>
-       
-//         </View>
-//       ))}
-//     </View>
-//   );
-// };
   const AddtoCart=()=>{
     navigation.navigate("Cart")
   }
@@ -196,20 +144,7 @@ const WritFeedback=()=>{
     onClose();
   };
 
-  // const MyrenderStars = () => {
-  //   const stars = [];
-  //   for (let i = 1; i <= 5; i++) {
-  //     const starColor = i <= rating ? '' : 'gray';
-  //     stars.push(
-  //       <TouchableOpacity key={i} onPress={() => setRating(i)}>
-  //         <Text style={{ color: starColor, fontSize: 30 }}>★</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   }
-  //   return stars;
-  // };
   
-
   //Store Product API CAll
   const StoreProduct=async()=>{
       try {
@@ -285,16 +220,14 @@ return (
         </View>
       </View>
     </Modal> */}
-  {loading && (
+  {loading ? (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
-      )}
-   {actual_data && (
-
+) : ( 
   <ScrollView style={{backgroundColor:'white'}}>
-
+{actual_data && (
       <View>
     <View >
    
@@ -532,65 +465,20 @@ return (
       ))
    
     )}
-     
-        
-        {/* <View style={{flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-      */}
-        {/* <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Monday</Text>
-        <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(135),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Tuesday</Text>
-        <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(140),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(160),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Wednesday</Text>
-        <Text style={{left:Metrics.ratio(50),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(142),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Thursday</Text>
-        <Text style={{left:Metrics.ratio(65),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(130),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(155),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>        
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Friday</Text>
-        <Text style={{left:Metrics.ratio(85),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(150),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(175),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Saturday</Text>
-        <Text style={{left:Metrics.ratio(70),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(130),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(155),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>
-        <View style={{height:Metrics.ratio(40),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Sunday</Text>
-        <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open</Text>
-        <Text style={{left:Metrics.ratio(140),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(165),top:Metrics.ratio(10)}}>End Time</Text>
-        </View>
-        <View style={{top:Metrics.ratio(50)}}>
+     <View style={{top:Metrics.ratio(50)}}>
           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
-          <Text style={{fontSize:15,alignContent:'center',alignSelf:'center',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
-          <Text style={{fontSize:15,alignContent:'center',alignSelf:'center',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(20),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
-          <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
-          <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>6. Cannot be combined with any other offers</Text>
-          <Text style={{fontSize:15,left:Metrics.ratio(20),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(22),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text> */}
-        {/* </View>  */}
-       
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
+          <Text style={{fontSize:15,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
+          <Text style={{fontSize:15,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>6. Cannot be combined with any other offers</Text>
+          <Text style={{fontSize:15,left:Metrics.ratio(-15),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
+        </View>
+   
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(1)}}>Ample Points Calculator</Text>
         <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(20)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
@@ -654,7 +542,7 @@ return (
       </TouchableOpacity>
     </View>
     </View>
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(20)}}>Apply Ample</Text>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
         <View style={styles.container3}>
       {/* Text Field */}
       <TextInput
@@ -674,24 +562,22 @@ return (
    <Text style={styles.Text6Container}>You Earn :</Text>
    <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
-    <View>
+    
     <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
-    </View>
-  
-       {isShippingSelected && (
-        <View>
-            <View>
+    
+    <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
+            <RadioButton.Item color='#FF2E00' label={"Pickup Dining"} value="true" />
+         </RadioButton.Group>
+{isShippingSelected && (
+      <View>
             <RadioButton.Group onValueChange={ShowMoreDetail} value={moreButton.toString()}>
-          <View style={{top:Metrics.ratio(10)}}>
             <RadioButton.Item color='#FF2E00' label={actual_data?.data?.product_info?.pickup_address} value="true" />
-          </View>
-        </RadioButton.Group>
+         </RadioButton.Group>
         <View style={styles.dateTimeContainer}> 
         <View style={styles.datePickerContainer}>
               <TouchableOpacity style={{bottom:Metrics.ratio(50)}}
                 title="Select Date"
-                onPress={() => setShowDatePicker(true)}
->
+                onPress={() => setShowDatePicker(true)}>
               <Text style={{top:Metrics.ratio(50)}}>Select Date:</Text>
               </TouchableOpacity>
               {showDatePicker && (
@@ -719,27 +605,30 @@ return (
                   onChange={handleTimeChange}
                 />
               )}
+              </View>
+              
    <TouchableOpacity style={styles.buttonSubmit}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
            
             </View>
+            
             </View>
-          </View>
-        </View>
-      )}
+       )}
+       
            
               </View>
-  
+)}
+            
     </ScrollView>
-  )}
+
+)}
+
 </SafeAreaView>
 
-)
-}
 //Vertical Line
 
-
+)}
 const styles=StyleSheet.create({
   leftIconView: {
     paddingHorizontal: Metrics.ratio(10),
