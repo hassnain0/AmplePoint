@@ -61,24 +61,18 @@ const WritFeedback=()=>{
         // Handle the successful response
         setactual_Data(response.data);
        
-        if (response.data && response.data.data && response.data.data.product_images) {
-         console.log("response.data.data.product_images",response.data.data.product_images)
-          setImageData(response.data.data.product_images);
-        }
-        // console.log(response.data)
-        const reviewData = actual_data.data.tabs_data.workin_hours_tab;
-       
-        console.log("Review Time",reviewData.hours_data)
         
     // Log the review ratings
-    if (reviewData && reviewData!=null) {
-      setTimeData(reviewData.hours_data);
-      
-      // You can log more details if needed
-    } else {
-      console.log('No Time Hours Available data available');
+  
+    if (response.data && response.data.data && response.data.data.product_images) {
+      setImageData(response.data.data.product_images);
     }
-
+    const reviewData = actual_data.data.tabs_data.workin_hours_tab;
+    console.log("Review Time", reviewData.hours_data)
+    if (reviewData && reviewData != null) {
+      setTimeData(reviewData.hours_data);
+      // You can log more details if needed
+    }
       } catch (error) {
         // Handle the error
         console.error('Error:', error);
@@ -148,26 +142,7 @@ const WritFeedback=()=>{
   //     </View>
   //   );
   // };
-  const TimeComponent = () => {
   
-    return (
-      <View>
-   
-   {TimeData &&   (
-      TimeData.map((dayInfo, index) => (
-        <View key={index} style={{ height: Metrics.ratio(50), bottom: Metrics.ratio(50), flex: 1, flexDirection: 'row', left: Metrics.ratio(15), marginRight: Metrics.ratio(20), backgroundColor: '#CED0CD' }}>
-        <Text style={{ left: Metrics.ratio(10), top: Metrics.ratio(10) }}>{dayInfo.day}</Text>
-        <Text style={{ left: Metrics.ratio(80), top: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
-        <Text style={{ left: Metrics.ratio(120), top: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
-        <Text style={{ left: Metrics.ratio(145), top: Metrics.ratio(10) }}>{dayInfo.end_time}</Text>
-      </View>
-      ))
-   
-    )}
-      </View>
-    );
-  };
-
   // const renderStars = () => {
   //   const stars = [];
   //   for (let i = 5; i >= 1; i--) {
@@ -545,7 +520,19 @@ return (
         <Text style={{left:Metrics.ratio(145),top:Metrics.ratio(10)}}>End Time</Text>
        
         </View>
-        <TimeComponent/> 
+ 
+     {TimeData &&   (
+      TimeData.map((dayInfo, index) => (
+        <View key={index} style={{ height: Metrics.ratio(50), bottom: Metrics.ratio(50), flex: 1, flexDirection: 'row', left: Metrics.ratio(15), marginRight: Metrics.ratio(20), backgroundColor: '#CED0CD' }}>
+        <Text style={{ left: Metrics.ratio(10), top: Metrics.ratio(10) }}>{dayInfo.day}</Text>
+        <Text style={{ left: Metrics.ratio(80), top: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
+        <Text style={{ left: Metrics.ratio(120), top: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
+        <Text style={{ left: Metrics.ratio(145), top: Metrics.ratio(10) }}>{dayInfo.end_time}</Text>
+      </View>
+      ))
+   
+    )}
+     
         
         {/* <View style={{flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
       */}

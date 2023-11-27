@@ -40,6 +40,23 @@ useEffect(()=>{
     console.log(error);
   });
 })
+const handleState=(countryCode)=>{
+  var config = {
+    method: 'get',
+    url: 'https://api.countrystatecity.in/v1/countries/${}/state',
+    headers: {
+      'X-CSCAPI-KEY': 'API_KEY'
+    }
+  };
+  
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 const data = [
   { label: 'Item 1', value: '1' },
   { label: 'Item 2', value: '2' },
@@ -53,7 +70,7 @@ const data = [
 
   return (
   
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'white'}}>
     <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(50)}}>
       <Text style={{top:Metrics.ratio(10),left:0,color:'black',fontSize:20,fontWeight:'500',textAlign:'center',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Biling Details</Text>
         </View>
@@ -68,8 +85,9 @@ const data = [
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Phone</Text>
     <TextInput placeholder='Phone' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
+  <View style={{backgroundColor:'#F2F2F2'}}>
    <View style={styles.container}>
-    
+   <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
       <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
@@ -92,6 +110,9 @@ const data = [
         }}
        
       />
+      </View>
+      <View style={styles.container}>
+      <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>State</Text>
        <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
@@ -114,6 +135,9 @@ const data = [
         }}
        
       />
+      </View>
+      <View style={styles.container}>
+      <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>City</Text>
        <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
@@ -136,7 +160,7 @@ const data = [
         }}
        
       />
-
+</View>
     </View>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
@@ -161,27 +185,23 @@ const data = [
 export default Checkout;
 
 const styles = StyleSheet.create({  container: {
-    backgroundColor: 'white',
-    padding: 16,
-    justifyContent:'center',
-    alignContent:'center',
+    backgroundColor: '#B6B8B5',
     flex:1
   },
   dropdown: {
-    height: 50, 
+    height: Metrics.ratio(50), 
+    width: Metrics.ratio(250), 
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 8,
-    paddingHorizontal: 8,
-    marginBottom:Metrics.ratio(20),
-    marginTop:Metrics.ratio(10)
+    backgroundColor:'#B6B8B5',
   },
   icon: {
     marginRight: 5,
   },
   label: {
     position: 'absolute',
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     left: 22,
     top: 8,
     zIndex: 999,
@@ -195,12 +215,12 @@ const styles = StyleSheet.create({  container: {
     fontSize: 16,
   },
   iconStyle: {
-    width: 20,
-    height: 20,
+    width: Metrics.ratio(20),
+    height: Metrics.ratio(20),
   },
   inputSearchStyle: {
     height: Metrics.ratio(40),
-    width:Metrics.ratio(200),
+    width:Metrics.ratio(400),
     fontSize: 16,
   },
   InputContainer:{

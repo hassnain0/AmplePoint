@@ -20,11 +20,10 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name='Cart' component={Cart} options={{headerShown:false,statusBarColor:'#FF2F00'}}/> 
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>   
-      <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>  
       <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00', headerShown:false,}}/>
-    
+      <Stack.Screen name='Cart' component={Cart} options={{headerShown:false,statusBarColor:'#FF2F00'}}/>
+      <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>  
     <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Payment',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {
         backgroundColor: '#FF2F00',    
         }, headerTitleContainerStyle: {
