@@ -13,7 +13,8 @@ import Swiper from 'react-native-swiper';
 
 
 const GiftDetails=({navigation})=>{
- 
+  
+  const [address,setAddress]=useState();
   const [isVisible,setIsVisible]=useState(false)
   //Rating Fields
   const [average_rating,setAverageRating]=useState(null);
@@ -55,18 +56,18 @@ const [loader,setLoader]=useState(false)
             user_id: userid,
           },
         });
-        console.log("Response ",response.data)
        
         // Log the review ratings
-        const reviewData = response.data.data.tabs_data.workin_hours_tab;
-  
-        if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab) {
+        // const reviewData = response.data.data.tabs_data.workin_hours_tab;
+        // const Address=response.data.data.pickup_address[0].loc_address;
+        // if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab &&response.data.data.pickup_address[0].loc_address) {
 
-          console.log("Update")
-          setactual_Data(response.data);
-          setImageData(response.data.data.product_images);
-          setTimeData(reviewData.hours_data);
-        }
+        //   console.log("Update")
+        //   setactual_Data(response.data);
+        //   setImageData(response.data.data.product_images);
+        //   setTimeData(reviewData.hours_data);
+        //   // setAddress(Address)
+        // }
        
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -188,7 +189,7 @@ const [loader,setLoader]=useState(false)
 
 return (
   <SafeAreaView>
-    <View style={styles.header}>
+    {/* <View style={styles.header}>
           <TouchableOpacity
             activeOpacity={1}
             style={styles.leftIconView}
@@ -196,7 +197,7 @@ return (
                     <Image source={require('../assets/ArrowBack.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}/>
           </TouchableOpacity>
           <Text style={styles.textHeader}>{actual_data?.data?.product_info?.single_price}$</Text>
-        </View>
+        </View> */}
      {/* <Modal
       visible={isVisible}
       transparent
@@ -225,7 +226,7 @@ return (
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
 ) : ( 
-  <ScrollView style={{backgroundColor:'white'}} scrollEnabled={true}>
+  <ScrollView style={{backgroundColor:'white',}} scrollEnabled={true}>
 {actual_data && (
       <View>
     <View >
@@ -563,37 +564,40 @@ return (
     </View>
     
     <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
-    
+    <View style={{top:Metrics.ratio(1)}}>
     <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
             <RadioButton.Item color='#FF2E00' label={"Pickup Dining"} value="true" />
          </RadioButton.Group>
+         </View>
 {isShippingSelected && (
       <View>
-            <RadioButton.Group onValueChange={ShowMoreDetail} value={moreButton.toString()}>
-            <RadioButton.Item color='#FF2E00' label={actual_data?.data?.product_info?.pickup_address} value="true" />
+            <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
+            <RadioButton.Item color='#FF2E00' label={address} value="true" />
          </RadioButton.Group>
         <View style={styles.dateTimeContainer}> 
-        <View style={styles.datePickerContainer}>
-              <TouchableOpacity style={{bottom:Metrics.ratio(50)}}
+        <View style={styles.timePickerContainer}>
+            <TouchableOpacity
                 title="Select Date"
-                onPress={() => setShowDatePicker(true)}>
-              <Text style={{top:Metrics.ratio(50)}}>Select Date:</Text>
-              </TouchableOpacity>
+                onPress={() => setShowDatePicker(true)}
+            >
+              <Text style={{color:'black'}}> {selectedDate.toDateString()}</Text>
+              </TouchableOpacity> 
               {showDatePicker && (
                 <DateTimePicker
-                  value={selectedDate}
+                style={{ color: 'black' }} 
+                  value={selectedTime}
                   mode="date"
                   display="default"
                   onChange={handleDateChange}
                 />
               )}
-            </View>
+              </View>
             <View style={styles.timePickerContainer}>
             <TouchableOpacity
                 title="Select Time"
                 onPress={() => setShowTimePicker(true)}
             >
-              <Text >Select Time:</Text>
+              <Text style={{color:'black'}}> {selectedTime.toTimeString()}</Text>
               </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
@@ -605,11 +609,7 @@ return (
                 />
               )}
               </View>
-              
-   <TouchableOpacity style={styles.buttonSubmit}>
-      <Text style={styles.buttonText}>Apply</Text>
-    </TouchableOpacity>
-           
+         
             </View>
             
             </View>
@@ -619,7 +619,7 @@ return (
       <Button
         loader={loader}
         btnPress={StoreProduct}
-        label={"Login"}
+        label={"Add to Cart"}
       />
     </View>
               </View>
@@ -672,17 +672,10 @@ const styles=StyleSheet.create({
   dateTimeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    right:Metrics.ratio(5)
+
   },
-  datePickerContainer: {
-    flex: 1,
-    marginRight: Metrics.ratio(10),
-    left:Metrics.ratio(15),
-    borderColor:'black',
-    borderWidth:Metrics.ratio(0.4),
-    borderRadius:10,
-    borderRadius:Metrics.ratio(10),
-    backgroundColor:'#D1D3D0'
-  },
+ 
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -730,7 +723,19 @@ const styles=StyleSheet.create({
     right:Metrics.ratio(30),
     borderWidth:Metrics.ratio(0.4),
     borderRadius:Metrics.ratio(10),
-    backgroundColor:'#D1D3D0'
+    backgroundColor:'#B6B8B5',
+    marginHorizontal:Metrics.ratio(10)
+  },
+  dateContainer: {
+    flex: 1,
+    borderColor:'black',
+    left:Metrics.ratio(15),
+    height:Metrics.ratio(40),
+    right:Metrics.ratio(30),
+    borderWidth:Metrics.ratio(0.4),
+    borderRadius:Metrics.ratio(10),
+    backgroundColor:'#D1D3D0',
+    margin:Metrics.ratio(5)
   },
   
   container: {
@@ -765,21 +770,32 @@ const styles=StyleSheet.create({
   button1: {
     backgroundColor: '#FF2E00',
 borderRadius: 1,
-  },button3: {
-    color:'white',
-    backgroundColor: '#FC3F01',
+  },
+  button3: {
+    
+color:'white',
+backgroundColor: '#FC3F01',
 borderRadius: 5,
 width:Metrics.ratio(60),
 height:Metrics.ratio(40),
   },
+  buttonApply: {
+    top:Metrics.ratio(50),
+    right:Metrics.ratio(15),
+    backgroundColor: '#FC3F01',
+    borderRadius: 5,
+    bottom:Metrics.ratio(10),
+    width:Metrics.ratio(60),
+    height:Metrics.ratio(40),
+      },
   buttonSubmit: {
     color:'white',
-    top:Metrics.ratio(20),
-    backgroundColor: '#FC3F01',
+    top:Metrics.ratio(50),
+    backgroundColor: '#D1D3D0',
 borderRadius: Metrics.borderRadius,
 width:Metrics.ratio(60),
 height:Metrics.ratio(40),
-marginBottom:Metrics.ratio(20)
+marginBottom:Metrics.ratio(10)
   },
   button4: {
     color:'white',
@@ -898,8 +914,8 @@ borderRadius:Metrics.ratio(70),
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center',
-        top:Metrics.ratio(0),
-        bottom:Metrics.ratio(20)
+       marginTop:Metrics.ratio(50),
+        bottom:Metrics.ratio(5)
       },
     ViewContainer:{
   

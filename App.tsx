@@ -32,7 +32,7 @@ export default function App() {
 })}/>
       <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/> 
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>   
-      <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00', headerShown:false,}}/>
+      <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00',}}/>
       <Stack.Screen name='Cart' component={Cart} options={{headerShown:false,statusBarColor:'#FF2F00'}}/>
       <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  
       <Stack.Screen name='Verify' component={Verify}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  
