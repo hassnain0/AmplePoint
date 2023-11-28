@@ -11,7 +11,9 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 
 const Checkout= ({navigation}) => {
-  const [isChecked,setIsChecked]=useState(true)
+  const [isChecked, setIsChecked] = useState(false);
+  const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
+
   const [value, setValue] = useState(null);
   const [countrydata,setCountryData]=useState([]);
   const [loader,setLoader]=useState(false);
@@ -104,7 +106,8 @@ navigation.navigate("Payement")
 }
 
 const Bounce=()=>{
-  setIsChecked(false)
+  setIsChecked(!isChecked);
+  setHiddenFields(!isChecked); // Toggle the visibility of fields
 }
 
   return (
@@ -219,17 +222,19 @@ const Bounce=()=>{
  width:Metrics.ratio(380),
  height:Metrics.ratio(70),}} ></TextInput>
 
- <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(10)}}>
+ <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(1)}}>
   
         <BouncyCheckbox
-        style={{marginTop: Metrics.ratio(7),left:Metrics.ratio(5)}}
+        style={{marginTop: Metrics.ratio(7),left:Metrics.ratio(5),}}
         fillColor="red"
         unfillColor="#FFFFFF"
-        isChecked={isChecked}
+        isChecked={!isChecked}
         onPress={Bounce}/>
     <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(5),fontSize:20,bottom:Metrics.ratio(20),top:Metrics.ratio(5)}}>Shipping (As above)</Text>
        </View> 
         </View>
+        {hiddenFields ? (
+        <View>
        <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>First Name</Text>
     <TextInput placeholder='First Name'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
@@ -335,9 +340,9 @@ const Bounce=()=>{
   fontSize:15,
  width:Metrics.ratio(380),
  height:Metrics.ratio(70),}} ></TextInput>
- 
+ </View>
 </View>
-
+ ) : null}
 <View style={styles.buttonView}>
       <Button
         loader={loader}

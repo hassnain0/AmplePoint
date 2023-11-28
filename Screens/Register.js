@@ -22,16 +22,15 @@ import axios from 'axios';
 const Register=({navigation})=> {
  const [loader,setLoader]=React.useState(false);
   const [state, setState] = React.useState({
-    Email: '',
-    Password: '', 
-    ConfirmPassword: '',  
-    First_name: '',
-    Last_name: '',
-    Mobile:'',
-    Referral_no:'',
+    email: '',
+    password: '', 
+    confirmPassword: '',  
+    first_name: '',
+    last_name: '',
+    mobile:'',
+    referral_no:'',
     Store_referral_no:'',
-    Term_accepted:'',
-    ConfirmPassword:'',
+    term_accepted:false
 
   });
   const [isConnected,setIsConnected]=React.useState(true)
@@ -159,51 +158,39 @@ const isStrongPassword = (password) => {
 
       
     } else{
-      try {
-       
-
-       
-      
-        const apiUrl = 'https://amplepoints.com/apiendpoint/register';
-        
-        axios.post(apiUrl, {
-          first_name: "hiren",
-          last_name: "buhecha",
-          email: "hassnain12212@gmail.com",
-          password: "Hassnain12@g",
-          mobile: "2025550126",
-          referral_no: "12",
-          store_referral_no: "12",
-          term_accepted: "true",
-        })
-          .then(function (response) {
-            console.log(response.data);
-          })
-          .catch(function (error) {
-            console.error("Error", error.message);
-            if (error.response) {
-              console.log("Response Status", error.response.status);
-              console.log("Response Data", error.response.data);
-            }
-          });
-          
-        
-        
-
-
-        // this.setState({ responseData: response.data, error: null })
-    } catch (error) {
-        console.log(error)
-     
-        // Handle any errors
-       
-    }
+      // Call the async function
+postData();
 
 // resetForm();
 // navigation.navigate('Login')
   };
 }
-
+async function postData() {
+  try {
+    const apiUrl = "https://amplepoints.com/apiendpoint/register"
+    const response = await axios.post(apiUrl, {
+        "first_name": "2",
+        "last_name": "1",
+        "email": "3",
+        "password": "5",
+        "mobile": "2",
+        "referral_no": "1",
+        "store_referral_no": "1",
+        "term_accepted": "0",
+    }, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    console.log(response);
+  } catch (error) {
+    console.error("Error", error.message);
+    if (error.response) {
+      console.log("Response Status", error.response.status);
+      console.log("Response Data", error.response.data);
+    }
+  }
+}
   const resetForm = () => {
     setState({
         first_name: '',

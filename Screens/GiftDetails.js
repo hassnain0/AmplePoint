@@ -22,6 +22,7 @@ const WritFeedback=()=>{
   setIsVisible(true);
 }
 const [loader,setLoader]=useState(false)
+const [address,setAddress]=useState('');
   const [TimeData,setTimeData]=useState(null);
   const [imageData,setImageData]=useState(null);
   const route=useRoute();
@@ -54,19 +55,23 @@ const [loader,setLoader]=useState(false)
   
         const response = await axios.get(apiUrl, {
           params: {
-            product_id: productid,
-            user_id: userid,
+            product_id: 59935,
+            user_id: 126,
           },
         });
        
-        console.log("Response",response.data)
+
     const reviewData = response.data.data.tabs_data.workin_hours_tab;
-        
+        // const Address=response.data.data[0].loc_address;
+        // console.log("Address",Address)
         if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab ) {
           setactual_Data(response.data);
           setImageData(response.data.data.product_images);
           setTimeData(reviewData.hours_data);
           // setAddress(Address)
+        }
+        if(response.data &&response.data.data.pickup_address[0].loc_address){
+         setAddress(response.data.data.pickup_address[0].loc_address)
         }
        
       } catch (error) {
@@ -92,13 +97,20 @@ const [loader,setLoader]=useState(false)
     }
   };
 
+  const [Delivery_type,setDeleiveryType]=useState('');
   const [isShippingSelected,setIsShippingSelected]=useState(false);
   const [moreButton, setMoreButton] = useState(false);
  const MoreButtonSelect=()=>{
   setMoreButton(!moreButton)
  }
+
   const showShippingDetails = () => {
+
     setIsShippingSelected(!isShippingSelected);
+   
+    if(isShippingSelected){
+      setDeleiveryType("Pickup")
+    }
   };
 
   //Method to get Product Details 
@@ -110,8 +122,17 @@ const [loader,setLoader]=useState(false)
 
   const handleDateChange = (event, date) => {
     setShowDatePicker(Platform.OS === 'ios');
+
     if (date) {
-      setSelectedDate(date);
+      // Format the date as 'YYYY/MM/DD'
+      const formattedDate = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+
+      console.log("Formatted Date", formattedDate);
+      setSelectedDate(formattedDate);
     }
   };
 
@@ -120,8 +141,15 @@ const [loader,setLoader]=useState(false)
     
     setShowTimePicker(Platform.OS === 'ios');
     if (time) {
+      // Format the time as '12:00 AM/PM'
+      const formattedTime = time.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      });
 
-      setSelectedTime(time);
+      console.log("Time", formattedTime);
+      setSelectedTime(formattedTime);
     }
   }    
   const SubmitButton=()=>{
@@ -184,36 +212,41 @@ const [loader,setLoader]=useState(false)
 
   //Submit Product withoutAmpples
   const withAmpples=async()=>{
-  
+  console.log("Date ",selectedDate)
   setLoader(true)
-   
+  // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
       try {
         const productid=route.params.productData.pid;
         const userid=route.params.productData.vendor_key;
-        const apiUrl = 'https://amplepoints.com/apiendpoint/addtocart?';
+        const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
         console.log("Prodcut Id",productid);
-        console.log("User Id",userid);
+        console.log("Time",Delivery_type);
         
 
         await axios.get(apiUrl, {
           params: {
-            product_id:25050,
-            user_id: 126,
-            quantity:1,
+            user_id:126,
+            product_id:productid,
+            vendor_id:906,
+            delivery_type:Delivery_type ||'',
+            pickuplocation:address || '',
+            pickup_date:selectedDate ||'',
+            pickup_time:selectedTime ||'',
           },
         }).then((response)=>{
+          
            console.log("Response After Submitting",response.data);
-           if(response.data.status=='F'){
-            util.errorMsg("Please input Deleivery Details");
-            setLoader(false)
-            return false;
-           }
-           if(response.data.status=='S'){
-            util.successMsg("Product added to Cart");
-            setLoader(false)
-            navigation.navigate("Cart")
-            return false;
-           }
+          //  if(response.data.status=='F'){
+          //   util.errorMsg("Please input Deleivery Details");
+          //   setLoader(false)
+          //   return false;
+          //  }
+          //  if(response.data.status=='S'){
+          //   util.successMsg("Product added to Cart");
+          //   setLoader(false)
+          //   navigation.navigate("Cart")
+          //   return false;
+          //  }
            
         }).catch((err)=>{
               console.log("Error",err)
@@ -621,31 +654,36 @@ return (
                 title="Select Date"
                 onPress={() => setShowDatePicker(true)}
             >
-              <Text style={{color:'black'}}> {selectedDate.toDateString()}</Text>
+              
               </TouchableOpacity> 
-              {showDatePicker && (
-                <DateTimePicker
-                style={{ color: 'black' }} 
-                  value={selectedTime}
-                  mode="date"
-                  display="default"
-                  onChange={handleDateChange}
-                />
-              )}
+              {!showDatePicker ? (
+        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+          <Text style={{ color: 'black' }}>
+        </Text>
+        </TouchableOpacity>
+      ) : (
+        <DateTimePicker
+          style={{ color: 'black' }}
+          value={selectedTime}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+        />
+      )}
               </View>
             <View style={styles.timePickerContainer}>
             <TouchableOpacity
                 title="Select Time"
                 onPress={() => setShowTimePicker(true)}
             >
-              <Text style={{color:'black'}}> {selectedTime.toTimeString()}</Text>
+              <Text>Hello</Text>
+              {/* <Text style={{color:'black'}}> {selectedTime.toTimeString()}</Text> */}
               </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
                 style={{ color: 'black' }} 
                   value={selectedTime}
                   mode="time"
-                  display="default"
                   onChange={handleTimeChange}
                 />
               )}
@@ -655,8 +693,6 @@ return (
             
             </View>
        )}
-       
-           
               </View>
               
 )}
