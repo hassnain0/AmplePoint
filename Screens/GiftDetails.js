@@ -14,7 +14,7 @@ import Swiper from 'react-native-swiper';
 
 const GiftDetails=({navigation})=>{
   
-  const [address,setAddress]=useState();
+ 
   const [isVisible,setIsVisible]=useState(false)
   //Rating Fields
   const [average_rating,setAverageRating]=useState(null);
@@ -39,15 +39,17 @@ const [loader,setLoader]=useState(false)
     setKnowMore(true);
     
    }
-   const onClose=()=>{
-    setIsVisible(false);
-   }
+  //  const onClose=()=>{
+  //   setIsVisible(false);
+  //  }
+
+
   const [loading,setLoading]=useState(true);
   useEffect(() => {
     const getProductDetails = async () => {
       try {
-        const productid = route.params.productData.pid;
-        const userid = route.params.productData.vendor_key;
+          const productid=route.params.productData.pid;
+          const userid=route.params.productData.vendor_key;
         const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
   
         const response = await axios.get(apiUrl, {
@@ -57,17 +59,15 @@ const [loader,setLoader]=useState(false)
           },
         });
        
-        // Log the review ratings
-        // const reviewData = response.data.data.tabs_data.workin_hours_tab;
-        // const Address=response.data.data.pickup_address[0].loc_address;
-        // if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab &&response.data.data.pickup_address[0].loc_address) {
-
-        //   console.log("Update")
-        //   setactual_Data(response.data);
-        //   setImageData(response.data.data.product_images);
-        //   setTimeData(reviewData.hours_data);
-        //   // setAddress(Address)
-        // }
+        console.log("Response",response.data)
+    const reviewData = response.data.data.tabs_data.workin_hours_tab;
+        
+        if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab ) {
+          setactual_Data(response.data);
+          setImageData(response.data.data.product_images);
+          setTimeData(reviewData.hours_data);
+          // setAddress(Address)
+        }
        
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -129,12 +129,6 @@ const [loader,setLoader]=useState(false)
     navigation.navigate("Cart")
   }
 
-  const AddtoCart=()=>{
-    navigation.navigate("Cart")
-  }
-  const MoreShown=()=>{
-    setShowMore(true);
-  }
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
 
@@ -187,6 +181,53 @@ const [loader,setLoader]=useState(false)
     }
   };
 
+
+  //Submit Product withoutAmpples
+  const withAmpples=async()=>{
+  
+  setLoader(true)
+   
+      try {
+        const productid=route.params.productData.pid;
+        const userid=route.params.productData.vendor_key;
+        const apiUrl = 'https://amplepoints.com/apiendpoint/addtocart?';
+        console.log("Prodcut Id",productid);
+        console.log("User Id",userid);
+        
+
+        await axios.get(apiUrl, {
+          params: {
+            product_id:25050,
+            user_id: 126,
+            quantity:1,
+          },
+        }).then((response)=>{
+           console.log("Response After Submitting",response.data);
+           if(response.data.status=='F'){
+            util.errorMsg("Please input Deleivery Details");
+            setLoader(false)
+            return false;
+           }
+           if(response.data.status=='S'){
+            util.successMsg("Product added to Cart");
+            setLoader(false)
+            navigation.navigate("Cart")
+            return false;
+           }
+           
+        }).catch((err)=>{
+              console.log("Error",err)
+              
+        });
+       
+        // Log the review ratings
+     
+       
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      
+    }; 
+  }
 return (
   <SafeAreaView>
     {/* <View style={styles.header}>
@@ -572,7 +613,7 @@ return (
 {isShippingSelected && (
       <View>
             <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
-            <RadioButton.Item color='#FF2E00' label={address} value="true" />
+            <RadioButton.Item color='#FF2E00' label={"Standard Shipping"} value="true" />
          </RadioButton.Group>
         <View style={styles.dateTimeContainer}> 
         <View style={styles.timePickerContainer}>
@@ -615,21 +656,22 @@ return (
             </View>
        )}
        
-            <View style={styles.buttonView}>
-      <Button
-        loader={loader}
-        btnPress={StoreProduct}
-        label={"Add to Cart"}
-      />
-    </View>
+           
               </View>
               
 )}
-   
+<Toast ref={ref => Toast.setRef(ref)} />
+    <View style={styles.buttonView}>
+      <Button
+        loader={loader}
+        btnPress={withAmpples}
+        label={"Add to Cart"}
+      />
+    </View>
     </ScrollView>
 
 )}
-
+   
 </SafeAreaView>
 
 //Vertical Line
@@ -914,7 +956,7 @@ borderRadius:Metrics.ratio(70),
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center',
-       marginTop:Metrics.ratio(50),
+       marginTop:Metrics.ratio(10),
         bottom:Metrics.ratio(5)
       },
     ViewContainer:{

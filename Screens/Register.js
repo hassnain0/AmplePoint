@@ -162,7 +162,11 @@ const isStrongPassword = (password) => {
       try {
        
 
-        const requestData = {
+       
+      
+        const apiUrl = 'https://amplepoints.com/apiendpoint/register';
+        
+        axios.post(apiUrl, {
           first_name: "hiren",
           last_name: "buhecha",
           email: "hassnain12212@gmail.com",
@@ -171,27 +175,9 @@ const isStrongPassword = (password) => {
           referral_no: "12",
           store_referral_no: "12",
           term_accepted: "true",
-        };
-        
-        console.log("requestData", requestData);
-        
-        const apiUrl = 'https://amplepoints.com/apiendpoint/register';
-        
-        axios.post(apiUrl,{
-          params:{
-            first_name: "hiren",
-            last_name: "buhecha",
-            email: "hassnain12212@gmail.com",
-            password: "Hassnain12@g",
-            mobile: "2025550126",
-            referral_no: "12",
-            store_referral_no: "12",
-            term_accepted: "true",
-          }
-          
         })
           .then(function (response) {
-           console.log(response.data)
+            console.log(response.data);
           })
           .catch(function (error) {
             console.error("Error", error.message);
@@ -200,6 +186,7 @@ const isStrongPassword = (password) => {
               console.log("Response Data", error.response.data);
             }
           });
+          
         
         
 

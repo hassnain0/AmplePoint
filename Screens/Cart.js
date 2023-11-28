@@ -92,21 +92,14 @@ const increaseQuantity = (index) => {
     return (
       <View>
         {actulaData?.data?.map((item, index) => (
-          <View key={index} style={{ top: Metrics.ratio(50), left: Metrics.ratio(10) ,marginBottom: Metrics.ratio(20) }}>
-             <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(1)}}>
-                {item.meta_description}
-              </Text>
-            <View style={{ flexDirection: 'row' ,left:Metrics.ratio(10)}}>
+
+          <View key={index} style={{  left: Metrics.ratio(10)  }}>
+             <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(1),bottom:Metrics.ratio(10)}}>{item.meta_description}</Text>
               <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' ,bottom:Metrics.ratio(20)}}>By: </Text>
               <Text style={{ fontSize: 15, fontWeight: '300',bottom:Metrics.ratio(20) }}>{item.supplier_name}</Text>
               <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
-              <View>
-              </View>
-            </View>
-  
             <View>
-          
-              <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
+            <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
                 ${item.discount_price}
               </Text>
               <View style={styles.container2}>
@@ -233,7 +226,7 @@ left:Metrics.ratio(110)
     width: Metrics.ratio(100), 
     height: Metrics.ratio(50),
     borderRadius:20,
-    left:Metrics.ratio(200),
+    left:Metrics.ratio(250),
     bottom:Metrics.ratio(30)
   },
   button: {
