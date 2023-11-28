@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {View,Text, StyleSheet,Image,TouchableOpacity, ImageBackground} from 'react-native';
+import {View,Text, StyleSheet,Image,TouchableOpacity, ImageBackground, BackHandler} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 import MainTextInput from '../components/MainTextInput';
@@ -11,11 +11,37 @@ import axios from 'axios';
 import DemoScreen from './DemoScreen';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
 const Login=({navigation})=>{
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert(
+          'Exit App',
+          'Are you sure you want to exit?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => null,
+              style: 'cancel'
+            },
+            {
+              text: 'Exit',
+              onPress: () => BackHandler.exitApp()
+            }
+          ],
+          { cancelable: false }
+        );
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+  
   const ForgotScreenMove=()=>{
     navigation.navigate("ForgotScreen")
   }

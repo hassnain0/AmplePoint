@@ -20,11 +20,11 @@ const GiftDetails=({navigation})=>{
 const WritFeedback=()=>{
   setIsVisible(true);
 }
+const [loader,setLoader]=useState(false)
   const [TimeData,setTimeData]=useState(null);
   const [imageData,setImageData]=useState(null);
   const route=useRoute();
-  const [data,setData]=useState(null);
-  
+ 
   const [actual_data,setactual_Data]=useState(null);
 
    const ShowMoreDetail=()=>{
@@ -146,21 +146,21 @@ const WritFeedback=()=>{
   
   //Store Product API CAll
   const StoreProduct=async()=>{
-      try {
-        const productid = route.params.productData.pid;
-        const userid = route.params.productData.vendor_key;
-        const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
+      // try {
+      //   const productid = route.params.productData.pid;
+      //   const userid = route.params.productData.vendor_key;
+      //   const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
   
-        const response = await axios.get(apiUrl, {
-          params: {
-            product_id: productid,
-            user_id: userid,
-          },
-        });
-      }
-      catch(err){
-        console.log(err)
-      }
+      //   const response = await axios.get(apiUrl, {
+      //     params: {
+      //       product_id: productid,
+      //       user_id: userid,
+      //     },
+      //   });
+      // }
+      // catch(err){
+      //   console.log(err)
+      // }
       
   }
   //Share Method
@@ -225,7 +225,7 @@ return (
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
 ) : ( 
-  <ScrollView style={{backgroundColor:'white'}}>
+  <ScrollView style={{backgroundColor:'white'}} scrollEnabled={true}>
 {actual_data && (
       <View>
     <View >
@@ -615,10 +615,17 @@ return (
             </View>
        )}
        
-           
+            <View style={styles.buttonView}>
+      <Button
+        loader={loader}
+        btnPress={StoreProduct}
+        label={"Login"}
+      />
+    </View>
               </View>
+              
 )}
-            
+   
     </ScrollView>
 
 )}

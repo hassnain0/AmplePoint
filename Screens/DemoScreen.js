@@ -1,8 +1,10 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,} from 'react';
 import {View,Text, StyleSheet,FlatList, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 
 const ProductItem = ({ product }) => {

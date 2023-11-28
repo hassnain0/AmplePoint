@@ -16,43 +16,43 @@ const Checkout= () => {
   const [statedata,setstate]=useState([]);
   const [cityydata,setCity]=useState([])
   const [isFocus, setIsFocus] = useState(false);
-  useEffect(() => {
-    var config = {
-      method: 'get',
-      url: `${BASE_URL}/countries`,
-      headers: {
-        'X-CSCAPI-KEY': API_KEY,
-      },
-    };
+useEffect(()=>{
+  var config = {
+    method: 'get',
+    url: BASE_URL,
+    headers: {
+      'X-CSCAPI-KEY': API_KEY
+    }
+  };
+  
+  axios(config)
+  .then( response =>{
+    
+    var count=Object.keys(response.data).length;
+    let countryArray=[];
+    for(var i=0; i<count; i++){
+    countryArray.push({
+      value:response.data[i].iso2,
+      label:response.data[i].name,
+    });
+    setCountryData(countryArray);
+  }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+})
+const handleState = (countryCode) => {
+  console.log("Contry code",countryCode)
+  var config = {
+    method: 'get',
+    url: `'https://api.countrystatecity.in/v1/countries'/countries/AF/states`,
+    headers: {
+      'X-CSCAPI-KEY': API_KEY,
+    },
+  };
 
-    axios(config)
-      .then(response => {
-        console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let countryArray = [];
-        for (var i = 0; i < count; i++) {
-          countryArray.push({
-            value: response.data[i].iso2,
-            label: response.data[i].name,
-          });
-        }
-        setCountryData(countryArray);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
-  const handleState = countryCode => {
-    var config = {
-      method: 'get',
-      url: `${BASE_URL}/countries/${countryCode}/states`,
-      headers: {
-        'X-CSCAPI-KEY': API_KEY,
-      },
-    };
-
-    axios(config)
+      axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         var count = Object.keys(response.data).length;
@@ -63,40 +63,40 @@ const Checkout= () => {
             label: response.data[i].name,
           });
         }
-        setstate(stateArray);
+        setStateData(stateArray);
       })
       .catch(function (error) {
         console.log(error);
       });
+
+};
+
+const handleCity = (countryCode, stateCode) => {
+  var config = {
+    method: 'get',
+    url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
+    headers: {
+      'X-CSCAPI-KEY': API_KEY,
+    },
   };
 
-  const handleCity = (countryCode, stateCode) => {
-    var config = {
-      method: 'get',
-      url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-      headers: {
-        'X-CSCAPI-KEY': API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let cityArray = [];
-        for (var i = 0; i < count; i++) {
-          cityArray.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-        setCity(cityArray);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      var count = Object.keys(response.data).length;
+      let cityArray = [];
+      for (var i = 0; i < count; i++) {
+        cityArray.push({
+          value: response.data[i].id,
+          label: response.data[i].name,
+        });
+      }
+      setCity(cityArray);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
 const data = [
   { label: 'Item 1', value: '1' },
   { label: 'Item 2', value: '2' },
