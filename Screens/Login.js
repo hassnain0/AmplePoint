@@ -11,6 +11,7 @@ import axios from 'axios';
 import DemoScreen from './DemoScreen';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const Login=({navigation})=>{
@@ -113,55 +114,40 @@ const Login=({navigation})=>{
         return false;
       } 
       else{
-       
-          try{
-               const apiUrl = 'https://amplepoints.com/apiendpoint/login?'; 
-                await axios.get(apiUrl,{
-                  params :{
-                    username:state.email,
-                    password:state.password,
-                  }
-                })
-                .then(response => {
-                   console.log("Response",response.status)
-                //   const Verifed=response.data.data.is_verified;
-                //  const data=response.data.data;
-                 
-                //   // Handle the successful response
-                  if (response.data.status === "F") {
-                  util.errorMsg("Invalid Email and Password")
-                  resetForm();
-                  return false; 
-                }
-               
-                  if(response.data.message=='You are login Successfully'){
-                    resetForm();
-                    setLoader(false);
-                  
-                  }
-                })
-                .catch(error => {
-                  // Handle the error
-                  setLoader(false);
-                  resetForm();
-                  console.error('Error:', error);
-                });
-          }
-          catch(err){
-            setLoader(false);  
-            console.log(err)
-            }
-            finally {
-              // Set loading to false when the API call is complete
-              setLoader(false);
-            }
-          }
+        postData();
     }
+  }
+  async function postData() {
+    try {
+      const apiUrl = "https://amplepoints.com/apiendpoint/login?";
+  
+      console.log("stat",state.email)
+      const formData = new FormData();
+    
+      formData.append("username", `"${state.email || ''}"`);
+      formData.append("password",`"${state.password || ''}"`);
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        "Accept": "application/json",
+      };
+  
+  
+      const response = await axios.post(apiUrl, formData, { headers });
+  
+    
+      // Handle the response as needed
+      console.log("response.data",response);
+    } catch (error) {
+      // Handle errors
+      console.error("Error:", error);
+    }
+  }
     const HomeScreen=()=>{
       navigation.navigate("DemoScreen")
     }
+   
 return (
-
+<View>
   <ImageBackground style={styles.ImageContainer} source={require('../assets/BackgroundImage.png')}>
   <TouchableOpacity onPress={SignUPScreen} style={styles.TouchContainer}>
   <Text style={styles.TextContainer}>Sign Up</Text>
@@ -203,10 +189,11 @@ return (
     <View>
     </View>
   </View>
+  <Toast ref={ref => Toast.setRef(ref)} />
 </View>
-<Toast ref={ref => Toast.setRef(ref)} />
+
 </ImageBackground>
-  
+</View>  
 )
 }
 const styles=StyleSheet.create({

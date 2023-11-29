@@ -23,7 +23,7 @@ const Checkout= ({navigation}) => {
 useEffect(()=>{
   var config = {
     method: 'get',
-    url: BASE_URL,
+    url: 'https://amplepoints.com/apiendpoint/getcoutrylist',
     headers: {
       'X-CSCAPI-KEY': API_KEY
     }
@@ -36,7 +36,7 @@ useEffect(()=>{
     let countryArray=[];
     for(var i=0; i<count; i++){
     countryArray.push({
-      value:response.data[i].iso2,
+      value:response.data[i].id,
       label:response.data[i].name,
     });
     setCountryData(countryArray);
@@ -63,7 +63,7 @@ const handleState = (countryCode) => {
         let stateArray = [];
         for (var i = 0; i < count; i++) {
           stateArray.push({
-            value: response.data[i].iso2,
+            value: response.data[i].id,
             label: response.data[i].name,
           });
         }

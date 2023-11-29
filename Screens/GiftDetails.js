@@ -109,7 +109,7 @@ const [address,setAddress]=useState('');
     setIsShippingSelected(!isShippingSelected);
    
     if(isShippingSelected){
-      setDeleiveryType("Pickup")
+      setDeleiveryType('pickup')
     }
   };
 
@@ -219,7 +219,7 @@ const [address,setAddress]=useState('');
         const productid=route.params.productData.pid;
         const userid=route.params.productData.vendor_key;
         const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
-        console.log("Prodcut Id",productid);
+        console.log("Prodcut Id",selectedDate);
         console.log("Time",Delivery_type);
         
 
@@ -229,24 +229,14 @@ const [address,setAddress]=useState('');
             product_id:productid,
             vendor_id:906,
             delivery_type:Delivery_type ||'',
-            pickuplocation:address || '',
-            pickup_date:selectedDate ||'',
-            pickup_time:selectedTime ||'',
+            pickuplocation:'6131 S Rainbow Blvd. Las Vegas, NV' || '',
+            pickup_date:'2023/11/27' ||'',
+            pickup_time:'12:00 AM',
           },
         }).then((response)=>{
           
            console.log("Response After Submitting",response.data);
-          //  if(response.data.status=='F'){
-          //   util.errorMsg("Please input Deleivery Details");
-          //   setLoader(false)
-          //   return false;
-          //  }
-          //  if(response.data.status=='S'){
-          //   util.successMsg("Product added to Cart");
-          //   setLoader(false)
-          //   navigation.navigate("Cart")
-          //   return false;
-          //  }
+         
            
         }).catch((err)=>{
               console.log("Error",err)
@@ -656,28 +646,22 @@ return (
             >
               
               </TouchableOpacity> 
-              {!showDatePicker ? (
-        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-          <Text style={{ color: 'black' }}>
-        </Text>
-        </TouchableOpacity>
-      ) : (
-        <DateTimePicker
-          style={{ color: 'black' }}
-          value={selectedTime}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
+              {showDatePicker && (
+                <DateTimePicker
+                style={{ color: 'black' }} 
+                  value={selectedDate}
+                  mode="date"
+                  onChange={handleDateChange}
+                />
+              )}
               </View>
             <View style={styles.timePickerContainer}>
             <TouchableOpacity
                 title="Select Time"
                 onPress={() => setShowTimePicker(true)}
             >
-              <Text>Hello</Text>
-              {/* <Text style={{color:'black'}}> {selectedTime.toTimeString()}</Text> */}
+              
+              <Text style={{color:'black'}}> Select Time</Text>
               </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
@@ -992,8 +976,7 @@ borderRadius:Metrics.ratio(70),
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center',
-       marginTop:Metrics.ratio(10),
-        bottom:Metrics.ratio(5)
+        bottom:Metrics.ratio(0)
       },
     ViewContainer:{
   

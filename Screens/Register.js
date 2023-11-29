@@ -1,4 +1,5 @@
-import  React,{useEffect,useState} from 'react';
+import  React,{useState,
+  State} from 'react';
 import {
   View,
   Text,
@@ -82,50 +83,50 @@ const isStrongPassword = (password) => {
       util.errorMsg("Please connect your internet Connection");
       return false;
     }
-    const {Email,Last_name, First_name, Referral_no,Password,ConfirmPassword,Mobile,Store_referral_no,} =
+    const {email,last_name, first_name, referral_no,password,confirmPassword,mobile,Store_referral_no,} =
       state;
-    if (util.stringIsEmpty(First_name)) {
+    if (util.stringIsEmpty(first_name)) {
       util.errorMsg('Enter First Name');
       setLoader(false);
       return false;
     }
-    if (util.stringIsEmpty(Last_name)) {
+    if (util.stringIsEmpty(last_name)) {
       util.errorMsg('Enter Last Name');
       setLoader(false);
       return false;
     }
-    if (util.stringIsEmpty(Email)) {
+    if (util.stringIsEmpty(email)) {
         util.errorMsg('Enter Email Address');
         setLoader(false);
         return false;
       }
-      if (util.stringIsEmpty(Password)) {
+      if (util.stringIsEmpty(password)) {
         util.errorMsg('Enter Password');
         setLoader(false);
         return false;
       }
-      if(!isStrongPassword(Password)){
+      if(!isStrongPassword(password)){
         setLoader(false)
         util.errorMsg("Password must contain special character capital and small letters")
         return false;
       }
-    if (util.stringIsEmpty(ConfirmPassword)) {
+    if (util.stringIsEmpty(confirmPassword)) {
       util.errorMsg('Enter Confirm Password');
       setLoader(false);
       return false;
     }
-    if(Password!=ConfirmPassword){
+    if(password!=confirmPassword){
       setLoader(false);
       util.errorMsg("Password and Confirm Password must be same")
       return false;
     }
-    if (util.stringIsEmpty(Mobile)) {
+    if (util.stringIsEmpty(mobile)) {
       util.errorMsg('Enter Mobile Number');
       setLoader(false);
       return false;
     }
   
-    if (util.stringIsEmpty(Referral_no)) {
+    if (util.stringIsEmpty(referral_no)) {
         util.errorMsg('Enter Referral Number');
         setLoader(false);
         return false;
@@ -167,39 +168,60 @@ postData();
 }
 async function postData() {
   try {
-    const apiUrl = "https://amplepoints.com/apiendpoint/register"
-    const response = await axios.post(apiUrl, {
-        "first_name": "2",
-        "last_name": "1",
-        "email": "3",
-        "password": "5",
-        "mobile": "2",
-        "referral_no": "1",
-        "store_referral_no": "1",
-        "term_accepted": "0",
-    }, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    console.log(response);
-  } catch (error) {
-    console.error("Error", error.message);
-    if (error.response) {
-      console.log("Response Status", error.response.status);
-      console.log("Response Data", error.response.data);
+    const apiUrl = "https://amplepoints.com/apiendpoint/register";
+
+    console.log("stat",state.email)
+    const formData = new FormData();
+    formData.append("first_name", `"${state.first_name || ''}"`);
+    formData.append("last_name",`"${state.last_name || ''}"`);
+    formData.append("email", `"${state.email || ''}"`);
+    formData.append("password",`"${state.password || ''}"`);
+    formData.append("mobile", `"${state.mobile || ''}"`);
+    formData.append("referral_no", `"${state.referral_no || ''}"`);
+    formData.append("store_referral_no", `"${state.Store_referral_no || ''}"`);
+    formData.append("term_accepted", `"${state.term_accepted || ''}"`);
+
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      "Accept": "application/json",
+    };
+
+
+    const response = await axios.post(apiUrl, formData, { headers });
+
+    if(response.data.message=='Email Already Exists'){
+      setLoader(false);
+      util.errorMsg("Email Already Exist")
+      return false;
     }
+    if(response.data.message=='Invalid data'){
+      setLoader(false);
+      util.errorMsg("Invalid data")
+      return false;
+    }
+    if(response.data.message=='You are Register Successfully'){
+      setLoader(false);
+      util.successMsg("You are Register Successfully")
+      navigation.navigate("Login")
+      
+    }
+    // Handle the response as needed
+    console.log("response.data",response.data);
+  } catch (error) {
+    // Handle errors
+    console.error("Error:", error);
   }
 }
+
   const resetForm = () => {
     setState({
         first_name: '',
-        Last_name: '',
-        Mobile: '',
-        Email: '',
-        Password: '',
-        ConfirmPassword:'',
-        Referral_no: '',
+        last_name: '',
+        mobile: '',
+        email: '',
+        password: '',
+        confirmPassword:'',
+        referral_no: '',
         Store_referral_no:'',
       Term_accepted:'',
     });
@@ -213,8 +235,8 @@ async function postData() {
         
           <View style={{top:Metrics.ratio(120)}}>
             <MainTextInput
-              onChangeText={t => _handleTextChange('First_name', t)}
-              value={state.First_name}
+              onChangeText={t => _handleTextChange('first_name', t)}
+              value={state.first_name}
               label="First Name"
               placeholder=""
               //   keyboardType=''
@@ -222,8 +244,8 @@ async function postData() {
             />
               <MainTextInput
              
-             onChangeText={t => _handleTextChange('Last_name', t)}
-             value={state.Last_name}
+             onChangeText={t => _handleTextChange('last_name', t)}
+             value={state.last_name}
              label="Last Name"
              placeholder=""
              //   keyboardType=''
@@ -232,8 +254,8 @@ async function postData() {
 
             <MainTextInput
               
-              onChangeText={t => _handleTextChange('Email', t)}
-              value={state.Email}
+              onChangeText={t => _handleTextChange('email', t)}
+              value={state.email}
               label="Email"
               placeholder=""
               keyboardType={'email-address'}
@@ -242,8 +264,8 @@ async function postData() {
             <MainTextInput
             
               secureTextEntry={true}
-              onChangeText={t => _handleTextChange('Password', t)}
-              value={state.Password}
+              onChangeText={t => _handleTextChange('password', t)}
+              value={state.password}
               label="Password"
               autoCapitalize={'none'}
               rightIcon={true}
@@ -252,8 +274,8 @@ async function postData() {
              <MainTextInput
              
               secureTextEntry={true}
-              onChangeText={t => _handleTextChange('ConfirmPassword', t)}
-              value={state.ConfirmPassword}
+              onChangeText={t => _handleTextChange('confirmPassword', t)}
+              value={state.confirmPassword}
               label="Confirm Password"
               autoCapitalize={'none'}
               rightIcon={true}
@@ -261,8 +283,8 @@ async function postData() {
             />
             <MainTextInput
             
-              onChangeText={t => _handleTextChange('Mobile', t)}
-              value={state.Mobile}
+              onChangeText={t => _handleTextChange('mobile', t)}
+              value={state.mobile}
               label="Mobile "
               placeholder=""
               keyboardType="number-pad"
@@ -270,8 +292,8 @@ async function postData() {
             />
               <MainTextInput
             
-            onChangeText={t => _handleTextChange('Referral_no', t)}
-            value={state.Referral_no}
+            onChangeText={t => _handleTextChange('referral_no', t)}
+            value={state.referral_no}
             label="Referral No"
             placeholder=""
             keyboardType="number-pad"
@@ -317,9 +339,8 @@ async function postData() {
           </TouchableOpacity>
         </View>            
           </View>
-
+          <Toast ref={ref => Toast.setRef(ref)} />
         </ScrollView>
-        <Toast ref={ref => Toast.setRef(ref)} />
         </ImageBackground>
       </SafeAreaView>
     
