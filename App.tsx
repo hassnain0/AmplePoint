@@ -20,6 +20,7 @@ export default function App() {
   return (
       <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Payment',headerTitleAlign:'center',statusBarColor:'#FF2F00',headerBackVisible:true,headerStyle: {
         backgroundColor: '#FF2F00',    
@@ -33,9 +34,6 @@ export default function App() {
       <Stack.Screen name='DemoScreen' component={DemoScreen} options={{ statusBarColor:'#FF2F00',headerShown:false}}/>  
 
       <Stack.Screen name='Cart' component={Cart} options={{headerShown:false,statusBarColor:'#FF2F00'}}/>
-   
-       
-      <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>   
       <Stack.Screen name='GiftDetails' component={GiftDetails}options={{statusBarColor:'#FF2F00',}}/>
       <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  
       <Stack.Screen name='Verify' component={Verify}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  

@@ -9,8 +9,9 @@ import util from "../helpers/util";
 const Verify=({navigation})=>{
 
   const route=useRoute();
+  const [data,setData]=useState('');
   useEffect(()=>{
-    const data=route.params.data
+    setData(route.params.data)
     console.log("data",data)
   },[])
    
@@ -18,22 +19,35 @@ const Verify=({navigation})=>{
   
     const Resend=async()=>{
         setLoader(true);
-     
-        const apiUrl="https://amplepoints.com/apiendpoint/sendverificationemail?"
-        const response = await axios.get(apiUrl, {
-            params: {
-              user_id: data.user_id,
-            },
-            
-          }).then(()=>{
-            setLoader(false);
-            util.successMsg("Resend Successfull")
-            navigation.navigate("Login")
-console.log(response)
-          }).catch((err)=>{
-            console.log(err)
-          })
+     try{
+      const apiUrl = "https://amplepoints.com/apiendpoint/sendverificationemail?";
+  
 
+      const formData = new FormData();
+    
+      formData.append("user_id", `"${data.user_id || ''}"`);
+
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        "Accept": "application/json",
+      };
+  
+  
+      const response = await axios.post(apiUrl, formData, { headers });
+if(response.status==200){
+  setLoader(false);
+  util.successMsg("Email sent");
+  navigation.navigate("Login")
+}
+else{
+  setLoader(false);
+  util.errorMsg("Something went wrong")
+}
+}
+        catch(error){
+          setLoader(false)
+          console.log("Error",error)
+        }
     }
    return(    <
     ImageBackground style={styles.ImageContainer} source={require('../assets/Email.jpg')}>

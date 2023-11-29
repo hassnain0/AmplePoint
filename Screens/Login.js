@@ -133,10 +133,30 @@ const Login=({navigation})=>{
   
   
       const response = await axios.post(apiUrl, formData, { headers });
-  
+  console.log("Response ",response.data)
+
+      // if()
+     
+     if(response.data.message=='Invalid Email and Password'){
+      setLoader(false);
+      util.errorMsg("Invalid Email and Password");
+      return false;
+     }
+     
+     const data=response.data.data.user_id;
     
-      // Handle the response as needed
-      console.log("response.data",response);
+      if(response.data.data.is_verified){
+        
+        setLoader(false);
+        util.errorMsg("User not registered");
+        navigation.navigate("Verify",{
+          data,
+        })
+      }
+      else{
+        navigation.navigate("DemoScreen")
+      }
+      console.log("Response ",response.data.data.is_verified)
     } catch (error) {
       // Handle errors
       console.error("Error:", error);
