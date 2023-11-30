@@ -1,60 +1,40 @@
 import { View } from 'react-native';
-import { StripeProvider, initPaymentSheet, useStripe } from '@stripe/stripe-react-native';
+import { useStripe } from '@stripe/stripe-react-native';
 import { useEffect } from 'react';
 import Button from '../components/Button';
+import axios from 'axios';
+import { StripeProvider } from '@stripe/stripe-react-native';
+
 
 const StripePayement =()=>{
- useEffect(async()=>{
 
     
-        const getProductDetails = async () => {
-            try {
-                const productid=route.params.productData.pid;
-                const userid=route.params.productData.vendor_key;
-              const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
-        
-              const response = await axios.get(apiUrl, {
-                params: {
-                  product_id:productid,
-                  user_id: userid,
-                },
-              });
-             
-      
-          const reviewData = response.data.data.tabs_data.workin_hours_tab;
-              // const Address=response.data.data[0].loc_address;
-              // console.log("Address",Address)
-              if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab ) {
-                setactual_Data(response.data);
-                setImageData(response.data.data.product_images);
-                setTimeData(reviewData.hours_data);
-                // setAddress(Address)
-              }
-              if(response.data &&response.data.data.pickup_address[0].loc_address){
-               setAddress(response.data.data.pickup_address[0].loc_address)
-              }
-             
-            } catch (error) {
-              console.error('Error fetching product details:', error);
-            }
-          };
-        
-         
-        }, []); 
-         
-   
+Stripe.initializePublishableKey('pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik');
+    const {initPaymentSheet,presentPaymentSheet}=useStripe();
 
     const onCheckout=async()=>{
-      const initResponse=await initPaymentSheet({
-                merchantDisplayName:'notJust.dev',
-                paymentIntentClientSecret:''
-             })    
-        console.log(initResponse)
+        try {
+               
+            const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
+      
+            const response = await axios.get(apiUrl);
 
-        await presentPaymentSheet();
+           
+           const key=response.data.data.clientSecret
+      const {initResponse}=await initPaymentSheet({
+        merchantDisplayName:'notJust.dev',
+        paymentIntentClientSecret:key,
+      })
+      console.log("init Response",initResponse)
+   
+      await presentPaymentSheet();
+          }catch(error){
+              console.log("Error",error)
+          }
+
         
     }
-    const {initPaymentSheet,presentPaymentSheet}=useStripe();
+
     const Stripe_Key='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik';
     return(
        <View>

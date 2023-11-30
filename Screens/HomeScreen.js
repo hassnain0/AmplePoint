@@ -69,7 +69,7 @@ const ProductItem = ({ product }) => {
   );
 };
 
-const DemoScreen=({navigation})=>{
+const HomeScreen=({navigation})=>{
   const route=useRoute().params;
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
@@ -86,13 +86,8 @@ const getProductDetails = async () => {
   try{
       const vendorId = 182;
       const page = 1;
-       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller'; 
-        await axios.get(apiUrl, {
-          params: {
-            vendor_id:vendorId,
-            page: page
-          }
-        })
+       const apiUrl = 'https://amplepoints.com/apiendpoint/getstores'; 
+        await axios.get(apiUrl)
         .then(response => {
           // Handle the successful response
          console.log("Response",response.data)
@@ -268,4 +263,4 @@ const styles=StyleSheet.create({
     color:'#E8A08D'
   }
 })
-export default DemoScreen;
+export default HomeScreen;

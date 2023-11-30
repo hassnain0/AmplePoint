@@ -30,7 +30,7 @@ const [imageData,setImageData]=useState(null);
 //Amples Applied to uswre
 const [amples,setAmples]=useState(0);
 const route=useRoute();
- 
+ console.log("Route",route.params.route)
   const [actual_data,setactual_Data]=useState(null);
 
    const ShowMoreDetail=()=>{
@@ -49,46 +49,51 @@ const route=useRoute();
   //  }
 
 
-  const [loading,setLoading]=useState(true);
+  const [loading,setLoading]=useState(false);
   useEffect(() => {
-    console.log("Prams",route.params)
-    setProductId(route.params.productData.pid)
-    setVendorId(route.params.productData.vendor_key)
+
+    setLoading(true);
+    setProductId(route.params.productData.pid);
+    setVendorId(route.params.productData.vendor_key);
+
     const getProductDetails = async () => {
-      try {
-        const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
-  
-        const response = await axios.get(apiUrl, {
-          params: {
-            product_id:productId,
-            user_id:VendorId,
-          },
-        });
-       
-  console.log("Response",response.data)
-  const reviewData = response.data.data.tabs_data.workin_hours_tab;
-        // const Address=response.data.data[0].loc_address;
-        // console.log("Address",Address)
-        if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab ) {
-       
-          setactual_Data(response.data);
-          setImageData(response.data.data.product_images);
-          setTimeData(reviewData.hours_data);
-          // setAddress(Address)
+        try {
+            const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
+            const response = await axios.get(apiUrl, {
+                params: {
+                    product_id: productId,
+                    user_id: VendorId,
+                },
+            });
+
+            console.log("Response", response.data);
+
+            if (response.data && response.data.data && response.data.data.tabs_data) {
+                const reviewData = response.data.data.tabs_data.workin_hours_tab;
+
+                // Rest of your code to handle the data
+                setactual_Data(response.data);
+                setImageData(response.data.data.product_images);
+                setTimeData(reviewData.hours_data);
+
+                if (response.data.data.pickup_address && response.data.data.pickup_address[0].loc_address) {
+                    setAddress(response.data.data.pickup_address[0].loc_address);
+                }
+            } else {
+                // console.error('Invalid response format:', response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching product details:', error);
+        } finally {
+            setLoading(false);
         }
-        if(response.data &&response.data.data.pickup_address[0].loc_address){
-         setAddress(response.data.data.pickup_address[0].loc_address)
-        }
-       
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-      }
     };
-  
-    // Call the function when the component mounts
+
     getProductDetails();
     setLoading(false)
-  }, []); 
+}, [productId, VendorId]);
+
+    // Call the function when the component mounts
    
   const [quantity, setQuantity] = useState(1);
 
@@ -163,8 +168,7 @@ const route=useRoute();
 
   // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
       try {
-        const productid=route.params.productData.pid;
-        const userid=route.params.productData.vendor_key;
+      
         const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
         console.log("Prodcut Id",selectedDate);
         console.log("Time",Delivery_type);
@@ -173,7 +177,7 @@ const route=useRoute();
         await axios.get(apiUrl, {
           params: {
             user_id:126,
-            product_id:productid,
+            product_id:productId,
             vendor_id:VendorId,
             delivery_type:'pickup' ||'',
             pickuplocation:address || '',
@@ -184,14 +188,13 @@ const route=useRoute();
         }).then((response)=>{
           
            console.log("Response After Submitting",response);
-        //  if(response.data.message=='Delivery  Detail Added Sucessfully'){
-        //   setLoader(false);
-        //   util.successMsg("Sucessfully added to  Cart");
-        //   navigation.navigate("Cart")
-        //  }
+        
+         if(response.data.message=='Delivery  Detail Added Sucessfully'){
+          util.successMsg("Delievery Submitted");          
+         }
            
         }).catch((err)=>{
-          setLoader(false)
+          // 
               console.log("Error",err)
               
         });
@@ -306,37 +309,7 @@ const route=useRoute();
   }
 return (
   <SafeAreaView>
-    {/* <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.leftIconView}
-            onPress={() => console.log('navigation', navigation.goBack())}>
-                    <Image source={require('../assets/ArrowBack.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}/>
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>{actual_data?.data?.product_info?.single_price}$</Text>
-        </View> */}
-     {/* <Modal
-      visible={isVisible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Feedback</Text>
-          <View style={styles.MystarsContainer}>{MyrenderStars()}</View>
-          <TextInput
-            placeholder="Enter your feedback"
-            value={feedback}
-            onChangeText={(text) => setFeedback(text)}
-            style={styles.feedbackInput}
-          />
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Save</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal> */}
+
   {loading ? (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
@@ -667,7 +640,7 @@ return (
         placeholder="Apply Amples"
         placeholderTextColor="grey"
         value={amples}
-        onChangeText={(text)=>setAmples(text)}
+        onChangeText={(text)=>handleAmples(text)}
       />
       <TouchableOpacity style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>

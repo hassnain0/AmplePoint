@@ -33,7 +33,9 @@ setLoading(false)
 const increaseQuantity = (index) => {
   setActualData((prevData) => {
     const newData = [...prevData.data];
-    newData[index].item_added_quantity += 1;
+    if (newData[index].item_added_quantity > 1) {
+      newData[index].item_added_quantity += 1;
+    }
     return { ...prevData, data: newData };
   });
 };
@@ -48,8 +50,6 @@ const increaseQuantity = (index) => {
           user_id:126,
         },
       });
-
-      console.log("Response ", response.data)
       // Handle the successful response
       setActualData(response.data)
       setProduct_no(response.data.length);
@@ -95,8 +95,10 @@ const increaseQuantity = (index) => {
 
           <View key={index} style={{  left: Metrics.ratio(10)  }}>
              <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(1),bottom:Metrics.ratio(10)}}>{item.meta_description}</Text>
+          <View style={{flex:1,flexDirection:'row',top:Metrics.ratio(10)}}>
               <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' ,bottom:Metrics.ratio(20)}}>By: </Text>
               <Text style={{ fontSize: 15, fontWeight: '300',bottom:Metrics.ratio(20) }}>{item.supplier_name}</Text>
+              </View>
               <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
             <View>
             <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
@@ -128,16 +130,7 @@ const increaseQuantity = (index) => {
   return (
     
     <SafeAreaView style={{backgroundColor:'white',flex: 1,}}>
-     <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.leftIconView}
-            onPress={() => console.log('navigation', navigation.goBack())}>
-                    <Image source={require('../assets/ArrowBack.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}/>
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>My Cart</Text>
-        </View>
-   
+    
         { loading && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>

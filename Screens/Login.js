@@ -8,11 +8,11 @@ import Register from './Register';
 import util from '../helpers/util';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-import DemoScreen from './DemoScreen';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
 import { useFocusEffect } from '@react-navigation/native';
-
+import DemoScreen from './DemoScreen';
+// 
 
 const Login=({navigation})=>{
 
@@ -118,46 +118,51 @@ const Login=({navigation})=>{
     }
   }
   async function postData() {
+    console.log("Data",state)
     try {
-      navigation.navigate("DemoScreen")
+      // navigation.navigate("DemoScreen")
       const apiUrl = "https://amplepoints.com/apiendpoint/login?";
   
-      console.log("stat",state.email)
       const formData = new FormData();
     
-      formData.append("username", `"${state.email || ''}"`);
-      formData.append("password",`"${state.password || ''}"`);
+      formData.append("username", "hirenbuhecha@gmail.com");
+      formData.append("password","1234567");
       const headers = {
         "Content-Type": "multipart/form-data",
         "Accept": "application/json",
       };
   
   
-      const response = await axios.post(apiUrl, formData, { headers });
-  console.log("Response ",response.data)
-
-      // if()
+  const response = await axios.post(apiUrl, formData, { headers });
+  console.log("Response ",response.data.data.total_ample)
+  if(response.data && response.data.data.total_ample)
+  {
+    const data=response.data.data.total_ample
+    navigation.navigate("DemoScreen",{
+    data,
+    })
+  }
     
-     if(response.data.message=='Invalid Email and Password'){
-      setLoader(false);
-      util.errorMsg("Invalid Email and Password");
-      return false;
-     }
+    //  if(response.data.message=='Invalid Email and Password'){
+    //   setLoader(false);
+    //   util.errorMsg("Invalid Email and Password");
+    //   return false;
+    //  }
      
-     const data=response.data.data.user_id;
-     console.log("Verified",data)
-      if(response.data.data.is_verified){
+    //  const data=response.data.data.user_id;
+    //  console.log("Verified",data)
+    //   if(response.data.data.is_verified){
         
-        setLoader(false);
-        util.errorMsg("User not registered");
+    //     setLoader(false);
+    //     util.errorMsg("User not registered");
      
-      }
-      else{
-        resetForm();
-        setLoader(false)
-        navigation.navigate("DemoScreen")
-      }
-      console.log("Response ",response.data.data.is_verified)
+    //   }
+    //   else{
+    //     resetForm();
+    //     setLoader(false)
+    //   
+    //   }
+      
     } catch (error) {
       // Handle errors
       console.error("Error:", error);
