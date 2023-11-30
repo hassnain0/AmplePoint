@@ -119,6 +119,7 @@ const Login=({navigation})=>{
   }
   async function postData() {
     try {
+      navigation.navigate("DemoScreen")
       const apiUrl = "https://amplepoints.com/apiendpoint/login?";
   
       console.log("stat",state.email)
@@ -149,7 +150,7 @@ const Login=({navigation})=>{
         
         setLoader(false);
         util.errorMsg("User not registered");
-        navigation.navigate("DemoScreen")
+     
       }
       else{
         resetForm();

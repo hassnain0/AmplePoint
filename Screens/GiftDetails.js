@@ -14,7 +14,6 @@ import Swiper from 'react-native-swiper';
 
 const GiftDetails=({navigation})=>{
   
- 
   const [isVisible,setIsVisible]=useState(false)
   //Rating Fields
   const [average_rating,setAverageRating]=useState(null);
@@ -23,9 +22,14 @@ const WritFeedback=()=>{
 }
 const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
-  const [TimeData,setTimeData]=useState(null);
-  const [imageData,setImageData]=useState(null);
-  const route=useRoute();
+const [productId,setProductId]=useState('');
+const [VendorId,setVendorId]=useState('');
+const [userId,setUserId]=useState('')
+const [TimeData,setTimeData]=useState(null);
+const [imageData,setImageData]=useState(null);
+//Amples Applied to uswre
+const [amples,setAmples]=useState(0);
+const route=useRoute();
  
   const [actual_data,setactual_Data]=useState(null);
 
@@ -47,24 +51,26 @@ const [address,setAddress]=useState('');
 
   const [loading,setLoading]=useState(true);
   useEffect(() => {
+    console.log("Prams",route.params)
+    setProductId(route.params.productData.pid)
+    setVendorId(route.params.productData.vendor_key)
     const getProductDetails = async () => {
       try {
-          const productid=route.params.productData.pid;
-          const userid=route.params.productData.vendor_key;
         const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
   
         const response = await axios.get(apiUrl, {
           params: {
-            product_id: 59935,
-            user_id: 126,
+            product_id:productId,
+            user_id:VendorId,
           },
         });
        
-
-    const reviewData = response.data.data.tabs_data.workin_hours_tab;
+  console.log("Response",response.data)
+  const reviewData = response.data.data.tabs_data.workin_hours_tab;
         // const Address=response.data.data[0].loc_address;
         // console.log("Address",Address)
         if (response.data.data.product_images && reviewData.hours_data &&response.data.data.tabs_data.workin_hours_tab ) {
+       
           setactual_Data(response.data);
           setImageData(response.data.data.product_images);
           setTimeData(reviewData.hours_data);
@@ -105,11 +111,12 @@ const [address,setAddress]=useState('');
  }
 
   const showShippingDetails = () => {
-
-    setIsShippingSelected(!isShippingSelected);
+    setIsShippingSelected(!isShippingSelected); 
    
     if(isShippingSelected){
-      setDeleiveryType('pickup')
+      setDeleiveryType("pickup")
+      console.log("Delivery_type",Delivery_type)
+       
     }
   };
 
@@ -152,9 +159,50 @@ const [address,setAddress]=useState('');
       setSelectedTime(formattedTime);
     }
   }    
-  const SubmitButton=()=>{
-    util.successMsg("Successfully Added to Cart")
-    navigation.navigate("Cart")
+  const SubmitButton=async()=>{
+
+  // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
+      try {
+        const productid=route.params.productData.pid;
+        const userid=route.params.productData.vendor_key;
+        const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
+        console.log("Prodcut Id",selectedDate);
+        console.log("Time",Delivery_type);
+        
+
+        await axios.get(apiUrl, {
+          params: {
+            user_id:126,
+            product_id:productid,
+            vendor_id:VendorId,
+            delivery_type:'pickup' ||'',
+            pickuplocation:address || '',
+            pickup_date:selectedDate ||'',
+            pickup_time:selectedTime || '',
+          },
+        
+        }).then((response)=>{
+          
+           console.log("Response After Submitting",response);
+        //  if(response.data.message=='Delivery  Detail Added Sucessfully'){
+        //   setLoader(false);
+        //   util.successMsg("Sucessfully added to  Cart");
+        //   navigation.navigate("Cart")
+        //  }
+           
+        }).catch((err)=>{
+          setLoader(false)
+              console.log("Error",err)
+              
+        });
+       
+        // Log the review ratings
+     
+       
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      
+    }; 
   }
 
   const [rating, setRating] = useState(0);
@@ -212,44 +260,49 @@ const [address,setAddress]=useState('');
 
   //Submit Product withoutAmpples
   const withAmpples=async()=>{
-  console.log("Date ",selectedDate)
-  setLoader(true)
-  // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
-      try {
-        const productid=route.params.productData.pid;
-        const userid=route.params.productData.vendor_key;
-        const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
-        console.log("Prodcut Id",selectedDate);
-        console.log("Time",Delivery_type);
-        
-
-        await axios.get(apiUrl, {
-          params: {
-            user_id:126,
-            product_id:productid,
-            vendor_id:906,
-            delivery_type:Delivery_type ||'',
-            pickuplocation:'6131 S Rainbow Blvd. Las Vegas, NV' || '',
-            pickup_date:'2023/11/27' ||'',
-            pickup_time:'12:00 AM',
-          },
-        }).then((response)=>{
-          
-           console.log("Response After Submitting",response.data);
+    setLoader(true)
+    // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
+        try {
          
+          const apiUrl = 'https://amplepoints.com/apiendpoint/addtocart?';
+          console.log("Prodcut Id",selectedDate);
+          console.log("Time",Delivery_type);
+          
+  
+          await axios.get(apiUrl, {
+            params: {
+              user_id:126 || '',
+              product_id:productId || '',
+              quantity:quantity || '',
+            },
+          
+          }).then((response)=>{
            
-        }).catch((err)=>{
-              console.log("Error",err)
-              
-        });
+             if(response.data.message==='Product Added To Cart'){
+              setLoader(false);
+              util.successMsg("Added to Cart Sucessfully");
+              navigation.navigate("Cart")
+             }
+          //  if(response.data.message=='Delivery  Detail Added Sucessfully'){s
+          //   setLoader(false);
+          //   util.successMsg("Sucessfully added to  Cart");
+          //   navigation.navigate("Cart")
+          //  }
+             
+          }).catch((err)=>{
+            setLoader(false)
+                console.log("Error",err)
+                
+          });
+         
+          // Log the review ratings
        
-        // Log the review ratings
-     
-       
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-      
-    }; 
+         
+        } catch (error) {
+          console.error('Error fetching product details:', error);
+        
+      }; 
+  
   }
 return (
   <SafeAreaView>
@@ -613,6 +666,8 @@ return (
         style={styles.textField}
         placeholder="Apply Amples"
         placeholderTextColor="grey"
+        value={amples}
+        onChangeText={(text)=>setAmples(text)}
       />
       <TouchableOpacity style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>
@@ -640,15 +695,18 @@ return (
          </RadioButton.Group>
         <View style={styles.dateTimeContainer}> 
         <View style={styles.timePickerContainer}>
+       
             <TouchableOpacity
                 title="Select Date"
                 onPress={() => setShowDatePicker(true)}
             >
-              
+        <Text style={{ color: 'black', textAlign: 'center' }}>
+          {selectedDate ? `Selected Date: ${selectedDate.toString()}` : 'Select Date'}
+        </Text>       
               </TouchableOpacity> 
               {showDatePicker && (
                 <DateTimePicker
-                style={{ color: 'black' }} 
+                style={{ color: 'orange' }} 
                   value={selectedDate}
                   mode="date"
                   onChange={handleDateChange}
@@ -661,7 +719,9 @@ return (
                 onPress={() => setShowTimePicker(true)}
             >
               
-              <Text style={{color:'black'}}> Select Time</Text>
+              <Text style={{ color: 'black', textAlign: 'center' }}>
+          {selectedTime ? `Selected Time: ${selectedTime.toString()}` : 'Select Time'}
+        </Text>
               </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
@@ -674,12 +734,12 @@ return (
               </View>
          
             </View>
-            
+            <TouchableOpacity onPress={SubmitButton} style={styles.buttonApply}>
+      <Text style={styles.buttonText}>Apply</Text>
+    </TouchableOpacity>
             </View>
+            
        )}
-              </View>
-              
-)}
 <Toast ref={ref => Toast.setRef(ref)} />
     <View style={styles.buttonView}>
       <Button
@@ -688,6 +748,11 @@ return (
         label={"Add to Cart"}
       />
     </View>
+              </View>
+
+
+)}
+
     </ScrollView>
 
 )}
@@ -842,8 +907,8 @@ width:Metrics.ratio(60),
 height:Metrics.ratio(40),
   },
   buttonApply: {
-    top:Metrics.ratio(50),
-    right:Metrics.ratio(15),
+    top:Metrics.ratio(10),
+    left:Metrics.ratio(300),
     backgroundColor: '#FC3F01',
     borderRadius: 5,
     bottom:Metrics.ratio(10),

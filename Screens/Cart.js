@@ -68,7 +68,7 @@ const increaseQuantity = (index) => {
 
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:item.vendor_id,
+        user_id:item.vendor_id,
          product_id:item.product_id,
          product_added_id:item.productaddedid 
         },
@@ -76,7 +76,7 @@ const increaseQuantity = (index) => {
         
       });
     console.log("Response",response.status);
-    if (response.status === 200) {
+    if (response.data.status === 'S') {
       util.successMsg("Item SUccessfully removed")
       // Reload your screen or perform any other actions here
       // For example, you can force a re-render by updating a state variable
@@ -113,7 +113,6 @@ const increaseQuantity = (index) => {
                 <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
                   <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
                 </TouchableOpacity>
-                
               </View>
               <View>
       <TouchableOpacity onPress={()=>delProduct(item)} style={{bottom:Metrics.ratio(20),left:Metrics.ratio(300),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',backgroundColor: '#FC3F01',width:Metrics.ratio(70),borderRadius: 10,}}>

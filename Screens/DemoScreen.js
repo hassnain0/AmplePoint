@@ -116,16 +116,19 @@ const getProductDetails = async () => {
   }
     const renderFlatList = (data) => (
    
-      <FlatList
-      data={storeProducts?.data}
+      <View>
+    <FlatList
+      data={data}
       horizontal
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.pid}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => handleProductPress(item)}>
           <ProductItem product={item} />
-          </TouchableOpacity>
-           )}/>
+        </TouchableOpacity>
+      )}
+    />
+  </View>
    
     );
     const chunkArray = (array, chunkSize) => {
