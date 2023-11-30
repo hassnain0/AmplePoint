@@ -136,7 +136,7 @@ const Login=({navigation})=>{
   console.log("Response ",response.data)
 
       // if()
-     
+    
      if(response.data.message=='Invalid Email and Password'){
       setLoader(false);
       util.errorMsg("Invalid Email and Password");
@@ -144,16 +144,16 @@ const Login=({navigation})=>{
      }
      
      const data=response.data.data.user_id;
-    
+     console.log("Verified",data)
       if(response.data.data.is_verified){
         
         setLoader(false);
         util.errorMsg("User not registered");
-        navigation.navigate("Verify",{
-          data,
-        })
+        navigation.navigate("DemoScreen")
       }
       else{
+        resetForm();
+        setLoader(false)
         navigation.navigate("DemoScreen")
       }
       console.log("Response ",response.data.data.is_verified)

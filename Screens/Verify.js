@@ -34,6 +34,7 @@ const Verify=({navigation})=>{
   
   
       const response = await axios.post(apiUrl, formData, { headers });
+      console.log("Response",response.message)
 if(response.status==200){
   setLoader(false);
   util.successMsg("Email sent");
