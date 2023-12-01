@@ -36,9 +36,6 @@ const Register=({navigation})=> {
   });
   const [isConnected,setIsConnected]=React.useState(true)
 
-  const LoginScreen=()=>{
-    navigation.navigate("Login")
-  }
   const _handleTextChange = (name, val) => {
     setState({
       ...state,
@@ -55,27 +52,8 @@ const Register=({navigation})=> {
       unsubscribe();
     }
 }) 
-const [isChecked, setIsChecked] = useState(0);
+const [isChecked, setIsChecked] = useState(false);
 
-const isStrongPassword = (password) => {
-  // This function checks if the password contains at least one special character, one uppercase letter, and one lowercase letter
-  const specialChars = '!@#$%^&*()_-+={}[]|:;"<>,.?/~`';
-  let hasSpecialChar = false;
-  let hasUppercase = false;
-  let hasLowercase = false;
-
-  for (let char of password) {
-    if (specialChars.includes(char)) {
-      hasSpecialChar = true;
-    } else if (char === char.toUpperCase() && char !== char.toLowerCase()) {
-      hasUppercase = true;
-    } else if (char === char.toLowerCase() && char !== char.toUpperCase()) {
-      hasLowercase = true;
-    }
-  }
-
-  return hasSpecialChar && hasUppercase && hasLowercase;
-};
 
   const _validation = () => {
     if(!isConnected){
@@ -105,11 +83,7 @@ const isStrongPassword = (password) => {
         setLoader(false);
         return false;
       }
-      if(!isStrongPassword(password)){
-        setLoader(false)
-        util.errorMsg("Password must contain special character capital and small letters")
-        return false;
-      }
+     
     if (util.stringIsEmpty(confirmPassword)) {
       util.errorMsg('Enter Confirm Password');
       setLoader(false);
@@ -138,7 +112,7 @@ const isStrongPassword = (password) => {
         return false;
       }
 
-      if (util.stringIsEmpty(isChecked)) {
+      if (!isChecked) {
         util.errorMsg('Please Accept terms and condition');
         setLoader(false);
         return false;
@@ -149,7 +123,7 @@ const isStrongPassword = (password) => {
   };
 
   const Bounce=()=>{
-    setIsChecked(1)
+    setIsChecked(true)
   }
   const onRegister = async() => {
   
@@ -170,16 +144,16 @@ async function postData() {
   try {
     const apiUrl = "https://amplepoints.com/apiendpoint/register";
 
-    console.log("stat",state.email)
+    console.log("stat",state)
     const formData = new FormData();
-    formData.append("first_name", `"${state.first_name || ''}"`);
-    formData.append("last_name",`"${state.last_name || ''}"`);
-    formData.append("email", `"${state.email || ''}"`);
-    formData.append("password",`"${state.password || ''}"`);
-    formData.append("mobile", `"${state.mobile || ''}"`);
-    formData.append("referral_no", `"${state.referral_no || ''}"`);
-    formData.append("store_referral_no", `"${state.Store_referral_no || ''}"`);
-    formData.append("term_accepted", `"${state.term_accepted || ''}"`);
+    formData.append("first_name", `"${state.first_name}"`);
+    formData.append("last_name",`"${state.last_name}"`);
+    formData.append("email", `"${state.email}"`);
+    formData.append("password",`"${state.password}"`);
+    formData.append("mobile", `"${state.mobile}"`);
+    formData.append("referral_no", `"${state.referral_no}"`);
+    formData.append("store_referral_no", `"${state.Store_referral_no}"`);
+    formData.append("term_accepted", `"${state.term_accepted}"`);
 
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -188,7 +162,7 @@ async function postData() {
 
 
     const response = await axios.post(apiUrl, formData, { headers });
-
+console.log("Response of Regisrer",response.data.message)
     if(response.data.message=='Email Already Exists'){
       setLoader(false);
       util.errorMsg("Email Already Exist")
@@ -201,9 +175,9 @@ async function postData() {
     }
     if(response.data.message=='You are Register Successfully'){
       setLoader(false);
+      resetForm();
       util.successMsg("You are Register Successfully")
       navigation.navigate("Login")
-      
     }
     // Handle the response as needed
     console.log("response.data",response.data);

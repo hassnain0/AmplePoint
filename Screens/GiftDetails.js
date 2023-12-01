@@ -24,9 +24,9 @@ const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
 const [productId,setProductId]=useState('');
 const [VendorId,setVendorId]=useState('');
-const [userId,setUserId]=useState('')
 const [TimeData,setTimeData]=useState(null);
 const [imageData,setImageData]=useState(null);
+const [submit,setSubmit]=useState(false);
 //Amples Applied to uswre
 const [amples,setAmples]=useState(0);
 const route=useRoute();
@@ -170,11 +170,7 @@ const route=useRoute();
       try {
       
         const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
-        console.log("Prodcut Id",selectedDate);
-        console.log("Time",Delivery_type);
-        
-
-        await axios.get(apiUrl, {
+         await axios.get(apiUrl, {
           params: {
             user_id:126,
             product_id:productId,
@@ -187,20 +183,16 @@ const route=useRoute();
         
         }).then((response)=>{
           
-           console.log("Response After Submitting",response);
+           console.log("Response After Submitting",response.data.status);
         
          if(response.data.message=='Delivery  Detail Added Sucessfully'){
-          util.successMsg("Delievery Submitted");          
+          util.successMsg("Delievery Submitted");     
+          setSubmit(true);     
          }
-           
         }).catch((err)=>{
-          // 
-              console.log("Error",err)
+         console.log("Error",err)
               
         });
-       
-        // Log the review ratings
-     
        
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -217,26 +209,7 @@ const route=useRoute();
     onClose();
   };
 
-  
-  //Store Product API CAll
-  const StoreProduct=async()=>{
-      // try {
-      //   const productid = route.params.productData.pid;
-      //   const userid = route.params.productData.vendor_key;
-      //   const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
-  
-      //   const response = await axios.get(apiUrl, {
-      //     params: {
-      //       product_id: productid,
-      //       user_id: userid,
-      //     },
-      //   });
-      // }
-      // catch(err){
-      //   console.log(err)
-      // }
-      
-  }
+
   //Share Method
   const handleShare = async () => {
     try {
@@ -262,7 +235,11 @@ const route=useRoute();
 
 
   //Submit Product withoutAmpples
-  const withAmpples=async()=>{
+  const withOutAmpples=async()=>{
+    if(!isShippingSelected){
+      util.errorMsg("Please add deleivery Details");
+      return;
+    }
     setLoader(true)
     // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
         try {
@@ -717,7 +694,7 @@ return (
     <View style={styles.buttonView}>
       <Button
         loader={loader}
-        btnPress={withAmpples}
+        btnPress={withOutAmpples}
         label={"Add to Cart"}
       />
     </View>

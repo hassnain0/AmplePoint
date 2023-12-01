@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import {API_KEY,BASE_URL} from '@env'
 import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { useStripe } from '@stripe/stripe-react-native';
 
 
 const Checkout= ({navigation}) => {
@@ -74,6 +75,45 @@ const handleState = (countryCode) => {
       });
 
 };
+
+const {initPaymentSheet,presentPaymentSheet}=useStripe();
+
+const onCheckout=async()=>{
+    try {
+           
+        const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
+  
+        const response = await axios.get(apiUrl);
+// Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
+
+
+       
+  const key=response.data.data.clientSecret
+  const {initResponse}=await initPaymentSheet({
+    merchantDisplayName:'notJust.dev',
+    paymentIntentClientSecret:key,
+    customFlow: false,
+    style: 'alwaysDark',
+  })
+  console.log("init Response",initResponse)
+if(initResponse){
+console.log("Int ",initResponse);
+}
+  const { error } = await presentPaymentSheet({key});
+
+  if (error) {
+    Alert.alert(`Error code: ${error.code}`, error.message);
+  } else {
+    Alert.alert('Success', 'The payment was confirmed successfully');
+  }
+ 
+ 
+}catch(error){
+          console.log("Error",error)
+      }
+
+    
+}
 
 const handleCity = (countryCode, stateCode) => {
   var config = {
@@ -346,7 +386,7 @@ const Bounce=()=>{
 <View style={styles.buttonView}>
       <Button
         loader={loader}
-        btnPress={Pay}
+        btnPress={onCheckout}
         label={"Pay"}
       />
     </View>

@@ -5,12 +5,12 @@ import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import util from '../helpers/util';
+import Checkout from './Checkout';
 
 const Cart= ({navigation}) => {
    const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
-  const [product_image,setProductImage]=useState(null);
-  const [product_id,setProductId]=useState(null);
+  
   
   useEffect(()=>{
 getProductDetails();
@@ -29,16 +29,22 @@ setLoading(false)
     return { ...prevData, data: newData };
   });
 };
-
 const increaseQuantity = (index) => {
+  console.log("Index",index)
   setActualData((prevData) => {
     const newData = [...prevData.data];
-    if (newData[index].item_added_quantity > 1) {
+    console.log('Item at Index:', newData[index]);
+    if (newData[index] && newData[index].item_added_quantity > 1) {
       newData[index].item_added_quantity += 1;
+      console.log('New Quantity:', newData[index].item_added_quantity);
+      return { ...prevData, data: newData };
     }
-    return { ...prevData, data: newData };
+    console.log('No update made. Returning previous data.');
+    return prevData;
   });
 };
+
+
   const CheckOutScreen=()=>{
     navigation.navigate("Checkout")
   }
@@ -50,11 +56,15 @@ const increaseQuantity = (index) => {
           user_id:126,
         },
       });
+      console.log("Response",response.data)
       // Handle the successful response
       setActualData(response.data)
       setProduct_no(response.data.length);
       const cart_items=response.data.data;
       setProduct_no(cart_items.length)
+      if(response.data && response.data.data.item_added_quantity){
+      setQuantity(response.data.data.item_added_quantity)
+      }
     
     } catch (error) {
       // Handle the error
@@ -75,8 +85,8 @@ const increaseQuantity = (index) => {
 
         
       });
-    console.log("Response",response.status);
-    if (response.data.status === 'S') {
+    console.log("Response",response.data);
+    if (response.status === 'S') {
       util.successMsg("Item SUccessfully removed")
       // Reload your screen or perform any other actions here
       // For example, you can force a re-render by updating a state variable
@@ -112,7 +122,7 @@ const increaseQuantity = (index) => {
                   <Image source={require('../assets/Minus.png')} style={styles.icon} />
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{item.item_added_quantity}</Text>
-                <TouchableOpacity style={styles.button} onPress={increaseQuantity}>
+                <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item.id)}>
                   <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
                 </TouchableOpacity>
               </View>
@@ -128,41 +138,40 @@ const increaseQuantity = (index) => {
     );
   }
   return (
-    
-    <SafeAreaView style={{backgroundColor:'white',flex: 1,}}>
-    
-        { loading && (
+    <SafeAreaView style={{ flex: 1 }}>
+      {loading && (
         <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
+          <Text style={{ textAlign: 'center', alignSelf: 'center' }}>Loading....</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
-        
-      
-    {actulaData &&(
-<View>
-    <ScrollView style={{backgroundColor:'white'}}>  
-      
-    <View  style={{flex: 1}}>
-        <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD'}}>
-        <Text style={{left:0,color:'black',fontSize:15,fontWeight:'500',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Item({product_no})</Text>
-        <Text style={{color:'black',fontSize:15,fontWeight:'500'}}>Total : {actulaData.cart_total} $</Text>
-          </View>
-        </View>
-        <MyComponent/> 
-               
-              <Toast ref={ref => Toast.setRef(ref)} />                    
-  </ScrollView>
-  <View style={styles.buttonView}>
-   <Button 
-     btnPress={CheckOutScreen}
-     label={"Check Out"}
-   />
- </View>   
-  </View>
-    )}
-           
-  </SafeAreaView>
+
+        {actulaData &&(
+          <View>
+              <ScrollView style={{backgroundColor:'white'}}>  
+                
+              <View  style={{flex: 1}}>
+                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD'}}>
+                  <Text style={{left:0,color:'black',fontSize:15,fontWeight:'500',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Item({product_no})</Text>
+                  <Text style={{color:'black',fontSize:15,fontWeight:'500'}}>Total : {actulaData.cart_total} $</Text>
+                    </View>
+                  </View>
+                  <MyComponent/> 
+                         
+                        <Toast ref={ref => Toast.setRef(ref)} />                    
+                        <View style={styles.buttonView}>
+             <Button 
+               btnPress={CheckOutScreen}
+               label={"Check Out"}
+             />
+           </View>     
+            </ScrollView>
+            
+            </View>
+            
+              
+      )}
+    </SafeAreaView>
 );
 };
 
@@ -190,8 +199,7 @@ borderRadius:Metrics.ratio(70),
     justifyContent: "center",
     alignItems: "center",
     alignSelf:'center',
-    top:Metrics.ratio(20),
-    bottom:Metrics.ratio(0)
+
   },
   icon: {
     width: Metrics.ratio(15),

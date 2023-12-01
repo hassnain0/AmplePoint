@@ -56,9 +56,6 @@ const Login=({navigation})=>{
    navigation.navigate("Register")
   }
   //Variables
-  const [user,setUser]=useState({});
-
- 
   const [loader,setLoader]=useState(false);
     const [state, setState] = React.useState({
       email: '',
@@ -96,8 +93,8 @@ const Login=({navigation})=>{
   
     const resetForm = () => {
       setState({
-          email: ' ',
-          password: ' ',
+          email: '',
+          password: '',
       });
     };
   
@@ -134,34 +131,35 @@ const Login=({navigation})=>{
   
   
   const response = await axios.post(apiUrl, formData, { headers });
-  console.log("Response ",response.data.data.total_ample)
-  if(response.data && response.data.data.total_ample)
+ 
+    console.log("Data",response.data)
+     if(response.data.message=='Invalid Email /Password. Please try again'){
+      setLoader(false);
+      util.errorMsg("Invalid Email and Password");
+      resetForm();
+      return false;
+     }
+     
+      if(!response.data.data.is_verified){
+        
+        setLoader(false);
+        util.errorMsg("User not registered");
+         navigation.navigate("Verify")
+      }
+
+      else{
+             resetForm();
+        setLoader(false)
+         if(response.data && response.data.data.total_ample)
   {
     const data=response.data.data.total_ample
     navigation.navigate("DemoScreen",{
     data,
     })
   }
-    
-    //  if(response.data.message=='Invalid Email and Password'){
-    //   setLoader(false);
-    //   util.errorMsg("Invalid Email and Password");
-    //   return false;
-    //  }
-     
-    //  const data=response.data.data.user_id;
-    //  console.log("Verified",data)
-    //   if(response.data.data.is_verified){
-        
-    //     setLoader(false);
-    //     util.errorMsg("User not registered");
-     
-    //   }
-    //   else{
-    //     resetForm();
-    //     setLoader(false)
-    //   
-    //   }
+   
+      
+      }
       
     } catch (error) {
       // Handle errors
