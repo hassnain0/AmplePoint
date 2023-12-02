@@ -7,19 +7,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import util from '../helpers/util';
 import Cart from './Cart';
-import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Swiper from 'react-native-swiper';
-
+import { useRoute } from '@react-navigation/native';
 
 const GiftDetails=({navigation})=>{
-  
-  const [isVisible,setIsVisible]=useState(false)
-  //Rating Fields
-  const [average_rating,setAverageRating]=useState(null);
-const WritFeedback=()=>{
-  setIsVisible(true);
-}
+
 const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
 const [productId,setProductId]=useState('');
@@ -27,11 +20,17 @@ const [VendorId,setVendorId]=useState('');
 const [TimeData,setTimeData]=useState(null);
 const [imageData,setImageData]=useState(null);
 const [submit,setSubmit]=useState(false);
-//Amples Applied to uswre
 const [amples,setAmples]=useState(0);
+const [isforGuest,setisforGuest]=useState(false);
+const [isforMe,setisforMe]=useState(true);
+const [firstName,setFirstName]=useState(null);
+const [lastName,setLastName]=useState(null);
+const [email,setEmail]=useState(null);
+const [phone,setPhone]=useState(null);
+const [isGiftCard,setIsGiftCard]=useState(false);
+
+const [actual_data,setactual_Data]=useState(null);
 const route=useRoute();
- console.log("Route",route.params.route)
-  const [actual_data,setactual_Data]=useState(null);
 
    const ShowMoreDetail=()=>{
     setKnowMore(false);
@@ -44,17 +43,18 @@ const route=useRoute();
     setKnowMore(true);
     
    }
-  //  const onClose=()=>{
-  //   setIsVisible(false);
-  //  }
-
+  
+const forGuest=()=>{
+setisforGuest(true);
+setisforMe(false)
+}
 
   const [loading,setLoading]=useState(false);
   useEffect(() => {
 
     setLoading(true);
     setProductId(route.params.productData.pid);
-    setVendorId(route.params.productData.vendor_key);
+    setVendorId(route.params.productData.vendor_id);
 
     const getProductDetails = async () => {
         try {
@@ -66,8 +66,6 @@ const route=useRoute();
                 },
             });
 
-            console.log("Response", response.data);
-
             if (response.data && response.data.data && response.data.data.tabs_data) {
                 const reviewData = response.data.data.tabs_data.workin_hours_tab;
 
@@ -78,6 +76,10 @@ const route=useRoute();
 
                 if (response.data.data.pickup_address && response.data.data.pickup_address[0].loc_address) {
                     setAddress(response.data.data.pickup_address[0].loc_address);
+                }
+                if (response.data.data && response.data.data.delivery_data && response.data.data.delivery_data.is_delevery_availabe === 1) 
+                {
+                  setIsGiftCard(true)
                 }
             } else {
                 // console.error('Invalid response format:', response.data);
@@ -108,21 +110,11 @@ const route=useRoute();
     }
   };
 
-  const [Delivery_type,setDeleiveryType]=useState('');
   const [isShippingSelected,setIsShippingSelected]=useState(false);
-  const [moreButton, setMoreButton] = useState(false);
- const MoreButtonSelect=()=>{
-  setMoreButton(!moreButton)
- }
 
   const showShippingDetails = () => {
     setIsShippingSelected(!isShippingSelected); 
    
-    if(isShippingSelected){
-      setDeleiveryType("pickup")
-      console.log("Delivery_type",Delivery_type)
-       
-    }
   };
 
   //Method to get Product Details 
@@ -200,16 +192,10 @@ const route=useRoute();
     }; 
   }
 
-  const [rating, setRating] = useState(0);
-  const [feedback, setFeedback] = useState('');
-
-  const handleSave = () => {
-    // Implement your save logic here
-    console.log(`Rating: ${rating}, Feedback: ${feedback}`);
-    onClose();
-  };
-
-
+  const forMe=()=>{
+    setisforMe(true)
+    setisforGuest(false)
+  }
   //Share Method
   const handleShare = async () => {
     try {
@@ -263,12 +249,6 @@ const route=useRoute();
               util.successMsg("Added to Cart Sucessfully");
               navigation.navigate("Cart")
              }
-          //  if(response.data.message=='Delivery  Detail Added Sucessfully'){s
-          //   setLoader(false);
-          //   util.successMsg("Sucessfully added to  Cart");
-          //   navigation.navigate("Cart")
-          //  }
-             
           }).catch((err)=>{
             setLoader(false)
                 console.log("Error",err)
@@ -504,12 +484,8 @@ return (
         }}>{actual_data?.data?.product_info?.long_desc}</Text>
   </View>  
   )} 
-    {/* <View style={{paddingTop:Metrics.ratio(20),flex:1, flexDirection:'row'}}> 
-    <Text style={{color:'black',fontWeight:'900',left:Metrics.ratio(20),fontSize:20}}>Rating & Reviews</Text>
-   
-       
-   </View> */}
-  
+   {isGiftCard && (
+    <View>
          <View>
            <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70),marginTop:Metrics.ratio(100)}}>Working Hours</Text>
          </View>
@@ -609,9 +585,67 @@ return (
       </TouchableOpacity>
     </View>
     </View>
+ 
+  <View>
+    <View style={{margin:Metrics.ratio(20),flex:1, flexDirection:'row',backgroundColor:'#FF2E00' , borderRadius:Metrics.ratio(20)}}>
+    <RadioButton.Group onValueChange={forMe} st value={isforMe.toString()}>
+            <RadioButton.Item color='white' label={"This is for me"}  labelStyle={{ color: 'white' }} value="true" />
+         </RadioButton.Group>
+         <RadioButton.Group onValueChange={forGuest} value={isforGuest.toString()}>
+            <RadioButton.Item color='white' label={"This is for guest"}  labelStyle={{ color: 'white' }} value="true" />
+         </RadioButton.Group>
+    </View>
+    <View style={{borderColor:'#FF2E00',borderWidth:2}}>
+      <Text style={{fontSize:20,color:'black',textAlign:"center"}}>Before clicking on add to cart please</Text>
+      <Text style={{fontSize:20,color:'black',textAlign:"center"}}>fill your guest detail</Text>
+      <View style={{ padding: 20 }}>
+      <View style={{ marginBottom:Metrics.ratio(10)}}>
+        <Text style={{color:'black'}} >To First Name *</Text>
+        <TextInput
+        style={styles.DetailsContainer}
+          placeholder="Enter first name"
+          value={firstName}
+          onChangeText={(text) => setFirstName(text)}
+        />
+      </View>
+      <View >
+        <Text style={{color:'black'}}>To Last Name *</Text>
+        <TextInput
+        style={styles.DetailsContainer}
+          placeholder="Enter last name"
+          value={lastName}
+          onChangeText={(text) => setLastName(text)}
+        />
+      </View>
+      <View style={{ marginBottom: 10 }}>
+        <Text style={{color:'black'}}>To Email *</Text>
+        <TextInput
+        style={styles.DetailsContainer}
+          placeholder="Enter email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          keyboardType="email-address"
+        />
+      </View>
+      <View style={{ marginBottom: 10 }}>
+        <Text style={{color:'black'}} >To Phone *</Text>
+        <TextInput
+        style={styles.DetailsContainer}
+          placeholder="Enter phone number"
+          value={phone}
+          onChangeText={(text) => setPhone(text)}
+          keyboardType="phone-pad"
+        />
+      </View>
+      
+    </View>
+  
+    </View>
+    </View>
+    </View>
+   )}
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
         <View style={styles.container3}>
-      {/* Text Field */}
       <TextInput
         style={styles.textField}
         placeholder="Apply Amples"
@@ -713,6 +747,11 @@ return (
 
 )}
 const styles=StyleSheet.create({
+  DetailsContainer:{
+    color:'black',
+    borderWidth:1,
+    borderRadius:5
+  },
   leftIconView: {
     paddingHorizontal: Metrics.ratio(10),
     height: Metrics.ratio(40),
