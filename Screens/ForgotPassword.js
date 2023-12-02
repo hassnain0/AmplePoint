@@ -67,7 +67,7 @@ const ForgotScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.button} onPress={handleChange}>
               <Text style={styles.buttonText}>Reset Password</Text>
             </TouchableOpacity>
-          
+            <Toast ref={ref => Toast.setRef(ref)} />
           </View>
       
      
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#FF2E00',
     padding: 10,
     borderRadius: 5,
   },

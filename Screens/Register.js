@@ -144,16 +144,16 @@ async function postData() {
   try {
     const apiUrl = "https://amplepoints.com/apiendpoint/register";
 
-    console.log("stat",state)
+ 
     const formData = new FormData();
-    formData.append("first_name", `"${state.first_name}"`);
-    formData.append("last_name",`"${state.last_name}"`);
-    formData.append("email", `"${state.email}"`);
-    formData.append("password",`"${state.password}"`);
-    formData.append("mobile", `"${state.mobile}"`);
-    formData.append("referral_no", `"${state.referral_no}"`);
-    formData.append("store_referral_no", `"${state.Store_referral_no}"`);
-    formData.append("term_accepted", `"${state.term_accepted}"`);
+    formData.append("first_name",state.first_name);
+    formData.append("last_name",state.last_name);
+    formData.append("email", state.email);
+    formData.append("password",state.password);
+    formData.append("mobile", state.mobile);
+    formData.append("referral_no", state.referral_no);
+    formData.append("store_referral_no", state.Store_referral_no);
+    formData.append("term_accepted", state.term_accepted);
 
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -162,8 +162,14 @@ async function postData() {
 
 
     const response = await axios.post(apiUrl, formData, { headers });
-console.log("Response of Regisrer",response.data.message)
-    if(response.data.message=='Email Already Exists'){
+console.log("Response of Hello",response.data)
+if(response.data.message=='You are Register Successfully'){
+  setLoader(false);
+  resetForm();
+  util.successMsg(response.data.message)
+  navigation.navigate("Login")
+}    
+if(response.data.message=='Email Already Exists'){
       setLoader(false);
       util.errorMsg("Email Already Exist")
       return false;
@@ -173,21 +179,16 @@ console.log("Response of Regisrer",response.data.message)
       util.errorMsg("Invalid data")
       return false;
     }
-    if(response.data.message=='You are Register Successfully'){
-      setLoader(false);
-      resetForm();
-      util.successMsg("You are Register Successfully")
-      navigation.navigate("Login")
-    }
+    
     // Handle the response as needed
-    console.log("response.data",response.data);
+   
   } catch (error) {
     // Handle errors
     console.error("Error:", error);
   }
 }
 
-  const resetForm = () => {
+const resetForm = () => {
     setState({
         first_name: '',
         last_name: '',

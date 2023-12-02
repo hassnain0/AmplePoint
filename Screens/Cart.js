@@ -17,37 +17,116 @@ getProductDetails();
 setLoading(false)
   },[deleteCount])
   const [quantity, setQuantity] = useState(1);
+  const [loader, setLoader] = useState(false);
  const [loading,setLoading]=useState(true);
  //Number of Carts recieved from API
  const [product_no,setProduct_no]=useState(0);
- const decreaseQuantity = (index) => {
+
+ const increaseQuantity = (item) => {
   setActualData((prevData) => {
+    console.log('Previous Data:', prevData);
+
     const newData = [...prevData.data];
-    if (newData[index].item_added_quantity > 1) {
-      newData[index].item_added_quantity -= 1;
+    const itemIndex = newData.findIndex((dataItem) => dataItem.id === item.id);
+
+    console.log("Index", itemIndex);
+
+    if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
+      newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) + 1).toString();
+    
+      const updatedData = { ...prevData, data: newData };
+    
+    
+      return updatedData;
     }
-    return { ...prevData, data: newData };
-  });
-};
-const increaseQuantity = (index) => {
-  console.log("Index",index)
-  setActualData((prevData) => {
-    const newData = [...prevData.data];
-    console.log('Item at Index:', newData[index]);
-    if (newData[index] && newData[index].item_added_quantity > 1) {
-      newData[index].item_added_quantity += 1;
-      console.log('New Quantity:', newData[index].item_added_quantity);
-      return { ...prevData, data: newData };
-    }
-    console.log('No update made. Returning previous data.');
+
+    
     return prevData;
   });
 };
+
+// const decreaseQuantity = (item) => {
+//   console.log("Item",item.item_added_quantity)
+//   setActualData((prevData) => {
+//     console.log('Previous Data:', prevData);
+
+//     const newData = [...prevData.data];
+//     const itemId = item.id; // Log the ID you're searching for
+//     const itemIndex = newData.findIndex((dataItem) => dataItem.id === itemId);
+
+//     if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
+//       newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) - 1).toString();
+
+    
+//       const updatedData = { ...prevData, data: newData };
+   
+//       return updatedData;
+//     }
+
+//     console.log('No update made. Returning previous data.');
+//     return prevData;
+//   });
+// };
 
 
   const CheckOutScreen=()=>{
     navigation.navigate("Checkout")
   }
+
+  //CheckOut
+  const Checkout=async()=>{
+setLoader(true);
+     try {    
+        const apiUrl = 'https://amplepoints.com/apiendpoint/checkbeforecheckout?';
+        const response = await axios.get(apiUrl, {
+          params: {
+            user_id:126,
+          },
+        });
+        console.log("Response",response.data.message)
+        // Handle the successful response
+      
+      if(response.data.status=='F'){
+        setLoader(false);
+        util.errorMsg(response.data.message)
+        return;
+      }
+      else{
+        setLoader(false);
+        CallCheckoutApi();
+      }
+      }
+       catch (error) {
+        // Handle the error
+        console.error('Error:', error);
+      }
+    
+  }
+
+  const CallCheckoutApi=async()=>{
+    setLoader(true);
+     try {    
+        const apiUrl = 'https://amplepoints.com/apiendpoint/checkout?';
+        const response = await axios.get(apiUrl, {
+          params: {
+            user_id:126,
+          },
+        });
+        console.log("Response",response.data.message)
+        // Handle the successful response
+      
+        util.successMsg("Sucessfull");
+        setLoader(false);
+        navigation.navigate("Checkout")
+      
+      }
+       catch (error) {
+        // Handle the error
+        console.error('Error:', error);
+      }
+    
+  }
+
   const getProductDetails = async () => {
     try {    
       const apiUrl = 'https://amplepoints.com/apiendpoint/getusercart?';
@@ -74,6 +153,7 @@ const increaseQuantity = (index) => {
   const delProduct = async (item) => {
     try {
     
+      console.log("Item",item)
       const apiUrl = 'https://amplepoints.com/apiendpoint/removetocart?';
 
       const response = await axios.get(apiUrl, {
@@ -118,11 +198,11 @@ const increaseQuantity = (index) => {
                 <Text style={{ top: Metrics.ratio(-30), fontSize: 15, left: Metrics.ratio(-15), }}>
                   Free with {item.no_of_amples} amplePoints
                 </Text>
-                <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
+                <TouchableOpacity style={styles.button1} >
                   <Image source={require('../assets/Minus.png')} style={styles.icon} />
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{item.item_added_quantity}</Text>
-                <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item.id)}>
+                <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item)}>
                   <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
                 </TouchableOpacity>
               </View>
@@ -147,7 +227,7 @@ const increaseQuantity = (index) => {
       )}
 
         {actulaData &&(
-          <View>
+          <View >
               <ScrollView style={{backgroundColor:'white'}}>  
                 
               <View  style={{flex: 1}}>
@@ -161,7 +241,8 @@ const increaseQuantity = (index) => {
                         <Toast ref={ref => Toast.setRef(ref)} />                    
                         <View style={styles.buttonView}>
              <Button 
-               btnPress={CheckOutScreen}
+               btnPress={Checkout}
+               loader={loader}
                label={"Check Out"}
              />
            </View>     

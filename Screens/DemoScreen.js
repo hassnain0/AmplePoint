@@ -84,15 +84,11 @@ const DemoScreen=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-      const vendorId = 182;
+      const vendorId = 162;
+      
       const page = 1;
-       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller'; 
-        await axios.get(apiUrl, {
-          params: {
-            vendor_id:vendorId,
-            page: page
-          }
-        })
+       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?vendor_id=182&page=1'; 
+        await axios.get(apiUrl)
         .then(response => {
           // Handle the successful response
          console.log("Response",response.data)

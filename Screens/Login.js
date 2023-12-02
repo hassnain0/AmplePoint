@@ -122,8 +122,8 @@ const Login=({navigation})=>{
   
       const formData = new FormData();
     
-      formData.append("username", "hirenbuhecha@gmail.com");
-      formData.append("password","1234567");
+      formData.append("username", state.email);
+      formData.append("password",state.password);
       const headers = {
         "Content-Type": "multipart/form-data",
         "Accept": "application/json",
@@ -140,11 +140,14 @@ const Login=({navigation})=>{
       return false;
      }
      
-      if(!response.data.data.is_verified){
-        
+      if(response.data.data.is_verified==0){
+        const Data=response.data;
         setLoader(false);
         util.errorMsg("User not registered");
-         navigation.navigate("Verify")
+         navigation.navigate("Verify",{
+          Data,
+
+         })
       }
 
       else{

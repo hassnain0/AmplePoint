@@ -84,8 +84,8 @@ const HomeScreen=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-      const vendorId = 182;
-      const page = 1;
+      
+      
        const apiUrl = 'https://amplepoints.com/apiendpoint/getstores'; 
         await axios.get(apiUrl)
         .then(response => {

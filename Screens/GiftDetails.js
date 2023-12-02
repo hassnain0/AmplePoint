@@ -236,7 +236,7 @@ const route=useRoute();
 
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
-    if(!isShippingSelected){
+    if(!submit){
       util.errorMsg("Please add deleivery Details");
       return;
     }

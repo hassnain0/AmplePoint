@@ -22,98 +22,73 @@ const Checkout= ({navigation}) => {
   const [cityydata,setCity]=useState([])
   const [isFocus, setIsFocus] = useState(false);
 useEffect(()=>{
-  var config = {
-    method: 'get',
-    url: 'https://amplepoints.com/apiendpoint/getcoutrylist',
-    headers: {
-      'X-CSCAPI-KEY': API_KEY
-    }
-  };
-  
-  axios(config)
-  .then( response =>{
-    
-    var count=Object.keys(response.data).length;
-    let countryArray=[];
-    for(var i=0; i<count; i++){
-    countryArray.push({
-      value:response.data[i].id,
-      label:response.data[i].name,
-    });
-    setCountryData(countryArray);
-  }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+getCountry();
 })
-const handleState = (countryCode) => {
-  console.log("Contry code",countryCode)
-  var config = {
-    method: 'get',
-    url: `'https://api.countrystatecity.in/v1/countries'/countries/AF/states`,
-    headers: {
-      'X-CSCAPI-KEY': API_KEY,
-    },
-  };
 
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let stateArray = [];
-        for (var i = 0; i < count; i++) {
-          stateArray.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-        setStateData(stateArray);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
 
+//Getting Country List
+const getCountry=async()=>{
+
+  const apiUrl="https://amplepoints.com/apiendpoint/getcoutrylist";
+try{
+  const response=await axios(apiUrl);
+  console.log("Response",response.data.data);
+const Data=response.data.data;
+
+  if(response.data && response.data.data){
+ setCountryData(Data);
+  }
+  console.log("Country Dta",countrydata)
+
+}
+catch(error){
+  console.log('Error',error);
+}
+}
+const handleState = (id) => {
+  console.log("ID",id);
+
+ 
 };
 
-const {initPaymentSheet,presentPaymentSheet}=useStripe();
+// const {initPaymentSheet,presentPaymentSheet}=useStripe();
 
-const onCheckout=async()=>{
-    try {
+// const onCheckout=async()=>{
+//     try {
            
-        const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
+//         const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
   
-        const response = await axios.get(apiUrl);
-// Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
+//         const response = await axios.get(apiUrl);
+// // Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
 
 
        
-  const key=response.data.data.clientSecret
-  const {initResponse}=await initPaymentSheet({
-    merchantDisplayName:'notJust.dev',
-    paymentIntentClientSecret:key,
-    customFlow: false,
-    style: 'alwaysDark',
-  })
-  console.log("init Response",initResponse)
-if(initResponse){
-console.log("Int ",initResponse);
-}
-  const { error } = await presentPaymentSheet({key});
+//   const key=response.data.data.clientSecret
+//   const {initResponse}=await initPaymentSheet({
+//     merchantDisplayName:'notJust.dev',
+//     paymentIntentClientSecret:key,
+//     customFlow: false,
+//     style: 'alwaysDark',
+//   })
+//   console.log("init Response",initResponse)
+// if(initResponse){
+// console.log("Int ",initResponse);
+// }
+//   const { error } = await presentPaymentSheet({key});
 
-  if (error) {
-    Alert.alert(`Error code: ${error.code}`, error.message);
-  } else {
-    Alert.alert('Success', 'The payment was confirmed successfully');
-  }
+//   if (error) {
+//     Alert.alert(`Error code: ${error.code}`, error.message);
+//   } else {
+//     Alert.alert('Success', 'The payment was confirmed successfully');
+//   }
  
  
-}catch(error){
-          console.log("Error",error)
-      }
+// }catch(error){
+//           console.log("Error",error)
+//       }
 
     
-}
+// }
 
 const handleCity = (countryCode, stateCode) => {
   var config = {
@@ -188,7 +163,7 @@ const Bounce=()=>{
         onBlur={() => setIsFocus(false)}
         onChange={item => {
           setValue(item.value);
-          handleState(item.value)
+          handleState(item.id)
           setIsFocus(false);
         }}
        
@@ -268,7 +243,7 @@ const Bounce=()=>{
         style={{marginTop: Metrics.ratio(7),left:Metrics.ratio(5),}}
         fillColor="red"
         unfillColor="#FFFFFF"
-        isChecked={!isChecked}
+        isChecked={isChecked}
         onPress={Bounce}/>
     <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(5),fontSize:20,bottom:Metrics.ratio(20),top:Metrics.ratio(5)}}>Shipping (As above)</Text>
        </View> 
@@ -386,7 +361,8 @@ const Bounce=()=>{
 <View style={styles.buttonView}>
       <Button
         loader={loader}
-        btnPress={onCheckout}
+        // btnPress={onCheckout}
+        
         label={"Pay"}
       />
     </View>
