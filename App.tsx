@@ -12,6 +12,7 @@ import Payement from './Screens/Payement';
 import ForgotScreen from './Screens/ForgotPassword';
 import Verify from './Screens/Verify';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import Store from './Screens/Store';
 
 const Stack=createNativeStackNavigator();
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name='Store' component={Store} options={( ) => ({headerTintColor:'white',title:'Brand',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='GiftDetails' component={GiftDetails} options={( ) => ({headerTintColor:'white',title:'Gift Details',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>

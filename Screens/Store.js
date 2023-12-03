@@ -3,51 +3,59 @@ import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProductItem = ({ product }) => {
 
-  
   return (
 
     <View style={styles.productItem}>     
-    <Text style={{fontSize:15,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.pname}</Text>
-        <View >
-            <Image   source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
-          <View style={styles.TouchContainer}>
-  <Text style={styles.TextContainer}>{product.pprice}$</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-        </View>
-      <Text style={styles.ProductContainer}>{product.pvendor}</Text>
-
-       <View style={{flex:1, flexDirection:'row'}}>
-       <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >$ {product.pprice}</Text>
-       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}}>
-       <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscount} % Back</Text>
-       </View>
-       </View>
-       <View>
-  <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-    Get <Text style={{color: '#FF2E00'}}>{product.pamples}</Text> AmplePoints $<Text style={{color: '#FF2E00'}}>{product.pdiscountprice}</Text>
-  </Text>
-</View>
-<Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-  or get it <Text style={{color: '#FF2E00'}}>FREE</Text> with <Text style={{color: '#FF2E00'}}>{product.pfwamples}</Text> points
-</Text>
+    <Image   source={{ uri: `https://amplepoints.com/vendor-data/${product.tbl_vndr_id}/profile/${product.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
+    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.vendor_name}</Text>
+    <View style={{flex:1,flexDirection:'row'}}>
+        <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
+        <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.vendor_city}</Text>
     </View>
-
+    <View style={{flex:1,flexDirection:'row'}}>
+        <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
+        <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.tbl_vndr_zip}</Text>
+    </View>
+    </View>
   );
 };
 
-const DemoScreen=({navigation})=>{
-  const route=useRoute().params;
+const Store=({navigation})=>{
+  
+    useFocusEffect(
+        React.useCallback(() => {
+          const onBackPress = () => {
+            Alert.alert(
+              'Exit App',
+              'Are you sure you want to exit?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => null,
+                  style: 'cancel'
+                },
+                {
+                  text: 'Exit',
+                  onPress: () => BackHandler.exitApp()
+                }
+              ],
+              { cancelable: false }
+            );
+            return true;
+          };
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+          return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+      );
+      
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
-    navigation.navigate('GiftDetails',{ productData,route });
+    navigation.navigate('DemoScreen');
   };
   useEffect(()=>{
     
@@ -58,14 +66,11 @@ const DemoScreen=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-      const vendorId = 162;
-      
-      const page = 1;
-       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?vendor_id=182&page=1'; 
+        const apiUrl = 'https://amplepoints.com/apiendpoint/getstores'; 
         await axios.get(apiUrl)
         .then(response => {
           // Handle the successful response
-         console.log("Response",response.data)
+        console.log("Response",response.data)
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
@@ -179,13 +184,13 @@ const styles=StyleSheet.create({
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       productImage: {
-        borderRadius:10,
+        borderRadius:100,
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
         marginTop:Metrics.smallMargin,
-        width: Metrics.ratio(200),
-        height: Metrics.ratio(180),
+        width: Metrics.ratio(110),
+        height: Metrics.ratio(110),
         
       },
       ProductContainer:{
@@ -238,4 +243,4 @@ const styles=StyleSheet.create({
     color:'#E8A08D'
   }
 })
-export default DemoScreen;
+export default Store;

@@ -20,7 +20,7 @@ const [VendorId,setVendorId]=useState('');
 const [TimeData,setTimeData]=useState(null);
 const [imageData,setImageData]=useState(null);
 const [submit,setSubmit]=useState(false);
-const [amples,setAmples]=useState(0);
+const [amples,setAmples]=useState(42.00);
 const [isforGuest,setisforGuest]=useState(false);
 const [isforMe,setisforMe]=useState(true);
 const [firstName,setFirstName]=useState(null);
@@ -65,6 +65,7 @@ setisforMe(false)
                     user_id: VendorId,
                 },
             });
+            
 
             if (response.data && response.data.data && response.data.data.tabs_data) {
                 const reviewData = response.data.data.tabs_data.workin_hours_tab;
@@ -81,8 +82,6 @@ setisforMe(false)
                 {
                   setIsGiftCard(true)
                 }
-            } else {
-                // console.error('Invalid response format:', response.data);
             }
         } catch (error) {
             console.error('Error fetching product details:', error);
@@ -93,8 +92,29 @@ setisforMe(false)
 
     getProductDetails();
     setLoading(false)
+    GetAmples();
 }, [productId, VendorId]);
 
+
+const postData = {
+  user_id: 126,
+  // Include any other data you want to post
+};
+
+const GetAmples = async () => {
+  try {
+    const apiUrl = "https://amplepoints.com/apiendpoint/getuserampleandreward";
+    const response = await axios.post(apiUrl, postData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    });
+    console.log("Response", response.data);
+  } catch (err) {
+    console.log("Error", err);
+  }
+}
     // Call the function when the component mounts
    
   const [quantity, setQuantity] = useState(1);
@@ -218,8 +238,29 @@ setisforMe(false)
       console.error('Error sharing:', error.message);
     }
   };
+  //Function to calculate Ample Points
+  function calculateDiscountedPrice(originalPrice, amplePointsApplied) {
+    // Ensure that the applied ample points are within a valid range (0 to originalPrice)
+    amplePointsApplied = Math.max(0, Math.min(originalPrice, amplePointsApplied));
+  
+    // Calculate the discounted price
+    const discountPercentage = (amplePointsApplied / originalPrice) * 100;
+    const discountedPrice = originalPrice - discountPercentage;
+  
+    return actual_data?.data?.product_info?.single_price-discountedPrice;
+  }
+  
+  // Example usage:
+ 
+  const Apply=()=>{
 
-
+    const discountedPrice = calculateDiscountedPrice(actual_data?.data?.product_info?.single_price, amples);
+  util.successMsg(discountedPrice.toFixed(2)); 
+ }
+  
+const handleAmples=(text)=>{
+  setAmples(text)
+}
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
     if(!submit){
@@ -521,7 +562,8 @@ return (
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
           <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
         </View>
-   
+        </View>
+      )}
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(1)}}>Ample Points Calculator</Text>
         <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(20)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
@@ -585,7 +627,7 @@ return (
       </TouchableOpacity>
     </View>
     </View>
- 
+ {isGiftCard &&(
   <View>
     <View style={{margin:Metrics.ratio(20),flex:1, flexDirection:'row',backgroundColor:'#FF2E00' , borderRadius:Metrics.ratio(20)}}>
     <RadioButton.Group onValueChange={forMe} st value={isforMe.toString()}>
@@ -642,18 +684,19 @@ return (
   
     </View>
     </View>
-    </View>
-   )}
+  
+  )}  
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
         <View style={styles.container3}>
       <TextInput
         style={styles.textField}
         placeholder="Apply Amples"
-        placeholderTextColor="grey"
+        placeholderTextColor="black"
         value={amples}
+        keyboardType='numeric'
         onChangeText={(text)=>handleAmples(text)}
       />
-      <TouchableOpacity style={styles.button3}>
+      <TouchableOpacity onPress={Apply} style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 
@@ -944,8 +987,7 @@ borderRadius: 5,
     paddingLeft: Metrics.ratio(5),
     borderRadius:Metrics.ratio(10),
     top:Metrics.ratio(5),
-    color: 'white',
-    backgroundColor:'#B6B8B5'
+    backgroundColor:'#D1D3D0'
     
   },
   buttonRow: {

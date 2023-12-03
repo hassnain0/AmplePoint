@@ -11,8 +11,7 @@ import axios from 'axios';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
 import { useFocusEffect } from '@react-navigation/native';
-import DemoScreen from './DemoScreen';
-// 
+import Store from './Store';
 
 const Login=({navigation})=>{
 
@@ -140,25 +139,21 @@ const Login=({navigation})=>{
       return false;
      }
      
-      if(response.data.data.is_verified==0){
-        const Data=response.data;
-        setLoader(false);
-        util.errorMsg("User not registered");
-         navigation.navigate("Verify",{
-          Data,
-
-         })
-      }
+      // if(response.data.data.is_verified==0){
+      //   const Data=response.data;
+      //   setLoader(false);
+      //   util.errorMsg("User not registered");
+      //    navigation.navigate("Verify",{
+      //     Data,})
+      // }
 
       else{
              resetForm();
         setLoader(false)
          if(response.data && response.data.data.total_ample)
   {
-    const data=response.data.data.total_ample
-    navigation.navigate("DemoScreen",{
-    data,
-    })
+   
+    navigation.navigate("Store")
   }
    
       
@@ -264,12 +259,7 @@ const styles=StyleSheet.create({
       borderRadius:Metrics.ratio(20),
       backgroundColor:'#FDFDFD',
     },
-    ImageContainer: {
-      // Your image styles here
-      width:300, // Adjust as needed
-      height: Metrics.ratio(200), // Adjust as needed
-
-    },
+  
     TextContainer: {
       fontSize:15,
       color: '#FF4001', // Optional: set the text color
@@ -278,8 +268,8 @@ const styles=StyleSheet.create({
     TouchContainer:{
       position: 'absolute',
       top: Metrics.ratio(5), // Adjust as needed
-      right: 5, // Adjust as needed// Optional: add a background color to make the text more readable
-      paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+      right: Metrics.ratio(35), // Adjust as needed// Optional: add a background color to make the text more readable
+
     },
     Text2Container:{
         paddingTop:Metrics.ratio(20),
@@ -290,11 +280,12 @@ const styles=StyleSheet.create({
       },
       ImageContainer:{
        backgroundColor:'white',
-        width: Metrics.ratio(380), 
-        height: Metrics.ratio(420),
+        width: Metrics.ratio(450), 
+        height: Metrics.ratio(440),
+        alignSelf:'center'
       },
       textContainer: {
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
         color: '#083166',
         marginLeft: Metrics.ratio(20),
