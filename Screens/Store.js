@@ -1,10 +1,10 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
-
+import Icon from 'react-native-vector-icons'
 const ProductItem = ({ product }) => {
 
   return (
@@ -25,7 +25,19 @@ const ProductItem = ({ product }) => {
 };
 
 const Store=({navigation})=>{
-  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState(null);
+  useEffect(() => {
+    // Filter products based on search query
+    if (searchQuery) {
+      const filteredData = storeProducts?.data.filter((product) =>
+        product.vendor_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredProducts(filteredData);
+    } else {
+      setFilteredProducts(null);
+    }
+  }, [searchQuery, storeProducts]);
     useFocusEffect(
         React.useCallback(() => {
           const onBackPress = () => {
@@ -120,25 +132,51 @@ const getProductDetails = async () => {
 
     return (
   <ScrollView>
-      <View style={styles.container}>
-      {loading && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
+    <View style={styles.container}>
+        <View style={styles.searchBarContainer}>
+        <Icon name="search" size={Metrics.ratio(20)} color="#555" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search..."
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
         </View>
-      )}
-      {chunkedData.map((chunk, index) => (
-        <View key={index}>
-          {renderFlatList(chunk)}
-        </View>
-      ))}
-    </View>
+        {loading && (
+          <View style={styles.overlay}>
+            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
+              Loading....
+            </Text>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+        {filteredProducts
+          ? renderFlatList(filteredProducts)
+          : chunkedData.map((chunk, index) => (
+              <View key={index}>{renderFlatList(chunk)}</View>
+            ))}
+      </View>
     </ScrollView>
 )
       }
 
 const styles=StyleSheet.create({
-   
+  searchBarContainer: {
+    marginTop:Metrics.ratio(20),
+    marginLeft:Metrics.ratio(10),
+    marginRight:Metrics.ratio(10),
+    backgroundColor: '#e0e0e0',
+    borderRadius: Metrics.ratio(30),
+  
+  },
+  searchIcon: {
+    width: Metrics.ratio(20),
+    height: Metrics.ratio(20),
+    marginRight: Metrics.ratio(10),
+  },
+  searchInput: {
+    fontSize: Metrics.ratio(16),
+  },
       ImageContainer:{
         width: Metrics.ratio(200), 
         height: Metrics.ratio(130),

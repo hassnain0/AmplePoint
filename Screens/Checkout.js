@@ -5,7 +5,6 @@ import { Metrics } from '../themes';
 import Button from '../components/Button';
 import Payement from './Payement';
 import Toast from 'react-native-toast-message';
-import {API_KEY,BASE_URL} from '@env'
 import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useStripe } from '@stripe/stripe-react-native';
@@ -16,40 +15,36 @@ const Checkout= ({navigation}) => {
   const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
 
   const [value, setValue] = useState(null);
-  const [countrydata,setCountryData]=useState([]);
+  const [countrydata,setCountryData]=useState([null]);
   const [loader,setLoader]=useState(false);
   const [statedata,setstate]=useState([]);
   const [cityydata,setCity]=useState([])
   const [isFocus, setIsFocus] = useState(false);
-useEffect(()=>{
-getCountry();
-})
+
+  useEffect(() => {
+    getcoutrylist();
+  }, []);
+
+  const getcoutrylist=async()=>{
+    const apiurl='https://amplepoints.com/apiendpoint/getcoutrylist';
+    
+    axios.get(apiurl)
+      .then((response) => {
+        console.log("response.data",response.data)
+        if (response.data.status === 'S') {
+
+          setCountryData(response.data);
+        } else {
+          console.error('Error fetching countries data');
+        }  
+      }).catch((error) => {
+        console.error('Error fetching countries data:', error);
+      });
+    }
 
 
 //Getting Country List
-const getCountry=async()=>{
 
-  const apiUrl="https://amplepoints.com/apiendpoint/getcoutrylist";
-try{
-  const response=await axios(apiUrl);
-  console.log("Response",response.data.data);
-const Data=response.data.data;
-
-  if(response.data && response.data.data){
- setCountryData(Data);
-  }
-  console.log("Country Dta",countrydata)
-
-}
-catch(error){
-  console.log('Error',error);
-}
-}
-const handleState = (id) => {
-  console.log("ID",id);
-
- 
-};
 
 // const {initPaymentSheet,presentPaymentSheet}=useStripe();
 
@@ -145,29 +140,27 @@ const Bounce=()=>{
   <View style={{backgroundColor:'#F2F2F2'}}>
    <View style={styles.container}>
    <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
-      <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={countrydata}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select Country' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-          handleState(item.id)
-          setIsFocus(false);
-        }}
-       
-      />
+   <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={countrydata}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select item' : '...'}
+          searchPlaceholder="Search..."
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.id);
+            setIsFocus(false);
+          }}
+        />
       </View>
       <View style={styles.container}>
       <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>State</Text>

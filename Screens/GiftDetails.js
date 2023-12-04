@@ -185,12 +185,12 @@ const GetAmples = async () => {
          await axios.get(apiUrl, {
           params: {
             user_id:126,
-            product_id:productId,
-            vendor_id:VendorId,
-            delivery_type:'pickup' ||'',
+            product_id:59935,
+            vendor_id:906,
+            delivery_type:'pickup',
             pickuplocation:address || '',
-            pickup_date:selectedDate ||'',
-            pickup_time:selectedTime || '',
+            pickup_date:selectedDate,
+            pickup_time:selectedTime,
           },
         
         }).then((response)=>{
@@ -239,24 +239,31 @@ const GetAmples = async () => {
     }
   };
   //Function to calculate Ample Points
-  function calculateDiscountedPrice(originalPrice, amplePointsApplied) {
-    // Ensure that the applied ample points are within a valid range (0 to originalPrice)
-    amplePointsApplied = Math.max(0, Math.min(originalPrice, amplePointsApplied));
+  const calculateDiscount = () => {
+    const userAmplePoints = 7000; // Replace this with your actual user's ample points
+    const amplePointsToRedeem = actual_data?.data?.product_info?.pfwamples; // Ample points required to redeem
+    const actualPrice = actual_data?.data?.product_info?.single_price; // Actual price of the product
   
-    // Calculate the discounted price
-    const discountPercentage = (amplePointsApplied / originalPrice) * 100;
-    const discountedPrice = originalPrice - discountPercentage;
+    // User can apply up to the required ample points or available ample points
+    const amplePointsApplied = Math.min(userAmplePoints, amplePointsToRedeem);
   
-    return actual_data?.data?.product_info?.single_price-discountedPrice;
-  }
+    // Calculate the discount directly proportional to the ample points applied
+    const discount = (amples/ amplePointsToRedeem) * actualPrice;
+  
+    // Calculate the new discounted price
+    const newDiscountedPrice = actualPrice - discount;
+  
+    console.log("My Discount 1", discount);
+    console.log("Discounted Price2", newDiscountedPrice);
+  };
   
   // Example usage:
  
-  const Apply=()=>{
+//   const Apply=()=>{
 
-    const discountedPrice = calculateDiscountedPrice(actual_data?.data?.product_info?.single_price, amples);
-  util.successMsg(discountedPrice.toFixed(2)); 
- }
+//     const discountedPrice = calculateDiscountedPrice(actual_data?.data?.product_info?.single_price, amples);
+//   util.successMsg(discountedPrice.toFixed(2)); 
+//  }
   
 const handleAmples=(text)=>{
   setAmples(text)
@@ -272,10 +279,7 @@ const handleAmples=(text)=>{
         try {
          
           const apiUrl = 'https://amplepoints.com/apiendpoint/addtocart?';
-          console.log("Prodcut Id",selectedDate);
-          console.log("Time",Delivery_type);
-          
-  
+         
           await axios.get(apiUrl, {
             params: {
               user_id:126 || '',
@@ -696,7 +700,7 @@ return (
         keyboardType='numeric'
         onChangeText={(text)=>handleAmples(text)}
       />
-      <TouchableOpacity onPress={Apply} style={styles.button3}>
+      <TouchableOpacity onPress={calculateDiscount} style={styles.button3}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 

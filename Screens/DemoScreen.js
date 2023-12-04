@@ -61,7 +61,7 @@ const getProductDetails = async () => {
       const vendorId = 162;
       
       const page = 1;
-       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?vendor_id=182&page=1'; 
+       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?vendor_id=182&page=3'; 
         await axios.get(apiUrl)
         .then(response => {
           // Handle the successful response
