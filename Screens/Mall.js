@@ -1,53 +1,68 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
-
-
+import { useFocusEffect } from '@react-navigation/native';
 const ProductItem = ({ product }) => {
-
-  
+    console.log("Image",`https://amplepoints.com/mall/logo/${product.top_logo}`)
   return (
 
     <View style={styles.productItem}>     
-    <Text style={{fontSize:15,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.pname}</Text>
-        <View >
-            <Image   source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
-          <View style={styles.TouchContainer}>
-  <Text style={styles.TextContainer}>{product.pprice}$</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-        </View>
-      <Text style={styles.ProductContainer}>{product.pvendor}</Text>
-
-       <View style={{flex:1, flexDirection:'row'}}>
-       <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >$ {product.pprice}</Text>
-       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}}>
-       <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscount} % Back</Text>
-       </View>
-       </View>
-       <View>
-  <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-    Get <Text style={{color: '#FF2E00'}}>{product.pamples}</Text> AmplePoints $<Text style={{color: '#FF2E00'}}>{product.pdiscountprice}</Text>
-  </Text>
-</View>
-<Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-  or get it <Text style={{color: '#FF2E00'}}>FREE</Text> with <Text style={{color: '#FF2E00'}}>{product.pfwamples}</Text> points
-</Text>
+    <Image   source={{ uri: `https://amplepoints.com/mall/logo/${product.logo_image}` }} style={styles.productImage} resizeMode="cover" />
+    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20,textAlign:'center'}}>{product.display_name}</Text>
+    
     </View>
-
   );
 };
 
-const DemoScreen=({navigation})=>{
-  const route=useRoute().params;
+const Mall=({navigation})=>{
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState(null);
+  useEffect(() => {
+    // Filter products based on search query
+    if (searchQuery) {
+      const filteredData = storeProducts?.data.filter((product) =>
+        product.display_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredProducts(filteredData);
+    } else {
+      setFilteredProducts(null);
+    }
+  }, [searchQuery, storeProducts]);
+    useFocusEffect(
+        React.useCallback(() => {
+          const onBackPress = () => {
+            Alert.alert(
+              'Exit App',
+              'Are you sure you want to exit?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => null,
+                  style: 'cancel'
+                },
+                {
+                  text: 'Exit',
+                  onPress: () => BackHandler.exitApp()
+                }
+              ],
+              { cancelable: false }
+            );
+            return true;
+          };
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+          return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+      );
+      
   const handleProductPress = (productData) => {
-    // Navigate to the next screen, passing the productId as a parameter
-    navigation.navigate('GiftDetails',{ productData,route });
+    const Id=productData.tbl_vndr_id
+    navigation.navigate('DemoScreen',{
+      Id,
+      
+    });
   };
   useEffect(()=>{
     
@@ -58,12 +73,10 @@ const DemoScreen=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-     
-       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?vendor_id=182&page=3'; 
+        const apiUrl = 'https://amplepoints.com/apiendpoint/getmalls'; 
         await axios.get(apiUrl)
         .then(response => {
-          // Handle the successful response
-         console.log("Response",response.data)
+       
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
@@ -87,17 +100,17 @@ const getProductDetails = async () => {
     const renderFlatList = (data) => (
    
       <View>
-    <FlatList
-      data={data}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item) => item.pid}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleProductPress(item)}>
-          <ProductItem product={item} />
-        </TouchableOpacity>
-      )}
-    />
+   <FlatList
+     numColumns={3} 
+    data={data}
+    showsVerticalScrollIndicator={false}  // hides the vertical scroll indicator
+    keyExtractor={(item) => item.venr_mall_id.toString()}
+    renderItem={({ item }) => (
+      <TouchableOpacity onPress={() => handleProductPress(item)}>
+        <ProductItem product={item} />
+      </TouchableOpacity>
+    )}
+  />
   </View>
    
     );
@@ -113,25 +126,56 @@ const getProductDetails = async () => {
 
     return (
   <ScrollView>
-      <View style={styles.container}>
-      {loading && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
+    <View style={styles.container}>
+        <View style={styles.searchBarContainer}>
+        <View style={styles.searchBar2Container}>
+          <TextInput
+
+            style={styles.searchInput}
+            placeholder="Search..."
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
         </View>
-      )}
-      {chunkedData.map((chunk, index) => (
-        <View key={index}>
-          {renderFlatList(chunk)}
         </View>
-      ))}
-    </View>
+        {loading && (
+          <View style={styles.overlay}>
+            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
+              Loading....
+            </Text>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+        {filteredProducts
+          ? renderFlatList(filteredProducts)
+          : chunkedData.map((chunk, index) => (
+              <View key={index}>{renderFlatList(chunk)}</View>
+            ))}
+      </View>
     </ScrollView>
 )
       }
 
 const styles=StyleSheet.create({
-   
+  searchBarContainer: {
+    backgroundColor: '#e0e0e0',
+    height: 50,
+},
+  searchBar2Container: {
+    flex: 1, // This ensures the inner container takes up all available space
+    alignItems: 'center', // Center the content horizontally
+    justifyContent: 'center', 
+      },
+  searchInput: {
+    top:Metrics.ratio(1),
+    height: 35,
+    borderColor: 'black',
+    borderWidth: 0.5,
+    padding: 10,
+    width: '90%',
+    borderRadius:10,
+    backgroundColor:'white'
+  },
       ImageContainer:{
         width: Metrics.ratio(200), 
         height: Metrics.ratio(130),
@@ -177,13 +221,13 @@ const styles=StyleSheet.create({
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       productImage: {
-        borderRadius:10,
+        borderRadius:100,
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
         marginTop:Metrics.smallMargin,
-        width: Metrics.ratio(200),
-        height: Metrics.ratio(180),
+        width: Metrics.ratio(110),
+        height: Metrics.ratio(110),
         
       },
       ProductContainer:{
@@ -236,4 +280,4 @@ const styles=StyleSheet.create({
     color:'#E8A08D'
   }
 })
-export default DemoScreen;
+export default Mall;

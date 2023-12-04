@@ -11,8 +11,8 @@ import axios from 'axios';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
 import { useFocusEffect } from '@react-navigation/native';
-import Store from './Store';
-
+import HomeScreen from './HomeScreen';
+HomeScreen
 const Login=({navigation})=>{
 
   useFocusEffect(
@@ -153,7 +153,7 @@ const Login=({navigation})=>{
          if(response.data && response.data.data.total_ample)
   {
    
-    navigation.navigate("Store")
+    navigation.navigate("HomeScreen")
   }
    
       

@@ -4,7 +4,6 @@ import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons'
 const ProductItem = ({ product }) => {
 
   return (
@@ -66,8 +65,11 @@ const Store=({navigation})=>{
       );
       
   const handleProductPress = (productData) => {
-    // Navigate to the next screen, passing the productId as a parameter
-    navigation.navigate('DemoScreen');
+    const Id=productData.tbl_vndr_id
+    navigation.navigate('DemoScreen',{
+      Id,
+      
+    });
   };
   useEffect(()=>{
     
@@ -104,20 +106,19 @@ const getProductDetails = async () => {
     }
   }
     const renderFlatList = (data) => (
-   
       <View>
-    <FlatList
-      data={data}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item) => item.pid}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleProductPress(item)}>
-          <ProductItem product={item} />
-        </TouchableOpacity>
-      )}
-    />
-  </View>
+      <FlatList
+        numColumns={3} 
+       data={data}
+       showsVerticalScrollIndicator={false}  // hides the vertical scroll indicator
+       keyExtractor={(item) => item.pid}
+       renderItem={({ item }) => (
+         <TouchableOpacity onPress={() => handleProductPress(item)}>
+           <ProductItem product={item} />
+         </TouchableOpacity>
+       )}
+     />
+     </View>
    
     );
     const chunkArray = (array, chunkSize) => {
@@ -133,15 +134,7 @@ const getProductDetails = async () => {
     return (
   <ScrollView>
     <View style={styles.container}>
-        <View style={styles.searchBarContainer}>
-        <Icon name="search" size={Metrics.ratio(20)} color="#555" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search..."
-            value={searchQuery}
-            onChangeText={(text) => setSearchQuery(text)}
-          />
-        </View>
+       
         {loading && (
           <View style={styles.overlay}>
             <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
@@ -175,6 +168,7 @@ const styles=StyleSheet.create({
     marginRight: Metrics.ratio(10),
   },
   searchInput: {
+    textAlign:'center',
     fontSize: Metrics.ratio(16),
   },
       ImageContainer:{
