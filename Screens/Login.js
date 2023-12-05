@@ -152,8 +152,11 @@ const Login=({navigation})=>{
         setLoader(false)
          if(response.data && response.data.data.total_ample)
   {
-   
-    navigation.navigate("HomeScreen")
+   const Data=response.data.data.user_id;
+   console.log("Data",Data)
+    navigation.navigate("HomeScreen",{
+      Data,
+    })
   }
    
       
