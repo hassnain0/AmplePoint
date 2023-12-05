@@ -6,7 +6,8 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
-
+import { useStripe } from '@stripe/stripe-react-native';
+import util from '../helpers/util';
 
 const ProductItem = ({ product, selectedProductId, onSelect }) => {
   const isSelected = selectedProductId === product.product_id;
@@ -167,7 +168,60 @@ const OrderSummary=({navigation})=>{
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const {initPaymentSheet,presentPaymentSheet}=useStripe();
 
+  //Stripe Show 
+  const MakePayement=()=>{
+    setLoader(true)
+    util.showAlertWithDelay("Please wait while your request done")
+onCheckout();
+    if(Total>0){
+
+
+}
+else{
+  util.errorMsg("Please try again letter")
+}
+
+  
+
+  }
+  const onCheckout=async()=>{
+    try {
+           
+        const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
+  
+        const response = await axios.get(apiUrl);
+// Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
+
+
+       
+  const key=response.data.data.clientSecret
+  const {initResponse}=await initPaymentSheet({
+    merchantDisplayName:'notJust.dev',
+    paymentIntentClientSecret:key,
+    customFlow: false,
+    style: 'alwaysDark',
+  })
+ 
+  const { error } = await presentPaymentSheet({key});
+
+  if (error) {
+    setLoader(false)
+    Alert.alert(`Error code: ${error.code}`, error.message);
+  } else {
+    setLoader(false)
+   util.successMsg('The payment was confirmed successfully');
+  }
+ 
+ 
+}catch(error){
+  setLoader(false)
+          console.log("Error",error)
+      }
+
+    
+}
 const getProductDetails = async () => {
   try{
      
@@ -225,19 +279,20 @@ const getProductDetails = async () => {
       <View style={{ flex: 1,backgroundColor:'white' }}>
           {renderFlatList(storeProducts)}
       <View style={{backgroundColor:'#F1F0F7',borderTopLeftRadius:30,borderTopRightRadius:30}}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: Metrics.ratio(50) }}>
-  <Text style={{ fontWeight: '500', fontSize: 15, color: 'black',top:0 }}>Amount Payable</Text>
-  <Text style={{ paddingLeft: Metrics.ratio(20), fontSize: 15, fontWeight: '500', color: 'black' }}>${Total}</Text>
+      <View style={{alignItems:'center',alignContent:'center',alignSelf:'center', flexDirection: 'row', paddingVertical: Metrics.ratio(30) }}>
+  <Text style={{ fontWeight: '500', fontSize: 20, color: 'black',top:0 }}>Amount Payable</Text>
+  <Text style={{ paddingLeft: Metrics.ratio(20), fontSize: 20, fontWeight: '500', color: 'black' }}>${Total}</Text>
 </View>
 
         <View style={styles.buttonView}>
           <Button
             loader={loader}
-            // btnPress={/* onCheckout function */}
+            btnPress={MakePayement}
             label={'Make Payement'}
           />
         </View> 
       </View>
+      <Toast ref={ref => Toast.setRef(ref)} />
     </View>
     
 
