@@ -14,8 +14,8 @@ import Verify from './Screens/Verify';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import Store from './Screens/Store';
 import Mall from './Screens/Mall';
+import OrderSummary from './Screens/OrderSummary';
 import HomeScreen from './Screens/HomeScreen';
-import Rough from './Screens/Rough';
 
 const Stack=createNativeStackNavigator();
 export default function App() {
@@ -23,6 +23,7 @@ export default function App() {
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
       <Stack.Navigator>  
+      <Stack.Screen name='OrderSummary' component={OrderSummary} options={( ) => ({headerTintColor:'white',title:'Order Summary',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       {/* <Stack.Screen name='Rough' component={Rough}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/> */}
       <Stack.Screen name='HomeScreen' component={HomeScreen}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
