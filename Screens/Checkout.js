@@ -15,7 +15,7 @@ const Checkout= ({navigation}) => {
   const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
 
   const [value, setValue] = useState(null);
-  const [countrydata,setCountryData]=useState([null]);
+  const [countrydata,setCountryData]=useState([]);
   const [loader,setLoader]=useState(false);
   const [statedata,setstate]=useState([]);
   const [cityydata,setCity]=useState([])

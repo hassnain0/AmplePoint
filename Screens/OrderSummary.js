@@ -1,104 +1,360 @@
-import React, { useState, useEffect } from 'react';
-import { View,ActivityIndicator ,} from 'react-native';
+import React,{useState,useEffect,} from 'react';
+import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
+import { Metrics } from '../themes';
+import GiftDetails from './GiftDetails';
 import axios from 'axios';
-import util from '../helpers/util';
+import { useRoute } from '@react-navigation/native';
+import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
-import { FlatList } from 'react-native-gesture-handler';
 
 
-//Item List 
-const ItemList = ({ items, onPressItem }) => {
-    return (
-        
-      <View>
-      {items && (
-      <View>
-        {items.map(item => (
-          <TouchableOpacity key={item.id} onPress={() => onPressItem(item)}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-              <Image source={{ uri: item.image }} style={{ width: 50, height: 50, marginRight: 10 }} />
-              <Text>{item.name}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-      )}
-      </View>
-        
-      
-    );
-  };
-//Details Item 
-const ItemDetails = ({ item }) => {
-    if (!item) {
-      return null; // Don't render anything if no item is selected
-    }
+const ProductItem = ({ product, selectedProductId, onSelect }) => {
+  const isSelected = selectedProductId === product.product_id;
+
+  return (
+
+    <TouchableOpacity onPress={() => onSelect(product.product_id)}>
+    <View style={styles.productItem}>
+      <View style={{ flex: 1, flexDirection: 'row', backgroundColor: isSelected ? 'transparent' : '#F1F0F7' }}>
+  <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 'bold', color: 'black', paddingBottom: 20 }}>
+    {product.product_name}
+  </Text>
   
-    return (
-      <View style={{ padding: 20 }}>
-        <Image source={{ uri: item.image }} style={{ width: 100, height: 100, marginBottom: 10 }} />
-        <Text>Name: {item.name}</Text>
-        {/* Add other details you want to display */}
-      </View>
-    );
-  };
-const OrderSummary=()=>{
-const [selectedItem, setSelectedItem] = useState(null);
-const [data,setData]=useState(null);
-const [loading,isLoading]=useState(false);
-useEffect(() => {
-  getProduct=async()=>{
-    try{
-    const apiUrl="https://amplepoints.com/apiendpoint/getordersummary?user_id=126";
-    const response=await axios.post(apiUrl)
+  {/* <Image source={{ uri: product.product_image }} style={styles.productImage} resizeMode="cover" /> */}
+</View>
 
-    console.log("Response", response.data)
-    if(response.data.data && response.data){
-        setData(response.data.data);
-    }
-    if(response.data.message=='Data Not Found'){
-        util.errorMsg("Data not Found")
-    }
-}
-catch(Error){
-    console.log("Error",Error)
-}
-  }
-  getProduct();
-}, []);
-
-const handlePressItem = (item) => {
-  setSelectedItem(item);
-};
-
-return (
+  
+{isSelected && (
   <View>
-  {loading && (
-          <View style={styles.overlay}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
-              Loading....
-            </Text>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        )}
-          <View>
-      <FlatList
-      
-       data={data}
-       showsHorizontalScrollIndicator={false}  // hides the vertical scroll indicator
-       keyExtractor={(item) => item.product_id}
-       renderItem={({ item }) => (
-         <TouchableOpacity onPress={() => handlePressItem(item)}>
-           <ItemDetails item={selectedItem} />
-         </TouchableOpacity>
-       )}
-     />
-     </View>
-    <ItemList items={data} onPressItem={handlePressItem} />
-    <Toast ref={ref => Toast.setRef(ref)} /> 
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+   <Text  style={{ 
+    fontWeight:'500',
+        fontSize:15,
+        color:'black',
+        }}>PickUp/Delivery:</Text>
+  <Text  style={{  
+        paddingLeft:Metrics.ratio(50),
+        fontWeight:'500',
+        fontSize:15,
+        color:'black',
+       
+        }}>{product.display_delivery_info}</Text>
     </View>
-  
-);
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+   <Text  style={{  
+       fontWeight:'500',
+        fontSize:15,
+        color:'black',
+        top:Metrics.ratio(10),
+        }}>Unit Price:</Text>
+  <Text  style={{
+    top:Metrics.ratio(10),
+     paddingLeft:Metrics.ratio(90),
+        fontSize:15,
+        fontWeight:'500',
+        top:Metrics.ratio(10),
+        color:'black'
+        }}>${product.product_unite_price}</Text>  
+   </View>
+
+   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+         <Text  style={{ 
+    fontWeight:'500',
+    top:Metrics.ratio(10),
+        fontSize:15,
+        color:'black'
+        }}>Tax:</Text>
+  <Text  style={{ 
+         top:Metrics.ratio(10),
+         paddingLeft:Metrics.ratio(130),
+            fontSize:15,
+            fontWeight:'500',
+            color:'black'
+        }}>${product.tax_amount}</Text>
+
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+         <Text  style={{ 
+    fontWeight:'500',
+    top:Metrics.ratio(10),
+        fontSize:15,
+        color:'black'
+        }}>Shipping or Delievery:</Text>
+  <Text  style={{ 
+         top:Metrics.ratio(10),
+         paddingLeft:Metrics.ratio(12),
+            fontSize:15,
+            fontWeight:'500',
+            color:'black'
+        }}>${product.ship_del_charge}</Text>
+
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+         <Text  style={{ 
+    fontWeight:'500',
+    top:Metrics.ratio(10),
+        fontSize:15,
+        color:'black'
+        }}>Earn Amples:</Text>
+  <Text  style={{ 
+         top:Metrics.ratio(10),
+         paddingLeft:Metrics.ratio(70),
+            fontSize:15,
+            fontWeight:'500',
+            color:'black'
+        }}>${product.product_earn_amples}</Text>
+
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+         <Text  style={{ 
+    fontWeight:'500',
+    top:Metrics.ratio(10),
+        fontSize:15,
+        color:'black'
+        }}>Redeem Amples:</Text>
+  <Text  style={{ 
+         top:Metrics.ratio(10),
+         paddingLeft:Metrics.ratio(45),
+            fontSize:15,
+            fontWeight:'500',
+            color:'black'
+        }}>${product.product_apply_amples}</Text>
+
+    </View>
+
+    <View style={styles.horizantalLine}></View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingBottom:Metrics.ratio(20),}}>
+         <Text  style={{ 
+    fontWeight:'500',
+    top:Metrics.ratio(10),
+        fontSize:15,
+        color:'black'
+        }}>Total Amount:</Text>
+  <Text  style={{ 
+         top:Metrics.ratio(10),
+         paddingLeft:Metrics.ratio(65),
+            fontSize:15,
+            fontWeight:'500',
+            color:'black',
+            
+        }}>${product.total_amount}</Text>
+
+    </View>
+  </View>
+  )}
+    </View>
+   
+    </TouchableOpacity>
+
+
+  );
 };
 
+const OrderSummary=({navigation})=>{
+  const route=useRoute().params;
+  const [loader,setLoader]=useState(false);
+  const [Total,setTotal]=useState(0);
+  console.log("Route",route)
+  const handleProductPress = (productData) => {
+    // Navigate to the next screen, passing the productId as a parameter
+   
+  };
+  useEffect(()=>{
+    
+    getProductDetails();
+    
+  },[])
+  const [storeProducts, setStoreProducts] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
+const getProductDetails = async () => {
+  try{
+     
+       const apiUrl = 'https://amplepoints.com/apiendpoint/getordersummary?user_id=126'; 
+        await axios.get(apiUrl)
+        .then(response => {
+          // Handle the successful response
+       
+            setStoreProducts(response.data.data.shopping_data);
+            if(response.data.data.shopping_total.final_total)
+          {
+            setTotal(response.data.data.shopping_total.final_total)
+          }
+        })
+        .catch(error => {
+          // Handle the error
+          setLoading(false)
+          console.error('Error:', error);
+        });
+        
+  }
+  catch(err){
+    setLoading(false);  
+    console.log(err)
+    }
+    finally {
+     
+      console.log("Store Products",storeProducts)
+       // Set loading to false when the API call is complete
+      setLoading(false);
+    }
+  }
+  const handleSelectPress = (productId) => {
+    setSelectedProductId((prevId) => (prevId === productId ? null : productId));
+  };
+    const renderFlatList = (data) => (
+   
+      <ScrollView style={{top:Metrics.ratio(30)}}>
+    <FlatList
+        data={data}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.pid}
+        renderItem={({ item }) => (
+          <ProductItem product={item} selectedProductId={selectedProductId} onSelect={handleSelectPress} />
+        )}
+      />
+    
+   
+<Toast ref={ref => Toast.setRef(ref)} /> 
+   
+  </ScrollView>
+    );
+  
+    return (
+      <View style={{ flex: 1,backgroundColor:'white' }}>
+          {renderFlatList(storeProducts)}
+      <View style={{backgroundColor:'#F1F0F7',borderTopLeftRadius:30,borderTopRightRadius:30}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: Metrics.ratio(50) }}>
+  <Text style={{ fontWeight: '500', fontSize: 15, color: 'black',top:0 }}>Amount Payable</Text>
+  <Text style={{ paddingLeft: Metrics.ratio(20), fontSize: 15, fontWeight: '500', color: 'black' }}>${Total}</Text>
+</View>
+
+        <View style={styles.buttonView}>
+          <Button
+            loader={loader}
+            // btnPress={/* onCheckout function */}
+            label={'Make Payement'}
+          />
+        </View> 
+      </View>
+    </View>
+    
+
+)
+      }
+
+const styles=StyleSheet.create({
+  buttonView: {
+    height:Metrics.vh*5,
+    backgroundColor:'#FF2F00',
+    borderRadius:Metrics.ratio(70),
+    width: Metrics.vw * 90,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf:'center',
+    bottom:Metrics.ratio(20)
+  },
+      ImageContainer:{
+        width: Metrics.ratio(100), 
+        height: Metrics.ratio(100),
+        borderRadius:20, 
+        left:Metrics.ratio(20)
+      },
+      textContainer: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#083166',
+        marginLeft: Metrics.ratio(20),
+      },
+      productList: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      TouchContainer2:{
+        position: 'absolute',
+        top: Metrics.ratio(10), // Adjust as needed
+        right: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
+        paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+      },
+      TextContainer2:{
+        fontSize:15,
+        color: 'black', // Optional: set the text color
+        fontWeight:'bold'
+      },
+      
+      productItem: {
+        backgroundColor:'white',
+        margin: Metrics.ratio(10),
+        borderRadius:5,
+        elevation:3
+      },
+      TextContainer: {
+        fontSize:15,
+        color: 'black', // Optional: set the text color
+        fontWeight:'bold'
+      },
+      TouchContainer:{
+        position: 'absolute',
+        bottom: Metrics.ratio(10), // Adjust as needed
+        left: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
+        paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+      },
+      productImage: {
+        borderRadius:10,
+        width: Metrics.ratio(70),
+        height: Metrics.ratio(70),
+        
+      },
+      ProductContainer:{
+        fontWeight:'bold',
+        paddingTop:50,
+        color:'black'
+       
+            },
+      heartButton: {
+        width: Metrics.ratio(30),
+        height: Metrics.ratio(30),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor:'white',
+        borderRadius: Metrics.borderRadius,
+      },
+     
+      trolleyIconContainer: {
+        position: 'absolute',
+        bottom: Metrics.ratio(5),
+        right: Metrics.ratio(5),
+        backgroundColor: 'transparent',
+      },
+    trolleyIcon: {
+    width: Metrics.ratio(20),
+    height: Metrics.ratio(20),
+  },
+  colorContainer: {
+    width: Metrics.ratio(15),
+    height: Metrics.ratio(15),
+    borderColor:'black',
+    borderWidth: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:Metrics.ratio(5),
+    margin:Metrics.ratio(1),
+  },
+  OptionContainer:{
+    
+  flexDirection:'row',
+  justifyContent:'left'
+  }  ,
+  SizeContainer:{
+    borderColor:'black',
+    
+    marginLeft:Metrics.ratio(25)
+  },
+  OptionTextContainer:{
+    color:'#E8A08D'
+  },
+  
+})
 export default OrderSummary;
