@@ -55,34 +55,34 @@ const DemoScreen=({navigation})=>{
   },[])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [data,setData]=useState(false)
 
 const getProductDetails = async () => {
   try{
      
-       const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?vendor_id=182&page=3'; 
-        await axios.get(apiUrl)
-        .then(response => {
-          // Handle the successful response
-         console.log("Response",response.data)
-          if (setStoreProducts && typeof setStoreProducts === 'function') {
-            setStoreProducts(response.data);
-          }
-          
-        })
-        .catch(error => {
-          // Handle the error
-          setLoading(false)
-          console.error('Error:', error);
-        });
-  }
-  catch(err){
-    setLoading(false);  
-    console.log(err)
+    const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
+     const response= await axios.get(apiUrl, {
+        params: {
+          vendor_id:'126'||'',
+          page:'1'||'',
+        },
+      });
+    console.log("Response",response.request)
+      if (setStoreProducts && typeof setStoreProducts === 'function') {
+        setStoreProducts(response.data);
+    
+        if (response.data.message === 'Data Not Found') {
+          setData(true);
+        } else {
+          setData(false); // Reset data state if no error
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle the error, e.g., set an error state or display an error message
     }
-    finally {
-      // Set loading to false when the API call is complete
-      setLoading(false);
-    }
+    
+  
   }
     const renderFlatList = (data) => (
    
@@ -118,6 +118,11 @@ const getProductDetails = async () => {
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
           <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+      {data && (
+        <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
         </View>
       )}
       {chunkedData.map((chunk, index) => (

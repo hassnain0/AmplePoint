@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useStripe } from '@stripe/stripe-react-native';
+import OrderSummary from './OrderSummary';
 
 
 const Checkout= ({navigation}) => {
@@ -84,7 +85,9 @@ const Checkout= ({navigation}) => {
 
     
 // }
-
+const onCheckout=()=>{
+  navigation.navigate("OrderSummary")
+}
 const handleCity = (countryCode, stateCode) => {
   var config = {
     method: 'get',
@@ -354,7 +357,7 @@ const Bounce=()=>{
 <View style={styles.buttonView}>
       <Button
         loader={loader}
-        // btnPress={onCheckout}
+        btnPress={onCheckout}
         
         label={"Pay"}
       />
