@@ -6,6 +6,7 @@ import { Metrics } from '../themes';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
+import Cart from './Cart';
 
 const HomeScreen=({navigation})=>{
 const Route=useRoute();
@@ -36,8 +37,22 @@ const user_ID=Route.params.Data;
     console.log("Error",erro)
   }
  }
+ useEffect(()=>{
+getHomeContent();
+ },[])
+ const getHomeContent=async()=>{
+  try{
+
+    const apiUrl='https://amplepoints.com/apiendpoint/gethomecontent';
+const response=await axios.get(apiUrl);
+console.log("Response ",response.data)
+  }catch(err){
+console.log("Error",err)
+  }
+ }
 return(
   <SafeAreaView>
+    <View style={{backgroundColor:'#EEEEEE'}}>
         <View style={styles.header}>
         <Image source={require('../assets/SideMenu.png') } style={styles.SideMenu}></Image>
 <Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
@@ -49,30 +64,43 @@ return(
           <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
           </TouchableOpacity>
         </View>
-        <View style={{top:Metrics.ratio(20),borderRadius: 20, overflow: 'hidden' ,width:Metrics.ratio(380),height:Metrics.ratio(150),alignSelf:'center',marginBottom:Metrics.ratio(20)}}>
-        <ImageSlider 
+        <View style={{ position: 'relative', marginBottom: 20 }}>
+      <ImageSlider
         data={[
-          {img: 'https://img.freepik.com/free-photo/stylish-beautiful-woman-posing-against-wooden-wall_285396-4810.jpg?size=626&ext=jpg&uid=R110769931&ga=GA1.1.687601769.1690259058&semt=ais'},
-          {img: 'https://img.freepik.com/free-photo/young-woman-beautiful-red-dress_1303-17506.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'},
-          {img: 'https://img.freepik.com/premium-photo/woman-black-long-skirt-shirt-with-colored-patterns-sneakers-white-background-studio-shot_481253-384.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'},
-          {img: 'https://img.freepik.com/free-photo/emotional-brunette-woman-blue-coat-posing-purple-wall-indoor-photo-beautiful-short-haired-female-model-trendy-midi-dress_197531-5181.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'}
-      ]}
-    autoPlay={true}
-   
-    closeIconColor="#fff"
-/> 
+          { img: 'https://amplepoints.com/home_banners/club1.jpg' },
+          { img: 'https://amplepoints.com/home_banners/club2.jpg' },
+          { img: 'https://amplepoints.com/home_banners/club3.jpg' },
+          { img: 'https://amplepoints.com/home_banners/club4.jpg' },
+          { img: 'https://amplepoints.com/home_banners/club5.jpg' },
+          { img: 'https://amplepoints.com/home_banners/club6.jpg' },
+          { img: 'https://amplepoints.com/home_banners/club7.jpg' },
+        ]}
+        autoPlay={true}
+        closeIconColor="#fff"
+      />
+      {/* Add the orange dots here at the bottom */}
+      <PaginationDots style={styles.dotContainerStyle} dotStyle={dotStyle} />
+    </View>
 </View>
-<View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(40)}}></View>
-<TouchableOpacity onPress={()=>navigation.navigate('Store')}>
-<Text>Store</Text>
-</TouchableOpacity>
-<TouchableOpacity onPress={()=>navigation.navigate('Mall')}>
-<Text>Mall</Text>
-</TouchableOpacity>
   </SafeAreaView>
 )
 }
 const styles=StyleSheet.create({
+  dotContainerStyle :{
+    position: 'absolute',
+    bottom: 10, // Adjust this value based on your design
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  
+  dotStyle :{
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'orange',
+    margin: 5,
+  },
   Logo:{
     marginLeft:Metrics.ratio(70),
     width:Metrics.ratio(200),

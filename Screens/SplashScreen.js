@@ -25,18 +25,9 @@ const  SplashScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     image: {
      
-        width:(395),
-        height: (800),
-      
+        width:Metrics.ratio(395),
+        height: Metrics.ratio(800),
       },
-      LottieView:{
-        paddingTop:650,
-        left:160,
-        width:(50),
-        height:(100),
-        
-      }
- 
 });
 
 export default SplashScreen;

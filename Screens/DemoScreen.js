@@ -8,11 +8,22 @@ import { useRoute } from '@react-navigation/native';
 
 const ProductItem = ({ product }) => {
 
-  
+  const maxWordsPerLine = 4;
+const words = product.pname.split(' ');
+const lines = [];
+
+for (let i = 0; i < words.length; i += maxWordsPerLine) {
+  const lineWords = words.slice(i, i + maxWordsPerLine);
+  lines.push(lineWords.join(' '));
+}
   return (
 
     <View style={styles.productItem}>     
-    <Text style={{fontSize:15,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.pname}</Text>
+     {lines.map((line, index) => (
+      <Text key={index} style={{ fontSize: 15, fontWeight: 'bold', color: 'black', paddingBottom: 20 }}>
+        {line}
+      </Text>
+    ))}
         <View >
             <Image   source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
           <View style={styles.TouchContainer}>
@@ -45,6 +56,7 @@ const ProductItem = ({ product }) => {
 
 const DemoScreen=({navigation})=>{
   const route=useRoute().params;
+  console.log("Route",route)
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
     navigation.navigate('GiftDetails',{ productData,route });
@@ -60,23 +72,37 @@ const DemoScreen=({navigation})=>{
 const getProductDetails = async () => {
   try{
      
+    const vendorId = route.Id;
+
+    // Specify the initial page number
+    let pageNumber = 1;
     const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
-     const response= await axios.get(apiUrl, {
-        params: {
-          vendor_id:'126'||'',
-          page:'1'||'',
-        },
-      });
-    console.log("Response",response.request)
+        const response = await axios.get(apiUrl, {
+          params: {
+            vendor_id: vendorId,
+            page: pageNumber,
+          },
+        });
+        pageNumber++;
+    
+        // Process the response data as needed
+        console.log(pageNumber);
+    
+        // Update the page number for the next request
+
+    console.log("Response",response.data.message)
       if (setStoreProducts && typeof setStoreProducts === 'function') {
         setStoreProducts(response.data);
     
+        setLoading(false)
+      }
         if (response.data.message === 'Data Not Found') {
           setData(true);
         } else {
+          setLoading(false)
           setData(false); // Reset data state if no error
         }
-      }
+      
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle the error, e.g., set an error state or display an error message

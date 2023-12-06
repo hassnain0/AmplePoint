@@ -1,5 +1,5 @@
-import React,{useState,useEffect} from 'react';
-import {View,Text, StyleSheet,Image,TouchableOpacity, ImageBackground, BackHandler} from 'react-native';
+import React,{useState} from 'react';
+import {View,Text, StyleSheet,Image,TouchableOpacity,Alert, ImageBackground, BackHandler} from 'react-native';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 import MainTextInput from '../components/MainTextInput';
@@ -12,7 +12,7 @@ import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
 import { useFocusEffect } from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
-HomeScreen
+
 const Login=({navigation})=>{
 
   useFocusEffect(

@@ -31,6 +31,7 @@ const [isGiftCard,setIsGiftCard]=useState(false);
 
 const [actual_data,setactual_Data]=useState(null);
 const route=useRoute();
+console.log("route.params.productData.pid",route.params.productData.vendor_key)
 
    const ShowMoreDetail=()=>{
     setKnowMore(false);
@@ -54,7 +55,7 @@ setisforMe(false)
 
     setLoading(true);
     setProductId(route.params.productData.pid);
-    setVendorId(route.params.productData.vendor_id);
+    setVendorId(route.params.productData.vendor_key);
 
     const getProductDetails = async () => {
         try {
@@ -78,6 +79,7 @@ setisforMe(false)
                 if (response.data.data.pickup_address && response.data.data.pickup_address[0].loc_address) {
                     setAddress(response.data.data.pickup_address[0].loc_address);
                 }
+                console.log("response.data.data.delivery_data.is_delevery_availabe ",response.data.data.delivery_data )
                 if (response.data.data && response.data.data.delivery_data && response.data.data.delivery_data.is_delevery_availabe === 1) 
                 {
                   setIsGiftCard(true)
@@ -349,7 +351,7 @@ return (
 
   </View>
    
-   <View style={{flex:1, flexDirection:'row'}}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
 
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
    <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
@@ -391,7 +393,7 @@ return (
         fontWeight:'500',
         color:'#FF2E00'
         }}>Details</Text>
-         <View style={{flex:1, flexDirection:'row'}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -399,13 +401,12 @@ return (
         color:'black'
         }}>Buy & Earn</Text>
    <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(105),
         fontSize:15,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
      </View>
-     <View style={{flex:1, flexDirection:'row'}}>
+     <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -419,7 +420,7 @@ return (
         color:'black'
         }}>{actual_data?.data?.product_info?.pdiscountprice}</Text>
    </View>
-   <View style={{flex:1, flexDirection:'row'}}>
+   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -434,7 +435,7 @@ return (
         }}>{actual_data?.data?.product_info?.pdiscount}</Text>
     
    </View>
-   <View style={{flex:1, flexDirection:'row'}}>
+   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -449,7 +450,7 @@ return (
         }}>50% Total Bill</Text>
     
    </View>
-   <View style={{flex:1, flexDirection:'row'}}>
+   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -463,7 +464,7 @@ return (
         color:'black'
         }}>50</Text>
     </View>
-    <View style={{flex:1, flexDirection:'row'}}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -483,7 +484,7 @@ return (
         fontWeight:'300',
         color:'black'
         }}>GIFT CARD DETAILS</Text>
-         <View style={{flex:1, flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
         fontSize:15,
@@ -583,7 +584,7 @@ return (
         color:'black'
         }}>${actual_data?.data?.product_info?.single_price*quantity}</Text>
         </View>
-        <View style={{flex:1,flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
         fontSize:15,
@@ -591,13 +592,12 @@ return (
         color:'black'
         }}>Buy & Earn</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(200),
         fontSize:15,
         fontWeight:'500',
         color:'black'
         }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
         </View>
-        <View style={{flex:1,flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
         fontSize:15,
@@ -605,7 +605,6 @@ return (
         color:'black'
         }}>Ample Needed to Redeem</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(100),
         fontSize:15,
         fontWeight:'500',
         color:'black'
@@ -634,13 +633,15 @@ return (
  {isGiftCard &&(
   <View>
     <View style={{margin:Metrics.ratio(20),flex:1, flexDirection:'row',backgroundColor:'#FF2E00' , borderRadius:Metrics.ratio(20)}}>
-    <RadioButton.Group onValueChange={forMe} st value={isforMe.toString()}>
+    <RadioButton.Group onValueChange={forMe}  value={isforMe.toString()}>
             <RadioButton.Item color='white' label={"This is for me"}  labelStyle={{ color: 'white' }} value="true" />
-         </RadioButton.Group>
+         </RadioButton.Group >
          <RadioButton.Group onValueChange={forGuest} value={isforGuest.toString()}>
             <RadioButton.Item color='white' label={"This is for guest"}  labelStyle={{ color: 'white' }} value="true" />
          </RadioButton.Group>
     </View>
+    {isforGuest &&(
+      <View >
     <View style={{borderColor:'#FF2E00',borderWidth:2}}>
       <Text style={{fontSize:20,color:'black',textAlign:"center"}}>Before clicking on add to cart please</Text>
       <Text style={{fontSize:20,color:'black',textAlign:"center"}}>fill your guest detail</Text>
@@ -654,7 +655,8 @@ return (
           onChangeText={(text) => setFirstName(text)}
         />
       </View>
-      <View >
+   
+    <View >
         <Text style={{color:'black'}}>To Last Name *</Text>
         <TextInput
         style={styles.DetailsContainer}
@@ -684,9 +686,12 @@ return (
         />
       </View>
       
+      </View>
+      
+    
     </View>
-  
     </View>
+    )}
     </View>
   
   )}  
@@ -700,7 +705,7 @@ return (
         keyboardType='numeric'
         onChangeText={(text)=>handleAmples(text)}
       />
-      <TouchableOpacity onPress={calculateDiscount} style={styles.button3}>
+      <TouchableOpacity onPress={calculateDiscount} style={styles.button3}> 
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 
