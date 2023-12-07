@@ -1,36 +1,39 @@
 import React,{useState,useEffect,} from 'react';
 import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
 import { Metrics } from '../themes';
-import GiftDetails from './GiftDetails';
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 const ProductItem = ({ product }) => {
-
+    const vendors = product.vendor_list[0];
+    console.log("vendors.name",vendors.vendor_name)
   return (
-
-    <View style={styles.productItem}>     
-    <Image   source={{ uri: `https://amplepoints.com/vendor-data/${product.tbl_vndr_id}/profile/${product.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
-    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.vendor_name}</Text>
+    <View style={styles.productItem}>   
+        
+    <Image   source={{ uri: `https://amplepoints.com/vendor-data/${vendors.tbl_vndr_id}/profile/${vendors.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
+    <Text style={{fontSize:10,fontWeight:'bold',paddingBottom:20}}>{vendors.vendor_name}</Text>
     <View style={{flex:1,flexDirection:'row'}}>
         <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.vendor_city}</Text>
+        <Text style={{fontSize:10,fontWeight:'bold',paddingBottom:20}}>{vendors.vendor_city}</Text>
     </View>
     <View style={{flex:1,flexDirection:'row'}}>
         <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.tbl_vndr_zip}</Text>
+        <Text style={{fontSize:10,fontWeight:'bold',paddingBottom:20}}>{vendors.tbl_vndr_zip}</Text>
     </View>
     </View>
   );
 };
 
-const Store=({navigation})=>{
+const MallDetail=({navigation})=>{
+    const route=useRoute().params;
+    
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(null);
   useEffect(() => {
     // Filter products based on search query
     if (searchQuery) {
       const filteredData = storeProducts?.data.filter((product) =>
-        product.vendor_name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.display_name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredProducts(filteredData);
     } else {
@@ -68,7 +71,6 @@ const Store=({navigation})=>{
     const Id=productData.tbl_vndr_id
     navigation.navigate('DemoScreen',{
       Id,
-      
     });
   };
   useEffect(()=>{
@@ -80,11 +82,13 @@ const Store=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-        const apiUrl = 'https://amplepoints.com/apiendpoint/getstores'; 
-        await axios.get(apiUrl)
+        const apiUrl = 'https://amplepoints.com/apiendpoint/getvendorbymall?'; 
+        await axios.get(apiUrl,{
+            params:{
+                mall_id:route.Id,
+            }
+        })
         .then(response => {
-          // Handle the successful response
-        console.log("Response",response.data)
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
@@ -106,19 +110,21 @@ const getProductDetails = async () => {
     }
   }
     const renderFlatList = (data) => (
+   
       <View>
-      <FlatList
-        numColumns={3} 
-       data={data}
-       showsVerticalScrollIndicator={false}  // hides the vertical scroll indicator
-       keyExtractor={(item) => item.pid}
-       renderItem={({ item }) => (
-         <TouchableOpacity onPress={() => handleProductPress(item)}>
-           <ProductItem product={item} />
-         </TouchableOpacity>
-       )}
-     />
-     </View>
+  <FlatList
+  numColumns={3}
+  data={data}
+  showsVerticalScrollIndicator={false}
+  keyExtractor={(item, index) => item.tbl_vndr_id || index.toString()}
+  renderItem={({ item }) => (
+    <TouchableOpacity onPress={() => handleProductPress(item)}>
+      <ProductItem product={item} />
+    </TouchableOpacity>
+  )}
+/>
+
+  </View>
    
     );
     const chunkArray = (array, chunkSize) => {
@@ -134,13 +140,12 @@ const getProductDetails = async () => {
     return (
   <ScrollView>
     <View style={styles.container}>
-       
         {loading && (
           <View style={styles.overlay}>
             <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
               Loading....
             </Text>
-            <ActivityIndicator size="large" color="#FF2E00" />
+            <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
         {filteredProducts
@@ -155,21 +160,23 @@ const getProductDetails = async () => {
 
 const styles=StyleSheet.create({
   searchBarContainer: {
-    marginTop:Metrics.ratio(20),
-    marginLeft:Metrics.ratio(10),
-    marginRight:Metrics.ratio(10),
     backgroundColor: '#e0e0e0',
-    borderRadius: Metrics.ratio(30),
-  
-  },
-  searchIcon: {
-    width: Metrics.ratio(20),
-    height: Metrics.ratio(20),
-    marginRight: Metrics.ratio(10),
-  },
+    height: 50,
+},
+  searchBar2Container: {
+    flex: 1, // This ensures the inner container takes up all available space
+    alignItems: 'center', // Center the content horizontally
+    justifyContent: 'center', 
+      },
   searchInput: {
-    textAlign:'center',
-    fontSize: Metrics.ratio(16),
+    top:Metrics.ratio(1),
+    height: 35,
+    borderColor: 'black',
+    borderWidth: 0.5,
+    padding: 10,
+    width: '90%',
+    borderRadius:10,
+    backgroundColor:'white'
   },
       ImageContainer:{
         width: Metrics.ratio(200), 
@@ -222,7 +229,7 @@ const styles=StyleSheet.create({
         alignSelf:'center',
         marginTop:Metrics.smallMargin,
         width: Metrics.ratio(110),
-        height: Metrics.ratio(110),
+        height: Metrics.ratio(100),
         
       },
       ProductContainer:{
@@ -275,4 +282,4 @@ const styles=StyleSheet.create({
     color:'#E8A08D'
   }
 })
-export default Store;
+export default MallDetail;

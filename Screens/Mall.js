@@ -4,6 +4,8 @@ import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
+import MallDetail from './MallDetail';
+
 const ProductItem = ({ product }) => {
     console.log("Image",`https://amplepoints.com/mall/logo/${product.top_logo}`)
   return (
@@ -11,7 +13,6 @@ const ProductItem = ({ product }) => {
     <View style={styles.productItem}>     
     <Image   source={{ uri: `https://amplepoints.com/mall/logo/${product.logo_image}` }} style={styles.productImage} resizeMode="cover" />
     <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20,textAlign:'center'}}>{product.display_name}</Text>
-    
     </View>
   );
 };
@@ -58,8 +59,8 @@ const Mall=({navigation})=>{
       );
       
   const handleProductPress = (productData) => {
-    const Id=productData.tbl_vndr_id
-    navigation.navigate('DemoScreen',{
+    const Id=productData.venr_mall_id
+    navigation.navigate('MallDetail',{
       Id,
       
     });
@@ -80,7 +81,7 @@ const getProductDetails = async () => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
-          
+          console.log("Response",response.data)
         })
         .catch(error => {
           // Handle the error
