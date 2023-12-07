@@ -20,18 +20,12 @@ for (let i = 0; i < words.length; i += maxWordsPerLine) {
 
     <View style={styles.productItem}>     
      {lines.map((line, index) => (
-      <Text key={index} style={{ fontSize: 15, fontWeight: 'bold', color: 'black', paddingBottom: 20 }}>
+      <Text key={index} style={{ fontSize: 15, fontWeight: 'bold', color: 'black', paddingBottom: Metrics.ratio(10) }}>
         {line}
       </Text>
     ))}
         <View >
             <Image   source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
-          <View style={styles.TouchContainer}>
-  <Text style={styles.TextContainer}>{product.pprice}$</Text>
-  </View>
-  <View style={styles.TouchContainer2}>
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
         </View>
       <Text style={styles.ProductContainer}>{product.pvendor}</Text>
 
@@ -71,9 +65,7 @@ const DemoScreen=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-     
     const vendorId = route.Id;
-
     // Specify the initial page number
     let pageNumber = 1;
     const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
@@ -84,13 +76,7 @@ const getProductDetails = async () => {
           },
         });
         pageNumber++;
-    
-        // Process the response data as needed
-        console.log(pageNumber);
-    
-        // Update the page number for the next request
 
-    console.log("Response",response.data.message)
       if (setStoreProducts && typeof setStoreProducts === 'function') {
         setStoreProducts(response.data);
     
@@ -143,7 +129,7 @@ const getProductDetails = async () => {
       {loading && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#FF2E00" />
         </View>
       )}
       {data && (

@@ -1,9 +1,8 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
-import { useFocusEffect } from '@react-navigation/native';
 const ProductItem = ({ product }) => {
 
   return (
@@ -37,33 +36,7 @@ const Store=({navigation})=>{
       setFilteredProducts(null);
     }
   }, [searchQuery, storeProducts]);
-    useFocusEffect(
-        React.useCallback(() => {
-          const onBackPress = () => {
-            Alert.alert(
-              'Exit App',
-              'Are you sure you want to exit?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => null,
-                  style: 'cancel'
-                },
-                {
-                  text: 'Exit',
-                  onPress: () => BackHandler.exitApp()
-                }
-              ],
-              { cancelable: false }
-            );
-            return true;
-          };
-          BackHandler.addEventListener('hardwareBackPress', onBackPress);
-          return () =>
-            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        }, [])
-      );
-      
+   
   const handleProductPress = (productData) => {
     const Id=productData.tbl_vndr_id
     navigation.navigate('DemoScreen',{

@@ -31,7 +31,6 @@ const [isGiftCard,setIsGiftCard]=useState(false);
 
 const [actual_data,setactual_Data]=useState(null);
 const route=useRoute();
-console.log("route.params.productData.pid",route.params.productData.vendor_key)
 
    const ShowMoreDetail=()=>{
     setKnowMore(false);
@@ -317,7 +316,7 @@ return (
   {loading ? (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#FF2E00" />
         </View>
 ) : ( 
   <ScrollView style={{backgroundColor:'white',}} scrollEnabled={true}>
@@ -335,15 +334,7 @@ return (
         ))}
       </Swiper>
     )} 
-    <View style={styles.TouchContainer1}>
-  <Text style={styles.TextContainer1}>{actual_data?.data?.product_info?.single_price}$</Text>
-
-  </View>
-  <View style={styles.TouchContainer2}>
-
-  <Text style={styles.TextContainer2}>Gift Card</Text>
-  </View>
-   </View>
+     </View>
    <View style={styles.ShareContainer}>
   <TouchableOpacity onPress={handleShare} style={{ backgroundColor: 'transparent', padding: 10, margin: 10 }}>
         <Image source={require('../assets/Share.png')} style={{width:Metrics.ratio(30), height:Metrics.ratio(30)}}/>
@@ -359,13 +350,13 @@ return (
     
    <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>FREE with {actual_data?.data?.product_info?.pfwamples} AmplePoints</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'500',
         color:'#FF2E00'
         }}>By:{actual_data?.data?.product_info?.pvendor}</Text>
@@ -374,14 +365,14 @@ return (
         <Image source={require('../assets/ColorOptions.png')} style={{height:Metrics.ratio(25),marginLeft:Metrics.ratio(20),width:Metrics.ratio(25),top:Metrics.ratio(10),backgroundColor:'black'}}></Image>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(15),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Color Options</Text>
    <Image source={require('../assets/Sale2.png')} style={{marginLeft:Metrics.ratio(10),width:Metrics.ratio(35),height:Metrics.ratio(10),top:Metrics.ratio(15),left:Metrics.ratio(35)}}></Image>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(40),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Size Chart(US)</Text>
@@ -389,19 +380,19 @@ return (
    </View>
    <Text style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:30,
+        fontSize:20,
         fontWeight:'500',
         color:'#FF2E00'
         }}>Details</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Buy & Earn</Text>
    <Text  style={{  paddingTop:Metrics.ratio(10),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
@@ -409,13 +400,13 @@ return (
      <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Reward Value</Text>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(90),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.pdiscountprice}</Text>
@@ -423,13 +414,13 @@ return (
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Your Earn</Text>
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(115),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.pdiscount}</Text>
@@ -438,13 +429,13 @@ return (
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Applied To :</Text>
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(105),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>50% Total Bill</Text>
@@ -453,13 +444,13 @@ return (
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Your Earn</Text>
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(115),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>50</Text>
@@ -467,33 +458,33 @@ return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Product Message:</Text>
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(60),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.pro_mess}</Text>  
    </View>
     <Text  style={{  paddingTop:Metrics.ratio(1),
-        paddingLeft:Metrics.ratio(200),
-        fontSize:15,
+        paddingLeft:Metrics.ratio(20),
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>GIFT CARD DETAILS</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Item Code:</Text>
   <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(105),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.product_sku}</Text>
@@ -504,7 +495,7 @@ return (
  
  {knowMore && ( <Text  style={{  top:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(290),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'600',
         color:'#FF2E00'
         }}>Know More</Text>
@@ -524,7 +515,7 @@ return (
         </TouchableOpacity>
         <Text  style={{  paddingTop:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>{actual_data?.data?.product_info?.long_desc}</Text>
@@ -556,30 +547,29 @@ return (
     )}
      <View style={{top:Metrics.ratio(50)}}>
           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
-          <Text style={{fontSize:15,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
-          <Text style={{fontSize:15,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>6. Cannot be combined with any other offers</Text>
-          <Text style={{fontSize:15,left:Metrics.ratio(-15),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:15,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
+          <Text style={{fontSize:10,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
+          <Text style={{fontSize:10,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>6. Cannot be combined with any other offers</Text>
+          <Text style={{fontSize:10,left:Metrics.ratio(-15),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
         </View>
         </View>
       )}
         <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(1)}}>Ample Points Calculator</Text>
-        <View style={{flex:1,flexDirection:'row',paddingTop:Metrics.ratio(20)}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingTop:Metrics.ratio(20)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Price</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(250),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'500',
         color:'black'
         }}>${actual_data?.data?.product_info?.single_price*quantity}</Text>
@@ -587,12 +577,12 @@ return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Buy & Earn</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'500',
         color:'black'
         }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
@@ -600,20 +590,20 @@ return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Ample Needed to Redeem</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'500',
         color:'black'
         }}>208.33Amples</Text>
         </View>
-        <View style={{flex:1,flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
-        fontSize:15,
+        fontSize:10,
         fontWeight:'300',
         color:'black'
         }}>Qty</Text>
@@ -643,9 +633,9 @@ return (
     {isforGuest &&(
       <View >
     <View style={{borderColor:'#FF2E00',borderWidth:2}}>
-      <Text style={{fontSize:20,color:'black',textAlign:"center"}}>Before clicking on add to cart please</Text>
-      <Text style={{fontSize:20,color:'black',textAlign:"center"}}>fill your guest detail</Text>
-      <View style={{ padding: 20 }}>
+      <Text style={{fontSize:15,color:'black',textAlign:"center"}}>Before clicking on add to cart please</Text>
+      <Text style={{fontSize:10,color:'black',textAlign:"center"}}>fill your guest detail</Text>
+      <View style={{ padding: Metrics.ratio(20) }}>
       <View style={{ marginBottom:Metrics.ratio(10)}}>
         <Text style={{color:'black'}} >To First Name *</Text>
         <TextInput
@@ -929,7 +919,6 @@ const styles=StyleSheet.create({
     fontSize: 15,
   },
   container2: {
-    left:Metrics.ratio(270),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -1097,42 +1086,42 @@ borderRadius:Metrics.ratio(70),
     Text4Container:{
       paddingTop:Metrics.ratio(20),
       paddingLeft:Metrics.ratio(60),
-      fontSize:15,
+      fontSize:10,
       color:'black',
       fontWeight:'400',
   },
   Text6Container:{
     paddingTop:Metrics.ratio(20),
     paddingLeft:Metrics.ratio(20),
-    fontSize:15,
+    fontSize:10,
     color:'black',
     fontWeight:'400',
 },
   TextContainer:{
     paddingTop:Metrics.ratio(20),
     paddingLeft:Metrics.ratio(20),
-    fontSize:15,
+    fontSize:10,
     color:'black',
     fontWeight:'400',
 },
     Text2Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(100),
-        fontSize:15,
+        fontSize:10,
         color:'#FF2E00',
         fontWeight:'bold', 
       },
       Text3Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(10),
-        fontSize:15,
+        fontSize:10,
         color:'#FF2E00',
         fontWeight:'400', 
       },
       Text5Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(5),
-        fontSize:15,
+        fontSize:10,
         color:'#FF2E00',
         fontWeight:'400', 
       },

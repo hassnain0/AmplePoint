@@ -5,28 +5,38 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 const ProductItem = ({ product }) => {
-    const vendors = product.vendor_list[0];
-    console.log("vendors.name",vendors.vendor_name)
-  return (
-    <View style={styles.productItem}>   
-        
-    <Image   source={{ uri: `https://amplepoints.com/vendor-data/${vendors.tbl_vndr_id}/profile/${vendors.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
-    <Text style={{fontSize:10,fontWeight:'bold',paddingBottom:20}}>{vendors.vendor_name}</Text>
-    <View style={{flex:1,flexDirection:'row'}}>
-        <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold',paddingBottom:20}}>{vendors.vendor_city}</Text>
-    </View>
-    <View style={{flex:1,flexDirection:'row'}}>
-        <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold',paddingBottom:20}}>{vendors.tbl_vndr_zip}</Text>
-    </View>
-    </View>
-  );
-};
+    const vendors = product.vendor_list;
+    console.log("Product:", product);
+    console.log("Vendors:", vendors);
+    return (
+      <View>
+        <Text>{product.category_name}</Text>
+        <View style={styles.productItem}>
+          <Image
+            source={{
+              uri: `https://amplepoints.com/vendor-data/${vendors.tbl_vndr_id}/profile/${vendors.tbl_vndr_img_pro}`,
+            }}
+            style={styles.productImage}
+            resizeMode="cover"
+          />
+          <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>{vendors.tbl_vndr_dispname}</Text>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <Image source={require('../assets/pin.jpg')} style={{ width: 15, height: 15 }} />
+            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>{vendors.tbl_vndr_city}</Text>
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <Image source={require('../assets/Pin2.png')} style={{ width: 15, height: 15 }} />
+            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>{vendors.tbl_vndr_zip}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+  
 
 const MallDetail=({navigation})=>{
-    const route=useRoute().params;
-    
+    const route=useRoute();
+    console.log("Route",route.params.Id)
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(null);
   useEffect(() => {
@@ -40,33 +50,7 @@ const MallDetail=({navigation})=>{
       setFilteredProducts(null);
     }
   }, [searchQuery, storeProducts]);
-    useFocusEffect(
-        React.useCallback(() => {
-          const onBackPress = () => {
-            Alert.alert(
-              'Exit App',
-              'Are you sure you want to exit?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => null,
-                  style: 'cancel'
-                },
-                {
-                  text: 'Exit',
-                  onPress: () => BackHandler.exitApp()
-                }
-              ],
-              { cancelable: false }
-            );
-            return true;
-          };
-          BackHandler.addEventListener('hardwareBackPress', onBackPress);
-          return () =>
-            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        }, [])
-      );
-      
+   
   const handleProductPress = (productData) => {
     const Id=productData.tbl_vndr_id
     navigation.navigate('DemoScreen',{
@@ -85,13 +69,14 @@ const getProductDetails = async () => {
         const apiUrl = 'https://amplepoints.com/apiendpoint/getvendorbymall?'; 
         await axios.get(apiUrl,{
             params:{
-                mall_id:route.Id,
+                mall_id:route.params.Id,
             }
         })
         .then(response => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
+          console.log("Response",response.data)
           
         })
         .catch(error => {
@@ -115,7 +100,7 @@ const getProductDetails = async () => {
   <FlatList
   numColumns={3}
   data={data}
-  showsVerticalScrollIndicator={false}
+  showsHorizontalScrollIndicator={false}
   keyExtractor={(item, index) => item.tbl_vndr_id || index.toString()}
   renderItem={({ item }) => (
     <TouchableOpacity onPress={() => handleProductPress(item)}>
@@ -145,7 +130,7 @@ const getProductDetails = async () => {
             <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
               Loading....
             </Text>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#FF2E00" />
           </View>
         )}
         {filteredProducts
