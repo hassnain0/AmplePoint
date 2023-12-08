@@ -6,8 +6,6 @@ import { useRoute } from '@react-navigation/native';
 
 const ProductItem = ({ product }) => {
     const vendors = product.vendor_list;
-    console.log("Product:", product);
-    console.log("Vendors:", `https://amplepoints.com/vendor-data/${vendors.tbl_vndr_id}/profile/${vendors.vendor_profileimage}`);
     return (
       <View>
         <Text>{product.category_name}</Text>

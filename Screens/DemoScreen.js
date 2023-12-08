@@ -58,7 +58,7 @@ const getProductDetails = async () => {
     const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
         const response = await axios.get(apiUrl, {
           params: {
-            vendor_id: vendorId,
+            vendor_id: 371,
             page: pageNumber,
           },
         });
@@ -66,7 +66,6 @@ const getProductDetails = async () => {
 
       if (setStoreProducts && typeof setStoreProducts === 'function') {
         setStoreProducts(response.data);
-    
         setLoading(false)
       }
         if (response.data.message === 'Data Not Found') {
@@ -80,8 +79,6 @@ const getProductDetails = async () => {
       console.error('Error fetching data:', error);
       // Handle the error, e.g., set an error state or display an error message
     }
-    
-  
   }
     const renderFlatList = (data) => (
    
@@ -182,7 +179,7 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:10,
-        width: Metrics.ratio(150),
+        width: Metrics.ratio(190),
         height: Metrics.ratio(180),
         
       },
