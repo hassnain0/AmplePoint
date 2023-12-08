@@ -3,32 +3,40 @@ import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image
 import { Metrics } from '../themes';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
-import { useFocusEffect } from '@react-navigation/native';
+
 const ProductItem = ({ product }) => {
     const vendors = product.vendor_list;
     console.log("Product:", product);
-    console.log("Vendors:", vendors);
+    console.log("Vendors:", `https://amplepoints.com/vendor-data/${vendors.tbl_vndr_id}/profile/${vendors.vendor_profileimage}`);
     return (
       <View>
         <Text>{product.category_name}</Text>
-        <View style={styles.productItem}>
+        {vendors.map((vendor) => (
+        <View style={styles.productItem} key={vendor.tbl_vndr_id}>
           <Image
             source={{
-              uri: `https://amplepoints.com/vendor-data/${vendors.tbl_vndr_id}/profile/${vendors.tbl_vndr_img_pro}`,
+              uri: `https://amplepoints.com/vendor-data/${vendor.tbl_vndr_id}/profile/${vendor.vendor_profileimage}`,
             }}
             style={styles.productImage}
             resizeMode="cover"
           />
-          <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>{vendors.tbl_vndr_dispname}</Text>
+          <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>
+            {vendor.vendor_name}
+          </Text>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Image source={require('../assets/pin.jpg')} style={{ width: 15, height: 15 }} />
-            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>{vendors.tbl_vndr_city}</Text>
+            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>
+              {vendor.tbl_vndr_city}
+            </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Image source={require('../assets/Pin2.png')} style={{ width: 15, height: 15 }} />
-            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>{vendors.tbl_vndr_zip}</Text>
+            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 20 }}>
+              {vendor.tbl_vndr_zip}
+            </Text>
           </View>
         </View>
+      ))}
       </View>
     );
   };
@@ -97,17 +105,17 @@ const getProductDetails = async () => {
     const renderFlatList = (data) => (
    
       <View>
-  <FlatList
-  numColumns={3}
-  data={data}
-  showsHorizontalScrollIndicator={false}
-  keyExtractor={(item, index) => item.tbl_vndr_id || index.toString()}
-  renderItem={({ item }) => (
-    <TouchableOpacity onPress={() => handleProductPress(item)}>
-      <ProductItem product={item} />
-    </TouchableOpacity>
-  )}
-/>
+   <FlatList
+     numColumns={3} 
+    data={data}
+    showsVerticalScrollIndicator={false}  // hides the vertical scroll indicator
+    keyExtractor={(item) => item.tbl_vndr_id}
+    renderItem={({ item }) => (
+      <TouchableOpacity onPress={() => handleProductPress(item)}>
+        <ProductItem product={item} />
+      </TouchableOpacity>
+    )}
+  />
 
   </View>
    

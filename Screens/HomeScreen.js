@@ -66,7 +66,23 @@ return(
           <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
           </TouchableOpacity>
         </View>
-        <View style={{ top: Metrics.ratio(-30), borderRadius: 20, overflow: 'hidden', width: Metrics.ratio(300), height: Metrics.ratio(0), alignSelf: 'center', marginBottom: Metrics.ratio(20) }}>
+
+      {/* Repeat the above row structure for additional rows */}
+    </View>
+    <View style={{  margin: 20,borderRadius:20,elevation:3 }}>
+      <ImageSlider
+        data={[
+          {img: 'https://img.freepik.com/free-photo/stylish-beautiful-woman-posing-against-wooden-wall_285396-4810.jpg?size=626&ext=jpg&uid=R110769931&ga=GA1.1.687601769.1690259058&semt=ais'},
+          {img: 'https://img.freepik.com/free-photo/young-woman-beautiful-red-dress_1303-17506.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'},
+          {img: 'https://img.freepik.com/premium-photo/woman-black-long-skirt-shirt-with-colored-patterns-sneakers-white-background-studio-shot_481253-384.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'},
+          {img: 'https://img.freepik.com/free-photo/emotional-brunette-woman-blue-coat-posing-purple-wall-indoor-photo-beautiful-short-haired-female-model-trendy-midi-dress_197531-5181.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'}
+      ]}
+    autoPlay={true}
+
+    closeIconColor="#fff"
+/>
+</View> 
+<View style={{ top: Metrics.ratio(-30), borderRadius: 20, overflow: 'hidden', width: Metrics.ratio(300), height: Metrics.ratio(0), alignSelf: 'center', marginBottom: Metrics.ratio(20) }}>
 {images &&(
       <ImageSlider
         data={images.sider_images.map(imgUrl => ({ img: imgUrl }))}
@@ -103,8 +119,6 @@ return(
 </TouchableOpacity>
       </View>
 
-      {/* Repeat the above row structure for additional rows */}
-    </View>
 </View>
   </SafeAreaView>
 )

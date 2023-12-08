@@ -9,14 +9,14 @@ const ProductItem = ({ product }) => {
 
     <View style={styles.productItem}>     
     <Image   source={{ uri: `https://amplepoints.com/vendor-data/${product.tbl_vndr_id}/profile/${product.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
-    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.vendor_name}</Text>
+    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:Metrics.ratio(10)}}>{product.vendor_name}</Text>
     <View style={{flex:1,flexDirection:'row'}}>
         <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.vendor_city}</Text>
+        <Text style={{fontSize:10,fontWeight:'bold', color:'black',}}>{product.vendor_city}</Text>
     </View>
     <View style={{flex:1,flexDirection:'row'}}>
         <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20}}>{product.tbl_vndr_zip}</Text>
+        <Text style={{fontSize:10,fontWeight:'bold', color:'black',}}>{product.tbl_vndr_zip}</Text>
     </View>
     </View>
   );
@@ -173,9 +173,9 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor:'#FFFF',
-        margin: Metrics.ratio(10),
         borderRadius:5,
-        elevation:3
+        elevation:3,
+        margin:Metrics.ratio(15)
       },
       TextContainer: {
         fontSize:15,

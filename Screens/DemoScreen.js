@@ -7,44 +7,31 @@ import { useRoute } from '@react-navigation/native';
 
 
 const ProductItem = ({ product }) => {
-
-  const maxWordsPerLine = 4;
-const words = product.pname.split(' ');
-const lines = [];
-
-for (let i = 0; i < words.length; i += maxWordsPerLine) {
-  const lineWords = words.slice(i, i + maxWordsPerLine);
-  lines.push(lineWords.join(' '));
-}
   return (
 
-    <View style={styles.productItem}>     
-     {lines.map((line, index) => (
-      <Text key={index} style={{ fontSize: 15, fontWeight: 'bold', color: 'black', paddingBottom: Metrics.ratio(10) }}>
-        {line}
-      </Text>
-    ))}
-        <View >
-            <Image   source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
-        </View>
-      <Text style={styles.ProductContainer}>{product.pvendor}</Text>
-
-       <View style={{flex:1, flexDirection:'row'}}>
-       <Text style={{paddingRight:Metrics.ratio(10),fontWeight:'800',color:'#618ED7'}} >$ {product.pprice}</Text>
-       <View style={{paddingLeft:Metrics.ratio(5),backgroundColor:'#C1D0EC',borderRadius:5,}}>
-       <Text style={{color:'#618ED7',fontWeight:'600',}} >{product.pdiscount} % Back</Text>
-       </View>
-       </View>
-       <View>
-  <Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-    Get <Text style={{color: '#FF2E00'}}>{product.pamples}</Text> AmplePoints $<Text style={{color: '#FF2E00'}}>{product.pdiscountprice}</Text>
-  </Text>
-</View>
-<Text style={{paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black'}}>
-  or get it <Text style={{color: '#FF2E00'}}>FREE</Text> with <Text style={{color: '#FF2E00'}}>{product.pfwamples}</Text> points
-</Text>
+    <View style={styles.productItem}>
+    <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black',}}>{product.pname}</Text>
+    <View>
+      <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
     </View>
-
+    <Text style={styles.ProductContainer}>{product.pvendor}</Text>
+  
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
+      <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
+        <Text style={{ color: '#618ED7', fontWeight: '600', fontSize: 10 }}>{`${product.pdiscount} % Back`}</Text>
+      </View>
+    </View>
+    <View>
+      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
+        Get <Text style={{ color: '#FF2E00' }}>{product.pamples}</Text> AmplePoints $<Text style={{ color: '#FF2E00' }}>{product.pdiscountprice}</Text>
+      </Text>
+    </View>
+    <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
+      or get it <Text style={{ color: '#FF2E00' }}>FREE</Text> with <Text style={{ color: '#FF2E00' }}>{product.pfwamples}</Text> points
+    </Text>
+  </View>
+  
   );
 };
 
@@ -101,8 +88,8 @@ const getProductDetails = async () => {
       <View>
     <FlatList
       data={data}
-      horizontal
-      showsHorizontalScrollIndicator={false}
+      numColumns={2} 
+      showsVerticalScrollIndicator={false} 
       keyExtractor={(item) => item.pid}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => handleProductPress(item)}>
@@ -195,18 +182,14 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:10,
-        alignContent:'center',
-        alignItems:'center',
-        alignSelf:'center',
-        marginTop:Metrics.smallMargin,
-        width: Metrics.ratio(200),
+        width: Metrics.ratio(150),
         height: Metrics.ratio(180),
         
       },
       ProductContainer:{
         fontWeight:'bold',
-        paddingTop:50,
-        color:'black'
+        color:'black',
+        fontSize:10
        
             },
       heartButton: {

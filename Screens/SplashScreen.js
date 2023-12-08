@@ -24,9 +24,8 @@ const  SplashScreen = ({navigation}) => {
 };
 const styles = StyleSheet.create({
     image: {
-     
-        width:Metrics.ratio(395),
-        height: Metrics.ratio(800),
+        width:Metrics.ratio(420),
+        height: Metrics.ratio(830),
       },
 });
 
