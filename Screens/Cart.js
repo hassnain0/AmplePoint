@@ -6,8 +6,12 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import util from '../helpers/util';
 import Checkout from './Checkout';
+import { useRoute } from '@react-navigation/native';
 
 const Cart= ({navigation}) => {
+  const route=useRoute();
+  const User_Id=route.params.user_ID;
+  console.log("User Id",User_Id)
    const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
   
@@ -45,28 +49,6 @@ setLoading(false)
   });
 };
 
-// const decreaseQuantity = (item) => {
-//   console.log("Item",item.item_added_quantity)
-//   setActualData((prevData) => {
-//     console.log('Previous Data:', prevData);
-
-//     const newData = [...prevData.data];
-//     const itemId = item.id; // Log the ID you're searching for
-//     const itemIndex = newData.findIndex((dataItem) => dataItem.id === itemId);
-
-//     if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
-//       newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) - 1).toString();
-
-    
-//       const updatedData = { ...prevData, data: newData };
-   
-//       return updatedData;
-//     }
-
-//     console.log('No update made. Returning previous data.');
-//     return prevData;
-//   });
-// };
 
 
   const CheckOutScreen=()=>{
@@ -80,7 +62,7 @@ setLoader(true);
         const apiUrl = 'https://amplepoints.com/apiendpoint/checkbeforecheckout?';
         const response = await axios.get(apiUrl, {
           params: {
-            user_id:126,
+            user_id:User_Id,
           },
         });
         console.log("Response",response.data.message)
@@ -132,7 +114,7 @@ setLoader(true);
       const apiUrl = 'https://amplepoints.com/apiendpoint/getusercart?';
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:126,
+          user_id:User_Id,
         },
       });
       console.log("Response",response.data)
@@ -239,15 +221,15 @@ setLoader(true);
                   <MyComponent/> 
                          
                         <Toast ref={ref => Toast.setRef(ref)} />                    
-                        <View style={styles.buttonView}>
+                        
+            </ScrollView>
+            <View style={styles.buttonView}>
              <Button 
                btnPress={Checkout}
                loader={loader}
                label={"Check Out"}
              />
            </View>     
-            </ScrollView>
-            
             </View>
             
               

@@ -1,5 +1,5 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList, ActivityIndicator,TextInput,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
@@ -11,7 +11,7 @@ const ProductItem = ({ product }) => {
 
     <View style={styles.productItem}>
   <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
-  {product.pname.split(' ').slice(0, 4).join(' ')}
+  {product.pname}
 </Text>
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
@@ -50,21 +50,21 @@ const Search=({navigation})=>{
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data,setData]=useState(false)
-
+const [search_query,setSearchQuery]=useState(null);
 const getProductDetails = async () => {
   try{
-    const vendorId = route.params.Id;
+
     // Specify the initial page number
     let pageNumber = 1;
-    const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
+    const apiUrl = 'https://amplepoints.com/apiendpoint/searchproduct?';
         const response = await axios.get(apiUrl, {
           params: {
-            vendor_id:vendorId,
+            search_query:'product',
             page: pageNumber,
           },
         });
         pageNumber++;
-
+console.log("Response",response.data)
       if (setStoreProducts && typeof setStoreProducts === 'function') {
         setStoreProducts(response.data);
         setLoading(false)
@@ -79,6 +79,8 @@ const getProductDetails = async () => {
       
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false)
+      setData(true);
       // Handle the error, e.g., set an error state or display an error message
     }
   }
@@ -111,6 +113,15 @@ const getProductDetails = async () => {
 
     return (
   <ScrollView>
+    <View style={styles.searchBar2Container}>
+     <TextInput
+
+style={styles.searchInput}
+placeholder="Search..."
+value={search_query}
+onChangeText={(text) => setSearchQuery(text)}
+/>
+</View>
       <View style={styles.container}>
       {loading && (
         <View style={styles.overlay}>
@@ -123,6 +134,7 @@ const getProductDetails = async () => {
           <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
         </View>
       )}
+      
       {chunkedData.map((chunk, index) => (
         <View key={index}>
           {renderFlatList(chunk)}
@@ -134,7 +146,19 @@ const getProductDetails = async () => {
       }
 
 const styles=StyleSheet.create({
-   
+    searchBar2Container: {
+        flex: 1, // This ensures the inner container takes up all available space
+        alignItems: 'center', // Center the content horizontally
+        justifyContent: 'center', 
+        flexDirection:'row',
+        padding: Metrics.ratio(10),
+          },  searchBar2Container: {
+            flex: 1, // This ensures the inner container takes up all available space
+            alignItems: 'center', // Center the content horizontally
+            justifyContent: 'center', 
+            flexDirection:'row',
+            padding: Metrics.ratio(10),
+              },
       ImageContainer:{
         width: Metrics.ratio(200), 
         height: Metrics.ratio(130),
@@ -167,6 +191,20 @@ const styles=StyleSheet.create({
         margin: Metrics.ratio(10),
         borderRadius:5,
         elevation:3
+      },
+      searchInput: {
+        top:Metrics.ratio(1),
+        height: 35,
+        height: Metrics.ratio(40),
+        borderColor: '#F0F0F0',
+        borderWidth: 2,
+        padding: 10,
+        padding: Metrics.ratio(10),
+        width: '90%',
+        flex:1,
+        flexDirection:'row',
+        borderRadius:20,
+        backgroundColor:'white'
       },
       TextContainer: {
         fontSize:15,
