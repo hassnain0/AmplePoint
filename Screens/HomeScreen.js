@@ -11,7 +11,6 @@ import Brands from './Brands';
 
 const HomeScreen=({navigation})=>{
 const Route=useRoute();
-const [searchQuery, setSearchQuery] = useState('');
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
 const user_ID=Route.params.Data;
@@ -83,19 +82,18 @@ return(
 Amples
 </Text>
           </View>
-          <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
+          <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
+            user_ID,
+          })}>
           <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
           </TouchableOpacity>
         </View>
     
-        <TouchableOpacity style={styles.searchBar2Container}>
-          <TextInput
-
-            style={styles.searchInput}
-            placeholder="Search..."
-            value={searchQuery}
-            onChangeText={(text) => setSearchQuery(text)}
-          />
+        <TouchableOpacity onPress={()=>navigation.navigate("Search")} style={styles.searchBar2Container}>
+          <View style={styles.searchInput}>
+            <Image source={require('../assets/Search.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}></Image>
+            <Text >Search...</Text>
+          </View>
         </TouchableOpacity>
     
     </View>
@@ -181,14 +179,18 @@ const styles=StyleSheet.create({
     flex: 1, // This ensures the inner container takes up all available space
     alignItems: 'center', // Center the content horizontally
     justifyContent: 'center', 
+    flexDirection:'row',
+    padding: Metrics.ratio(10),
       },
   searchInput: {
     top:Metrics.ratio(1),
-    height: 35,
+    height: Metrics.ratio(40),
     borderColor: '#F0F0F0',
     borderWidth: 2,
-    padding: 10,
+    padding: Metrics.ratio(10),
     width: '90%',
+    flex:1,
+    flexDirection:'row',
     borderRadius:20,
     backgroundColor:'white'
   },
