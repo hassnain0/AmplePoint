@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet, Image,} from "react-native";
+import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet, Image,TextInput,Platform} from "react-native";
 import Mall from './Mall';
 import Store from './Store';
 import { Metrics } from '../themes';
@@ -7,9 +7,11 @@ import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import Cart from './Cart';
+import Brands from './Brands';
 
 const HomeScreen=({navigation})=>{
 const Route=useRoute();
+const [searchQuery, setSearchQuery] = useState('');
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
 const user_ID=Route.params.Data;
@@ -32,6 +34,7 @@ try {
 }
 
 }
+
 const getRewards=async()=>{
   try{
     const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
@@ -59,15 +62,42 @@ return(
         <Image source={require('../assets/SideMenu.png') } style={styles.SideMenu}></Image>
 <Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
           <View>
-            <Text style={{color:'black',right:Metrics.ratio(10),fontSize:12}}>{amplePoints}</Text>
-            <Text style={{color:'black',right:Metrics.ratio(10),fontSize:12}}>Amples</Text>
+          <Text style={{
+  color: 'black',
+  fontSize: 12,
+  fontFamily: Platform.select({
+    ios: 'Times New Roman',
+    android: 'serif', // You may need to adjust this for Android
+  }),
+}}>
+  {amplePoints}
+</Text>
+<Text style={{
+  color: 'black',
+  fontSize: 12,
+  fontFamily: Platform.select({
+    ios: 'Times New Roman',
+    android: 'serif', // You may need to adjust this for Android
+  }),
+}}>
+Amples
+</Text>
           </View>
           <TouchableOpacity onPress={()=>navigation.navigate("Cart")}>
           <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
           </TouchableOpacity>
         </View>
+    
+        <TouchableOpacity style={styles.searchBar2Container}>
+          <TextInput
 
-      {/* Repeat the above row structure for additional rows */}
+            style={styles.searchInput}
+            placeholder="Search..."
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
+        </TouchableOpacity>
+    
     </View>
     <View style={{  margin: 20,borderRadius:20,elevation:3 }}>
       <ImageSlider
@@ -93,23 +123,23 @@ return(
   </View>
     <View style={styles.container}>
       <View style={styles.row}>
-        {/* First Component: Image */}
        <TouchableOpacity onPress={()=>navigation.navigate("Store")}> 
-
-       
-        <View style={styles.ovalContainer}>
+       <View style={styles.ovalContainer}>
           <Image
             source={require('../assets/Store.jpeg')}
             style={styles.ovalImage}
           />
         </View>
         </TouchableOpacity>
-        {/* Second Component: Text */}
-        <Text style={styles.text}>Your Text Here</Text>
-
         <TouchableOpacity onPress={()=>navigation.navigate("Mall")}>
-
-       
+     <View style={styles.ovalContainer}>
+  <Image
+    source={require('../assets/Store.jpeg')}
+    style={styles.ovalImage}
+  />
+</View>
+</TouchableOpacity>
+<TouchableOpacity onPress={()=>navigation.navigate("Brands")}>
 <View style={styles.ovalContainer}>
   <Image
     source={require('../assets/Store.jpeg')}
@@ -118,11 +148,8 @@ return(
 </View>
 </TouchableOpacity>
       </View>
-
 </View>
-  </SafeAreaView>
-)
-}
+  </SafeAreaView>)}
 const styles=StyleSheet.create({
   container: {
     flex: 1,
@@ -145,6 +172,25 @@ const styles=StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     color:'black'
+  },
+  searchBarContainer: {
+    backgroundColor: '#e0e0e0',
+    height: 50,
+},
+  searchBar2Container: {
+    flex: 1, // This ensures the inner container takes up all available space
+    alignItems: 'center', // Center the content horizontally
+    justifyContent: 'center', 
+      },
+  searchInput: {
+    top:Metrics.ratio(1),
+    height: 35,
+    borderColor: '#F0F0F0',
+    borderWidth: 2,
+    padding: 10,
+    width: '90%',
+    borderRadius:20,
+    backgroundColor:'white'
   },
   ovalContainer: {
     width: 100, // Adjust the width as needed
@@ -181,6 +227,7 @@ const styles=StyleSheet.create({
   Icon:{
     width:Metrics.ratio(30),
     height:Metrics.ratio(30),
+    left:Metrics.ratio(10)
   },
   SideMenu:{
     width:Metrics.ratio(30),

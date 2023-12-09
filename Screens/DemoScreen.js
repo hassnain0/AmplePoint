@@ -10,7 +10,9 @@ const ProductItem = ({ product }) => {
   return (
 
     <View style={styles.productItem}>
-    <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black',}}>{product.pname}</Text>
+  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
+  {product.pname.split(' ').slice(0, 4).join(' ')}
+</Text>
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
     </View>
@@ -36,8 +38,7 @@ const ProductItem = ({ product }) => {
 };
 
 const DemoScreen=({navigation})=>{
-  const route=useRoute().params;
-  console.log("Route",route)
+  const route=useRoute();
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
     navigation.navigate('GiftDetails',{ productData,route });
@@ -52,13 +53,13 @@ const DemoScreen=({navigation})=>{
 
 const getProductDetails = async () => {
   try{
-    const vendorId = route.Id;
+    const vendorId = route.params.Id;
     // Specify the initial page number
     let pageNumber = 1;
     const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
         const response = await axios.get(apiUrl, {
           params: {
-            vendor_id: 371,
+            vendor_id:vendorId,
             page: pageNumber,
           },
         });
@@ -68,6 +69,7 @@ const getProductDetails = async () => {
         setStoreProducts(response.data);
         setLoading(false)
       }
+      console.log("Responnse",response.data)
         if (response.data.message === 'Data Not Found') {
           setData(true);
         } else {
