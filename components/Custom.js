@@ -3,7 +3,7 @@ import { View,StyleSheet, Text, Modal, TouchableOpacity,Image,Alert } from 'reac
 import { Metrics } from '../themes';
 import { useFocusEffect } from '@react-navigation/native';
 
-const CustomDialog = ({ visible, item }) => {
+const CustomDialog = ({ visible, item , onClose}) => {
     const [visibile,setVisible]=useState(visibile)
     useFocusEffect(
         React.useCallback(() => {
@@ -32,6 +32,7 @@ console.log("Item",item)
       animationType="fade"
       transparent
       visible={visible}
+      onRequestClose={onClose}
     style={{alignItems:'center',alignContent:'center'}}
     >
    
@@ -40,10 +41,12 @@ console.log("Item",item)
             backgroundColor: 'white',
             borderRadius: 10,
             width: 500,
-            height:200
+            height:200,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
-        >
-         
+          >
               <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
               <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
               <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>

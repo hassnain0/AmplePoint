@@ -21,6 +21,7 @@ import MallDetail from './Screens/MallDetail';
 import Search from './Screens/Search';
 import MyPurchase from './Screens/MyPurchase';
 import LocalPurchase from './Screens/LocalPurchase';
+import Return from './Screens/Return';
 
 const Stack=createNativeStackNavigator();
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
       <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name='LocalPurchase' component={LocalPurchase} options={( ) => ({headerTintColor:'white',title:'My Local Purchases',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
+      <Stack.Screen name='Return' component={Return} options={( ) => ({headerTintColor:'white',title:'Return Order',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='My Purchase' component={MyPurchase} options={( ) => ({headerTintColor:'white',title:'My Purchases',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='Search' component={Search} options={( ) => ({headerTintColor:'white',title:'Search',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>

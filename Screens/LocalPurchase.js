@@ -4,7 +4,7 @@ import { Colors, Metrics } from '../themes';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import util from '../helpers/util';
-import CustomDialog from '../components/Custom';
+import Return from './Return';
 
 const LocalPurchase= ({navigation}) => {
 //   const route=useRoute();
@@ -19,35 +19,10 @@ getProductDetails();
 setLoading(false)
   },[deleteCount])
   const [quantity, setQuantity] = useState(1);
-  const [loader, setLoader] = useState(false);
   const [visibile, setVisible] = useState(false);
  const [loading,setLoading]=useState(true);
  //Number of Carts recieved from API
  const [product_no,setProduct_no]=useState(0);
-
- const increaseQuantity = (item) => {
-  setActualData((prevData) => {
-    console.log('Previous Data:', prevData);
-
-    const newData = [...prevData.data];
-    const itemIndex = newData.findIndex((dataItem) => dataItem.id === item.id);
-
-    console.log("Index", itemIndex);
-
-    if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
-      newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) + 1).toString();
-    
-      const updatedData = { ...prevData, data: newData };
-    
-    
-      return updatedData;
-    }
-
-    
-    return prevData;
-  });
-};
-
 
 
 //   const CheckOutScreen=()=>{
@@ -73,8 +48,6 @@ setLoading(false)
       if(response.data && response.data.data.quantity){
       setQuantity(response.data.data.quantity)
       }
-    console.log('cart_items.price',cart_items.amount)
-
     } catch (error) {
       // Handle the error
       console.error('Error:', error);
@@ -87,58 +60,53 @@ setLoading(false)
   const Question=()=>{
     
   }
-  const isSelected = (item) => {
-    // Your selection logic goes here
-    // For example, let's assume you want to select items with a certain condition
-    return item.someCondition;
+  const handleCloseDialog = () => {
+    setDialogVisible(false);
   };
   const MyComponent =()=>{
+const handleProductPress=(item)=>{
+  navigation.navigate("Return",{
+    item,
+  })
+}
     return (
       <View style={{flex:1,}}>
       
         {actulaData?.data?.map((item, index) => (
           <View>
-            {isSelected(item) && (
-    <View key={index}>
-      <CustomDialog
-        visible={visibile}
-        item={item}
-      />
-    </View>
-  )}
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
   <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
   <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:13,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Times New Roman',android: 'serif', // You may need to adjust this for Android
-}), }}>{item.item_added.split(' ').slice(0, 4).join(' ')}</Text>
-<Text style={{ fontSize:8,
+}), }}>{item.item_added.split(' ').slice(0, 3).join(' ')}</Text>
+ <Text style={{ fontSize:8,marginRight:Metrics.ratio(10),
         fontWeight:'700',bottom:Metrics.ratio(20),color:'#FF2E00',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>{item.purchase_date}</Text>
-  <View>
-  </View>
+
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'00',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>Invoice No: {item.order_id}</Text>
-<Text style={{ fontSize:8,backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(1),width:Metrics.ratio(40),left:Metrics.ratio(10),textAlign:'center',
-        fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
+<View style={{backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(2),marginRight:Metrics.ratio(25),width:Metrics.ratio(40),height:Metrics.ratio(15),bottom:Metrics.ratio(20),left:Metrics.ratio(10),borderWidth:Metrics.ratio(0.5),}}>
+<Text style={{ fontSize:8,textAlign:'center',
+        fontWeight:'600',color:'black', fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Qty:{item.quantity}</Text>
-    <View>
   </View>
+
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>SKU:#{item.product_sku}</Text>
 <Text style={{ fontSize:8,
-        fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
+        fontWeight:'800',bottom:Metrics.ratio(20),color:'black',marginRight:Metrics.ratio(25), fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
-  }), }}>{item.total_amount}</Text>
+  }), }}>${item.total_amount}</Text>
   </View>
   <View>
 
@@ -154,13 +122,13 @@ setLoading(false)
   }), }}>Order Status:<Text style={{ color: '#FF2E00' }}>{item.product_order_status}</Text>
       </Text>
   </View>
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+  <View style={{ flexDirection: 'row',}}>
   <Text style={{ fontSize:8,fontWeight:'700',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Ample Earned:<Text style={{ color: '#FF2E00' }}>{item.earned_amples}</Text>
       </Text>
-      <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
+      <Text style={{ fontSize:8,fontWeight:'800',bottom:Metrics.ratio(20),left:Metrics.ratio(50) ,color:'black',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Ample Redeemed:<Text style={{ color: '#FF2E00' , fontSize:8}}>{item.apply_amples}</Text>
@@ -169,7 +137,7 @@ setLoading(false)
   <View>  
   </View>
   <View style={{flex:1 , flexDirection:'row'}}>
-  <TouchableOpacity style={styles.buttonView} onPress={()=>navigation.navigate("Return")}>
+  <TouchableOpacity style={styles.buttonView} onPress={() => handleProductPress(item)}>
            <Text style={{color:'white', fontSize:7, fontFamily: Platform.select({
     ios: 'Arial',
     android: 'serif', // You may need to adjust this for Android
@@ -213,11 +181,11 @@ setLoading(false)
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
                   <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(30),justifyContent: 'space-between',}}>
-                  <Text style={{left:0,color:'black',fontSize:12,fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
+                  <Text style={{left:0,color:'black',fontSize:10,textAlign:'center',fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Item({product_no})</Text>
-                  <Text style={{color:'black',fontSize:12,fontWeight:'700',fontFamily: Platform.select({
+                  <Text style={{color:'black',fontSize:10,textAlign:'center',fontWeight:'700',fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Total : {actulaData.cart_total} $</Text>
@@ -255,7 +223,7 @@ const styles = StyleSheet.create({
   buttonView: {
     height:Metrics.ratio(15),
     backgroundColor:'#FE3F01',
-borderRadius:Metrics.ratio(5),
+borderRadius:Metrics.ratio(2),
     width: Metrics.ratio(55),
     justifyContent: "center",
     alignItems: "center",
