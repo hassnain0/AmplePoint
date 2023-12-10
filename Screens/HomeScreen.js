@@ -1,19 +1,31 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect,useRef,useState } from 'react';
 import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet, Image,TextInput,Platform} from "react-native";
 import Mall from './Mall';
 import Store from './Store';
+import Ionicons from 'react-native-vector-icons'
 import { Metrics } from '../themes';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import Cart from './Cart';
 import Brands from './Brands';
+// import { createDrawerNavigator} from '@react-navigation/drawer';
+// const Drawer=createDrawerNavigator();
+// import Animated from 'react-native-reanimated';
+
+// Animated.initializeReanimated();
 
 const HomeScreen=({navigation})=>{
 const Route=useRoute();
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
 const user_ID=Route.params.Data;
+// const videoUrl = 'https://amplepoints.com/images/HowItWork.mp4';
+// const thumbnailUrl = 'https://amplepoints.com/images/vthumbnail.png';
+
+//   const [isPlaying, setIsPlaying] = useState(false);
+//   const [thumbnail, setThumbnail] = useState(thumbnailUrl);
+//   const videoRef = useRef(null);
 
 useEffect(() => {
   const getHomeContent=async()=>{
@@ -28,7 +40,20 @@ useEffect(() => {
       console.log("Error fetching data:", err);
     }
     
-    }
+    } 
+    // const fetchThumbnail = async () => {
+    //   try {
+    //     const thumbnailUrl = await getThumbnail({
+    //       url: videoUrl,
+    //       timeStamp: 10000, // specify the time for the thumbnail in milliseconds
+    //     });
+    //     setThumbnail(thumbnailUrl);
+    //   } catch (error) {
+    //     console.error('Error fetching thumbnail:', error);
+    //   }
+    // };
+
+    // fetchThumbnail();
   getHomeContent();
   getRewards();
   }, []);
@@ -50,7 +75,19 @@ const getRewards=async()=>{
     console.log("Error",erro)
   }
  }
+//Video section methods
+const handlePlayPause = async () => {
+  if (isPlaying) {
+    videoRef.current.pause();
+  } else {
+    const thumbnail = await getThumbnail(videoUrl);
+    setThumbnail(thumbnail);
+    videoRef.current.seek(0); // Reset video to the beginning
+    videoRef.current.play();
+  }
 
+  setIsPlaying(!isPlaying);
+};
 return(
   <SafeAreaView>
     <View style={{backgroundColor:'#EEEEEE'}}>
@@ -94,7 +131,7 @@ Amples
         </TouchableOpacity>
     
     </View>
-    <View style={{  margin: Metrics.ratio(20),bottom:Metrics.ratio(40),elevation:10,height:'100%'}}>
+    <View style={{  margin: Metrics.ratio(20),bottom:Metrics.ratio(10),elevation:10,height:'100%'}}>
     {images && (
   <ImageSlider
     data={images.map((imgUrl) => ({ img: imgUrl }))}
@@ -102,12 +139,36 @@ Amples
     closeIconColor="white"
   />
 )}
-</View> 
 
-  
+</View> 
+ {/* <View style={styles.container}>
+      <TouchableOpacity onPress={handlePlayPause}>
+     
+          <Video
+            ref={videoRef}
+            source={{ uri: videoUrl }}
+            resizeMode="cover"
+            style={styles.video}
+            paused={!isPlaying}
+          />
+       
+      </TouchableOpacity>
+    </View> */}
+
   </SafeAreaView>)}
 const styles=StyleSheet.create({
- 
+  container: {
+    flex: 1,
+
+  },
+  thumbnail: {
+    width: 300,
+    height: 200,
+  },
+  video: {
+    width: 300,
+    height: 200,
+  },
   text: {
     flex: 1,
     marginHorizontal: 16, // Adjust the spacing between components as needed
@@ -138,18 +199,7 @@ const styles=StyleSheet.create({
     borderRadius:20,
     backgroundColor:'white'
   },
-  ovalContainer: {
-    width: 100, // Adjust the width as needed
-    height: 100, // Adjust the height as needed
-    borderRadius: 10, // Half of the width/height for a perfect circle
-    overflow: 'hidden',
-  },
-  ovalImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
+
   dotContainerStyle :{
     position: 'absolute',
     bottom: 10, // Adjust this value based on your design
@@ -184,7 +234,7 @@ const styles=StyleSheet.create({
     backgroundColor: "#EEEEEE",
 
     flexDirection: 'row',
-    paddingVertical: Metrics.ratio(15),
+    paddingVertical: Metrics.ratio(10),
     // paddingHorizontal:Metrics.ratio(5),
   }, container: {
     flex: 1,
@@ -207,17 +257,34 @@ const styles=StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
   },
-  ovalContainer: {
-    width: 100, // Adjust the width as needed
-    height: 100, // Adjust the height as needed
-    borderRadius: 50, // Half of the width/height for a perfect circle
-    overflow: 'hidden',
-  },
-  ovalImage: {
+  container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  thumbnail: {
+    width: 300,
+    height: 200,
+  },
+  video: {
+    width: 300,
+    height: 200,
   },
 })
 export default HomeScreen;
+// export default function Home({ navigation }) {
+//   return (
+//     <View style={{ flex: 1 ,}}>
+//       <DrawerNavigation />
+//     </View>
+//   );
+// }
+
+function DrawerNavigation() {
+  return (
+      <Drawer.Navigator  initialRouteName="HomeScreen" >
+      <Drawer.Screen name="HomeScreen" component={HomeScreen} options={{drawerIcon:({color})=>(<Ionicons name='home-outline' size={22} color={color} />),headerTitleAlign:'center'}} />
+  
+      </Drawer.Navigator>
+  );
+}

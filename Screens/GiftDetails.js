@@ -179,7 +179,6 @@ const GetAmples = async () => {
   }    
   const SubmitButton=async()=>{
 
-  // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
       try {
       
         const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
@@ -257,14 +256,7 @@ const GetAmples = async () => {
     console.log("My Discount 1", discount);
     console.log("Discounted Price2", newDiscountedPrice);
   };
-  
-  // Example usage:
- 
-//   const Apply=()=>{
 
-//     const discountedPrice = calculateDiscountedPrice(actual_data?.data?.product_info?.single_price, amples);
-//   util.successMsg(discountedPrice.toFixed(2)); 
-//  }
   
 const handleAmples=(text)=>{
   setAmples(text)
@@ -490,7 +482,7 @@ return (
         }}>{actual_data?.data?.product_info?.product_sku}</Text>
 
     </View>
-<View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <TouchableOpacity onPress={ShowMoreDetail}>
  
  {knowMore && ( <Text  style={{  top:Metrics.ratio(10),
