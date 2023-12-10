@@ -136,7 +136,6 @@ setLoader(true);
   const delProduct = async (item) => {
     try {
     
-      console.log("Item",item)
       const apiUrl = 'https://amplepoints.com/apiendpoint/removetocart?';
 
       const response = await axios.get(apiUrl, {
@@ -161,50 +160,108 @@ setLoader(true);
       console.error('Error:', error);
     }
   };
+  const Return=()=>{
+
+  }
+  const Question=()=>{
+    
+  }
+  const Redeem=()=>{
+    
+  }
   const MyComponent =()=>{
     return (
-      <View style={{flex:1,marginLeft:Metrics.ratio(10)}}>
+      <View style={{flex:1,}}>
         {actulaData?.data?.map((item, index) => (
-            <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30)}} >
+          <View>
+            <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
   <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
-  <View style={{flex:1, flexDirection:'column',}}>
+  <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-  <Text style={{ fontSize:16,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Times New Roman',android: 'serif', // You may need to adjust this for Android
-}), }}>{item.item_added}</Text>
-<Text style={{ fontSize:12,
-        fontWeight:'700',bottom:Metrics.ratio(20) ,color:'#FF2E00',fontFamily: Platform.select({
+  <Text style={{ fontSize:13,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Times New Roman',android: 'serif', // You may need to adjust this for Android
+}), }}>{item.item_added.split(' ').slice(0, 4).join(' ')}</Text>
+<Text style={{ fontSize:8,
+        fontWeight:'700',bottom:Metrics.ratio(20),color:'#FF2E00',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>{item.purchase_date}</Text>
+  <View>
+  </View>
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-  <Text style={{ fontSize:12,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
+  <Text style={{ fontSize:8,fontWeight:'00',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>Invoice No: {item.order_id}</Text>
+<Text style={{ fontSize:8,backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(1),width:Metrics.ratio(40),left:Metrics.ratio(10),textAlign:'center',
+        fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'Arial', // You may need to adjust this for Android
+  }), }}>Qty:{item.quantity}</Text>
+    <View>
+  </View>
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-  <Text style={{ fontSize:12,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
+  <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>SKU:#{item.product_sku}</Text>
+<Text style={{ fontSize:8,backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(1),width:Metrics.ratio(40),left:Metrics.ratio(10),textAlign:'center',
+        fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'Arial', // You may need to adjust this for Android
+  }), }}>{item.total_amount}</Text>
+  </View>
+  <View>
+    
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-  <Text style={{ fontSize:12,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
+  <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>By:{item.supplier_name}</Text>
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-  <Text style={{ fontSize:12,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
+  <Text style={{ fontSize:8,fontWeight:'700',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Order Status:<Text style={{ color: '#FF2E00' }}>{item.product_order_status}</Text>
       </Text>
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-  <Text style={{ fontSize:12,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
+  <Text style={{ fontSize:8,fontWeight:'700',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Ample Earned:<Text style={{ color: '#FF2E00' }}>{item.earned_amples}</Text>
       </Text>
+      <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'Arial', // You may need to adjust this for Android
+  }), }}>Ample Redeemed:<Text style={{ color: '#FF2E00' , fontSize:8}}>{item.apply_amples}</Text>
+      </Text>
+  </View>
+  <View>  
+  </View>
+  <View style={{flex:1 , flexDirection:'row'}}>
+  <TouchableOpacity style={styles.buttonView} onPress={()=>navigation.navigate("Return")}>
+           <Text style={{color:'white', fontSize:7, fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'serif', // You may need to adjust this for Android
+  }),}}>Return</Text>
+           </TouchableOpacity >
+           <TouchableOpacity onPress={()=>navigation.navigate("Question")} style={styles.buttonView}>
+           <Text style={{color:'white', fontSize:7,fontWeight:'600', fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'serif', // You may need to adjust this for Android
+  }),}}>Question</Text>
+           </TouchableOpacity>
+           <TouchableOpacity style={styles.buttonView} onPress={()=>setRedeem(true)}>
+           <Text style={{color:'white', fontSize:7,fontWeight:'600', fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'serif', // You may need to adjust this for Android
+  }),}}>Redeem Order</Text>
+           </TouchableOpacity>
   </View>
   </View>
+
   </View>
+    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>
+    </View>
+    
         ))}
       </View>
     );
@@ -220,15 +277,14 @@ setLoader(true);
 
         {actulaData &&(
           <View >
-              <ScrollView style={{backgroundColor:'white'}}>  
-                
+              <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
-                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(40),justifyContent: 'space-between',}}>
-                  <Text style={{left:0,color:'black',fontSize:15,fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
+                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(30),justifyContent: 'space-between',}}>
+                  <Text style={{left:0,color:'black',fontSize:12,fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Item({product_no})</Text>
-                  <Text style={{color:'black',fontSize:15,fontWeight:'700',fontFamily: Platform.select({
+                  <Text style={{color:'black',fontSize:12,fontWeight:'700',fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Total : {actulaData.cart_total} $</Text>
@@ -238,14 +294,7 @@ setLoader(true);
                          
                         <Toast ref={ref => Toast.setRef(ref)} />                    
                         
-            </ScrollView>
-            <View style={styles.buttonView}>
-             <Button 
-               btnPress={Checkout}
-               loader={loader}
-               label={"Check Out"}
-             />
-           </View>     
+            </ScrollView>   
             </View>
             
               
@@ -271,15 +320,18 @@ const styles = StyleSheet.create({
     textAlign:'center'
   },
   buttonView: {
-    height:Metrics.vh*5,
+    height:Metrics.ratio(15),
     backgroundColor:'#FF2F00',
-borderRadius:Metrics.ratio(70),
-    width: Metrics.vw * 90,
+borderRadius:Metrics.ratio(5),
+    width: Metrics.ratio(55),
     justifyContent: "center",
     alignItems: "center",
     alignSelf:'center',
+    marginLeft:Metrics.ratio(5),
+    bottom:Metrics.ratio(10)
 
   },
+ 
   icon: {
     width: Metrics.ratio(15),
     height:  Metrics.ratio(15),
@@ -301,9 +353,8 @@ left:Metrics.ratio(110)
     borderRadius:20
   },
   ImageContainer:{
-
-    width: Metrics.ratio(100), 
-    height: Metrics.ratio(100),
+    width: Metrics.ratio(90), 
+    height: Metrics.ratio(90),
     bottom:Metrics.ratio(30)
   },
   button: {
