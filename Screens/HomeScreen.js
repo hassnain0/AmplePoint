@@ -16,23 +16,23 @@ const [amplePoints,setAmplePoints]=useState(0);
 const user_ID=Route.params.Data;
 
 useEffect(() => {
+  const getHomeContent=async()=>{
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/gethomecontent';
+      const response = await axios.get(apiUrl);
+      console.log(response.data.data.sider_images)
+     
+        setImages(response.data.data.sider_images);
+      }
+     catch (err) {
+      console.log("Error fetching data:", err);
+    }
+    
+    }
   getHomeContent();
   getRewards();
   }, []);
-const getHomeContent=async()=>{
-try {
-  const apiUrl = 'https://amplepoints.com/apiendpoint/gethomecontent';
-  const response = await axios.get(apiUrl);
-  
-  if (response.data.data && response.data.data.sider_images) {
-    setImages(response.data.data);
 
-  }
-} catch (err) {
-  console.log("Error fetching data:", err);
-}
-
-}
 
 const getRewards=async()=>{
   try{
@@ -51,9 +51,6 @@ const getRewards=async()=>{
   }
  }
 
-
-
- 
 return(
   <SafeAreaView>
     <View style={{backgroundColor:'#EEEEEE'}}>
@@ -63,7 +60,7 @@ return(
           <View>
           <Text style={{
   color: 'black',
-  fontSize: 12,
+  fontSize: 9,
   fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
@@ -73,7 +70,7 @@ return(
 </Text>
 <Text style={{
   color: 'black',
-  fontSize: 12,
+  fontSize: 9,
   fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
@@ -97,73 +94,20 @@ Amples
         </TouchableOpacity>
     
     </View>
-    <View style={{  margin: 20,borderRadius:20,elevation:3 }}>
-      <ImageSlider
-        data={[
-          {img: 'https://img.freepik.com/free-photo/stylish-beautiful-woman-posing-against-wooden-wall_285396-4810.jpg?size=626&ext=jpg&uid=R110769931&ga=GA1.1.687601769.1690259058&semt=ais'},
-          {img: 'https://img.freepik.com/free-photo/young-woman-beautiful-red-dress_1303-17506.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'},
-          {img: 'https://img.freepik.com/premium-photo/woman-black-long-skirt-shirt-with-colored-patterns-sneakers-white-background-studio-shot_481253-384.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'},
-          {img: 'https://img.freepik.com/free-photo/emotional-brunette-woman-blue-coat-posing-purple-wall-indoor-photo-beautiful-short-haired-female-model-trendy-midi-dress_197531-5181.jpg?size=626&ext=jpg&ga=GA1.1.2097605529.1691319045&semt=ais'}
-      ]}
+    <View style={{  margin: Metrics.ratio(20),bottom:Metrics.ratio(40),elevation:10,height:'100%'}}>
+    {images && (
+  <ImageSlider
+    data={images.map((imgUrl) => ({ img: imgUrl }))}
     autoPlay={true}
-
-    closeIconColor="#fff"
-/>
+    closeIconColor="white"
+  />
+)}
 </View> 
-<View style={{ top: Metrics.ratio(-30), borderRadius: 20, overflow: 'hidden', width: Metrics.ratio(300), height: Metrics.ratio(0), alignSelf: 'center', marginBottom: Metrics.ratio(20) }}>
-{images &&(
-      <ImageSlider
-        data={images.sider_images.map(imgUrl => ({ img: imgUrl }))}
-        autoPlay={true}
-        closeIconColor="#fff"
-      />
-      )}
-  </View>
-    <View style={styles.container}>
-      <View style={styles.row}>
-       <TouchableOpacity onPress={()=>navigation.navigate("Store")}> 
-       <View style={styles.ovalContainer}>
-          <Image
-            source={require('../assets/Store.jpeg')}
-            style={styles.ovalImage}
-          />
-        </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={()=>navigation.navigate("Mall")}>
-     <View style={styles.ovalContainer}>
-  <Image
-    source={require('../assets/Store.jpeg')}
-    style={styles.ovalImage}
-  />
-</View>
-</TouchableOpacity>
-<TouchableOpacity onPress={()=>navigation.navigate("Brands")}>
-<View style={styles.ovalContainer}>
-  <Image
-    source={require('../assets/Store.jpeg')}
-    style={styles.ovalImage}
-  />
-</View>
-</TouchableOpacity>
-      </View>
-</View>
+
+  
   </SafeAreaView>)}
 const styles=StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 16, // Adjust the spacing between rows as needed
-  },
-  image: {
-    width: 100, // Adjust the width as needed
-    height: 100, // Adjust the height as needed
-    resizeMode: 'cover',
-    borderRadius: 8, // Adjust the border radius for rounded corners
-  },
+ 
   text: {
     flex: 1,
     marginHorizontal: 16, // Adjust the spacing between components as needed
@@ -197,7 +141,7 @@ const styles=StyleSheet.create({
   ovalContainer: {
     width: 100, // Adjust the width as needed
     height: 100, // Adjust the height as needed
-    borderRadius: 50, // Half of the width/height for a perfect circle
+    borderRadius: 10, // Half of the width/height for a perfect circle
     overflow: 'hidden',
   },
   ovalImage: {
@@ -224,7 +168,7 @@ const styles=StyleSheet.create({
   Logo:{
     marginLeft:Metrics.ratio(70),
     width:Metrics.ratio(200),
-    height:Metrics.ratio(50),
+    height:Metrics.ratio(30),
   },  
   Icon:{
     width:Metrics.ratio(30),
@@ -238,7 +182,7 @@ const styles=StyleSheet.create({
   },
   header: {
     backgroundColor: "#EEEEEE",
-    alignItems: 'center',
+
     flexDirection: 'row',
     paddingVertical: Metrics.ratio(15),
     // paddingHorizontal:Metrics.ratio(5),

@@ -1,5 +1,5 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList, ActivityIndicator,TextInput,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList, TextInput,ScrollView,Image, TouchableOpacity,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
@@ -17,7 +17,7 @@ const ProductItem = ({ product }) => {
       <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
     </View>
     <Text style={styles.ProductContainer}>{product.pvendor}</Text>
-  
+
     <View style={{ flex: 1, flexDirection: 'row' }}>
       <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
       <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
@@ -33,7 +33,7 @@ const ProductItem = ({ product }) => {
       or get it <Text style={{ color: '#FF2E00' }}>FREE</Text> with <Text style={{ color: '#FF2E00' }}>{product.pfwamples}</Text> points
     </Text>
   </View>
-  
+
   );
 };
 
@@ -44,48 +44,55 @@ const Search=({navigation})=>{
     navigation.navigate('GiftDetails',{ productData,route });
   };
   useEffect(()=>{
-    
+
     getProductDetails();
   },[])
+  const [pageNumber, setPageNumber] = useState(1);
   const [storeProducts, setStoreProducts] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [data,setData]=useState(false)
-const [search_query,setSearchQuery]=useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState(null);
+  useEffect(() => {
+   
+    filterProducts();
+    getProductDetails();
+  },  [searchQuery, storeProducts, pageNumber]);
+  const filterProducts = () => {
+    if (searchQuery && storeProducts && storeProducts.data) {
+      const filteredData = storeProducts.data.filter((product) =>
+      product.pname && product.pname.includes(searchQuery.toLowerCase())
+      );
+      setFilteredProducts(filteredData);
+    } else {
+      setFilteredProducts(null);
+    }
+  };
+
 const getProductDetails = async () => {
   try{
-
+    // const vendorId = route.params.Id;
     // Specify the initial page number
-    let pageNumber = 1;
+    
     const apiUrl = 'https://amplepoints.com/apiendpoint/searchproduct?';
         const response = await axios.get(apiUrl, {
           params: {
-            search_query:'product',
+            search_query:searchQuery,
             page: pageNumber,
           },
         });
-        pageNumber++;
-console.log("Response",response.data)
+       
+
       if (setStoreProducts && typeof setStoreProducts === 'function') {
         setStoreProducts(response.data);
-        setLoading(false)
+        setPageNumber((prevPage) => prevPage + 1);
       }
-      console.log("Responnse",response.data)
-        if (response.data.message === 'Data Not Found') {
-          setData(true);
-        } else {
-          setLoading(false)
-          setData(false); // Reset data state if no error
-        }
       
     } catch (error) {
       console.error('Error fetching data:', error);
-      setLoading(false)
-      setData(true);
       // Handle the error, e.g., set an error state or display an error message
     }
   }
     const renderFlatList = (data) => (
-   
+
       <View>
     <FlatList
       data={data}
@@ -99,7 +106,7 @@ console.log("Response",response.data)
       )}
     />
   </View>
-   
+
     );
     const chunkArray = (array, chunkSize) => {
       const chunks = [];
@@ -114,52 +121,23 @@ console.log("Response",response.data)
     return (
   <ScrollView>
     <View style={styles.searchBar2Container}>
-     <TextInput
-
-style={styles.searchInput}
-placeholder="Search..."
-value={search_query}
-onChangeText={(text) => setSearchQuery(text)}
-/>
-</View>
+      <TextInput style={styles.searchInput}
+      onChangeText={(text)=>setSearchQuery(text)}
+      placeholder="Search..."
+      value={searchQuery}
+      ></TextInput>
+    </View>
       <View style={styles.container}>
-      {loading && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#FF2E00" />
-        </View>
-      )}
-      {data && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
-        </View>
-      )}
-      
-      {chunkedData.map((chunk, index) => (
-        <View key={index}>
-          {renderFlatList(chunk)}
-        </View>
-      ))}
+      {filteredProducts
+          ? renderFlatList(filteredProducts)
+          : chunkedData.map((chunk, index) => (
+              <View key={index}>{renderFlatList(chunk)}</View>
+            ))}
     </View>
     </ScrollView>
-)
-      }
-
+)}
 const styles=StyleSheet.create({
-    searchBar2Container: {
-        flex: 1, // This ensures the inner container takes up all available space
-        alignItems: 'center', // Center the content horizontally
-        justifyContent: 'center', 
-        flexDirection:'row',
-        padding: Metrics.ratio(10),
-          },  searchBar2Container: {
-            flex: 1, // This ensures the inner container takes up all available space
-            alignItems: 'center', // Center the content horizontally
-            justifyContent: 'center', 
-            flexDirection:'row',
-            padding: Metrics.ratio(10),
-              },
-      ImageContainer:{
+   ImageContainer:{
         width: Metrics.ratio(200), 
         height: Metrics.ratio(130),
         borderRadius:20, 
@@ -185,31 +163,35 @@ const styles=StyleSheet.create({
         color: 'black', // Optional: set the text color
         fontWeight:'bold'
       },
-      
+
       productItem: {
         backgroundColor:'#FFFF',
         margin: Metrics.ratio(10),
         borderRadius:5,
         elevation:3
       },
+      TextContainer: {
+        fontSize:15,
+        color: 'black', // Optional: set the text color
+        fontWeight:'bold'
+      }, searchBar2Container: {
+        flex: 1, // This ensures the inner container takes up all available space
+        alignItems: 'center', // Center the content horizontally
+        justifyContent: 'center', 
+        flexDirection:'row',
+        padding: Metrics.ratio(10),
+          },
       searchInput: {
         top:Metrics.ratio(1),
-        height: 35,
         height: Metrics.ratio(40),
         borderColor: '#F0F0F0',
         borderWidth: 2,
-        padding: 10,
         padding: Metrics.ratio(10),
         width: '90%',
         flex:1,
         flexDirection:'row',
         borderRadius:20,
         backgroundColor:'white'
-      },
-      TextContainer: {
-        fontSize:15,
-        color: 'black', // Optional: set the text color
-        fontWeight:'bold'
       },
       TouchContainer:{
         position: 'absolute',
@@ -221,13 +203,13 @@ const styles=StyleSheet.create({
         borderRadius:10,
         width: Metrics.ratio(190),
         height: Metrics.ratio(180),
-        
+
       },
       ProductContainer:{
         fontWeight:'bold',
         color:'black',
         fontSize:10
-       
+
             },
       heartButton: {
         width: Metrics.ratio(30),
@@ -238,7 +220,7 @@ const styles=StyleSheet.create({
         borderColor:'white',
         borderRadius: Metrics.borderRadius,
       },
-     
+
       trolleyIconContainer: {
         position: 'absolute',
         bottom: Metrics.ratio(5),
@@ -260,13 +242,13 @@ const styles=StyleSheet.create({
     margin:Metrics.ratio(1),
   },
   OptionContainer:{
-    
+
   flexDirection:'row',
   justifyContent:'left'
   }  ,
   SizeContainer:{
     borderColor:'black',
-    
+
     marginLeft:Metrics.ratio(25)
   },
   OptionTextContainer:{
