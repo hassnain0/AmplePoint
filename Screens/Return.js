@@ -1,38 +1,99 @@
-import React,{useState} from 'react';
-import {Image, View,Text, StyleSheet,} from 'react-native';
+import React,{useState,useEffect} from 'react';
+import {Image,TextInput, View,Text, StyleSheet,ScrollView, TouchableOpacity,Alert} from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { Colors, Metrics } from '../themes';
+import { Metrics } from '../themes';
 import { Dropdown } from 'react-native-element-dropdown';
+import Button from '../components/Button';
+import {launchImageLibrary} from 'react-native-image-picker';
+import util from '../helpers/util';
+// import { Camera } from 'react-native-vision-camera';
 
 const Return=()=>{
+  const [isRecording, setIsRecording] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-  ];
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-          Dropdown label
-        </Text>
-      );
-    }
-    return null;
+  const [loader, setLoader] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
+
+  const pickImage = () => {
+    Alert.alert(
+      'Select Image Source',
+      'Choose the source of the image',
+      [
+        {
+          text: 'Camera',
+          onPress: () => LaunchCamera(),
+        },
+        {
+          text: 'Image Library',
+          onPress: () => LaunchimageLibrary(),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+useEffect(()=>{
+  // checkPermission();
+  
+})
+ 
+  
+
+
+  const LaunchimageLibrary = () => {
+    const options = {
+      mediaType: 'mixed', // Allow both photos and videos
+      quality: 0.5, // Adjust image quality as needed
+      maxWidth: 800, // Adjust the maximum image width
+      maxHeight: 600, // Adjust the maximum image height
+      allowsEditing: false, // Whether to allow image editing
+      noData: true, // If true, removes the base64-encoded data field from the response
+      mimeTypes: ['image/jpeg', 'image/jpg', 'image/png',],
+      selectionLimit:5,
+    };
+
+    launchImageLibrary(options, (response) => {
+      handleImagePickerResponse(response);
+    });
   };
 
+  const handleImagePickerResponse = (response) => {
+    if (response.didCancel) {
+      util.errorMsg('cancelled');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else {
+      const source = { uri: response.uri };
+      setSelectedImage(source);
+    }
+  };
+  const checkPermission=async()=>{
+    // const newCameraPermission=await Camera.requestCameraPermission();
+    // const newMicrophonePermission=await Camera.requestMicrophonePermission();
+    // console.log("newCameraPermission",newCameraPermission);
+    // console.log("newMicrophonePermission",newMicrophonePermission);
+    
+  }
+  const data = [
+    { label: 'Refund Only', value: '1' },
+    { label: 'Refund Dispute', value: '2' },
+    
+  ];
+ 
+  const Submit=()=>{
+
+  }
 const route=useRoute();
-console.log("Route",route.params.item)
+
 const item=route.params.item;
         return (
-            <View style={{flex:1, flexDirection:"column"}}>
+            <ScrollView style={{flex:1, flexDirection:"column",backgroundColor:'white',}}>
+                    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>
               <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
         <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
         <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>
@@ -79,26 +140,26 @@ const item=route.params.item;
         
         </View>
         <View>
-        <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(40),width:'100%',}}> 
-        <Text style={{color:'black',textAlign:'center',fontFamily: Platform.select({
+        <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(30),width:'100%',}}> 
+        <Text style={{color:'black',fontWeight:'800',textAlign:'left',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
           ios: 'Arial',
           android: 'Arial', // You may need to adjust this for Android
         }),}}>Enter the Following Details to Return your order</Text></View>
-        <View style={styles.container}> 
-        {renderLabel()}
+          <View style={{padding:Metrics.ratio(20)}}>
+          <Text style={{fontSize:15,fontWeight:'400',}}>I want to Apply For:</Text>
       <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#F1F0F7',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           data={data}
           search
-          maxHeight={300}
+          maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select item' : '...'}
-          searchPlaceholder="Search..."
+          placeholder={!isFocus ? 'Select Apply For' : '...'}
+          searchPlaceholder="Select Apply For"
           value={value}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
@@ -106,36 +167,81 @@ const item=route.params.item;
             setValue(item.value);
             setIsFocus(false);
           }}
-          // renderLeftIcon={() => (
-          //   <AntDesign
-          //     style={styles.icon}
-          //     color={isFocus ? 'blue' : 'black'}
-          //     name="Safety"
-          //     size={20}
-          //   />
-          // )}
         />
+         <Text style={{fontSize:15,fontWeight:'400',marginTop:20}}>Reason for Dispute</Text>
+    <TextInput placeholder='Enter Reason for Dispute'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <Text style={{fontSize:15,fontWeight:'400',}}>Please Upload Your Evidence</Text>
+    <TouchableOpacity onPress={pickImage}>
+    <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
+      <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
+    <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 1</Text>
+    <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
     </View>
+    </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={pickImage}>
+    <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
+      <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
+    <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 2</Text>
+    <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
+    </View>
+    </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={pickImage}>
+    <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
+      <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
+    <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 3</Text>
+    <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
+    </View>
+    </View>
+    </TouchableOpacity>
+    <Text style={{fontSize:15,fontWeight:'400',marginTop:30}}>Upload Video</Text>
+    <TouchableOpacity onPress={pickImage}>
+    <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
+      <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
+    <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 1</Text>
+    <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
+    </View>
+    </View>
+    </TouchableOpacity>
+</View>
+
         </View>
-       </View>
+        <View style={styles.buttonView}>
+    <Button 
+    loader={loader}
+      btnPress={Submit}
+      label={"Submit"}
+    />
+  </View>
+       </ScrollView>
          
     )
 }
 const styles = StyleSheet.create({
-  
-    buttonView: {
-      height:Metrics.ratio(15),
-      backgroundColor:'#FE3F01',
-  borderRadius:Metrics.ratio(2),
-      width: Metrics.ratio(55),
-      justifyContent: "center",
-      alignItems: "center",
-      alignSelf:'center',
-      marginLeft:Metrics.ratio(5),
-      bottom:Metrics.ratio(10)
-  
+  buttonView: {
+    height:Metrics.vh*5,
+    backgroundColor:'#FF2F00',
+    borderRadius:Metrics.ratio(70),
+    width: Metrics.vw * 90,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf:'center',
+    
+  },
+    InputContainer:{
+      marginTop:Metrics.ratio(3),
+      marginBottom:Metrics.ratio(10),
+      backgroundColor:'#F1F0F7',
+      borderRadius:5,
+      fontSize:15,
+     width:'100%',
+     height:Metrics.ratio(80),
     },
-   
     icon: {
       width: Metrics.ratio(15),
       height:  Metrics.ratio(15),
@@ -260,10 +366,10 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
   },
   dropdown: {
-    height: 50,
-    borderColor: 'gray',
+    height: 35,
     borderWidth: 0.5,
-    borderRadius: 8,
+    backgroundColor:'#F1F0F7',
+    borderRadius: 5,
     paddingHorizontal: 8,
   },
   icon: {

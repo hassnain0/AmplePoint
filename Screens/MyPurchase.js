@@ -202,14 +202,14 @@ setLoader(true);
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>SKU:#{item.product_sku}</Text>
-<Text style={{ fontSize:8,backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(1),width:Metrics.ratio(40),left:Metrics.ratio(10),textAlign:'center',
+<Text style={{ fontSize:8,
         fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>{item.total_amount}</Text>
   </View>
   <View>
-    
+
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android

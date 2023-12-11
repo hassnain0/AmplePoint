@@ -70,17 +70,16 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
       ndkVersion rootProject.ext.ndkVersion
-
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    
-
-    namespace "com.amplepoint"  
-    defaultConfig {
+      compileSdkVersion rootProject.ext.compileSdkVersion
+      buildToolsVersion "30.0.3" 
+      namespace "com.amplepoint"  
+      defaultConfig {
         applicationId "com.amplepoint"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
     }
     signingConfigs {
         release {
