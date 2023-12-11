@@ -249,12 +249,7 @@ setLoader(true);
     android: 'serif', // You may need to adjust this for Android
   }),}}>Question</Text>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.buttonView} onPress={()=>setRedeem(true)}>
-           <Text style={{color:'white', fontSize:7,fontWeight:'600', fontFamily: Platform.select({
-    ios: 'Arial',
-    android: 'serif', // You may need to adjust this for Android
-  }),}}>Redeem Order</Text>
-           </TouchableOpacity>
+
   </View>
   </View>
 

@@ -3,8 +3,8 @@ import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,Modal,Touchab
 import { Colors, Metrics } from '../themes';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-import util from '../helpers/util';
 import Return from './Return';
+import AskQuestion from './AskQuestion';
 
 const LocalPurchase= ({navigation}) => {
 //   const route=useRoute();
@@ -57,7 +57,10 @@ setLoading(false)
   const Return=()=>{
 
   }
-  const Question=()=>{
+  const Question=(item)=>{
+    navigation.navigate("AskQuestion",{
+      item,
+    })
     
   }
   const handleCloseDialog = () => {
@@ -143,7 +146,7 @@ const handleProductPress=(item)=>{
     android: 'serif', // You may need to adjust this for Android
   }),}}>Return</Text>
            </TouchableOpacity >
-           <TouchableOpacity onPress={()=>navigation.navigate("Question")} style={styles.buttonView}>
+           <TouchableOpacity onPress={() => Question(item)} style={styles.buttonView}>
            <Text style={{color:'white', fontSize:7,fontWeight:'600', fontFamily: Platform.select({
     ios: 'Arial',
     android: 'serif', // You may need to adjust this for Android
