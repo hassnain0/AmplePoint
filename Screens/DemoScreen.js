@@ -136,7 +136,7 @@ const getProductDetails = async () => {
 const styles=StyleSheet.create({
    
       ImageContainer:{
-        width: Metrics.ratio(200), 
+        width: Metrics.ratio( 150), 
         height: Metrics.ratio(130),
         borderRadius:20, 
       },
@@ -181,8 +181,8 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:10,
-        width: Metrics.ratio(190),
-        height: Metrics.ratio(180),
+        width: Metrics.ratio(170),
+        height: Metrics.ratio(170),
         
       },
       ProductContainer:{

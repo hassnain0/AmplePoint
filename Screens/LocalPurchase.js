@@ -5,14 +5,53 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import Return from './Return';
 import AskQuestion from './AskQuestion';
+import CustomDialog from './CustomDialog';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const LocalPurchase= ({navigation}) => {
 //   const route=useRoute();
 //   const User_Id=route.params.user_ID;
 //   console.log("User Id",User_Id)
-   const [deleteCount,setDelete]=useState(0);
+  const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
+   
+      const services = ['Painter','Electrician','Flat Tire Mechanic','Key Maker','Denter','Auto Mechanic','Body-Mechanic']; // Add other services as needed  
+      const handleServiceSelect =async (selected) => {
+          try{
   
+            const data={
+              Latitude: "24.8787702",
+              Longitude: "66.87899999999999",
+              Specialties: ["Painter","Denter"]          }
+            const url="https://zohaib964242.pythonanywhere.com/predict";
+      
+            // Using axios:
+            try {
+             
+              const response = await axios.post(url,data);
+             
+              if(response.data){
+                
+                navigation.navigate("Locations",{
+                  Data:response.data,
+                })
+                setLoading(false);
+              }
+              else{
+                setLoading(false);
+                setVisible(false);
+                util.errorMsg("No Nearby Mechanic found");
+                return false;
+              }
+            }
+          catch(erro){
+            console.log("Error",erro)
+          }}
+          catch(erro){
+            console.log("Error",erro)
+          }
+          }
+
   
   useEffect(()=>{
 getProductDetails();
@@ -20,6 +59,8 @@ setLoading(false)
   },[deleteCount])
   const [quantity, setQuantity] = useState(1);
   const [visibile, setVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
  const [loading,setLoading]=useState(true);
  //Number of Carts recieved from API
  const [product_no,setProduct_no]=useState(0);
@@ -30,7 +71,10 @@ setLoading(false)
 //   }
 
   //CheckOut
-  
+  const handleOpenDialog = (item) => {
+    setSelectedItem(item);
+    setVisible(true);
+  };
   const getProductDetails = async () => {
     try {    
       const apiUrl = 'https://amplepoints.com/apiendpoint/getuserlocalorderhistory?';
@@ -64,13 +108,16 @@ setLoading(false)
     
   }
   const handleCloseDialog = () => {
-    setDialogVisible(false);
+    setVisible(false);
   };
   const MyComponent =()=>{
 const handleProductPress=(item)=>{
   navigation.navigate("Return",{
     item,
   })
+}
+const DialogBox=(item)=>{
+
 }
     return (
       <View style={{flex:1,}}>
@@ -83,7 +130,7 @@ const handleProductPress=(item)=>{
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:13,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Times New Roman',android: 'serif', // You may need to adjust this for Android
 }), }}>{item.item_added.split(' ').slice(0, 3).join(' ')}</Text>
- <Text style={{ fontSize:8,marginRight:Metrics.ratio(10),
+ <Text style={{ fontSize:10,marginRight:Metrics.ratio(10),
         fontWeight:'700',bottom:Metrics.ratio(20),color:'#FF2E00',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
@@ -93,7 +140,7 @@ const handleProductPress=(item)=>{
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'00',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>Invoice No: {item.order_id}</Text>
-<View style={{backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(2),marginRight:Metrics.ratio(25),width:Metrics.ratio(40),height:Metrics.ratio(15),bottom:Metrics.ratio(20),left:Metrics.ratio(10),borderWidth:Metrics.ratio(0.5),}}>
+<View style={{backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(2),marginRight:Metrics.ratio(25),width:Metrics.ratio(50),height:Metrics.ratio(15),bottom:Metrics.ratio(20),left:Metrics.ratio(10),borderWidth:Metrics.ratio(0.5),}}>
 <Text style={{ fontSize:8,textAlign:'center',
         fontWeight:'600',color:'black', fontFamily: Platform.select({
     ios: 'Arial',
@@ -105,7 +152,7 @@ const handleProductPress=(item)=>{
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>SKU:#{item.product_sku}</Text>
-<Text style={{ fontSize:8,
+<Text style={{ fontSize:12,
         fontWeight:'800',bottom:Metrics.ratio(20),color:'black',marginRight:Metrics.ratio(25), fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
@@ -152,56 +199,67 @@ const handleProductPress=(item)=>{
     android: 'serif', // You may need to adjust this for Android
   }),}}>Question</Text>
            </TouchableOpacity>
-           <TouchableOpacity style={styles.buttonView} onPress={()=>setVisible(true)}>
-           <Text style={{color:'white', fontSize:7,fontWeight:'600', fontFamily: Platform.select({
-    ios: 'Arial',
-    android: 'serif', // You may need to adjust this for Android
-  }),}}>Redeem Order</Text>
-           </TouchableOpacity>
+          {item.product_order_status === 'In Process' ? (
+    <TouchableOpacity style={styles.buttonView} onPress={()=>handleOpenDialog(item)}>
+      <Text style={{
+        color: 'white',
+        fontSize: 7,
+        fontWeight: '600',
+        fontFamily: Platform.select({
+          ios: 'Arial',
+          android: 'serif', // You may need to adjust this for Android
+        }),
+      }}>Redeem Order</Text>
+    </TouchableOpacity>
+  ) : null}
   </View>
   </View>
 
   </View>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>
     </View>
-    
-        ))}
+    ))}
       </View>
     );
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {loading && (
-        <View style={styles.overlay}>
-          <Text style={{ textAlign: 'center', alignSelf: 'center' }}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
-
-        {actulaData &&(
-            
+                  <CustomDialog
+        visible={visibile}
+        onClose={handleCloseDialog}
+        item={selectedItem}
+      
+      />
+   {/* <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF' }}
+        />   */}
+          {actulaData &&(
           <View >
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
-                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(30),justifyContent: 'space-between',}}>
-                  <Text style={{left:0,color:'black',fontSize:10,textAlign:'center',fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
+                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(20),justifyContent: 'space-between',}}>
+                  <Text style={{left:0,color:'black',fontSize:9,textAlign:'center',fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
     ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
+    android: 'Times New Roman', // You may need to adjust this for Android
   }),}}>Item({product_no})</Text>
-                  <Text style={{color:'black',fontSize:10,textAlign:'center',fontWeight:'700',fontFamily: Platform.select({
+                  <Text style={{color:'black',fontSize:9,textAlign:'center',fontWeight:'700',fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Total : {actulaData.cart_total} $</Text>
                     </View>
+        
                   </View>
+
                   <MyComponent/> 
                          
                         <Toast ref={ref => Toast.setRef(ref)} />                    
                         
             </ScrollView>   
             </View>
-            
-              
+
       )}
     </SafeAreaView>
 );

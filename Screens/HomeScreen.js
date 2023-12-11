@@ -1,10 +1,10 @@
 import React, { useEffect,useRef,useState } from 'react';
-import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet, Image,TextInput,Platform} from "react-native";
+import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet,Alert,BackHandler, Image,TextInput,Platform, ScrollView} from "react-native";
 import Mall from './Mall';
 import Store from './Store';
 import Ionicons from 'react-native-vector-icons'
 import { Metrics } from '../themes';
-import { useRoute } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import Cart from './Cart';
@@ -27,6 +27,34 @@ const user_ID=Route.params.Data;
 //   const [thumbnail, setThumbnail] = useState(thumbnailUrl);
 //   const videoRef = useRef(null);
 
+
+useFocusEffect(
+  React.useCallback(() => {
+    const onBackPress = () => {
+      Alert.alert(
+        'Exit App',
+        'Are you sure you want to exit?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel'
+          },
+          {
+            text: 'Exit',
+            onPress: () => BackHandler.exitApp()
+          }
+        ],
+        { cancelable: false }
+      );
+      return true;
+    };
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  }, [])
+);
+
 useEffect(() => {
   const getHomeContent=async()=>{
     try {
@@ -41,19 +69,7 @@ useEffect(() => {
     }
     
     } 
-    // const fetchThumbnail = async () => {
-    //   try {
-    //     const thumbnailUrl = await getThumbnail({
-    //       url: videoUrl,
-    //       timeStamp: 10000, // specify the time for the thumbnail in milliseconds
-    //     });
-    //     setThumbnail(thumbnailUrl);
-    //   } catch (error) {
-    //     console.error('Error fetching thumbnail:', error);
-    //   }
-    // };
 
-    // fetchThumbnail();
   getHomeContent();
   getRewards();
   }, []);
@@ -90,6 +106,7 @@ const handlePlayPause = async () => {
 };
 return(
   <SafeAreaView>
+    <ScrollView>
     <View style={{backgroundColor:'#EEEEEE'}}>
         <View style={styles.header}>
         <Image source={require('../assets/SideMenu.png') } style={styles.SideMenu}></Image>
@@ -131,35 +148,120 @@ Amples
         </TouchableOpacity>
     
     </View>
-    <View style={{  margin: Metrics.ratio(20),bottom:Metrics.ratio(10),elevation:10,height:'100%'}}>
+    <View style={{marginLeft:Metrics.ratio(20),bottom:Metrics.ratio(50) ,width:Metrics.ratio(350), height:Metrics.ratio(200), borderRadius: 20,borderTopEndRadius:20,
+    overflow: 'hidden',}}> 
     {images && (
   <ImageSlider
     data={images.map((imgUrl) => ({ img: imgUrl }))}
     autoPlay={true}
     closeIconColor="white"
+    
   />
 )}
-
-</View> 
- {/* <View style={styles.container}>
-      <TouchableOpacity onPress={handlePlayPause}>
-     
-          <Video
-            ref={videoRef}
-            source={{ uri: videoUrl }}
-            resizeMode="cover"
-            style={styles.video}
-            paused={!isPlaying}
-          />
-       
+ </View>
+  <View style={styles.rowContainer}>
+      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Store")}>
+      
+        <Image style={styles.ovalImage2} source={require('../assets/Store.jpeg')} />
+        <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
+       color:'black',fontStyle:'italic'}}>Store</Text>
+        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>Create your own store to</Text>
+        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>maximizes the sale</Text>
+      
       </TouchableOpacity>
-    </View> */}
+      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
+    
+        <Image style={styles.ovalImage2} source={require('../assets/Brand.jpeg')} />
+        <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
+       color:'black',fontStyle:'italic'}}>BRANDS</Text>
+        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>Add your brand to promote</Text>
+        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>on an interactive platform</Text>
+    
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
+      
+        <Image style={styles.ovalImage2} source={require('../assets/Mall.jpeg')} />
+        <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
+       color:'black',fontStyle:'italic'}}>MALL</Text>
+        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>Find your online shop at </Text>
+        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>your online mall</Text>
+      </TouchableOpacity>
+      
+    </View>
+    <View >  
+    </View>
+    <View style={{backgroundColor:'white',top:Metrics.ratio(30)}}>
+    <Text style={{ fontSize:15,fontWeight:'700',textAlign:'left',paddingTop:Metrics.ratio(20),paddingLeft:Metrics.ratio(20),
+       color:'black',}}>How it Works</Text>
+        <View style={styles.AnotherrowContainer}>
 
+      <View style={styles.cartContainer}>
+        <Image style={styles.cartImage} source={require('../assets/Join.png')} />
+        <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
+       color:'black',fontStyle:'italic'}}>Join Free</Text>
+        <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>SignUp for A Free</Text>
+        <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>Membership & Get 42</Text>
+        <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>Ample Points Valued at $5</Text>
+        <View style={styles.horizontalLine} />
+        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',}}>1 Ample Point=12 cents</Text>
+      </View>
+
+      {/* Second Cart Component */}
+      <View style={styles.cartContainer}>
+        <Image style={styles.cartImage} source={require('../assets/Join.png')} />
+        <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
+       color:'black',fontStyle:'italic'}}>Earn More</Text>
+        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Earn Ample Points For</Text>
+        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Shopping, Sharing Links &</Text>
+        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Watching Personlized Ads</Text>
+        <View style={styles.horizontalLine} />
+        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',}}>60 min = 60 AmplePoints =$7.20</Text>
+      </View>
+
+      {/* Third Cart Component */}
+      <View style={styles.cartContainer}>
+        <Image style={styles.ovalImageCarts} source={require('../assets/Join.png')} />
+        <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
+       color:'black',fontStyle:'italic'}}>Use Amples</Text>
+        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Use Your Ample Points </Text>
+        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>To Get Free Products &</Text>
+        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Discounts</Text>
+        <View style={styles.horizontalLine} />
+        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',}}>100 AmplePoints= $12.00</Text>
+      </View>
+    </View>
+    </View>
+    </ScrollView>
   </SafeAreaView>)}
 const styles=StyleSheet.create({
   container: {
     flex: 1,
 
+  },  horizontalLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'black', // Adjust the color as needed
+    alignSelf: 'stretch',
+    marginVertical: 10, // Adjust the margin as needed
+  },
+  AnotherrowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cartContainer: {
+    flex: 1,
+    elevation:1,
+    alignItems: 'center',
+    flexDirection:'column',
+    borderRadius:10
+  },
+  cartImage: {
+    width: 40, // Adjust the width and height as needed
+    height: 40,
+    resizeMode: 'cover', // Adjust the resizeMode as needed
+  },
+  cartText: {
+    fontSize: 16,
+    marginTop: 8, // Adjust the margin as needed
   },
   thumbnail: {
     width: 300,
@@ -171,14 +273,10 @@ const styles=StyleSheet.create({
   },
   text: {
     flex: 1,
-    marginHorizontal: 16, // Adjust the spacing between components as needed
-    textAlign: 'center',
-    alignSelf: 'center',
-    color:'black'
   },
   searchBarContainer: {
     backgroundColor: '#e0e0e0',
-    height: 50,
+    height: '50%',
 },
   searchBar2Container: {
     flex: 1, // This ensures the inner container takes up all available space
@@ -186,6 +284,7 @@ const styles=StyleSheet.create({
     justifyContent: 'center', 
     flexDirection:'row',
     padding: Metrics.ratio(10),
+    bottom:Metrics.ratio(20)
       },
   searchInput: {
     top:Metrics.ratio(1),
@@ -236,39 +335,48 @@ const styles=StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: Metrics.ratio(10),
     // paddingHorizontal:Metrics.ratio(5),
-  }, container: {
+  },rowContainer: {
+    marginTop:Metrics.ratio(10),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor:'white'
+  },
+  itemContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 16, // Adjust the spacing between rows as needed
+  ovalImage: {
+    width: Metrics.ratio(90), // Adjust the width and height as needed
+    height: Metrics.ratio(120),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'skyblue',
+    borderWidth:0.7
   },
-  image: {
-    width: 100, // Adjust the width as needed
-    height: 100, // Adjust the height as needed
-    resizeMode: 'cover',
-    borderRadius: 8, // Adjust the border radius for rounded corners
+  ovalImageCarts: {
+    width: Metrics.ratio(40), // Adjust the width and height as needed
+    height: Metrics.ratio(40),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'skyblue',
+    borderWidth:0.7
+  },
+  ovalImage1: {
+    paddingTop:Metrics.ratio(10),
+    width: Metrics.ratio(90), // Adjust the width and height as needed
+    height: Metrics.ratio(120),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'skygreen',
+    borderWidth:0.7
+  },
+  ovalImage2: {
+    width: Metrics.ratio(90), // Adjust the width and height as needed
+    height: Metrics.ratio(120),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'purple',
+    borderWidth:0.7
   },
   text: {
-    flex: 1,
-    marginHorizontal: 16, // Adjust the spacing between components as needed
-    textAlign: 'center',
-    alignSelf: 'center',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  thumbnail: {
-    width: 300,
-    height: 200,
-  },
-  video: {
-    width: 300,
-    height: 200,
+    fontSize: 16,
+    marginTop: 8, // Adjust the margin as needed
   },
 })
 export default HomeScreen;

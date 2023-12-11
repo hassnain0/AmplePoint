@@ -1,54 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,TouchableOpacity, SafeAreaView} from 'react-native';
+import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,Modal,TouchableOpacity, SafeAreaView} from 'react-native';
 import { Colors, Metrics } from '../themes';
-import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-import util from '../helpers/util';
-import Checkout from './Checkout';
-import { useRoute } from '@react-navigation/native';
+import Return from './Return';
+import AskQuestion from './AskQuestion';
+import CustomDialog from './CustomDialog';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const MyPurchase= ({navigation}) => {
 //   const route=useRoute();
 //   const User_Id=route.params.user_ID;
 //   console.log("User Id",User_Id)
-   const [deleteCount,setDelete]=useState(0);
+  const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
+   
+      const services = ['Painter','Electrician','Flat Tire Mechanic','Key Maker','Denter','Auto Mechanic','Body-Mechanic']; // Add other services as needed  
+      const handleServiceSelect =async (selected) => {
+          try{
   
+            const data={
+              Latitude: "24.8787702",
+              Longitude: "66.87899999999999",
+              Specialties: ["Painter","Denter"]          }
+            const url="https://zohaib964242.pythonanywhere.com/predict";
+      
+            // Using axios:
+            try {
+             
+              const response = await axios.post(url,data);
+             
+              if(response.data){
+                
+                navigation.navigate("Locations",{
+                  Data:response.data,
+                })
+                setLoading(false);
+              }
+              else{
+                setLoading(false);
+                setVisible(false);
+                util.errorMsg("No Nearby Mechanic found");
+                return false;
+              }
+            }
+          catch(erro){
+            console.log("Error",erro)
+          }}
+          catch(erro){
+            console.log("Error",erro)
+          }
+          }
+
   
   useEffect(()=>{
 getProductDetails();
 setLoading(false)
   },[deleteCount])
   const [quantity, setQuantity] = useState(1);
-  const [loader, setLoader] = useState(false);
+  const [visibile, setVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
  const [loading,setLoading]=useState(true);
  //Number of Carts recieved from API
  const [product_no,setProduct_no]=useState(0);
-
- const increaseQuantity = (item) => {
-  setActualData((prevData) => {
-    console.log('Previous Data:', prevData);
-
-    const newData = [...prevData.data];
-    const itemIndex = newData.findIndex((dataItem) => dataItem.id === item.id);
-
-    console.log("Index", itemIndex);
-
-    if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
-      newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) + 1).toString();
-    
-      const updatedData = { ...prevData, data: newData };
-    
-    
-      return updatedData;
-    }
-
-    
-    return prevData;
-  });
-};
-
 
 
 //   const CheckOutScreen=()=>{
@@ -56,68 +71,19 @@ setLoading(false)
 //   }
 
   //CheckOut
-  const Checkout=async()=>{
-setLoader(true);
-     try {    
-        const apiUrl = 'https://amplepoints.com/apiendpoint/getuserorderhistory?';
-        const response = await axios.get(apiUrl, {
-          params: {
-            user_id:126,
-          },
-        });
-        console.log("Response",response.data.message)
-        // Handle the successful response
-      
-      if(response.data.status=='F'){
-        setLoader(false);
-        util.errorMsg(response.data.message)
-        return;
-      }
-      else{
-        setLoader(false);
-        CallCheckoutApi();
-      }
-      }
-       catch (error) {
-        // Handle the error
-        console.error('Error:', error);
-      }
-    
-  }
-
-  const CallCheckoutApi=async()=>{
-    setLoader(true);
-     try {    
-        const apiUrl = 'https://amplepoints.com/apiendpoint/checkout?';
-        const response = await axios.get(apiUrl, {
-          params: {
-            user_id:126,
-          },
-        });
-        console.log("Response",response.data.message)
-        // Handle the successful response
-      
-        util.successMsg("Sucessfull");
-        setLoader(false);
-        navigation.navigate("Checkout")
-      
-      }
-       catch (error) {
-        // Handle the error
-        console.error('Error:', error);
-      }
-    
-  }
-
+  const handleOpenDialog = (item) => {
+    setSelectedItem(item);
+    setVisible(true);
+  };
   const getProductDetails = async () => {
     try {    
-      const apiUrl = 'https://amplepoints.com/apiendpoint/getuserorderhistory?';
+      const apiUrl = 'https://amplepoints.com/apiendpoint/getuserlocalorderhistory?';
       const response = await axios.get(apiUrl, {
         params: {
           user_id:126,
         },
       });
-      console.log("Response",response.data)
+  
       // Handle the successful response
       setActualData(response.data)
       setProduct_no(response.data.length);
@@ -126,52 +92,36 @@ setLoader(true);
       if(response.data && response.data.data.quantity){
       setQuantity(response.data.data.quantity)
       }
-    console.log('cart_items.price',cart_items.amount)
-
     } catch (error) {
       // Handle the error
       console.error('Error:', error);
     }
   };
-  const delProduct = async (item) => {
-    try {
-    
-      const apiUrl = 'https://amplepoints.com/apiendpoint/removetocart?';
-
-      const response = await axios.get(apiUrl, {
-        params: {
-        user_id:item.vendor_id,
-         product_id:item.product_id,
-         product_added_id:item.productaddedid 
-        },
-
-        
-      });
-    console.log("Response",response.data);
-    if (response.status === 'S') {
-      util.successMsg("Item SUccessfully removed")
-      // Reload your screen or perform any other actions here
-      // For example, you can force a re-render by updating a state variable
-      setDelete((prev) => prev + 1); 
-    }
-      
-    } catch (error) {
-      // Handle the error
-      console.error('Error:', error);
-    }
-  };
+ 
   const Return=()=>{
 
   }
-  const Question=()=>{
+  const Question=(item)=>{
+    navigation.navigate("AskQuestion",{
+      item,
+    })
     
   }
-  const Redeem=()=>{
-    
-  }
+  const handleCloseDialog = () => {
+    setVisible(false);
+  };
   const MyComponent =()=>{
+const handleProductPress=(item)=>{
+  navigation.navigate("Return",{
+    item,
+  })
+}
+const DialogBox=(item)=>{
+
+}
     return (
       <View style={{flex:1,}}>
+      
         {actulaData?.data?.map((item, index) => (
           <View>
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
@@ -179,34 +129,34 @@ setLoader(true);
   <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:13,fontWeight:'800',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Times New Roman',android: 'serif', // You may need to adjust this for Android
-}), }}>{item.item_added.split(' ').slice(0, 4).join(' ')}</Text>
-<Text style={{ fontSize:8,
+}), }}>{item.item_added.split(' ').slice(0, 3).join(' ')}</Text>
+ <Text style={{ fontSize:10,marginRight:Metrics.ratio(10),
         fontWeight:'700',bottom:Metrics.ratio(20),color:'#FF2E00',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>{item.purchase_date}</Text>
-  <View>
-  </View>
+
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'00',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>Invoice No: {item.order_id}</Text>
-<Text style={{ fontSize:8,backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(1),width:Metrics.ratio(40),left:Metrics.ratio(10),textAlign:'center',
-        fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
+<View style={{backgroundColor:'#EEEEEE',borderRadius:Metrics.ratio(2),marginRight:Metrics.ratio(25),width:Metrics.ratio(50),height:Metrics.ratio(15),bottom:Metrics.ratio(20),left:Metrics.ratio(10),borderWidth:Metrics.ratio(0.5),}}>
+<Text style={{ fontSize:8,textAlign:'center',
+        fontWeight:'600',color:'black', fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Qty:{item.quantity}</Text>
-    <View>
   </View>
+
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
 }), }}>SKU:#{item.product_sku}</Text>
-<Text style={{ fontSize:8,
-        fontWeight:'600',bottom:Metrics.ratio(20),color:'black',borderWidth:Metrics.ratio(0.5), fontFamily: Platform.select({
+<Text style={{ fontSize:12,
+        fontWeight:'800',bottom:Metrics.ratio(20),color:'black',marginRight:Metrics.ratio(25), fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
-  }), }}>{item.total_amount}</Text>
+  }), }}>${item.total_amount}</Text>
   </View>
   <View>
 
@@ -222,13 +172,13 @@ setLoader(true);
   }), }}>Order Status:<Text style={{ color: '#FF2E00' }}>{item.product_order_status}</Text>
       </Text>
   </View>
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+  <View style={{ flexDirection: 'row',}}>
   <Text style={{ fontSize:8,fontWeight:'700',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Ample Earned:<Text style={{ color: '#FF2E00' }}>{item.earned_amples}</Text>
       </Text>
-      <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({
+      <Text style={{ fontSize:8,fontWeight:'800',bottom:Metrics.ratio(20),left:Metrics.ratio(50) ,color:'black',fontFamily: Platform.select({
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>Ample Redeemed:<Text style={{ color: '#FF2E00' , fontSize:8}}>{item.apply_amples}</Text>
@@ -237,62 +187,80 @@ setLoader(true);
   <View>  
   </View>
   <View style={{flex:1 , flexDirection:'row'}}>
-  <TouchableOpacity style={styles.buttonView} onPress={()=>navigation.navigate("Return")}>
+  <TouchableOpacity style={styles.buttonView} onPress={() => handleProductPress(item)}>
            <Text style={{color:'white', fontSize:7, fontFamily: Platform.select({
     ios: 'Arial',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Return</Text>
            </TouchableOpacity >
-           <TouchableOpacity onPress={()=>navigation.navigate("Question")} style={styles.buttonView}>
+           <TouchableOpacity onPress={() => Question(item)} style={styles.buttonView}>
            <Text style={{color:'white', fontSize:7,fontWeight:'600', fontFamily: Platform.select({
     ios: 'Arial',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Question</Text>
            </TouchableOpacity>
-
+          {item.product_order_status === 'In Process' ? (
+    <TouchableOpacity style={styles.buttonView} onPress={()=>handleOpenDialog(item)}>
+      <Text style={{
+        color: 'white',
+        fontSize: 7,
+        fontWeight: '600',
+        fontFamily: Platform.select({
+          ios: 'Arial',
+          android: 'serif', // You may need to adjust this for Android
+        }),
+      }}>Redeem Order</Text>
+    </TouchableOpacity>
+  ) : null}
   </View>
   </View>
 
   </View>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>
     </View>
-    
-        ))}
+    ))}
       </View>
     );
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {loading && (
-        <View style={styles.overlay}>
-          <Text style={{ textAlign: 'center', alignSelf: 'center' }}>Loading....</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
-
-        {actulaData &&(
+       <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF' }}
+        /> 
+                  <CustomDialog
+        visible={visibile}
+        onClose={handleCloseDialog}
+        item={selectedItem}
+      
+      />
+  
+          {actulaData &&(
           <View >
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
-                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(30),justifyContent: 'space-between',}}>
-                  <Text style={{left:0,color:'black',fontSize:12,fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
+                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(20),justifyContent: 'space-between',}}>
+                  <Text style={{left:0,color:'black',fontSize:9,textAlign:'center',fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
     ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
+    android: 'Times New Roman', // You may need to adjust this for Android
   }),}}>Item({product_no})</Text>
-                  <Text style={{color:'black',fontSize:12,fontWeight:'700',fontFamily: Platform.select({
+                  <Text style={{color:'black',fontSize:9,textAlign:'center',fontWeight:'700',fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Total : {actulaData.cart_total} $</Text>
                     </View>
+        
                   </View>
+
                   <MyComponent/> 
                          
                         <Toast ref={ref => Toast.setRef(ref)} />                    
                         
             </ScrollView>   
             </View>
-            
-              
+
       )}
     </SafeAreaView>
 );
@@ -316,8 +284,8 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     height:Metrics.ratio(15),
-    backgroundColor:'#FF2F00',
-borderRadius:Metrics.ratio(5),
+    backgroundColor:'#FE3F01',
+borderRadius:Metrics.ratio(2),
     width: Metrics.ratio(55),
     justifyContent: "center",
     alignItems: "center",
@@ -384,72 +352,7 @@ right:Metrics.ratio(40)
     textAlign: 'center',
     width: '20%',
   },
-  submitButton: {
-    backgroundColor: '#FF4001',
-    paddingVertical: Metrics.ratio(12),
-    paddingHorizontal: Metrics.ratio(20),
-    borderRadius: Metrics.ratio(8),
-  },
-  container2: {
-    left:Metrics.ratio(10),
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    justifyContent: 'space-around',
-  },
-  quantityText: {
-    backgroundColor:'white',
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: 'black',
-    bottom:Metrics.ratio(30),
-    marginLeft:Metrics.ratio(10),
-    marginRight:Metrics.ratio(10)
-
-  },
-  button1: {
-    backgroundColor: '#C9CBC8',
-borderRadius: 1,
-bottom:Metrics.ratio(30),
-left:Metrics.ratio(40)
-  },button3: {
-    color:'white',
-    backgroundColor: '#FC3F01',
-borderRadius: 5,
-width:Metrics.ratio(80),
-height:Metrics.ratio(40),
-  },
-  submitButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  }, 
-  TouchContainer1:{
-    position: 'absolute',
-    top: Metrics.ratio(-40), // Adjust as needed
-    left: Metrics.ratio(55), // Adjust as needed// Optional: add a background color to make the text more readable
-    paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
-  },
-  TouchContainer2:{
-    position: 'absolute',
-    bottom: Metrics.ratio(50), // Adjust as needed
-    left: Metrics.ratio(-30), // Adjust as needed// Optional: add a background color to make the text more readable
-    // Optional: add padding for better visibility
-  },
-  TextContainer1:{
-    paddingTop:Metrics.ratio(20),
-    paddingLeft:Metrics.ratio(20),
-    fontSize:15,
-    color:'white',
-    fontWeight:'bold',
-},
-TextContainer2:{
-  paddingTop:Metrics.ratio(20),
-  paddingLeft:Metrics.ratio(20),
-  fontSize:15,
-  color:'white',
-  fontWeight:'bold',
-},
+ 
 });
 
 export default MyPurchase;

@@ -37,12 +37,6 @@ const Return=()=>{
       { cancelable: false }
     );
   };
-useEffect(()=>{
-  // checkPermission();
-  
-})
- 
-  
 
 
   const LaunchimageLibrary = () => {

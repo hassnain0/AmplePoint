@@ -7025,6 +7025,11 @@
   "resolved" "https://registry.npmjs.org/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz"
   "version" "1.3.1"
 
+"react-native-loading-spinner-overlay@^3.0.1":
+  "integrity" "sha512-4GdR54HQnKg2HPSSisVizfTLuyhSh4splY9eb8mKiYF1Ihjn/5EmdNo5bN3S7uKPFRC3WLzIZIouX6G6fXfnjw=="
+  "resolved" "https://registry.npmjs.org/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz"
+  "version" "3.0.1"
+
 "react-native-otp-entry@^1.3.0":
   "integrity" "sha512-fcEd3DRfoBO/InImo9IIV/DF9iahWaei4BK8TSOVynEK1PTXszpThdhN31Jubx7b1zYEoq1ejRBg9WMVNfVhUA=="
   "resolved" "https://registry.npmjs.org/react-native-otp-entry/-/react-native-otp-entry-1.3.0.tgz"
