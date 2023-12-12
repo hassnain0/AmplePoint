@@ -109,41 +109,6 @@ const getProductDetails = async () => {
 
     return (
   <ScrollView>
-     <View style={{backgroundColor:'#EEEEEE'}}>
-        <View style={styles.header}>
-        <Image source={require('../assets/SideMenu.png') } style={styles.SideMenu}></Image>
-<Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
-          <View>
-          <Text style={{
-  color: 'black',
-  fontSize: 9,
-  fontFamily: Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
-  }),
-}}>
-  {amplePoints}
-</Text>
-<Text style={{
-  color: 'black',
-  fontSize: 9,
-  fontFamily: Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
-  }),
-}}>
-Amples
-</Text>
-          </View>
-          <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
-            user_ID,
-          })}>
-          <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
-          </TouchableOpacity>
-        </View>
-        </View>
-        
-    
     <View style={styles.container}>
         <View style={styles.searchBarContainer}>
         <View style={styles.searchBar2Container}>
@@ -191,23 +156,8 @@ const styles=StyleSheet.create({
     borderWidth: 0.4,
     padding: 10,
     width: '90%',
-    borderRadius:7,
+    borderRadius:10,
     backgroundColor:'white'
-  },
-  Logo:{
-    marginLeft:Metrics.ratio(70),
-    width:Metrics.ratio(200),
-    height:Metrics.ratio(30),
-  },  
-  Icon:{
-    width:Metrics.ratio(30),
-    height:Metrics.ratio(30),
-    left:Metrics.ratio(10)
-  },
-  SideMenu:{
-    width:Metrics.ratio(30),
-    height:Metrics.ratio(30),
-    left:Metrics.ratio(10)
   },
       ImageContainer:{
         width: Metrics.ratio(200), 

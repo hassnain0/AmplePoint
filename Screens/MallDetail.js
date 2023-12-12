@@ -1,8 +1,9 @@
 import React,{useState,useEffect,} from 'react';
 import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
-import { Metrics } from '../themes';
+import { Colors, Metrics } from '../themes';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ProductItem = ({ product }) => {
     const vendors = product.vendor_list;
@@ -42,7 +43,8 @@ const ProductItem = ({ product }) => {
 
 const MallDetail=({navigation})=>{
     const route=useRoute();
-    console.log("Route",route.params.Id)
+    const Name=route.params.Name
+    console.log("Route",route.params.Name)
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(null);
   useEffect(() => {
@@ -130,15 +132,23 @@ const getProductDetails = async () => {
 
     return (
   <ScrollView>
+       <View style={styles.header}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.leftIconView}
+            onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{width:28,height:28}}/>
+          </TouchableOpacity>
+          <Text style={styles.textHeader}>{Name} Mall</Text>
+        </View>
     <View style={styles.container}>
-        {loading && (
-          <View style={styles.overlay}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
-              Loading....
-            </Text>
-            <ActivityIndicator size="large" color="#FF2E00" />
-          </View>
-        )}
+    <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {filteredProducts
           ? renderFlatList(filteredProducts)
           : chunkedData.map((chunk, index) => (
@@ -153,6 +163,25 @@ const styles=StyleSheet.create({
   searchBarContainer: {
     backgroundColor: '#e0e0e0',
     height: 50,
+},
+textHeader: {
+  textAlign:'center',
+  alignContent:'center',
+  color: Colors.white,
+  fontSize: Metrics.ratio(15),
+  paddingLeft: Metrics.ratio(20),
+  fontFamily: Platform.select({
+    ios: 'Times New Roman',
+    android: 'serif', // You may need to adjust this for Android
+  }),
+},
+leftIconView: {
+  paddingHorizontal: Metrics.ratio(25),
+  height: Metrics.ratio(20),
+  width:Metrics.ratio(20),
+  justifyContent: 'center',
+  alignItems: 'center',
+
 },
   searchBar2Container: {
     flex: 1, // This ensures the inner container takes up all available space
@@ -195,12 +224,34 @@ const styles=StyleSheet.create({
         color: 'black', // Optional: set the text color
         fontWeight:'bold'
       },
-      
+      Icon:{
+        width:Metrics.ratio(27),
+        height:Metrics.ratio(32),
+        left:Metrics.ratio(10)
+      },
+      SideMenu:{
+        width:Metrics.ratio(40),
+        height:Metrics.ratio(40),
+        left:Metrics.ratio(10)
+      },
+      header: {
+        backgroundColor: "#EEEEEE",
+        flexDirection: 'row',
+        paddingVertical: Metrics.ratio(1),
+        // paddingHorizontal:Metrics.ratio(5),
+      },
       productItem: {
         backgroundColor:'#FFFF',
         margin: Metrics.ratio(10),
         borderRadius:5,
         elevation:3
+      },
+      header: {
+        backgroundColor:'#FF2E00',
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingVertical: Metrics.ratio(30),
+        // paddingHorizontal:Metrics.ratio(5),
       },
       TextContainer: {
         fontSize:15,

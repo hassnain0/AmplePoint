@@ -3,6 +3,11 @@ import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+import Brands from './Brands';
+import Mall from './Mall';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 const ProductItem = ({ product }) => {
 
   return (
@@ -12,11 +17,11 @@ const ProductItem = ({ product }) => {
     <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:Metrics.ratio(10)}}>{product.vendor_name}</Text>
     <View style={{flex:1,flexDirection:'row'}}>
         <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', color:'black',}}>{product.vendor_city}</Text>
+        <Text style={{fontSize:10,fontWeight:'bold',}}>{product.vendor_city}</Text>
     </View>
     <View style={{flex:1,flexDirection:'row'}}>
         <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', color:'black',}}>{product.tbl_vndr_zip}</Text>
+        <Text style={{fontSize:10,fontWeight:'bold', }}>{product.tbl_vndr_zip}</Text>
     </View>
     </View>
   );
@@ -25,6 +30,10 @@ const ProductItem = ({ product }) => {
 const Store=({navigation})=>{
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(null);
+  const [amplePoints,setAmplePoints]=useState(0);
+  const route=useRoute();
+  const user_Id=route.params.user_ID;
+  
   useEffect(() => {
     // Filter products based on search query
     if (searchQuery) {
@@ -38,14 +47,15 @@ const Store=({navigation})=>{
   }, [searchQuery, storeProducts]);
    
   const handleProductPress = (productData) => {
+    const Name=productData.vendor_name
     const Id=productData.tbl_vndr_id
     navigation.navigate('DemoScreen',{
       Id,
-      
+      Name,
     });
   };
   useEffect(()=>{
-    
+    getRewards();
     getProductDetails();
   },[])
   const [storeProducts, setStoreProducts] = useState(null);
@@ -57,7 +67,7 @@ const getProductDetails = async () => {
         await axios.get(apiUrl)
         .then(response => {
           // Handle the successful response
-        console.log("Response",response.data)
+    
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
@@ -78,8 +88,25 @@ const getProductDetails = async () => {
       setLoading(false);
     }
   }
+  const getRewards=async()=>{
+    try{
+      const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
+     const Response= await axios.get(apiUrl, {
+        params: {
+          user_id:user_Id,
+        },
+      });
+  
+     if(Response.data &&Response.data.data.user_total_ample)
+     {
+      setAmplePoints(Response.data.data.user_total_ample);
+     }
+    }catch(erro){
+      console.log("Error",erro)
+    }
+   }
     const renderFlatList = (data) => (
-      <View>
+      <View style={{backgroundColor:'white'}}>
       <FlatList
         numColumns={3} 
        data={data}
@@ -105,17 +132,77 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
-  <ScrollView>
-    <View style={styles.container}>
-       
-        {loading && (
-          <View style={styles.overlay}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
-              Loading....
-            </Text>
-            <ActivityIndicator size="large" color="#FF2E00" />
+  <ScrollView style={{backgroundColor:'#EEEEEE'}}>
+
+     <View style={{backgroundColor:'#EEEEEE'}}>
+        <View style={styles.header}>
+        <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
+<Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
+          <View>
+          <Text style={{
+  color: 'black',
+  fontSize: 9,
+  fontFamily: Platform.select({
+    ios: 'Times New Roman',
+    android: 'serif', // You may need to adjust this for Android
+  }),
+}}>
+  {amplePoints}
+</Text>
+<Text style={{
+  color: 'black',
+  fontSize: 9,
+  fontWeight:'600',
+  fontFamily: Platform.select({
+    ios: 'Times New Roman',
+    android: 'serif', // You may need to adjust this for Android
+  }),
+}}>
+Amples
+</Text>
           </View>
-        )}
+          <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
+            user_Id,
+          })}>
+          <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
+          </TouchableOpacity>
+        </View>
+        </View>
+        
+        <View style={{backgroundColor:'white', flex:1,flexDirection:'row'}}>
+        <View>
+
+        </View>
+        </View>
+        <View style={styles.rowContainer}>
+      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
+      
+        <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
+      
+      
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
+    
+        <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
+      
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
+      
+        <Image style={styles.ovalImage2} source={require('../assets/Banner.png')} />
+      
+      </TouchableOpacity>
+      
+    </View>
+    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10)}} >  
+    </View>
+    <View style={{backgroundColor:'white'}}>
+    <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {filteredProducts
           ? renderFlatList(filteredProducts)
           : chunkedData.map((chunk, index) => (
@@ -127,6 +214,40 @@ const getProductDetails = async () => {
       }
 
 const styles=StyleSheet.create({
+  ovalImage1: {
+    paddingTop:Metrics.ratio(10),
+    width: Metrics.ratio(90), // Adjust the width and height as needed
+    height: Metrics.ratio(120),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'skygreen',
+    borderWidth:0.7
+  },
+  ovalImage2: {
+    width: Metrics.ratio(120), // Adjust the width and height as needed
+    height: Metrics.ratio(90),
+    borderRadius: Metrics.ratio(20),
+
+  },
+  ovalImage3: {
+    width: Metrics.ratio(120), // Adjust the width and height as needed
+    height: Metrics.ratio(70),
+    borderRadius: Metrics.ratio(20),
+
+  },
+  ovalImage: {
+    width: Metrics.ratio(90), // Adjust the width and height as needed
+    height: Metrics.ratio(120),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'skyblue',
+    borderWidth:0.7
+  },
+  ovalImageCarts: {
+    width: Metrics.ratio(40), // Adjust the width and height as needed
+    height: Metrics.ratio(40),
+    borderRadius: Metrics.ratio(40),
+    borderColor:'skyblue',
+    borderWidth:0.7
+  },
   searchBarContainer: {
     marginTop:Metrics.ratio(20),
     marginLeft:Metrics.ratio(10),
@@ -143,6 +264,15 @@ const styles=StyleSheet.create({
   searchInput: {
     textAlign:'center',
     fontSize: Metrics.ratio(16),
+  },
+  rowContainer: {
+    flexDirection: 'row',
+
+    backgroundColor:'white'
+  },
+  itemContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
       ImageContainer:{
         width: Metrics.ratio(200), 
@@ -170,12 +300,33 @@ const styles=StyleSheet.create({
         color: 'black', // Optional: set the text color
         fontWeight:'bold'
       },
-      
+      Logo:{
+        marginLeft:Metrics.ratio(70),
+        width:Metrics.ratio(200),
+        height:Metrics.ratio(30),
+      },  
+      Icon:{
+        width:Metrics.ratio(30),
+        height:Metrics.ratio(30),
+        left:Metrics.ratio(10)
+      },
+      SideMenu:{
+        width:Metrics.ratio(30),
+        height:Metrics.ratio(30),
+        left:Metrics.ratio(10)
+      },
+      header: {
+        backgroundColor: "#EEEEEE",
+    
+        flexDirection: 'row',
+        paddingVertical: Metrics.ratio(7),
+        // paddingHorizontal:Metrics.ratio(5),
+      },
       productItem: {
         backgroundColor:'#FFFF',
         borderRadius:5,
         elevation:3,
-        margin:Metrics.ratio(15)
+        margin:Metrics.ratio(10)
       },
       TextContainer: {
         fontSize:15,
@@ -193,9 +344,10 @@ const styles=StyleSheet.create({
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
-        marginTop:Metrics.smallMargin,
-        width: Metrics.ratio(110),
-        height: Metrics.ratio(110),
+        margin:Metrics.smallMargin,
+        
+        width: Metrics.ratio(90),
+        height: Metrics.ratio(90),
         
       },
       ProductContainer:{

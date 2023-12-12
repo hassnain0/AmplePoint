@@ -1,10 +1,11 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity,} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import MallDetail from './MallDetail';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ProductItem = ({ product }) => {
     console.log("Image",`https://amplepoints.com/mall/logo/${product.top_logo}`)
@@ -31,37 +32,14 @@ const Mall=({navigation})=>{
       setFilteredProducts(null);
     }
   }, [searchQuery, storeProducts]);
-    useFocusEffect(
-        React.useCallback(() => {
-          const onBackPress = () => {
-            Alert.alert(
-              'Exit App',
-              'Are you sure you want to exit?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => null,
-                  style: 'cancel'
-                },
-                {
-                  text: 'Exit',
-                  onPress: () => BackHandler.exitApp()
-                }
-              ],
-              { cancelable: false }
-            );
-            return true;
-          };
-          BackHandler.addEventListener('hardwareBackPress', onBackPress);
-          return () =>
-            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        }, [])
-      );
+   
       
   const handleProductPress = (productData) => {
-    const Id=productData.venr_mall_id
+    const Id=productData.venr_mall_id;
+    const Name=productData.display_name
     navigation.navigate('MallDetail',{
       Id,
+      Name
       
     });
   };
@@ -129,7 +107,7 @@ const getProductDetails = async () => {
   <ScrollView>
     <View style={styles.container}>
         <View style={styles.searchBarContainer}>
-        <View style={styles.searchBar2Container}>
+        
           <TextInput
 
             style={styles.searchInput}
@@ -138,15 +116,14 @@ const getProductDetails = async () => {
             onChangeText={(text) => setSearchQuery(text)}
           />
         </View>
-        </View>
-        {loading && (
-          <View style={styles.overlay}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
-              Loading....
-            </Text>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        )}
+      
+        <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {filteredProducts
           ? renderFlatList(filteredProducts)
           : chunkedData.map((chunk, index) => (
@@ -160,7 +137,9 @@ const getProductDetails = async () => {
 const styles=StyleSheet.create({
   searchBarContainer: {
     backgroundColor: '#e0e0e0',
-    height: 50,
+    height: Metrics.ratio(50),
+    justifyContent:'center',
+    alignItems:'center'
 },
   searchBar2Container: {
     flex: 1, // This ensures the inner container takes up all available space
@@ -169,12 +148,13 @@ const styles=StyleSheet.create({
       },
   searchInput: {
     top:Metrics.ratio(1),
-    height: 35,
+    height: Metrics.ratio(35),
     borderColor: 'black',
     borderWidth: 0.5,
     padding: 10,
     width: '90%',
-    borderRadius:10,
+    fontSize:13,
+    borderRadius:15,
     backgroundColor:'white'
   },
       ImageContainer:{
@@ -205,10 +185,12 @@ const styles=StyleSheet.create({
       },
       
       productItem: {
-        backgroundColor:'#FFFF',
+        backgroundColor:'rgba(245,245,245,255)',
         margin: Metrics.ratio(10),
         borderRadius:5,
-        elevation:3
+        elevation:3,
+        alignItems:'center',
+        padding:Metrics.ratio(7)
       },
       TextContainer: {
         fontSize:15,
@@ -227,8 +209,8 @@ const styles=StyleSheet.create({
         alignItems:'center',
         alignSelf:'center',
         marginTop:Metrics.smallMargin,
-        width: Metrics.ratio(110),
-        height: Metrics.ratio(110),
+        width: Metrics.ratio(90),
+        height: Metrics.ratio(90),
         
       },
       ProductContainer:{

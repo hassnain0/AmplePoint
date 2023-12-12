@@ -9,7 +9,8 @@ import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import Cart from './Cart';
 import Brands from './Brands';
-// import { createDrawerNavigator} from '@react-navigation/drawer';
+// import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+// // import { createDrawerNavigator} from '@react-navigation/drawer';
 // const Drawer=createDrawerNavigator();
 // import Animated from 'react-native-reanimated';
 
@@ -54,7 +55,14 @@ useFocusEffect(
       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
   }, [])
 );
+//Navigation Store
+const MoveStore=()=>{
+  
+  navigation.navigate("Store",{
+    user_ID
 
+  })
+}
 useEffect(() => {
   const getHomeContent=async()=>{
     try {
@@ -109,7 +117,7 @@ return(
     <ScrollView>
     <View style={{backgroundColor:'#EEEEEE'}}>
         <View style={styles.header}>
-        <Image source={require('../assets/SideMenu.png') } style={styles.SideMenu}></Image>
+        <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
 <Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
           <View>
           <Text style={{
@@ -150,10 +158,10 @@ Amples
     </View>
     <View style={{backgroundColor:'white'}}>
     <View style={{
-  marginLeft: Metrics.ratio(20),
+  marginLeft: Metrics.ratio(7),
   bottom: Metrics.ratio(50),
-  width: Metrics.ratio(350),
-  height: Metrics.ratio(180),
+  width: Metrics.ratio(370),
+  height: Metrics.ratio(250),
   borderRadius: 20,
   
   }}> 
@@ -168,7 +176,7 @@ Amples
 
  </View> 
   <View style={styles.rowContainer}>
-      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Store")}>
+      <TouchableOpacity style={styles.itemContainer} onPress={MoveStore}>
       
         <Image style={styles.ovalImage2} source={require('../assets/Store.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
@@ -237,7 +245,6 @@ Amples
         <View style={styles.horizontalLine} />
         <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>100 AmplePoints= $12.00</Text>
       </View>
-      
     </View>
     <View >  
     </View>
@@ -328,18 +335,18 @@ const styles=StyleSheet.create({
     margin: 5,
   },
   Logo:{
-    marginLeft:Metrics.ratio(70),
+    marginLeft:Metrics.ratio(50),
     width:Metrics.ratio(200),
     height:Metrics.ratio(30),
   },  
   Icon:{
-    width:Metrics.ratio(30),
-    height:Metrics.ratio(30),
+    width:Metrics.ratio(27),
+    height:Metrics.ratio(32),
     left:Metrics.ratio(10)
   },
   SideMenu:{
-    width:Metrics.ratio(30),
-    height:Metrics.ratio(30),
+    width:Metrics.ratio(40),
+    height:Metrics.ratio(40),
     left:Metrics.ratio(10)
   },
   header: {
@@ -393,7 +400,6 @@ const styles=StyleSheet.create({
   },
 })
 export default HomeScreen;
-// export default function Home({ navigation }) {
 //   return (
 //     <View style={{ flex: 1 ,}}>
 //       <DrawerNavigation />
@@ -401,11 +407,11 @@ export default HomeScreen;
 //   );
 // }
 
-function DrawerNavigation() {
-  return (
-      <Drawer.Navigator  initialRouteName="HomeScreen" >
-      <Drawer.Screen name="HomeScreen" component={HomeScreen} options={{drawerIcon:({color})=>(<Ionicons name='home-outline' size={22} color={color} />),headerTitleAlign:'center'}} />
+// function DrawerNavigation() {
+//   return (
+//       <Drawer.Navigator  initialRouteName="HomeScreen"   >
+//       <Drawer.Screen name="HomeScreen" component={HomeScreen} options={{drawerIcon:({color})=>(<Ionicons name='home-outline' size={22} color={color} />),headerTitleAlign:'center'}} />
   
-      </Drawer.Navigator>
-  );
-}
+//       </Drawer.Navigator>
+//   );
+// }

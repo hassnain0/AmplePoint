@@ -178,7 +178,7 @@ return (
   <Text style={styles.TextContainer}>Sign Up</Text>
   </TouchableOpacity>
   <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',  borderRadius:Metrics.ratio(20),
-  backgroundColor:'#F0F1EC',top:Metrics.ratio(320), padding: Metrics.ratio(20)}}>
+  backgroundColor:'#F0F1EC',top:Metrics.ratio(290), padding: Metrics.ratio(20)}}>
   
     <Text style={{fontSize: 30, color: 'black', fontWeight: '500', paddingLeft: Metrics.ratio(30)}}>Login</Text>
     
@@ -282,8 +282,8 @@ const styles=StyleSheet.create({
       },
       ImageContainer:{
        backgroundColor:'white',
-        width: 'auto', 
-        height: '80%',
+        width: Metrics.ratio(400) ,
+        height: Metrics.ratio(450),
       
       },
       textContainer: {
