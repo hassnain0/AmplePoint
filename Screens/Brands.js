@@ -39,10 +39,12 @@ const Brands=({navigation})=>{
   }, [searchQuery, storeProducts]);
    
   const handleProductPress = (productData) => {
-    const Id=productData.tbl_vndr_id
+    const Id=productData.tbl_vndr_id;
+    const Name=productData.vendor_name
+    console.log("Name",Name)
     navigation.navigate('DemoScreen',{
       Id,
-      
+      Name,
     });
   };
   useEffect(()=>{
@@ -150,11 +152,11 @@ const styles=StyleSheet.create({
   searchInput: {
     top:Metrics.ratio(1),
     height: 35,
-    borderColor: 'black',
-    borderWidth: 0.5,
+    borderColor: '#C1C3C0',
+    borderWidth: 0.4,
     padding: 10,
     width: '90%',
-    borderRadius:10,
+    borderRadius:7,
     backgroundColor:'white'
   },
       ImageContainer:{

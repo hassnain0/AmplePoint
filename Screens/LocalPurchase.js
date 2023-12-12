@@ -6,7 +6,7 @@ import axios from 'axios';
 import Return from './Return';
 import AskQuestion from './AskQuestion';
 import CustomDialog from './CustomDialog';
-import Spinner from 'react-native-loading-spinner-overlay';
+// import Spinner from 'react-native-loading-spinner-overlay';
 
 const LocalPurchase= ({navigation}) => {
 //   const route=useRoute();

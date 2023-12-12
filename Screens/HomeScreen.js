@@ -148,17 +148,25 @@ Amples
         </TouchableOpacity>
     
     </View>
-    <View style={{marginLeft:Metrics.ratio(20),bottom:Metrics.ratio(50) ,width:Metrics.ratio(350), height:Metrics.ratio(200), borderRadius: 20,borderTopEndRadius:20,
-    overflow: 'hidden',}}> 
-    {images && (
-  <ImageSlider
-    data={images.map((imgUrl) => ({ img: imgUrl }))}
-    autoPlay={true}
-    closeIconColor="white"
-    
-  />
-)}
- </View>
+    <View style={{backgroundColor:'white'}}>
+    <View style={{
+  marginLeft: Metrics.ratio(20),
+  bottom: Metrics.ratio(50),
+  width: Metrics.ratio(350),
+  height: Metrics.ratio(180),
+  borderRadius: 20,
+  
+  }}> 
+  {images && (
+    <ImageSlider
+      data={images.map((imgUrl) => ({ img: imgUrl }))}
+      autoPlay={true}
+      closeIconColor="white"
+    />
+  )}
+</View>
+
+ </View> 
   <View style={styles.rowContainer}>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Store")}>
       
@@ -190,45 +198,51 @@ Amples
     </View>
     <View >  
     </View>
-    <View style={{backgroundColor:'white',top:Metrics.ratio(30)}}>
+    
+    <View style={{backgroundColor:'white',top:Metrics.ratio(30),}}>
     <Text style={{ fontSize:15,fontWeight:'700',textAlign:'left',paddingTop:Metrics.ratio(20),paddingLeft:Metrics.ratio(20),
        color:'black',}}>How it Works</Text>
         <View style={styles.AnotherrowContainer}>
 
       <View style={styles.cartContainer}>
-        <Image style={styles.cartImage} source={require('../assets/Join.png')} />
+        <Image style={styles.ovalImageCarts} source={require('../assets/Join.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Join Free</Text>
         <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>SignUp for A Free</Text>
         <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>Membership & Get 42</Text>
         <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>Ample Points Valued at $5</Text>
         <View style={styles.horizontalLine} />
-        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',}}>1 Ample Point=12 cents</Text>
+        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>1 Ample Point=12 cents</Text>
       </View>
 
       {/* Second Cart Component */}
       <View style={styles.cartContainer}>
-        <Image style={styles.cartImage} source={require('../assets/Join.png')} />
+        <Image style={styles.ovalImageCarts} source={require('../assets/Earn.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Earn More</Text>
         <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Earn Ample Points For</Text>
         <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Shopping, Sharing Links &</Text>
         <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Watching Personlized Ads</Text>
         <View style={styles.horizontalLine} />
-        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',}}>60 min = 60 AmplePoints =$7.20</Text>
+        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>60 min = 60 AmplePoints =$7.20</Text>
       </View>
 
-      {/* Third Cart Component */}
       <View style={styles.cartContainer}>
-        <Image style={styles.ovalImageCarts} source={require('../assets/Join.png')} />
+        <Image style={styles.ovalImageCarts} source={require('../assets/Cards.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Use Amples</Text>
         <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Use Your Ample Points </Text>
         <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>To Get Free Products &</Text>
         <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Discounts</Text>
         <View style={styles.horizontalLine} />
-        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',}}>100 AmplePoints= $12.00</Text>
+        <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>100 AmplePoints= $12.00</Text>
       </View>
+      
+    </View>
+    <View >  
+    </View>
+    <View style={{alignItems:'center',paddingTop:Metrics.ratio(30),paddingBottom:Metrics.ratio(40),backgroundColor:'white'}}>
+    <Image style={{width:'80%',height:Metrics.ratio(200)}} source={{uri:'https://amplepoints.com/images/vthumbnail.png'}}/>
     </View>
     </View>
     </ScrollView>
@@ -238,8 +252,8 @@ const styles=StyleSheet.create({
     flex: 1,
 
   },  horizontalLine: {
-    borderBottomWidth: 1,
-    borderBottomColor: 'black', // Adjust the color as needed
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#B6B8B5', // Adjust the color as needed
     alignSelf: 'stretch',
     marginVertical: 10, // Adjust the margin as needed
   },
@@ -249,14 +263,13 @@ const styles=StyleSheet.create({
   },
   cartContainer: {
     flex: 1,
-    elevation:1,
     alignItems: 'center',
     flexDirection:'column',
     borderRadius:10
   },
   cartImage: {
-    width: 40, // Adjust the width and height as needed
-    height: 40,
+    width: Metrics.ratio(40), // Adjust the width and height as needed
+    height: Metrics.ratio(40),
     resizeMode: 'cover', // Adjust the resizeMode as needed
   },
   cartText: {

@@ -1,6 +1,6 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler,} from 'react-native';
-import { Metrics } from '../themes';
+import {View,Text, StyleSheet,FlatList,Platform, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler, SafeAreaView,} from 'react-native';
+import { Colors, Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
@@ -39,6 +39,8 @@ const ProductItem = ({ product }) => {
 
 const DemoScreen=({navigation})=>{
   const route=useRoute();
+  const Name = route.params.Name;
+  console.log("Name",Name)
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
     navigation.navigate('GiftDetails',{ productData,route });
@@ -54,6 +56,7 @@ const DemoScreen=({navigation})=>{
 const getProductDetails = async () => {
   try{
     const vendorId = route.params.Id;
+   
     // Specify the initial page number
     let pageNumber = 1;
     const apiUrl = 'https://amplepoints.com/apiendpoint/productsbyseller?';
@@ -110,6 +113,16 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
+      <SafeAreaView>
+          <View style={styles.header}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.leftIconView}
+            onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{width:28,height:28}}/>
+          </TouchableOpacity>
+          <Text style={styles.textHeader}>{Name}</Text>
+        </View>
   <ScrollView>
       <View style={styles.container}>
       {loading && (
@@ -130,6 +143,7 @@ const getProductDetails = async () => {
       ))}
     </View>
     </ScrollView>
+    </SafeAreaView>
 )
       }
 
@@ -178,12 +192,29 @@ const styles=StyleSheet.create({
         bottom: Metrics.ratio(10), // Adjust as needed
         left: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
+      },  textHeader: {
+        textAlign:'center',
+        alignContent:'center',
+        color: Colors.white,
+        fontSize: Metrics.ratio(15),
+        paddingLeft: Metrics.ratio(20),
+        fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'serif', // You may need to adjust this for Android
+        }),
       },
       productImage: {
         borderRadius:10,
         width: Metrics.ratio(170),
         height: Metrics.ratio(170),
         
+      },
+      header: {
+        backgroundColor:'#FF2E00',
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingVertical: Metrics.ratio(15),
+        // paddingHorizontal:Metrics.ratio(5),
       },
       ProductContainer:{
         fontWeight:'bold',
@@ -200,7 +231,14 @@ const styles=StyleSheet.create({
         borderColor:'white',
         borderRadius: Metrics.borderRadius,
       },
-     
+      leftIconView: {
+        paddingHorizontal: Metrics.ratio(10),
+        height: Metrics.ratio(20),
+        width:Metrics.ratio(20),
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.transparent,
+      },
       trolleyIconContainer: {
         position: 'absolute',
         bottom: Metrics.ratio(5),

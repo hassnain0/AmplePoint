@@ -1,8 +1,6 @@
 import React ,{useEffect} from 'react';
 import {StyleSheet,ImageBackground, View} from 'react-native';
 import Login from './Login';
-import { Metrics } from '../themes';
-
 
 const  SplashScreen = ({navigation}) => {
 

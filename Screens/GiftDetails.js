@@ -199,7 +199,8 @@ const GetAmples = async () => {
         
          if(response.data.message=='Delivery  Detail Added Sucessfully'){
           util.successMsg("Delievery Submitted");     
-          setSubmit(true);     
+          setSubmit(true);   
+          navigation.navigate("Checkout")  
          }
         }).catch((err)=>{
          console.log("Error",err)

@@ -4,11 +4,23 @@ import { Checkbox } from 'react-native-paper';
 import util from '../helpers/util';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 const CustomDialog = ({ visible, onClose,item, }) => {
-  const [selectedServices, setSelectedServices] = useState([]);
+   const navigate=useNavigation();
+    const [selectedServices, setSelectedServices] = useState([]);
   const [loader,setLoader]=useState(false)
-console.log("Item Custom",item)
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        
+      onClose()
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
   const Submit=()=>{
     
   }
