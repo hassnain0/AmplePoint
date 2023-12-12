@@ -259,7 +259,7 @@ const getProductDetails = async () => {
   };
     const renderFlatList = (data) => (
    
-      <ScrollView style={{top:Metrics.ratio(30)}}>
+      <ScrollView style={{top:Metrics.ratio(20),paddingBottom:Metrics.ratio(10)}}>
     <FlatList
         data={data}
         showsVerticalScrollIndicator={false}
@@ -279,7 +279,7 @@ const getProductDetails = async () => {
       <View style={{ flex: 1,backgroundColor:'white' }}>
           {renderFlatList(storeProducts)}
       <View style={{backgroundColor:'#F1F0F7',borderTopLeftRadius:30,borderTopRightRadius:30}}>
-      <View style={{alignItems:'center',alignContent:'center',alignSelf:'center', flexDirection: 'row', paddingVertical: Metrics.ratio(30) }}>
+      <View style={{alignItems:'center',alignContent:'center',alignSelf:'center', flexDirection: 'row', paddingVertical: Metrics.ratio(20) }}>
   <Text style={{ fontWeight: '500', fontSize: 20, color: 'black',top:0 }}>Amount Payable</Text>
   <Text style={{ paddingLeft: Metrics.ratio(20), fontSize: 20, fontWeight: '500', color: 'black' }}>${Total}</Text>
 </View>

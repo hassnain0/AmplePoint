@@ -287,6 +287,8 @@ const resetForm = () => {
         <BouncyCheckbox
         style={{marginTop: Metrics.ratio(1),left:Metrics.ratio(10)}}
         isChecked={isChecked}
+        fillColor="#FF2E00"
+        unfillColor="#FFFFFF"
         onPress={Bounce}/>
            <View>
   <Text style={{right: Metrics.ratio(5), fontWeight: '600', color: 'black',}}>By Creating an account, you agree to AmplePoint.com's  </Text>

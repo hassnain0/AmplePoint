@@ -213,7 +213,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#FF2E00',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: Metrics.ratio(15),
+        paddingVertical: Metrics.ratio(30),
         // paddingHorizontal:Metrics.ratio(5),
       },
       ProductContainer:{
@@ -232,7 +232,7 @@ const styles=StyleSheet.create({
         borderRadius: Metrics.borderRadius,
       },
       leftIconView: {
-        paddingHorizontal: Metrics.ratio(10),
+        paddingHorizontal: Metrics.ratio(25),
         height: Metrics.ratio(20),
         width:Metrics.ratio(20),
         justifyContent: 'center',

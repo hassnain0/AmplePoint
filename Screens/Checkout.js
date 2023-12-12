@@ -84,36 +84,41 @@ const Checkout= ({navigation}) => {
 //       }
 
     
-// }
+// }'
+const data = [
+  { label: 'Refund Only', value: '1' },
+  { label: 'Refund Dispute', value: '2' },
+  
+];
 const onCheckout=()=>{
   navigation.navigate("OrderSummary")
 }
-const handleCity = (countryCode, stateCode) => {
-  var config = {
-    method: 'get',
-    url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-    headers: {
-      'X-CSCAPI-KEY': API_KEY,
-    },
-  };
+// const handleCity = (countryCode, stateCode) => {
+//   var config = {
+//     method: 'get',
+//     url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
+//     headers: {
+//       'X-CSCAPI-KEY': API_KEY,
+//     },
+//   };
 
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      var count = Object.keys(response.data).length;
-      let cityArray = [];
-      for (var i = 0; i < count; i++) {
-        cityArray.push({
-          value: response.data[i].id,
-          label: response.data[i].name,
-        });
-      }
-      setCity(cityArray);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
+//   // axios(config)
+//   //   .then(function (response) {
+//   //     console.log(JSON.stringify(response.data));
+//   //     var count = Object.keys(response.data).length;
+//   //     let cityArray = [];
+//   //     for (var i = 0; i < count; i++) {
+//   //       cityArray.push({
+//   //         value: response.data[i].id,
+//   //         label: response.data[i].name,
+//   //       });
+//   //     }
+//   //     setCity(cityArray);
+//   //   })
+//   //   .catch(function (error) {
+//   //     console.log(error);
+//   //   });
+// };
 const Pay=()=>{
 navigation.navigate("Payement")
 }
@@ -126,8 +131,11 @@ const Bounce=()=>{
   return (
   <SafeAreaView>
     <ScrollView style={{backgroundColor:'white'}}>
-    <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(50)}}>
-      <Text style={{top:Metrics.ratio(10),left:0,color:'black',fontSize:20,fontWeight:'500',textAlign:'center',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Biling Details</Text>
+    <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',height:Metrics.ratio(40)}}>
+      <Text style={{top:Metrics.ratio(10),left:0,color:'black',fontSize:15,fontWeight:'500', fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),textAlign:'center',marginRight:Metrics.ratio(190),marginLeft:Metrics.ratio(10)}}>Biling Details</Text>
         </View>
         <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>First Name</Text>
@@ -141,80 +149,6 @@ const Bounce=()=>{
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Phone</Text>
     <TextInput placeholder='Phone' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
   <View style={{backgroundColor:'#F2F2F2'}}>
-   <View style={styles.container}>
-   <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
-   <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={countrydata}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Select item' : '...'}
-          searchPlaceholder="Search..."
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setValue(item.id);
-            setIsFocus(false);
-          }}
-        />
-      </View>
-      <View style={styles.container}>
-      <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>State</Text>
-       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={statedata}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select State' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-  
-          setIsFocus(false);
-        }}
-       
-       />
-       </View>
-       <View style={styles.container}>
-       <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>City</Text>
-       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={cityydata}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select City' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-          setIsFocus(false);
-        }}
-       />
-</View>
     </View>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
@@ -222,16 +156,18 @@ const Bounce=()=>{
     <TextInput placeholder='Zip Code'   textAlign='left' keyboardType='numeric' auto style={styles.InputContainer} ></TextInput>
     <Text style={{fontSize:15,color:'#F0F0F0',fontWeight:'400',color:'black'}}>Fax</Text>
     <TextInput placeholder='Fax'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
-<Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Address</Text>
+    <Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black',textAlign:'auto'}}>Address</Text>
     <TextInput placeholder='Address'   textAlign='left' auto style={{ marginTop:Metrics.ratio(3),
   marginBottom:Metrics.ratio(10),
-  backgroundColor:'#D1D3D0',
+  backgroundColor:'#D8D9D8',
   margin:Metrics.ratio(5),
   right:Metrics.ratio(10),
   borderRadius:10,
   fontSize:15,
- width:Metrics.ratio(380),
- height:Metrics.ratio(70),}} ></TextInput>
+  borderWidth:0.5,
+ width:'100%',
+ alignItems:'center',
+ height:Metrics.ratio(60),}} ></TextInput>
 
  <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(1)}}>
   
@@ -257,100 +193,93 @@ const Bounce=()=>{
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Phone</Text>
     <TextInput placeholder='Phone' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
-  <View style={{backgroundColor:'#F2F2F2'}}>
-   <View style={styles.container}>
-   <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
+ 
+    <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={countrydata}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select Country' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-          handleState(item.value)
-          setIsFocus(false);
-        }}
-       
-      />
-      </View>
-      <View style={styles.container}>
-      <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>State</Text>
-       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={statedata}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select State' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-  
-          setIsFocus(false);
-        }}
-       
-/>
-       </View>
-       <View style={styles.container}>
-       <Text style={{fontSize:15,color:'#7D7D7D',fontWeight:'400',color:'black'}}>City</Text>
-       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={cityydata}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select City' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-          setIsFocus(false);
-        }}
-       />
-</View>
+          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select Country' : '...'}
+          searchPlaceholder="Search Country"
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+        />
+         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>State</Text>
+      <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select State' : '...'}
+          searchPlaceholder="Search State"
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+        />
+         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>City</Text>
+      <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select City' : '...'}
+          searchPlaceholder="Search City"
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+        />
     </View>
-</View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
-        <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Zip Code</Text>
+        <Text style={{fontSize:15, fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'serif', // You may need to adjust this for Android
+        }),color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Zip Code</Text>
     <TextInput placeholder='Zip Code'   textAlign='left' keyboardType='numeric' auto style={styles.InputContainer} ></TextInput>
     <Text style={{fontSize:15,color:'#F0F0F0',fontWeight:'400',color:'black'}}>Fax</Text>
     <TextInput placeholder='Fax'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
-<Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Address</Text>
+<Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black',textAlign:'auto'}}>Address</Text>
     <TextInput placeholder='Address'   textAlign='left' auto style={{ marginTop:Metrics.ratio(3),
   marginBottom:Metrics.ratio(10),
-  backgroundColor:'#D1D3D0',
+  backgroundColor:'#D8D9D8',
   margin:Metrics.ratio(5),
   right:Metrics.ratio(10),
   borderRadius:10,
   fontSize:15,
- width:Metrics.ratio(380),
- height:Metrics.ratio(70),}} ></TextInput>
+ width:'100%',
+ alignItems:'center',
+ height:Metrics.ratio(60),}} ></TextInput>
  </View>
 </View>
  ) : null}
@@ -387,12 +316,14 @@ borderRadius:Metrics.ratio(70),
     bottom:Metrics.ratio(5)
   },
   dropdown: {
-    height: Metrics.ratio(50), 
-    width: Metrics.ratio(250), 
+    height: Metrics.ratio(20), 
+    width: '90%', 
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 8,
-    backgroundColor:'#C1C3C0',
+    alignItems:'center',
+    backgroundColor:'#F1F0F7',
+    color:'#D8D9D8'
   },
   icon: {
     marginRight: 5,
@@ -422,15 +353,16 @@ borderRadius:Metrics.ratio(70),
     fontSize: 16,
   },
   InputContainer:{
-  marginTop:Metrics.ratio(3),
-  marginBottom:Metrics.ratio(10),
-  backgroundColor:'#D1D3D0',
+  backgroundColor:'#D8D9D8',
   margin:Metrics.ratio(5),
   right:Metrics.ratio(10),
-  borderRadius:10,
+  borderRadius:5,
+  borderWidth:0.5,
+  borderColor:'black',
   fontSize:15,
- width:Metrics.ratio(380),
- height:Metrics.ratio(40),
+ width:'100%',
+ alignItems:'center',
+ height:Metrics.ratio(38),
 },
 
   container: {

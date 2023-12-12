@@ -31,19 +31,20 @@ export default function App() {
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
       <Stack.Navigator>
+
       {/* <Stack.Screen name='Video' component={Video}options={{ statusBarColor:'#FF2F00',headerShown:false}}/> */}
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='HomeScreen' component={HomeScreen}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>
+      <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Checkout',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='LocalPurchase' component={LocalPurchase} options={( ) => ({headerTintColor:'white',title:'My Local Purchases',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Return' component={Return} options={( ) => ({headerTintColor:'white',title:'Return Order',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='AskQuestion' component={AskQuestion} options={( ) => ({headerTintColor:'white',title:'Ask Question',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Search' component={Search} options={( ) => ({headerTintColor:'white',title:'Search',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='MallDetail' component={MallDetail}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='OrderSummary' component={OrderSummary} options={( ) => ({headerTintColor:'white',title:'Order Summary',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
-      <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Checkout',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Store' component={Store} options={( ) => ({headerTintColor:'white',title:'Store',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Mall' component={Mall} options={( ) => ({headerTintColor:'white',title:'Mall',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
-      <Stack.Screen name='Brands' component={Brands} options={( ) => ({headerTintColor:'white',title:'Brands',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
+      <Stack.Screen name='Brands' component={Brands} options={( ) => ({headerTintColor:'white',headerShown:false})}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='GiftDetails' component={GiftDetails} options={( ) => ({headerTintColor:'white',title:'Gift Details',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>

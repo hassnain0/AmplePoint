@@ -177,8 +177,9 @@ return (
   <TouchableOpacity onPress={SignUPScreen} style={styles.TouchContainer}>
   <Text style={styles.TextContainer}>Sign Up</Text>
   </TouchableOpacity>
-  <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',top:Metrics.ratio(320), padding: Metrics.ratio(20)}}>
-  <View style={styles.ViewContainer2}>
+  <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',  borderRadius:Metrics.ratio(20),
+  backgroundColor:'#F0F1EC',top:Metrics.ratio(320), padding: Metrics.ratio(20)}}>
+  
     <Text style={{fontSize: 30, color: 'black', fontWeight: '500', paddingLeft: Metrics.ratio(30)}}>Login</Text>
     
     <MainTextInput
@@ -215,7 +216,6 @@ return (
     </View>
   </View>
   <Toast ref={ref => Toast.setRef(ref)} />
-</View>
 
 </ImageBackground>
 </View>  
@@ -223,8 +223,7 @@ return (
 }
 const styles=StyleSheet.create({
   ViewContainer2:{
-  borderRadius:Metrics.ratio(20),
-  backgroundColor:'#F0F1EC',
+
   },
   socialButtonContainer: {
     marginTop:Metrics.ratio(10),
@@ -283,9 +282,9 @@ const styles=StyleSheet.create({
       },
       ImageContainer:{
        backgroundColor:'white',
-        width: Metrics.ratio(450), 
-        height: Metrics.ratio(440),
-        alignSelf:'center'
+        width: 'auto', 
+        height: '80%',
+      
       },
       textContainer: {
         fontSize: 15,
