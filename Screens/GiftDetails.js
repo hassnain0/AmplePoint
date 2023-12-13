@@ -28,9 +28,14 @@ const [lastName,setLastName]=useState(null);
 const [email,setEmail]=useState(null);
 const [phone,setPhone]=useState(null);
 const [isGiftCard,setIsGiftCard]=useState(false);
+const [pickUp,setPickup]=useState(null);
+const [shipping,setShipping]=useState(null);
+const [online,setOnline]=useState(null);
+const [deleivery,setDeleivery]=useState(null);
+
 
 const [actual_data,setactual_Data]=useState(null);
-const route=useRoute();
+// const route=useRoute();
 
    const ShowMoreDetail=()=>{
     setKnowMore(false);
@@ -53,20 +58,19 @@ setisforMe(false)
   useEffect(() => {
 
     setLoading(true);
-    setProductId(route.params.productData.pid);
-    setVendorId(route.params.productData.vendor_key);
+    // setProductId(route.params.productData.pid);
+    // setVendorId(route.params.productData.vendor_key);
 
     const getProductDetails = async () => {
-        try {
+         try {
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                    product_id: productId,
-                    user_id: VendorId,
+                    product_id: 59947,
+                    user_id: 126,
                 },
             });
-            
-
+      
             if (response.data && response.data.data && response.data.data.tabs_data) {
                 const reviewData = response.data.data.tabs_data.workin_hours_tab;
 
@@ -83,6 +87,11 @@ setisforMe(false)
                 {
                   setIsGiftCard(true)
                 }
+                setPickup(response.data.data.product_info.pickUp)
+                setOnline(response.data.data.product_info.online);
+                setDeleivery(response.data.data.product_info.delivery)
+                setShipping(response.data.data.product_info.shipping)
+
             }
         } catch (error) {
             console.error('Error fetching product details:', error);
@@ -495,6 +504,9 @@ return (
         )}
         </TouchableOpacity>
   </View>  
+  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(10)}}>
+
+  </View>
    </View>
    {showMore && (
   <View>
@@ -551,9 +563,16 @@ return (
           <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
           <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
         </View>
+        <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(5)}}>
+
+</View>       
         </View>
-      )}
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70),top:Metrics.ratio(1)}}>Ample Points Calculator</Text>
+         )}
+     
+        <Text style={{color:'black',fontWeight:'800',paddingLeft:Metrics.ratio(10),fontSize:12,bottom:Metrics.ratio(70),top:Metrics.ratio(1), fontFamily: Platform.select({
+        ios: 'Times New Roman',
+        android: 'serif', // You may need to adjust this for Android
+      }),}}>Ample Points Calculator</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingTop:Metrics.ratio(20)}}>
         <Text style={{  paddingTop:Metrics.ratio(10),
         left:Metrics.ratio(20),
@@ -678,12 +697,15 @@ return (
     </View>
   
   )}  
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
+        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:12, fontFamily: Platform.select({
+        ios: 'Times New Roman',
+        android: 'Times New Roman', // You may need to adjust this for Android
+      }),bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
         <View style={styles.container3}>
       <TextInput
         style={styles.textField}
-        placeholder="Apply Amples"
-        placeholderTextColor="black"
+        placeholder="Apply Ample"
+        placeholderTextColor="#C1C3C0"
         value={amples}
         keyboardType='numeric'
         onChangeText={(text)=>handleAmples(text)}
@@ -700,28 +722,124 @@ return (
    <Text style={styles.Text6Container}>You Earn :</Text>
    <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
-    
-    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:15,bottom:Metrics.ratio(20),top:Metrics.ratio(20)}}>Shipping</Text>
+  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(20)}}>
+</View>
+    <Text style={{color:'black',fontWeight:'500',fontSize:13,top:Metrics.ratio(10)}}>Shipping</Text>
+    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5),marginTop:Metrics.ratio(20)}}>
+</View>
     <View style={{top:Metrics.ratio(1)}}>
     <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
-            <RadioButton.Item color='#FF2E00' label={"Pickup Dining"} value="true" />
+    {pickUp && (
+        <RadioButton.Item
+          label="Pickup/Dining"
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 12 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+        />
+      )}
+
+      {online && (
+        <RadioButton.Item
+          label="Online"
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 12 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+        />
+      )}
+
+      {deleivery && (
+        <RadioButton.Item
+          label="Delivery"
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 12 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+        />
+      )}
+
+      {shipping && (
+        <RadioButton.Item
+          label="Shipping"
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 12 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+          // Add other props as needed
+        />
+      )}
          </RadioButton.Group>
          </View>
 {isShippingSelected && (
       <View>
             <RadioButton.Group onValueChange={showShippingDetails} value={isShippingSelected.toString()}>
-            <RadioButton.Item color='#FF2E00' label={"Standard Shipping"} value="true" />
+            {shipping && (
+        <RadioButton.Item
+          label="Standard Shipping"
+          value={true}
+          color='#FF2E00'
+          labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+          // Add other props as needed
+        />
+      )}
+          {pickUp && (
+        <RadioButton.Item
+          label={address}
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+          // Add other props as needed
+        />
+      )}
+      {online && (
+        <RadioButton.Item
+          label="Online"
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+          // Add other props as needed
+        />
+      )}
+      {deleivery && (
+        <RadioButton.Item
+          label="Delievery"
+          value="true"
+          color='#FF2E00'
+          labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
+            ios: 'Times New Roman',
+            android: 'serif', // You may need to adjust this for Android
+          }),}} 
+          // Add other props as needed
+        />
+      )}
          </RadioButton.Group>
-        <View style={styles.dateTimeContainer}> 
+       {pickUp &&( 
+       <View style={styles.dateTimeContainer}> 
         <View style={styles.timePickerContainer}>
-       
+    
             <TouchableOpacity
-                title="Select Date"
+                title="PickUp Date"
                 onPress={() => setShowDatePicker(true)}
             >
-        <Text style={{ color: 'black', textAlign: 'center' }}>
-          {selectedDate ? `Selected Date: ${selectedDate.toString()}` : 'Select Date'}
-        </Text>       
+        <Text style={{ color: 'black', textAlign: 'center' }}>{selectedDate ? `Selected Date: ${selectedDate.toString()}` : 'Pickup Date'}</Text>       
               </TouchableOpacity> 
               {showDatePicker && (
                 <DateTimePicker
@@ -734,7 +852,7 @@ return (
               </View>
             <View style={styles.timePickerContainer}>
             <TouchableOpacity
-                title="Select Time"
+                title="PickUp Time"
                 onPress={() => setShowTimePicker(true)}
             >
               
@@ -753,7 +871,8 @@ return (
               </View>
          
             </View>
-            <TouchableOpacity onPress={SubmitButton} style={styles.buttonApply}>
+       )}
+           <TouchableOpacity onPress={SubmitButton} style={styles.buttonApply}>
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
             </View>
@@ -823,7 +942,8 @@ const styles=StyleSheet.create({
   dateTimeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    right:Metrics.ratio(5)
+    right:Metrics.ratio(5),
+    borderRadius:10
 
   },
  
@@ -872,9 +992,9 @@ const styles=StyleSheet.create({
     left:Metrics.ratio(10),
     height:Metrics.ratio(40),
     right:Metrics.ratio(30),
-    borderWidth:Metrics.ratio(0.4),
-    borderRadius:Metrics.ratio(10),
-    backgroundColor:'#B6B8B5',
+    borderWidth:Metrics.ratio(0.2),
+    borderRadius:Metrics.ratio(5),
+    backgroundColor:'#EEEEEE',
     marginHorizontal:Metrics.ratio(10)
   },
   dateContainer: {
@@ -883,9 +1003,9 @@ const styles=StyleSheet.create({
     left:Metrics.ratio(15),
     height:Metrics.ratio(40),
     right:Metrics.ratio(30),
-    borderWidth:Metrics.ratio(0.4),
+    borderWidth:Metrics.ratio(0.2),
     borderRadius:Metrics.ratio(10),
-    backgroundColor:'#D1D3D0',
+    backgroundColor:'#EEEEEE',
     margin:Metrics.ratio(5)
   },
   
@@ -925,9 +1045,10 @@ borderRadius: 1,
     
 color:'white',
 backgroundColor: '#FC3F01',
-borderRadius: 5,
-width:Metrics.ratio(60),
-height:Metrics.ratio(40),
+borderRadius: 3,
+left:Metrics.ratio(10),
+width:'30%',
+height:Metrics.ratio(30),
   },
   buttonApply: {
     top:Metrics.ratio(10),
@@ -970,15 +1091,14 @@ borderRadius: 5,
   },
   textField: {
     height: Metrics.ratio(40),
-    borderColor: 'black',
-    borderWidth: 0.4,
-    width: Metrics.ratio(290),
+    borderColor: '#D8D9D8',
+    borderWidth: 0.2,
+    width: '55%',
     marginBottom: Metrics.ratio(10),
-    marginRight:Metrics.ratio(10),
-    paddingLeft: Metrics.ratio(5),
-    borderRadius:Metrics.ratio(10),
+    marginRight:Metrics.ratio(5),
+    borderRadius:Metrics.ratio(2),
     top:Metrics.ratio(5),
-    backgroundColor:'#D1D3D0'
+    backgroundColor:'#EEEEEE'
     
   },
   buttonRow: {
@@ -1070,8 +1190,7 @@ borderRadius:Metrics.ratio(70),
     paddingLeft:Metrics.ratio(60)
     },
     TextContainer:{
-        paddingTop:Metrics.ratio(20),
-        paddingLeft:Metrics.ratio(20),
+
         fontSize:15,
         color:'black',
         fontWeight:'800',
@@ -1079,16 +1198,24 @@ borderRadius:Metrics.ratio(70),
     Text4Container:{
       paddingTop:Metrics.ratio(20),
       paddingLeft:Metrics.ratio(60),
-      fontSize:10,
+      fontSize:12,
       color:'black',
+      fontFamily: Platform.select({
+        ios: 'Times New Roman',
+        android: 'serif', // You may need to adjust this for Android
+      }),
       fontWeight:'400',
   },
   Text6Container:{
     paddingTop:Metrics.ratio(20),
     paddingLeft:Metrics.ratio(20),
-    fontSize:10,
+    fontSize:12,
     color:'black',
     fontWeight:'400',
+    fontFamily: Platform.select({
+      ios: 'Times New Roman',
+      android: 'serif', // You may need to adjust this for Android
+    }),
 },
   TextContainer:{
     paddingTop:Metrics.ratio(20),
@@ -1107,14 +1234,22 @@ borderRadius:Metrics.ratio(70),
       Text3Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(10),
-        fontSize:10,
+        fontSize:12,
+        fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'serif', // You may need to adjust this for Android
+        }),
         color:'#FF2E00',
         fontWeight:'400', 
       },
       Text5Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(5),
-        fontSize:10,
+        fontSize:12,
+        fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'serif', // You may need to adjust this for Android
+        }),
         color:'#FF2E00',
         fontWeight:'400', 
       },

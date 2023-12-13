@@ -93,32 +93,7 @@ const data = [
 const onCheckout=()=>{
   navigation.navigate("OrderSummary")
 }
-// const handleCity = (countryCode, stateCode) => {
-//   var config = {
-//     method: 'get',
-//     url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-//     headers: {
-//       'X-CSCAPI-KEY': API_KEY,
-//     },
-//   };
 
-//   // axios(config)
-//   //   .then(function (response) {
-//   //     console.log(JSON.stringify(response.data));
-//   //     var count = Object.keys(response.data).length;
-//   //     let cityArray = [];
-//   //     for (var i = 0; i < count; i++) {
-//   //       cityArray.push({
-//   //         value: response.data[i].id,
-//   //         label: response.data[i].name,
-//   //       });
-//   //     }
-//   //     setCity(cityArray);
-//   //   })
-//   //   .catch(function (error) {
-//   //     console.log(error);
-//   //   });
-// };
 const Pay=()=>{
 navigation.navigate("Payement")
 }
@@ -158,16 +133,16 @@ const Bounce=()=>{
     <TextInput placeholder='Fax'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
     <Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black',textAlign:'auto'}}>Address</Text>
     <TextInput placeholder='Address'   textAlign='left' auto style={{ marginTop:Metrics.ratio(3),
-  marginBottom:Metrics.ratio(10),
-  backgroundColor:'#D8D9D8',
-  margin:Metrics.ratio(5),
-  right:Metrics.ratio(10),
-  borderRadius:10,
-  fontSize:15,
-  borderWidth:0.5,
- width:'100%',
- alignItems:'center',
- height:Metrics.ratio(60),}} ></TextInput>
+     marginBottom:Metrics.ratio(10),
+     backgroundColor:'#D8D9D8',
+     margin:Metrics.ratio(5),
+    right:Metrics.ratio(10),
+    borderRadius:10,
+    fontSize:15,
+    borderWidth:0.5,
+    width:'100%',
+    alignItems:'center',
+   height:Metrics.ratio(60)}} ></TextInput>
 
  <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(1)}}>
   

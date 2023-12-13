@@ -31,7 +31,7 @@ export default function App() {
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
       <Stack.Navigator>
-
+      <Stack.Screen name='GiftDetails' component={GiftDetails} options={( ) => ({headerTintColor:'white',title:'Gift Details',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       {/* <Stack.Screen name='Video' component={Video}options={{ statusBarColor:'#FF2F00',headerShown:false}}/> */}
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
       <Stack.Screen name='HomeScreen' component={HomeScreen}options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
@@ -46,7 +46,6 @@ export default function App() {
       <Stack.Screen name='Mall' component={Mall} options={( ) => ({headerTintColor:'white',title:'Mall',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Brands' component={Brands} options={( ) => ({headerTintColor:'white',title:'Brands',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
-      <Stack.Screen name='GiftDetails' component={GiftDetails} options={( ) => ({headerTintColor:'white',title:'Gift Details',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#FF2F00',headerShown:false}}/>
       <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'Cart',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#FF2F00'}}/>  

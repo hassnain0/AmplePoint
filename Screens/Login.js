@@ -178,9 +178,9 @@ return (
   <Text style={styles.TextContainer}>Sign Up</Text>
   </TouchableOpacity>
   <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',  borderRadius:Metrics.ratio(20),
-  backgroundColor:'#F0F1EC',top:Metrics.ratio(290), padding: Metrics.ratio(20)}}>
+  backgroundColor:'#F0F1EC',top:Metrics.ratio(290), padding: Metrics.ratio(20),}}>
   
-    <Text style={{fontSize: 30, color: 'black', fontWeight: '500', paddingLeft: Metrics.ratio(30)}}>Login</Text>
+    <Text style={{fontSize: 35, color: 'black', fontWeight: '600', paddingLeft: Metrics.ratio(30)}}>Login</Text>
     
     <MainTextInput
       onChangeText={t => _handleTextChange('email', t)}
@@ -248,7 +248,7 @@ const styles=StyleSheet.create({
   buttonView: {
     top:Metrics.ratio(15),
         height:Metrics.vh*5,
-        backgroundColor:'#FF2F00',
+        backgroundColor:'#ff3d00',
         borderRadius:Metrics.ratio(70),        
         marginBottom: Metrics.ratio(10),
         width: Metrics.vw * 50,

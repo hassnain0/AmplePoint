@@ -4,6 +4,7 @@ import { Colors, Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const ProductItem = ({ product }) => {
@@ -125,12 +126,13 @@ const getProductDetails = async () => {
         </View>
   <ScrollView>
       <View style={styles.container}>
-      {loading && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#FF2E00" />
-        </View>
-      )}
+      <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
       {data && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
