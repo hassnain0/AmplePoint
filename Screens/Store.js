@@ -1,5 +1,5 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TouchableOpacity} from 'react-native';
+import {View,Text, StyleSheet,FlatList,ScrollView,Image, TouchableOpacity} from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
@@ -56,12 +56,12 @@ const Store=({navigation})=>{
   };
   useEffect(()=>{
     getRewards();
-    getProductDetails();
+    getstores();
   },[])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
 
-const getProductDetails = async () => {
+const getstores = async () => {
   try{
         const apiUrl = 'https://amplepoints.com/apiendpoint/getstores'; 
         await axios.get(apiUrl)
@@ -71,7 +71,7 @@ const getProductDetails = async () => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
-          
+
         })
         .catch(error => {
           // Handle the error

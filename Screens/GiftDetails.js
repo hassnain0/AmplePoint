@@ -32,7 +32,7 @@ const [pickUp,setPickup]=useState(null);
 const [shipping,setShipping]=useState(null);
 const [online,setOnline]=useState(null);
 const [deleivery,setDeleivery]=useState(null);
-
+const [appliedAmples,setAppliedAmples]=useState(0);
 
 const [actual_data,setactual_Data]=useState(null);
 // const route=useRoute();
@@ -60,13 +60,14 @@ setisforMe(false)
     setLoading(true);
     // setProductId(route.params.productData.pid);
     // setVendorId(route.params.productData.vendor_key);
+//Getting user reaward
 
     const getProductDetails = async () => {
          try {
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                    product_id: 59947,
+                    product_id: 59927,
                     user_id: 126,
                 },
             });
@@ -99,32 +100,31 @@ setisforMe(false)
             setLoading(false);
         }
     };
+  
+
 
     getProductDetails();
-    setLoading(false)
+    setLoading(false);
     GetAmples();
 }, [productId, VendorId]);
 
 
-const postData = {
-  user_id: 126,
-  // Include any other data you want to post
-};
-
-const GetAmples = async () => {
-  try {
-    const apiUrl = "https://amplepoints.com/apiendpoint/getuserampleandreward";
-    const response = await axios.post(apiUrl, postData, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+const GetAmples=async()=>{
+  try{
+    const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
+   const Response= await axios.get(apiUrl, {
+      params: {
+        user_id:126,
       },
     });
-    console.log("Response", response.data);
-  } catch (err) {
-    console.log("Error", err);
+   if(Response.data &&Response.data.data.user_total_ample)
+   {
+    setAmples(Response.data.data.user_total_ample);
+   }
+  }catch(erro){
+    console.log("Error",erro)
   }
-}
+ }
     // Call the function when the component mounts
    
   const [quantity, setQuantity] = useState(1);
@@ -163,7 +163,7 @@ const GetAmples = async () => {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
-      });
+      })
 
       console.log("Formatted Date", formattedDate);
       setSelectedDate(formattedDate);
@@ -249,28 +249,25 @@ const GetAmples = async () => {
     }
   };
   //Function to calculate Ample Points
-  const calculateDiscount = () => {
-    const userAmplePoints = 7000; // Replace this with your actual user's ample points
-    const amplePointsToRedeem = actual_data?.data?.product_info?.pfwamples; // Ample points required to redeem
-    const actualPrice = actual_data?.data?.product_info?.single_price; // Actual price of the product
-  
-    // User can apply up to the required ample points or available ample points
-    const amplePointsApplied = Math.min(userAmplePoints, amplePointsToRedeem);
-  
-    // Calculate the discount directly proportional to the ample points applied
-    const discount = (amples/ amplePointsToRedeem) * actualPrice;
-  
-    // Calculate the new discounted price
-    const newDiscountedPrice = actualPrice - discount;
-  
-    console.log("My Discount 1", discount);
-    console.log("Discounted Price2", newDiscountedPrice);
-  };
-
-  
+ 
 const handleAmples=(text)=>{
-  setAmples(text)
+setAppliedAmples(text);
+  
+
 }
+const calculateQuantity = () => {
+  console.log("appliedAmples",appliedAmples)
+  if (appliedAmples >= actual_data.data.product_info.single_price && appliedAmples <= amples) {
+    if (appliedAmples === 200) {
+      setQuantity(1);
+    } else {
+      // You can customize the quantity logic based on your requirements
+      setQuantity(Math.floor(200 /appliedAmples ));
+      console.log("Quantity",quantity)
+    }
+  }
+  
+};
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
     if(!submit){
@@ -313,7 +310,7 @@ const handleAmples=(text)=>{
   
   }
 return (
-  <SafeAreaView>
+  <SafeAreaView >
 
   {loading ? (
         <View style={styles.overlay}>
@@ -322,6 +319,7 @@ return (
         </View>
 ) : ( 
   <ScrollView style={{backgroundColor:'white',}} scrollEnabled={true}>
+   
 {actual_data && (
       <View>
     <View >
@@ -344,23 +342,31 @@ return (
 
   </View>
    
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-
+  <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
    <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
     </View>
     
    <Text style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
+        paddingLeft:Metrics.ratio(12),
         fontSize:10,
         fontWeight:'300',
-        color:'black'
+        color:'black',
+        fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),
         }}>FREE with {actual_data?.data?.product_info?.pfwamples} AmplePoints</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
+        paddingLeft:Metrics.ratio(12),
         fontSize:10,
         fontWeight:'500',
-        color:'#FF2E00'
+        fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),
+        color:'#FF2E00',
+        
         }}>By:{actual_data?.data?.product_info?.pvendor}</Text>
         <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, flexDirection:'row'}}>
@@ -504,9 +510,7 @@ return (
         )}
         </TouchableOpacity>
   </View>  
-  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(10)}}>
-
-  </View>
+  
    </View>
    {showMore && (
   <View>
@@ -697,20 +701,21 @@ return (
     </View>
   
   )}  
-        <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:12, fontFamily: Platform.select({
+              <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:12, fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'Times New Roman', // You may need to adjust this for Android
       }),bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
+
         <View style={styles.container3}>
       <TextInput
         style={styles.textField}
         placeholder="Apply Ample"
         placeholderTextColor="#C1C3C0"
-        value={amples}
+        value={appliedAmples}
         keyboardType='numeric'
-        onChangeText={(text)=>handleAmples(text)}
+        onChangeText={(text)=>setAppliedAmples(text)}
       />
-      <TouchableOpacity onPress={calculateDiscount} style={styles.button3}> 
+      <TouchableOpacity onPress={calculateQuantity} style={styles.button3}> 
       <Text style={styles.buttonText}>Apply</Text>
     </TouchableOpacity>
 
@@ -771,8 +776,8 @@ return (
           value="true"
           color='#FF2E00'
           labelStyle={{ fontSize: 12 , fontFamily: Platform.select({
-            ios: 'Times New Roman',
-            android: 'serif', // You may need to adjust this for Android
+            ios: 'Arial',
+            android: 'Arial', // You may need to adjust this for Android
           }),}} 
           // Add other props as needed
         />
@@ -789,7 +794,7 @@ return (
           color='#FF2E00'
           labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
             ios: 'Times New Roman',
-            android: 'serif', // You may need to adjust this for Android
+            android: 'Arial', // You may need to adjust this for Android
           }),}} 
           // Add other props as needed
         />
@@ -836,10 +841,12 @@ return (
         <View style={styles.timePickerContainer}>
     
             <TouchableOpacity
-                title="PickUp Date"
+                style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}
                 onPress={() => setShowDatePicker(true)}
             >
-        <Text style={{ color: 'black', textAlign: 'center' }}>{selectedDate ? `Selected Date: ${selectedDate.toString()}` : 'Pickup Date'}</Text>       
+              
+        <Text style={{ color: 'black',left:Metrics.ratio(10) ,textAlign: 'center',top:2,fontWeight:'300'}}>PickUp Date</Text> 
+        <Image source={require('../assets/Date.png')} style={{right:Metrics.ratio(10),width:25,height:25}}/>      
               </TouchableOpacity> 
               {showDatePicker && (
                 <DateTimePicker
@@ -852,13 +859,12 @@ return (
               </View>
             <View style={styles.timePickerContainer}>
             <TouchableOpacity
-                title="PickUp Time"
+              style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}
                 onPress={() => setShowTimePicker(true)}
             >
               
-              <Text style={{ color: 'black', textAlign: 'center' }}>
-          {selectedTime ? `Selected Time: ${selectedTime.toString()}` : 'Select Time'}
-        </Text>
+              <Text style={{ color: 'black',left:Metrics.ratio(10) ,textAlign: 'center',top:2,fontWeight:'300'}}>select Time</Text> 
+        <Image source={require('../assets/Date.png')} style={{right:Metrics.ratio(10),width:25,height:25}}/>  
               </TouchableOpacity> 
               {showTimePicker && (
                 <DateTimePicker
@@ -872,12 +878,20 @@ return (
          
             </View>
        )}
-           <TouchableOpacity onPress={SubmitButton} style={styles.buttonApply}>
-      <Text style={styles.buttonText}>Apply</Text>
+         <TouchableOpacity onPress={SubmitButton} style={styles.button6}>
+      <Text style={styles.buttonText}>Submit</Text>
     </TouchableOpacity>
+    <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(20)}}>
+</View>
+
             </View>
             
        )}
+              <TouchableOpacity onPress={()=>navigation.navigate("AskQuestion")} style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
+        <Text style={{fontSize:12,fontWeight:'600',color:'black'}}>Ask Questions</Text>
+        <Image style={{width:30,height:30}} source={require('../assets/SideArrow.png')}></Image>
+        </TouchableOpacity>
+
 <Toast ref={ref => Toast.setRef(ref)} />
     <View style={styles.buttonView}>
       <Button
@@ -890,7 +904,6 @@ return (
 
 
 )}
-
     </ScrollView>
 
 )}
@@ -906,6 +919,16 @@ const styles=StyleSheet.create({
     borderWidth:1,
     borderRadius:5
   },
+  button6: {
+    alignSelf:'flex-end',
+    right:Metrics.ratio(2),
+    color:'white',
+    backgroundColor: '#FC3F01',
+    borderRadius: 3,
+    width:'25%',
+    height:Metrics.ratio(30),
+      },
+
   leftIconView: {
     paddingHorizontal: Metrics.ratio(10),
     height: Metrics.ratio(40),
@@ -1083,17 +1106,19 @@ left:Metrics.ratio(110)
 borderRadius: 5,
   },container3: {
     right:Metrics.ratio(30),
-  left:Metrics.ratio(20),
+  left:Metrics.ratio(10),
    top:Metrics.ratio(20),
     alignItems: 'center',
     flex:1,
     flexDirection:'row'
   },
+
   textField: {
-    height: Metrics.ratio(40),
-    borderColor: '#D8D9D8',
-    borderWidth: 0.2,
-    width: '55%',
+    height: Metrics.ratio(35),
+    borderColor: '#C1C3C0',
+    fontSize:12,
+    borderWidth: 1,
+    width: '70%',
     marginBottom: Metrics.ratio(10),
     marginRight:Metrics.ratio(5),
     borderRadius:Metrics.ratio(2),
@@ -1101,6 +1126,7 @@ borderRadius: 5,
     backgroundColor:'#EEEEEE'
     
   },
+
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1189,12 +1215,7 @@ borderRadius:Metrics.ratio(70),
   
     paddingLeft:Metrics.ratio(60)
     },
-    TextContainer:{
-
-        fontSize:15,
-        color:'black',
-        fontWeight:'800',
-    },
+   
     Text4Container:{
       paddingTop:Metrics.ratio(20),
       paddingLeft:Metrics.ratio(60),
@@ -1218,28 +1239,34 @@ borderRadius:Metrics.ratio(70),
     }),
 },
   TextContainer:{
-    paddingTop:Metrics.ratio(20),
-    paddingLeft:Metrics.ratio(20),
-    fontSize:10,
+    paddingLeft:Metrics.ratio(10),
+    fontSize:15,
+    fontFamily: Platform.select({
+      ios: 'Cambria',
+      android: 'Cambria', // You may need to adjust this for Android
+    }),
     color:'black',
-    fontWeight:'400',
+    fontWeight:'800',
 },
     Text2Container:{
-        paddingTop:Metrics.ratio(20),
-        paddingLeft:Metrics.ratio(100),
-        fontSize:10,
+       marginRight:Metrics.ratio(10),
+        fontSize:15,
         color:'#FF2E00',
         fontWeight:'bold', 
+        fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),
       },
       Text3Container:{
         paddingTop:Metrics.ratio(20),
         paddingLeft:Metrics.ratio(10),
         fontSize:12,
         fontFamily: Platform.select({
-          ios: 'Times New Roman',
+          ios: 'Arial',
           android: 'serif', // You may need to adjust this for Android
         }),
-        color:'#FF2E00',
+        color:'#ff3d00',
         fontWeight:'400', 
       },
       Text5Container:{
