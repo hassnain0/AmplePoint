@@ -70,6 +70,7 @@ const getstores = async () => {
     
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
+            setLoading(false);
           }
 
         })
@@ -83,10 +84,7 @@ const getstores = async () => {
     setLoading(false);  
     console.log(err)
     }
-    finally {
-      // Set loading to false when the API call is complete
-      setLoading(false);
-    }
+   
   }
   const getRewards=async()=>{
     try{
@@ -128,9 +126,8 @@ const getstores = async () => {
       }
       return chunks;
     };
-
-    const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
-
+  
+    
     return (
   <ScrollView style={{backgroundColor:'#EEEEEE'}}>
 
@@ -165,11 +162,15 @@ const getstores = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
-        {filteredProducts
-          ? renderFlatList(filteredProducts)
-          : chunkedData.map((chunk, index) => (
-              <View key={index}>{renderFlatList(chunk)}</View>
-            ))}
+     {storeProducts && (
+        <>
+          {filteredProducts
+            ? renderFlatList(filteredProducts)
+            : chunkArray(storeProducts.data, 10).map((chunk, index) => (
+                <View key={index}>{renderFlatList(chunk)}</View>
+              ))}
+        </>
+      )}
       </View>
     </ScrollView>
 )

@@ -26,16 +26,21 @@ import AskQuestion from './Screens/AskQuestion';
 import Video from './Screens/Video';
 import TabNavigator from './Screens/tabNavigator';
 import Profile from './Screens/Profile';
+import EditProfie from './Screens/EditProfile';
+
 
 const Stack=createNativeStackNavigator();
 export default function App() {
   return (
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
+
       <Stack.Navigator>
+      <Stack.Screen name='EditProfile' component={EditProfie} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/> 
+      <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
       <Stack.Screen name='Profile' component={Profile} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/>
       {/* <Stack.Screen name='Video' component={Video}options={{ statusBarColor:'#FF2F00',headerShown:false}}/> */}
-      <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
+
       <Stack.Screen name='HomeScreen' component={TabNavigator}options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
       <Stack.Screen name='GiftDetails' component={GiftDetails} options={( ) => ({headerTintColor:'white',title:'Gift Details',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Checkout',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
@@ -46,7 +51,7 @@ export default function App() {
       <Stack.Screen name='MallDetail' component={MallDetail}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
       <Stack.Screen name='OrderSummary' component={OrderSummary} options={( ) => ({headerTintColor:'white',title:'Order Summary',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Store' component={Store} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/>
-     
+      
       <Stack.Screen name='Mall' component={Mall} options={( ) => ({headerTintColor:'white',title:'Mall',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Brands' component={Brands} options={( ) => ({headerTintColor:'white',title:'Brands',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>

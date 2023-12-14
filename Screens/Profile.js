@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { Metrics } from '../themes';
 import axios from 'axios';
+import Button from '../components/Button';
 
 // import ProgressBar from 'react-native-progress';
 
@@ -39,7 +40,9 @@ const Profile= () => {
   };
 
   return (
+    
     <View style={styles.container}>
+      {data &&(
       <View style={styles.card}>
         <Image source={userData.profilePicture} style={styles.profilePicture} />
 
@@ -63,19 +66,118 @@ const Profile= () => {
   }}>{data.mobile}</Text>
     </View>
         </View>
+        <View style={{flex:1, flexDirection:'row'}}>
+<View>
+    <Text style={styles.userInfo}>Tag Line:</Text>
+    <Text style={styles.userEmail}>{data.tag_desc}</Text>
+    </View>
+<View style={styles.line1}/>
+<View>
+    <Text style={styles.userInfo}>Age</Text>
+    <Text style={{ 
+    fontSize: 8,
+    marginBottom: 4,
+  }}>{data.age}</Text>
+    </View>
+        </View>
+        <View style={{flex:1, flexDirection:'row'}}>
+<View>
+    <Text style={styles.userInfo}>Gender:</Text>
+    <Text style={styles.userEmail}>{data.gender}</Text>
+    </View>
+<View style={styles.line1}/>
+<View>
+    <Text style={styles.userInfo}>Education</Text>
+    <Text style={{ 
+    fontSize: 8,
+    marginBottom: 4,
+  }}>{data.education}</Text>
+    </View>
+        </View>
+        <View style={{flex:1, flexDirection:'row'}}>
+<View>
+    <Text style={styles.userInfo}>Birthday:</Text>
+    <Text style={styles.userEmail}>{data.birthday}</Text>
+    </View>
+<View style={styles.line1}/>
+<View>
+    <Text style={styles.userInfo}>Employeement</Text>
+    <Text style={{ 
+    fontSize: 8,
+    marginBottom: 4,
+  }}>{data.employment}</Text>
+    </View>
+        </View>
+        <View style={{flex:1, flexDirection:'row'}}>
+<View>
+    <Text style={styles.userInfo}>Income:</Text>
+    <Text style={styles.userEmail}>{data.income}</Text>
+    </View>
+<View style={styles.line1}/>
+<View>
+    <Text style={styles.userInfo}>Country</Text>
+    <Text style={{ 
+    fontSize: 8,
+    marginBottom: 4,
+  }}>{data.user_country}</Text>
+    </View>
+        </View>
+        <View style={{flex:1, flexDirection:'row'}}>
+<View>
+    <Text style={styles.userInfo}>Zip Code:</Text>
+    <Text style={styles.userEmail}>{data.zip_code}</Text>
+    </View>
+
+<View>
+    <Text style={styles.userInfo}>City</Text>
+    <Text style={{ 
+    fontSize: 8,
+    marginBottom: 4,
+  }}>{data.user_city}</Text>
+    </View>
+        </View>
+        
+<View>
+    <Text style={styles.userInfo}>Address:</Text>
+    <Text style={styles.userEmail}>{data.address}</Text>
+    </View>
+
+        
+        
+        <View style={styles.buttonView}>
+      <Button
+        // loader={loader}
+        // btnPress={onCheckout}
+        
+        label={"View More"}
+      />
+    </View>
+    
       </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonView: {
+    height:Metrics.vh*5,
+    backgroundColor:'#FF2F00',
+borderRadius:Metrics.ratio(70),
+    width: Metrics.vw * 30,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf:'center',
+
+    bottom:Metrics.ratio(5)
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignContent:'center',
+    alignSelf:'center'
   },
   card: {
-    padding: 5,
+    padding: 30,
     borderRadius: 10,
     backgroundColor: 'white',
     elevation: 3,
@@ -99,6 +201,7 @@ const styles = StyleSheet.create({
     bottom:Metrics.ratio(20)
   },
   userName: {
+    color:'black',
     fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'serif', // You may need to adjust this for Android
@@ -108,6 +211,7 @@ const styles = StyleSheet.create({
   },
   points: {
     fontSize: 16,
+    color:'black',
     fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'serif', // You may need to adjust this for Android
@@ -116,6 +220,7 @@ const styles = StyleSheet.create({
   amplepoints: {
     fontWeight:'800',
     fontSize: 16,
+  
     color:'#ff3d00',
     fontFamily: Platform.select({
         ios: 'Times New Roman',
