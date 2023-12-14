@@ -10,9 +10,11 @@ import Cart from './Cart';
 import axios from 'axios';
 import Swiper from 'react-native-swiper';
 import { useRoute } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const GiftDetails=({navigation})=>{
-
+const [isFocus, setIsFocus] = useState(false);
+const [value, setValue] = useState(null);
 const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
 const [productId,setProductId]=useState('');
@@ -20,7 +22,7 @@ const [VendorId,setVendorId]=useState('');
 const [TimeData,setTimeData]=useState(null);
 const [imageData,setImageData]=useState(null);
 const [submit,setSubmit]=useState(false);
-const [amples,setAmples]=useState(42.00);
+const [amples,setAmples]=useState(0);
 const [isforGuest,setisforGuest]=useState(false);
 const [isforMe,setisforMe]=useState(true);
 const [firstName,setFirstName]=useState(null);
@@ -33,10 +35,10 @@ const [shipping,setShipping]=useState(null);
 const [online,setOnline]=useState(null);
 const [deleivery,setDeleivery]=useState(null);
 const [appliedAmples,setAppliedAmples]=useState(0);
-
 const [actual_data,setactual_Data]=useState(null);
-// const route=useRoute();
-
+const data = [
+  { label: 'Select', value: '1' },
+];
    const ShowMoreDetail=()=>{
     setKnowMore(false);
     setShowMore(true);
@@ -53,22 +55,21 @@ const forGuest=()=>{
 setisforGuest(true);
 setisforMe(false)
 }
-
+const route=useRoute();
   const [loading,setLoading]=useState(false);
   useEffect(() => {
 
     setLoading(true);
-    // setProductId(route.params.productData.pid);
-    // setVendorId(route.params.productData.vendor_key);
-//Getting user reaward
+    setProductId(route.params.productData.pid);
+    setVendorId(route.params.productData.vendor_key);
 
     const getProductDetails = async () => {
          try {
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                    product_id: 59927,
-                    user_id: 126,
+                    product_id: productId,
+                    user_id: VendorId,
                 },
             });
       
@@ -83,8 +84,8 @@ setisforMe(false)
                 if (response.data.data.pickup_address && response.data.data.pickup_address[0].loc_address) {
                     setAddress(response.data.data.pickup_address[0].loc_address);
                 }
-                console.log("response.data.data.delivery_data.is_delevery_availabe ",response.data.data.delivery_data )
-                if (response.data.data && response.data.data.delivery_data && response.data.data.delivery_data.is_delevery_availabe === 1) 
+                console.log("response.data.data.delivery_data.is_delevery_availabe ",response.data.data.gift_card_detail_available )
+                if (response.data.data && response.data.data && response.data.data.gift_card_detail_available === 1) 
                 {
                   setIsGiftCard(true)
                 }
@@ -109,7 +110,34 @@ setisforMe(false)
 }, [productId, VendorId]);
 
 
-const GetAmples=async()=>{
+const GetHours=async(dateObject)=>{
+  try{
+    console.log("Date",dateObject)
+    // const formattedDate = dateObject.toLocaleDateString('en-US', {
+    //   year: 'numeric',
+    //   month: '2-digit',
+    //   day: '2-digit',
+    // });
+    const apiUrl="https://amplepoints.com/apiendpoint/getvendorhours?"
+   const Response= await axios.get(apiUrl,{
+    params:{
+      fordate:dateObject,
+      vid:371,
+    }
+   });
+  //  if(Response.data &&Response.data.data.user_total_ample)
+  //  {
+  //   setAmples(Response.data.data.user_total_ample);
+  //  }
+  data=Response.data.data
+  console.log("Response of Date",Response.data)
+  
+  }catch(erro){
+    console.log("Error",erro)
+  }
+ }
+ //Get Time
+ const GetAmples=async()=>{
   try{
     const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
    const Response= await axios.get(apiUrl, {
@@ -154,9 +182,9 @@ const GetAmples=async()=>{
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
 
-  const handleDateChange = (event, date) => {
+  const handleDateChange =async (event, date) => {
     setShowDatePicker(Platform.OS === 'ios');
-
+  
     if (date) {
       // Format the date as 'YYYY/MM/DD'
       const formattedDate = date.toLocaleDateString('en-US', {
@@ -164,28 +192,14 @@ const GetAmples=async()=>{
         month: '2-digit',
         day: '2-digit',
       })
-
-      console.log("Formatted Date", formattedDate);
+  
       setSelectedDate(formattedDate);
+     await GetHours(formattedDate);  // Pass formattedDate directly
     }
   };
 
-  const [showMore,setShowMore]=useState(false)
-  const handleTimeChange = (event, time) => {
-    
-    setShowTimePicker(Platform.OS === 'ios');
-    if (time) {
-      // Format the time as '12:00 AM/PM'
-      const formattedTime = time.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      });
-
-      console.log("Time", formattedTime);
-      setSelectedTime(formattedTime);
-    }
-  }    
+  const [showMore,setShowMore]=useState(false);
+  
   const SubmitButton=async()=>{
 
       try {
@@ -209,7 +223,7 @@ const GetAmples=async()=>{
          if(response.data.message=='Delivery  Detail Added Sucessfully'){
           util.successMsg("Delievery Submitted");     
           setSubmit(true);   
-          navigation.navigate("Checkout")  
+        
          }
         }).catch((err)=>{
          console.log("Error",err)
@@ -290,9 +304,10 @@ const calculateQuantity = () => {
           }).then((response)=>{
            
              if(response.data.message==='Product Added To Cart'){
+              navigation.navigate("Cart")
               setLoader(false);
               util.successMsg("Added to Cart Sucessfully");
-              navigation.navigate("Cart")
+          
              }
           }).catch((err)=>{
             setLoader(false)
@@ -343,8 +358,12 @@ return (
   </View>
    
   <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between',}}>
+  <View >
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
+   </View>
+   <View style={{marginLeft:Metrics.ratio(10)}}>
    <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
+   </View>
     </View>
     
    <Text style={{  paddingTop:Metrics.ratio(10),
@@ -501,9 +520,9 @@ return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <TouchableOpacity onPress={ShowMoreDetail}>
  
- {knowMore && ( <Text  style={{  top:Metrics.ratio(10),
+ {knowMore && (<Text  style={{  top:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(290),
-        fontSize:10,
+        fontSize:15,
         fontWeight:'600',
         color:'#FF2E00'
         }}>Know More</Text>
@@ -727,7 +746,7 @@ return (
    <Text style={styles.Text6Container}>You Earn :</Text>
    <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
-  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(20)}}>
+  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(30)}}>
 </View>
     <Text style={{color:'black',fontWeight:'500',fontSize:13,top:Metrics.ratio(10)}}>Shipping</Text>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5),marginTop:Metrics.ratio(20)}}>
@@ -790,7 +809,7 @@ return (
             {shipping && (
         <RadioButton.Item
           label="Standard Shipping"
-          value={true}
+          value="true"
           color='#FF2E00'
           labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
             ios: 'Times New Roman',
@@ -813,7 +832,7 @@ return (
       )}
       {online && (
         <RadioButton.Item
-          label="Online"
+        label={address}
           value="true"
           color='#FF2E00'
           labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
@@ -825,7 +844,7 @@ return (
       )}
       {deleivery && (
         <RadioButton.Item
-          label="Delievery"
+        label={address}
           value="true"
           color='#FF2E00'
           labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
@@ -841,11 +860,14 @@ return (
         <View style={styles.timePickerContainer}>
     
             <TouchableOpacity
-                style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}
+                style={{flex:1,flexDirection:'row',justifyContent:'space-between',top:Metrics.ratio(5),}}
                 onPress={() => setShowDatePicker(true)}
             >
               
-        <Text style={{ color: 'black',left:Metrics.ratio(10) ,textAlign: 'center',top:2,fontWeight:'300'}}>PickUp Date</Text> 
+        <Text style={{ left:Metrics.ratio(10) ,textAlign: 'center',top:2,fontWeight:'300', fontFamily: Platform.select({
+            ios: 'Arial',
+            android: 'Arial', // You may need to adjust this for Android
+          }),}}>PickUp Date</Text> 
         <Image source={require('../assets/Date.png')} style={{right:Metrics.ratio(10),width:25,height:25}}/>      
               </TouchableOpacity> 
               {showDatePicker && (
@@ -857,26 +879,27 @@ return (
                 />
               )}
               </View>
-            <View style={styles.timePickerContainer}>
-            <TouchableOpacity
-              style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}
-                onPress={() => setShowTimePicker(true)}
-            >
-              
-              <Text style={{ color: 'black',left:Metrics.ratio(10) ,textAlign: 'center',top:2,fontWeight:'300'}}>select Time</Text> 
-        <Image source={require('../assets/Date.png')} style={{right:Metrics.ratio(10),width:25,height:25}}/>  
-              </TouchableOpacity> 
-              {showTimePicker && (
-                <DateTimePicker
-                style={{ color: 'black' }} 
-                  value={selectedTime}
-                  mode="time"
-                  onChange={handleTimeChange}
-                />
-              )}
-              </View>
-         
-            </View>
+             
+              <Dropdown
+          style={[styles.timePickerContainer,]}
+          placeholderStyle={{textAlign:'center'}}
+          selectedTextStyle={styles.selectedTextStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select Time' : '...'}
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+        /></View>
+            
        )}
          <TouchableOpacity onPress={SubmitButton} style={styles.button6}>
       <Text style={styles.buttonText}>Submit</Text>
@@ -914,6 +937,16 @@ return (
 
 )}
 const styles=StyleSheet.create({
+  dropdown: {
+    height: Metrics.ratio(20), 
+    width: '20%', 
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    alignItems:'center',
+    backgroundColor:'#F1F0F7',
+    color:'#D8D9D8'
+  },
   DetailsContainer:{
     color:'black',
     borderWidth:1,
@@ -966,7 +999,9 @@ const styles=StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     right:Metrics.ratio(5),
-    borderRadius:10
+    borderRadius:10,
+    marginRight:Metrics.ratio(10),
+    marginBottom:Metrics.ratio(10)
 
   },
  
@@ -1016,9 +1051,10 @@ const styles=StyleSheet.create({
     height:Metrics.ratio(40),
     right:Metrics.ratio(30),
     borderWidth:Metrics.ratio(0.2),
-    borderRadius:Metrics.ratio(5),
+    borderRadius:Metrics.ratio(3),
     backgroundColor:'#EEEEEE',
     marginHorizontal:Metrics.ratio(10)
+    
   },
   dateContainer: {
     flex: 1,
@@ -1065,13 +1101,15 @@ const styles=StyleSheet.create({
 borderRadius: 1,
   },
   button3: {
-    
-color:'white',
-backgroundColor: '#FC3F01',
-borderRadius: 3,
-left:Metrics.ratio(10),
-width:'30%',
-height:Metrics.ratio(30),
+    alignSelf:'flex-end',
+    right:Metrics.ratio(2),
+    color:'white',
+    backgroundColor: '#FC3F01',
+    bottom:Metrics.ratio(5),
+    borderRadius: 3,
+    width:'25%',
+    height:Metrics.ratio(30),
+    left:Metrics.ratio(1)
   },
   buttonApply: {
     top:Metrics.ratio(10),
@@ -1249,10 +1287,11 @@ borderRadius:Metrics.ratio(70),
     fontWeight:'800',
 },
     Text2Container:{
-       marginRight:Metrics.ratio(10),
+       marginRight:Metrics.ratio(10), marginLeft: 8,
         fontSize:15,
         color:'#FF2E00',
-        fontWeight:'bold', 
+ 
+             fontWeight:'bold', 
         fontFamily: Platform.select({
           ios: 'Times New Roman',
           android: 'Times New Roman', // You may need to adjust this for Android
