@@ -32,7 +32,7 @@ const Store=({navigation})=>{
   const [filteredProducts, setFilteredProducts] = useState(null);
   const [amplePoints,setAmplePoints]=useState(0);
   const route=useRoute();
-  const user_Id=route.params.user_ID;
+  const user_Id=route.params.user_Id;
   
   useEffect(() => {
     // Filter products based on search query
@@ -134,46 +134,8 @@ const getstores = async () => {
     return (
   <ScrollView style={{backgroundColor:'#EEEEEE'}}>
 
-     <View style={{backgroundColor:'#EEEEEE'}}>
-        <View style={styles.header}>
-        <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
-<Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
-          <View>
-          <Text style={{
-  color: 'black',
-  fontSize: 9,
-  fontFamily: Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
-  }),
-}}>
-  {amplePoints}
-</Text>
-<Text style={{
-  color: 'black',
-  fontSize: 9,
-  fontWeight:'600',
-  fontFamily: Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
-  }),
-}}>
-Amples
-</Text>
-          </View>
-          <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
-            user_Id,
-          })}>
-          <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
-          </TouchableOpacity>
-        </View>
-        </View>
-        
-        <View style={{backgroundColor:'white', flex:1,flexDirection:'row'}}>
-        <View>
-
-        </View>
-        </View>
+    
+    
         <View style={styles.rowContainer}>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
       

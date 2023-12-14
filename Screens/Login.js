@@ -153,7 +153,6 @@ const Login=({navigation})=>{
          if(response.data && response.data.data.total_ample)
   {
    const Data=response.data.data.user_id;
-   console.log("Data",Data)
     navigation.navigate("HomeScreen",{
       Data,
     })
@@ -167,10 +166,7 @@ const Login=({navigation})=>{
       console.error("Error:", error);
     }
   }
-    const HomeScreen=()=>{
-      navigation.navigate("DemoScreen")
-    }
-   
+ 
 return (
 <View>
   <ImageBackground style={styles.ImageContainer} source={require('../assets/BackgroundImage.png')}>

@@ -9,6 +9,7 @@ import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import Cart from './Cart';
 import Brands from './Brands';
+
 // import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 // // import { createDrawerNavigator} from '@react-navigation/drawer';
 // const Drawer=createDrawerNavigator();
@@ -17,10 +18,9 @@ import Brands from './Brands';
 // Animated.initializeReanimated();
 
 const HomeScreen=({navigation})=>{
-const Route=useRoute();
+
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
-const user_ID=Route.params.Data;
 // const videoUrl = 'https://amplepoints.com/images/HowItWork.mp4';
 // const thumbnailUrl = 'https://amplepoints.com/images/vthumbnail.png';
 
@@ -59,7 +59,7 @@ useFocusEffect(
 const MoveStore=()=>{
   
   navigation.navigate("Store",{
-    user_ID
+    // user_ID
 
   })
 }
@@ -115,47 +115,7 @@ const handlePlayPause = async () => {
 return(
   <SafeAreaView>
     <ScrollView>
-    <View style={{backgroundColor:'#EEEEEE'}}>
-        <View style={styles.header}>
-        <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
-<Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
-          <View>
-          <Text style={{
-  color: 'black',
-  fontSize: 9,
-  fontFamily: Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
-  }),
-}}>
-  {amplePoints}
-</Text>
-<Text style={{
-  color: 'black',
-  fontSize: 9,
-  fontFamily: Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif', // You may need to adjust this for Android
-  }),
-}}>
-Amples
-</Text>
-          </View>
-          <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
-            user_ID,
-          })}>
-          <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
-          </TouchableOpacity>
-        </View>
-    
-        <TouchableOpacity onPress={()=>navigation.navigate("Search")} style={styles.searchBar2Container}>
-          <View style={styles.searchInput}>
-            <Image source={require('../assets/Search.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}></Image>
-            <Text >Search...</Text>
-          </View>
-        </TouchableOpacity>
-    
-    </View>
+  
     <View style={{backgroundColor:'white'}}>
     <View style={{
   marginLeft: Metrics.ratio(7),
@@ -203,8 +163,6 @@ Amples
         <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>your online mall</Text>
       </TouchableOpacity>
       
-    </View>
-    <View >  
     </View>
     
     <View style={{backgroundColor:'white',top:Metrics.ratio(30),}}>
@@ -359,11 +317,14 @@ const styles=StyleSheet.create({
     marginTop:Metrics.ratio(10),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor:'white'
+    backgroundColor:'white',
+   
   },
   itemContainer: {
     flex: 1,
     alignItems: 'center',
+    top:Metrics.ratio(10),
+    bottom:Metrics.ratio(10)
   },
   ovalImage: {
     width: Metrics.ratio(90), // Adjust the width and height as needed

@@ -36,9 +36,8 @@ const [online,setOnline]=useState(null);
 const [deleivery,setDeleivery]=useState(null);
 const [appliedAmples,setAppliedAmples]=useState(0);
 const [actual_data,setactual_Data]=useState(null);
-const data = [
-  { label: 'Select Time', value: '1' },
-];
+const [data, setData] = useState([{ label: 'Select Time', value: '1' }]);
+ 
    const ShowMoreDetail=()=>{
     setKnowMore(false);
     setShowMore(true);
@@ -130,10 +129,11 @@ const GetHours=async(dateObject)=>{
   //   setAmples(Response.data.data.user_total_ample);
   //  }
   console.log("Response of Date",Response.data)
-  data = Response.data.data.map((time, index) => ({
+  const data = Response.data.data.map((time, index) => ({
     label: time,
     value: `${index + 1}`, // You can adjust the value as needed
   }));
+  setData(data)
   
   }catch(erro){
     console.log("Error",erro)
@@ -932,8 +932,6 @@ return (
       />
     </View>
               </View>
-
-
 )}
     </ScrollView>
 
