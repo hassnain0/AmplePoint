@@ -37,7 +37,7 @@ const [deleivery,setDeleivery]=useState(null);
 const [appliedAmples,setAppliedAmples]=useState(0);
 const [actual_data,setactual_Data]=useState(null);
 const data = [
-  { label: 'Select', value: '1' },
+  { label: 'Select Time', value: '1' },
 ];
    const ShowMoreDetail=()=>{
     setKnowMore(false);
@@ -60,16 +60,16 @@ const route=useRoute();
   useEffect(() => {
 
     setLoading(true);
-    setProductId(route.params.productData.pid);
-    setVendorId(route.params.productData.vendor_key);
+    // setProductId(route.params.productData.pid);
+    // setVendorId(route.params.productData.vendor_key);
 
     const getProductDetails = async () => {
          try {
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                    product_id: productId,
-                    user_id: VendorId,
+                  product_id: 59927,
+                  user_id: 126,
                 },
             });
       
@@ -129,8 +129,11 @@ const GetHours=async(dateObject)=>{
   //  {
   //   setAmples(Response.data.data.user_total_ample);
   //  }
-  data=Response.data.data
   console.log("Response of Date",Response.data)
+  data = Response.data.data.map((time, index) => ({
+    label: time,
+    value: `${index + 1}`, // You can adjust the value as needed
+  }));
   
   }catch(erro){
     console.log("Error",erro)
@@ -192,8 +195,10 @@ const GetHours=async(dateObject)=>{
         month: '2-digit',
         day: '2-digit',
       })
-  
+
+      console.log("Formatted Date", formattedDate);
       setSelectedDate(formattedDate);
+
      await GetHours(formattedDate);  // Pass formattedDate directly
     }
   };
@@ -562,17 +567,19 @@ return (
        
         </View>
  
-     {TimeData &&   (
-      TimeData.map((dayInfo, index) => (
-        <View key={index} style={{ height: Metrics.ratio(50), bottom: Metrics.ratio(50), flex: 1, flexDirection: 'row', left: Metrics.ratio(15), marginRight: Metrics.ratio(20), backgroundColor: '#CED0CD' }}>
-        <Text style={{ left: Metrics.ratio(10), top: Metrics.ratio(10) }}>{dayInfo.day}</Text>
-        <Text style={{ left: Metrics.ratio(80), top: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
-        <Text style={{ left: Metrics.ratio(120), top: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
-        <Text style={{ left: Metrics.ratio(145), top: Metrics.ratio(10) }}>{dayInfo.end_time}</Text>
+     {TimeData && (
+  <View>
+    {TimeData.map((dayInfo, index) => (
+      <View key={index} style={{ height: Metrics.ratio(50), justifyContent:'space-between',flex: 1, flexDirection: 'row', marginBottom: Metrics.ratio(10), marginLeft: Metrics.ratio(15), marginRight: Metrics.ratio(20), backgroundColor: '#CED0CD' }}>
+        <Text style={{ marginLeft: Metrics.ratio(10), marginTop: Metrics.ratio(10) }}>{dayInfo.day}</Text>
+        <Text style={{ marginLeft: Metrics.ratio(30), marginTop: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
+        <Text style={{ marginLeft: Metrics.ratio(60), marginTop: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
+        <Text style={{ marginLeft: Metrics.ratio(85), marginTop: Metrics.ratio(10) }}>{dayInfo.end_time}</Text>
       </View>
-      ))
-   
-    )}
+    ))}
+  </View>
+)}
+
      <View style={{top:Metrics.ratio(50)}}>
           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
           <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
@@ -888,6 +895,7 @@ return (
           data={data}
           search
           maxHeight={200}
+          searchField='false'
           labelField="label"
           valueField="value"
           placeholder={!isFocus ? 'Select Time' : '...'}

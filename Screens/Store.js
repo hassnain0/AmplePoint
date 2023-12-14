@@ -55,9 +55,9 @@ const Store=({navigation})=>{
     });
   };
   useEffect(()=>{
-    getRewards();
     getstores();
-  },[])
+    getRewards();
+  },[storeProducts])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
 
