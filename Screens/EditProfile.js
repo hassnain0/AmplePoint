@@ -9,8 +9,23 @@ import { Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 const EditProfie= ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false)
-  const [isFocus, setIsFocus] = useState(false);
-  const [value, setValue] = useState(null);
+  const [isFocus1, setIsFocus1] = useState(false);
+  const [isFocus2, setIsFocus2] = useState(false);
+  const [isFocus3, setIsFocus3] = useState(false);
+  const [isFocus4, setIsFocus4] = useState(false);
+  const [isFocus5, setIsFocus5] = useState(false);
+  const [isFocus6, setIsFocus6] = useState(false);
+  const [isFocus7, setIsFocus7] = useState(false);
+  const [isFocus8, setIsFocus8] = useState(false);
+
+  const [valuegen, setValueGen] = useState(null);
+  const [valueage, setValueAge] = useState(null);
+  const [valuequal, setValueQual] = useState(null);
+  const [valueinc, setValueInc] = useState(null);
+  const [valueemp, setValueEmp] = useState(null);
+  const [valuecountry, setValueCountryInc] = useState(null);
+  const [valuestate, setValueState] = useState(null);
+  const [valueCity, setValueCity] = useState(null);  
   const [countrydata,setCountryData]=useState([]);
   const [loader,setLoader]=useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -199,7 +214,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>Gender</Text>
       <Dropdown
-          style={[styles.InputContainer2, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer2, isFocus1 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -208,14 +223,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select Gender' : '...'}
-          searchPlaceholder="Search City"
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          placeholder={!isFocus1 ? 'Select Gender' : '...'}
+          searchPlaceholder="Select Gender"
+          value={valuegen}
+          onFocus={() => setIsFocus1(true)}
+          onBlur={() => setIsFocus1(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueGen(item.value);
+            setIsFocus1(false);
           }}
         />
     </View>
@@ -230,7 +245,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>Age</Text>
      <Dropdown
-          style={[styles.InputContainer2, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer2, isFocus2 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -240,14 +255,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select Age' : '...'}
+          placeholder={!isFocus2? 'Select Age' : '...'}
           searchField={false}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          value={valueage}
+          onFocus={() => setIsFocus2(true)}
+          onBlur={() => setIsFocus2(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueAge(item.value);
+            setIsFocus2(false);
           }}
         />
     </View>
@@ -354,7 +369,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>INCOME</Text>
       <Dropdown
-          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus3 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -364,14 +379,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select qualification' : '...'}
+          placeholder={!isFocus3 ? 'Select qualification' : '...'}
           searchField={false}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          value={valuequal}
+          onFocus={() => setIsFocus3(true)}
+          onBlur={() => setIsFocus3(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueQual(item.value);
+            setIsFocus3(false);
           }}
         />
 </View>
@@ -386,7 +401,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>EMPLOYEEMENT</Text>
     <Dropdown
-          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus4 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -396,14 +411,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select Employment' : '...'}
+          placeholder={!isFocus4 ? 'Select Employment' : '...'}
           searchField={false}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          value={valueemp}
+          onFocus={() => setIsFocus4(true)}
+          onBlur={() => setIsFocus4(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueEmp(item.value);
+            setIsFocus4(false);
           }}
         />
 </View>
@@ -440,7 +455,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>Country</Text>
      <Dropdown
-          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus5 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -450,14 +465,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select Country' : '...'}
+          placeholder={!isFocus5 ? 'Select Country' : '...'}
           searchField={false}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          value={valueinc}
+          onFocus={() => setIsFocus5(true)}
+          onBlur={() => setIsFocus5(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueInc(item.value);
+            setIsFocus5(false);
           }}
         />
 </View>
@@ -472,7 +487,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>State</Text>
    <Dropdown
-          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus6 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -482,14 +497,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select State' : '...'}
+          placeholder={!isFocus6 ? 'Select State' : '...'}
           searchField={false}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          value={valuestate}
+          onFocus={() => setIsFocus6(true)}
+          onBlur={() => setIsFocus6(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueState(item.value);
+            setIsFocus6(false);
           }}
         />
 </View>
@@ -504,7 +519,7 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>City</Text>
   <Dropdown
-          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus7 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -514,14 +529,14 @@ const Bounce=()=>{
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select City' : '...'}
+          placeholder={!isFocus7 ? 'Select City' : '...'}
           searchField={false}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          value={valueCity}
+          onFocus={() => setIsFocus7(true)}
+          onBlur={() => setIsFocus7(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueCity(item.value);
+            setIsFocus7(false);
           }}
         />
 </View>

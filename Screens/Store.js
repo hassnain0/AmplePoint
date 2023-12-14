@@ -135,15 +135,7 @@ const getstores = async () => {
     
         <View style={styles.rowContainer}>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
-      
         <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
-      
-      
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
-    
-        <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
-      
       </TouchableOpacity>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
       

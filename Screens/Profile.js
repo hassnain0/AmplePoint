@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import {ProgressBarAndroidBase, View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Metrics } from '../themes';
-import axios from 'axios';
 import Button from '../components/Button';
+import axios from 'axios';
+import EditProfie from './EditProfile';
 
 // import ProgressBar from 'react-native-progress';
 
-const Profile= () => {
+const Profile= ({navigation}) => {
     //Feidls
     const [data,setData]=useState(null)
     useEffect(()=>{
@@ -29,152 +30,128 @@ const Profile= () => {
           getHomeContent();
     },)
   // Dummy data (replace with actual user data)
-  const userData = {
-    name: 'John Doe',
-    points: 75,
-    progress: 0.75, // Should be between 0 and 1
-    email: 'john.doe@example.com',
-    phoneNumber: '+1 555-555-5555',
-    // Add the path to the user's picture
-    profilePicture: require('../assets/Profile.png'), // Replace with your actual image path
-  };
+ const EditProfie=()=>{
+  navigation.navigate("EditProfile")
+ }
 
   return (
     
-    <View style={styles.container}>
+    <ImageBackground source={require('../assets/EditBane.jpg')} style={styles.containerImage}>
+     <View style={styles.container}>
+      <TouchableOpacity onPress={EditProfie}>
+      <Image style={{left:Metrics.ratio(100),width:40,height:40}} source={require('../assets/EditIcon.png')}></Image>
+      </TouchableOpacity>
       {data &&(
       <View style={styles.card}>
-        <Image source={userData.profilePicture} style={styles.profilePicture} />
+        <Image source={require('../assets/Profile.png')} style={styles.profilePicture} />
 
         <Text style={styles.userName}>{data.first_name} {data.last_name}</Text>
         
-       <View style={{flex:1,flexDirection:'row'}}>
-        <Text style={styles.points}> Ample</Text>
+       <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+        <Text style={styles.points}> Amples: </Text>
         <Text style={styles.amplepoints}>{data.total_ample}</Text>
         </View>      
-<View style={{flex:1, flexDirection:'row'}}>
+        
+<View style={{flexDirection:'row',justifyContent:'left'}}>
+<View style={{marginLeft:Metrics.ratio(20)}}>  
 <View>
     <Text style={styles.userInfo}>Email Id:</Text>
     <Text style={styles.userEmail}>{data.email}</Text>
     </View>
-<View style={styles.line1}/>
-<View>
-    <Text style={styles.userInfo}>Phone Number</Text>
-    <Text style={{ 
-    fontSize: 8,
-    marginBottom: 4,
-  }}>{data.mobile}</Text>
-    </View>
-        </View>
-        <View style={{flex:1, flexDirection:'row'}}>
-<View>
+    <View>
     <Text style={styles.userInfo}>Tag Line:</Text>
     <Text style={styles.userEmail}>{data.tag_desc}</Text>
     </View>
-<View style={styles.line1}/>
-<View>
-    <Text style={styles.userInfo}>Age</Text>
-    <Text style={{ 
-    fontSize: 8,
-    marginBottom: 4,
-  }}>{data.age}</Text>
-    </View>
-        </View>
-        <View style={{flex:1, flexDirection:'row'}}>
-<View>
+    <View>
     <Text style={styles.userInfo}>Gender:</Text>
     <Text style={styles.userEmail}>{data.gender}</Text>
     </View>
-<View style={styles.line1}/>
-<View>
-    <Text style={styles.userInfo}>Education</Text>
-    <Text style={{ 
-    fontSize: 8,
-    marginBottom: 4,
-  }}>{data.education}</Text>
-    </View>
-        </View>
-        <View style={{flex:1, flexDirection:'row'}}>
-<View>
+    <View>
     <Text style={styles.userInfo}>Birthday:</Text>
     <Text style={styles.userEmail}>{data.birthday}</Text>
     </View>
-<View style={styles.line1}/>
-<View>
-    <Text style={styles.userInfo}>Employeement</Text>
-    <Text style={{ 
-    fontSize: 8,
-    marginBottom: 4,
-  }}>{data.employment}</Text>
-    </View>
-        </View>
-        <View style={{flex:1, flexDirection:'row'}}>
-<View>
+    <View>
     <Text style={styles.userInfo}>Income:</Text>
     <Text style={styles.userEmail}>{data.income}</Text>
     </View>
-<View style={styles.line1}/>
-<View>
-    <Text style={styles.userInfo}>Country</Text>
-    <Text style={{ 
-    fontSize: 8,
-    marginBottom: 4,
-  }}>{data.user_country}</Text>
-    </View>
-        </View>
-        <View style={{flex:1, flexDirection:'row'}}>
-<View>
+    <View>
     <Text style={styles.userInfo}>Zip Code:</Text>
     <Text style={styles.userEmail}>{data.zip_code}</Text>
     </View>
-
+        </View>
+        <View style={styles.line1}/>
+        <View style={{flex:1, flexDirection:'column',marginLeft:Metrics.ratio(50)}}>
 <View>
-    <Text style={styles.userInfo}>City</Text>
-    <Text style={{ 
-    fontSize: 8,
-    marginBottom: 4,
-  }}>{data.user_city}</Text>
+    <Text style={styles.userInfo}>Phone Number:</Text>
+    <Text style={styles.userEmail}>{data.mobile}</Text>
+    </View>
+    <View>
+    <Text style={styles.userInfo}>Age:</Text>
+    <Text style={styles.userEmail}>{data.age}</Text>
+    </View>
+    <View>
+    <Text style={styles.userInfo}>Education:</Text>
+    <Text style={styles.userEmail}>{data.education}</Text>
+    </View>
+    <View>
+    <Text style={styles.userInfo}>Birthday:</Text>
+    <Text style={styles.userEmail}>{data.employment}</Text>
+    </View>
+    <View>
+    <Text style={styles.userInfo}>Country:</Text>
+    <Text style={styles.userEmail}>{data.user_country}</Text>
+    </View>
+    <View>
+    <Text style={styles.userInfo}>City:</Text>
+    <Text style={styles.userEmail}>{data.user_city}</Text>
     </View>
         </View>
-        
-<View>
-    <Text style={styles.userInfo}>Address:</Text>
-    <Text style={styles.userEmail}>{data.address}</Text>
-    </View>
 
-        
-        
+        </View>
+        <View  >
+        <Text style={styles.address}>Address:</Text>
+    <Text style={styles.address1}>{data.address}</Text>
+        </View>
+        <View style={{flex:1,flexDirection:'row',alignItems:'flex-end'}}>
         <View style={styles.buttonView}>
       <Button
-        // loader={loader}
-        // btnPress={onCheckout}
-        
         label={"View More"}
       />
     </View>
-    
+    </View>
       </View>
       )}
-    </View>
+        </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  userEmail:{
+fontSize:10,
+color:'black'
+  },
   buttonView: {
     height:Metrics.vh*5,
     backgroundColor:'#FF2F00',
 borderRadius:Metrics.ratio(70),
     width: Metrics.vw * 30,
     justifyContent: "center",
-    alignItems: "center",
-    alignSelf:'center',
+    alignSelf:'right',
+    marginHorizontal:Metrics.ratio(100),
 
     bottom:Metrics.ratio(5)
   },
+  containerImage: {
+   
+    height:'60%',
+    width:'100%'
+  },
   container: {
     flex: 1,
-    alignContent:'center',
-    alignSelf:'center'
+    top:Metrics.ratio(70),
+   alignItems:'center',
+justifyContent:'center',
   },
   card: {
     padding: 30,
@@ -186,40 +163,45 @@ borderRadius:Metrics.ratio(70),
     shadowRadius: 2,
   },
   line1: {
-    height: Metrics.ratio(40), // Adjust the height of the line
+    height:'100%', // Adjust the height of the line
     width: Metrics.ratio(2), // Adjust the width of the line
     backgroundColor: '#D1D3D0',
-
+    left:Metrics.ratio(20),
+    alignItems:'center',
+    justifyContent:'center'
     // Change the color of the line
   },
   profilePicture: {
-    width: 100,
-    height: 100,
+    width: Metrics.ratio(70),
+    height: Metrics.ratio(70),
     borderRadius: 50,
     alignItems:'center',
     alignSelf:'center',
-    bottom:Metrics.ratio(20)
   },
   userName: {
+    textAlign:'center',
     color:'black',
     fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'serif', // You may need to adjust this for Android
-      }),
-    fontSize: 18,
+      }),fontStyle:'italic',
+    fontSize: 15,
     fontWeight: 'bold'
   },
   points: {
-    fontSize: 16,
+    fontSize: 13,
+    fontStyle:'italic',
     color:'black',
+    fontWeight:'800',
     fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'serif', // You may need to adjust this for Android
       }),
   },
   amplepoints: {
-    fontWeight:'800',
-    fontSize: 16,
+    fontWeight:'900',
+    fontSize: 13,
+    fontStyle:'italic',
   
     color:'#ff3d00',
     fontFamily: Platform.select({
@@ -233,8 +215,21 @@ borderRadius:Metrics.ratio(70),
     color:'#ff3d00',
   },
   userInfo: {
+    marginTop:Metrics.ratio(10),
     fontSize: 8,
-    marginBottom: 4,
+    textAlign:"left",
+marginLeft:Metrics.ratio(0)
+  },
+  address: {
+    marginTop:Metrics.ratio(10),
+    fontSize: 8,
+    textAlign:"center",
+  },
+  address1: {
+    color:'black',
+    fontSize: 8,
+    textAlign:"center",
+    paddingBottom:Metrics.ratio(20)
   },
 });
 

@@ -328,7 +328,7 @@ borderRadius:Metrics.ratio(70),
     fontSize: 16,
   },
   InputContainer:{
-  backgroundColor:'#D8D9D8',
+  backgroundColor:'#eeeeee',
   margin:Metrics.ratio(5),
   right:Metrics.ratio(10),
   borderRadius:5,

@@ -307,7 +307,7 @@ const calculateQuantity = () => {
             },
           
           }).then((response)=>{
-           
+           console.log("response of carr",response.data.message)
              if(response.data.message==='Product Added To Cart'){
               navigation.navigate("Cart")
               setLoader(false);
