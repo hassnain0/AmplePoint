@@ -54,7 +54,7 @@ const decreaseQuantity = (item) => {
   
     const newData = [...prevData.data];
     const itemIndex = newData.findIndex((dataItem) => dataItem.id === item.id);
-    if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
+    if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 1) {
       newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) - 1).toString();
     
       const updatedData = { ...prevData, data: newData };
@@ -136,7 +136,7 @@ setLoader(true);
           user_id:126,
         },
       });
-      console.log("Response",response.data)
+      console.log("Response", response.data.data.item_added);
       // Handle the successful response
       setActualData(response.data)
       setProduct_no(response.data.length);
@@ -183,44 +183,68 @@ setLoader(true);
     return (
       <View>
         {actulaData?.data?.map((item, index) => (
-
-          <View key={index} style={{  left: Metrics.ratio(10),top:Metrics.ratio(20)  }}>
-             <Text style={{ fontSize: 12, color: 'black', fontWeight: 'bold', left: Metrics.ratio(1),bottom:Metrics.ratio(10)}}>{item.meta_description}</Text>
-          <View style={{flex:1,flexDirection:'row',top:Metrics.ratio(10)}}>
-              <Text style={{ fontSize: 10, color: 'black', fontWeight: 'bold' ,bottom:Metrics.ratio(20)}}>By: </Text>
-              <Text style={{ fontSize: 10, fontWeight: '300',bottom:Metrics.ratio(20) }}>{item.supplier_name}</Text>
+<View>
+          <View key={index} style={{  flex:1, flexDirection:'row',justifyContent:'space-between',left:Metrics.ratio(10),marginBottom:Metrics.ratio(50)}}>
+             <View style={{top:Metrics.ratio(20),flex:1, flexDirection:'column'}}>
+             <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' ,bottom:Metrics.ratio(10), fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),}}>{item.item_added}</Text>
+           <View style={{flex:1, flexDirection:'row', fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),}}>
+             <Text style={{ fontSize: 10, color: 'black', fontWeight: 'bold' , fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),}}>By: </Text>
+              <Text style={{ fontSize: 10, fontWeight: '700' ,}}>{item.supplier_name}</Text>
               </View>
              
-            <View>
-            <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
-            <Text style={{ fontSize: 12, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
-                ${item.discount_price}
-              </Text>
-              <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
-              </View>        
-              <View style={styles.container2}>
-                <Text style={{ top: Metrics.ratio(-30), fontSize: 15, left: Metrics.ratio(-15), }}>
-                  Free with {item.no_of_amples} amplePoints
-                </Text>
-                <TouchableOpacity style={styles.button1} >
-                  <Image source={require('../assets/Minus.png')} style={styles.icon} />
+              <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold',}}>
+                ${item.item_added_price}
+              </Text> 
+              <Text >Free with{item.no_of_amples}AmplePoints</Text>
+               
+             </View>
+             <View style={{top:Metrics.ratio(30),flex:1, flexDirection:'column',left:Metrics.ratio(110)}}>
+             <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
+            {item.apply_amples==0.00 &&(
+             <View style={{flex:1,flexDirection:'row',top:Metrics.ratio(50)}}>
+              <TouchableOpacity onPress={() => increaseQuantity(item)} style={styles.button1} >
+                  <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{item.item_added_quantity}</Text>
-                <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item)}>
-                 <View>
-                  <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
-                  </View>
+                <TouchableOpacity style={styles.button} onPress={() => decreaseQuantity(item)}>
+                  <Image source={require('../assets/Minus.png')} style={styles.icon} />
                 </TouchableOpacity>
-              </View>
-              <View>
-      <TouchableOpacity onPress={()=>delProduct(item)} style={{bottom:Metrics.ratio(20),left:Metrics.ratio(280),height:Metrics.ratio(30), marginRight:Metrics.ratio(20), color:'white',backgroundColor: '#FC3F01',width:Metrics.ratio(70),borderRadius: 10,}}>
-      <Text style={{fontSize:12,textAlign:'center',color:'white'}}>Remove</Text>
+                </View>
+                )}
+                <TouchableOpacity onPress={()=>delProduct(item)} style={{ color: 'white',right:Metrics.ratio(10),
+    backgroundColor: '#ff3f09',
+    top:Metrics.ratio(20),
+    width: Metrics.ratio(70),
+    height:Metrics.ratio(25),
+    alignSelf:'left',
+    borderRadius: 10,}}>
+      <Text style={{fontSize:12,textAlign:'center',justifyContent:'center',color:'white' , fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),}}>Remove</Text>
+    
       </TouchableOpacity>
-    </View>
-            </View>
+               
+</View> 
+              
+
+
           </View>
+<View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(15)}}></View>
+</View>
         ))}
+        
       </View>
+      
     );
   }
   return (
@@ -238,12 +262,12 @@ setLoader(true);
               <ScrollView style={{backgroundColor:'white'}}>  
                 
               <View  style={{flex: 1}}>
-                  <View  style={{height:Metrics.ratio(20),flex:1,flexDirection:'row',backgroundColor:'#B6B8B5',justifyContent:'space-between'}}>
-                  <Text style={{textAlign:'center',color:'black',fontSize:10,fontWeight:'800', fontFamily: Platform.select({
+                  <View  style={{height:Metrics.ratio(30),flex:1,flexDirection:'row',backgroundColor:'#d0d0d0',justifyContent:'space-between'}}>
+                  <Text style={{marginLeft:Metrics.ratio(10),textAlign:'right',color:'black',fontSize:10,fontWeight:'800', fontFamily: Platform.select({
           ios: 'Times New Roman',
           android: 'Times New Roman', // You may need to adjust this for Android
         }),}}>Item({product_no})</Text>
-                  <Text style={{ textAlign:'center',color: 'black', fontSize: 10, fontWeight: '800', fontFamily: Platform.select({
+                  <Text style={{ marginRight:Metrics.ratio(10),textAlign:'center',color: 'black', fontSize: 10, fontWeight: '800', fontFamily: Platform.select({
           ios: 'Times New Roman',
           android: 'Times New Roman', // You may need to adjust this for Android
         }), }}>
@@ -299,7 +323,7 @@ borderRadius:Metrics.ratio(70),
   },
   icon: {
     width: Metrics.ratio(15),
-    height:  Metrics.ratio(15),
+    height:  Metrics.ratio(12),
   },
   button4: {
     color:'white',
@@ -322,14 +346,13 @@ left:Metrics.ratio(110)
     width: Metrics.ratio(80), 
     height: Metrics.ratio(50),
     borderRadius:10,
-    bottom:Metrics.ratio(30),
     right:Metrics.ratio(20)
   },
   button: {
-    color:'white',
-    backgroundColor: '#FC3F01',
-borderRadius: 1,
-bottom:Metrics.ratio(30),
+    backgroundColor: '#d0d0d0',
+    borderRadius: 1,
+    bottom:Metrics.ratio(30),
+    height:Metrics.ratio(15),
 right:Metrics.ratio(40)
   },container3: {
     right:Metrics.ratio(30),
@@ -374,13 +397,14 @@ right:Metrics.ratio(40)
     fontSize: 15,
     fontWeight: 'bold',
     color: 'black',
-    bottom:Metrics.ratio(30),
+    bottom:Metrics.ratio(32),
 
   },
   button1: {
-    backgroundColor: '#C9CBC8',
+    backgroundColor: '#ff3f09',
 borderRadius: 1,
 bottom:Metrics.ratio(30),
+height:Metrics.ratio(15),
 left:Metrics.ratio(40)
   },button3: {
     color:'white',

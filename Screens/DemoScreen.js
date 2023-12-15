@@ -274,7 +274,8 @@ const styles=StyleSheet.create({
         height: Metrics.ratio(50),
         alignSelf:'left',
         justifyContent:'left',
-        position: 'absolute', bottom: 0, width: 60, height: 60
+        position: 'absolute', bottom: 0, width: 60, height: 60,
+        
   
         
       },
