@@ -6365,7 +6365,7 @@
 "npm-user-validate@^2.0.0":
   "version" "2.0.0"
 
-"npm@^10.2.3":
+"npm@^10.2.5":
   "integrity" "sha512-lXdZ7titEN8CH5YJk9C/aYRU9JeDxQ4d8rwIIDsvH3SMjLjHTukB2CFstMiB30zXs4vCrPN2WH6cDq1yHBeJAw=="
   "resolved" "https://registry.npmjs.org/npm/-/npm-10.2.5.tgz"
   "version" "10.2.5"

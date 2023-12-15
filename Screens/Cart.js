@@ -215,10 +215,10 @@ setLoader(true);
               <ScrollView style={{backgroundColor:'white'}}>  
                 
               <View  style={{flex: 1}}>
-                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#CED0CD',justifyContent:'space-between'}}>
+                  <View  style={{height:Metrics.ratio(20),flex:1,flexDirection:'row',backgroundColor:'#eeeeee',justifyContent:'space-between'}}>
                   <Text style={{left:0,color:'black',fontSize:10,fontWeight:'500',}}>Item({product_no})</Text>
                   <Text style={{ color: 'black', fontSize: 10, fontWeight: '500' }}>
-  Total: {parseFloat(actulaData.cart_total).toFixed(4)} $
+  Total: {parseFloat(actulaData.cart_total).toFixed(1)} $
 </Text>
                     </View>
                   </View>

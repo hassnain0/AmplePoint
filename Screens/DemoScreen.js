@@ -27,7 +27,7 @@ const ProductItem = ({ product }) => {
     </View>
     <View>
       <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
-        Get <Text style={{ color: '#FF2E00' }}>{product.pamples}</Text> AmplePoints $<Text style={{ color: '#FF2E00' }}>{product.pdiscountprice}</Text>
+        Get <Text style={{ color: '#ff3d00' }}>{product.pamples}</Text> AmplePoints $<Text style={{ color: '#FF2E00' }}>{product.pdiscountprice}</Text>
       </Text>
     </View>
     <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
@@ -41,7 +41,7 @@ const ProductItem = ({ product }) => {
 const DemoScreen=({navigation})=>{
   const route=useRoute();
   const Name = route.params.Name;
-  console.log("Name",Name)
+  const productData=route.params.productData
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
     navigation.navigate('GiftDetails',{ productData,route });
@@ -115,6 +115,13 @@ const getProductDetails = async () => {
 
     return (
       <SafeAreaView>
+          <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
           <View style={styles.header}>
           <TouchableOpacity
             activeOpacity={1}
@@ -124,15 +131,14 @@ const getProductDetails = async () => {
           </TouchableOpacity>
           <Text style={styles.textHeader}>{Name}</Text>
         </View>
-  <ScrollView>
+  <ScrollView >
+    <View style={{backgroundColor:'white'}}>
+    <View style={{backgroundColor:'white',height:Metrics.ratio(100),width:'100%'}}>
+    <Image   source={{ uri: `https://amplepoints.com/vendor-data/${productData.tbl_vndr_id}/profile/${productData.vendor_profileimage}` }} style={styles.StoreImage} resizeMode="cover" />
+ </View>
+    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5)}}></View> 
       <View style={styles.container}>
-      <Spinner
-          visible={loading}
-          size={'large'}
-          textContent={'Loading...'}
-          textStyle={{ color: '#ff3d00' }}
-          
-        />
+    
       {data && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
@@ -143,6 +149,7 @@ const getProductDetails = async () => {
           {renderFlatList(chunk)}
         </View>
       ))}
+    </View>
     </View>
     </ScrollView>
     </SafeAreaView>
@@ -182,7 +189,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#FFFF',
         margin: Metrics.ratio(10),
         borderRadius:5,
-        elevation:3
+        elevation:5
       },
       TextContainer: {
         fontSize:15,
@@ -207,12 +214,19 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:10,
-        width: Metrics.ratio(170),
-        height: Metrics.ratio(170),
+        width: Metrics.ratio(100),
+        height: Metrics.ratio(100),
+        
+      },
+      StoreImage: {
+        width: Metrics.ratio(50),
+        height: Metrics.ratio(50),
+        alignSelf:'left',
+        justifyContent:'left',
         
       },
       header: {
-        backgroundColor:'#FF2E00',
+        backgroundColor:'#ff3d00',
         alignItems: 'center',
         flexDirection: 'row',
         paddingVertical: Metrics.ratio(30),

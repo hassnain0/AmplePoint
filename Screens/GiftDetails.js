@@ -102,7 +102,7 @@ const route=useRoute();
     };
   
 
-
+getComments();
     getProductDetails();
     setLoading(false);
     GetAmples();
@@ -271,9 +271,23 @@ const GetHours=async(dateObject)=>{
  
 const handleAmples=(text)=>{
 setAppliedAmples(text);
-  
+  }
+  const getComments=async()=>{
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/vendortestinomial?';
+      const response = await axios.get(apiUrl,{
+        params:{
+          vendor_id:VendorId
+        }
+      });
+      console.log("Response of  Comments",response.data.data)
+      }
+     catch (err) {
+      console.log("Error fetching data:", err);
+    }
+    
+    } 
 
-}
 const calculateQuantity = () => {
   console.log("appliedAmples",appliedAmples)
   if (appliedAmples >= actual_data.data.product_info.single_price && appliedAmples <= amples) {
@@ -312,7 +326,6 @@ const calculateQuantity = () => {
               navigation.navigate("Cart")
               setLoader(false);
               util.successMsg("Added to Cart Sucessfully");
-          
              }
           }).catch((err)=>{
             setLoader(false)

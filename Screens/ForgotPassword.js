@@ -32,17 +32,22 @@ const ForgotScreen = ({ navigation }) => {
     return ;  
   }
   else{
-              try {
-      const apiUrl = 'https://amplepoints.com/apiendpoint/forgotpassword'; 
+    try {
+      // navigation.navigate("DemoScreen")
+      const apiUrl = "https://amplepoints.com/apiendpoint/forgotpassword?email=hirenbuhecha@yopmail.com";
+  
+      const formData = new FormData();
     
-      const requestData = {
-          email:email_password
+      formData.append("email", email_password);
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        "Accept": "application/json",
       };
-     const respone=await axios.post(apiUrl, requestData);
-      console.log("Respone",respone)
+      const response = await axios.post(apiUrl, formData, { headers });
+      console.log("Respone",response.data)
       // this.setState({ responseData: response.data, error: null });
     setEmail('');
-    util.successMsg("Done")
+    util.successMsg("Your Password Has Been Sent To Your Email Address! Please Check your Spam if not get in Inbox")
     navigation.navigate("Login")
     } catch (error) {
      

@@ -50,6 +50,7 @@ const Store=({navigation})=>{
     const Name=productData.vendor_name
     const Id=productData.tbl_vndr_id
     navigation.navigate('DemoScreen',{
+      productData,
       Id,
       Name,
     });
@@ -154,15 +155,13 @@ const getstores = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
-     {storeProducts && (
-        <>
-          {filteredProducts
-            ? renderFlatList(filteredProducts)
-            : chunkArray(storeProducts.data, 10).map((chunk, index) => (
-                <View key={index}>{renderFlatList(chunk)}</View>
-              ))}
-        </>
-      )}
+{storeProducts && (
+  <>
+    {chunkArray(storeProducts.data, 10).map((chunk, index) => (
+      <View key={index}>{renderFlatList(chunk)}</View>
+    ))}
+  </>
+)}
       </View>
     </ScrollView>
 )

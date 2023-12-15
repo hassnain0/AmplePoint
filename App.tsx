@@ -49,8 +49,7 @@ export default function App() {
       <Stack.Screen name='Search' component={Search} options={( ) => ({headerTintColor:'white',title:'Search',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='MallDetail' component={MallDetail}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
       <Stack.Screen name='OrderSummary' component={OrderSummary} options={( ) => ({headerTintColor:'white',title:'Order Summary',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
-      <Stack.Screen name='Store' component={Store} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/>
-      
+      <Stack.Screen name='Store' component={Store} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/>   
       <Stack.Screen name='Mall' component={Mall} options={( ) => ({headerTintColor:'white',title:'Mall',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Brands' component={Brands} options={( ) => ({headerTintColor:'white',title:'Brands',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
