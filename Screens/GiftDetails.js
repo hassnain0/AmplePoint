@@ -11,6 +11,7 @@ import axios from 'axios';
 import Swiper from 'react-native-swiper';
 import { useRoute } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const GiftDetails=({navigation})=>{
 const [isFocus, setIsFocus] = useState(false);
@@ -54,6 +55,7 @@ const forGuest=()=>{
 setisforGuest(true);
 setisforMe(false)
 }
+
 const route=useRoute();
   const [loading,setLoading]=useState(false);
   useEffect(() => {
@@ -129,11 +131,21 @@ const GetHours=async(dateObject)=>{
   //   setAmples(Response.data.data.user_total_ample);
   //  }
   console.log("Response of Date",Response.data)
+  if(Response.data.message!=="Vendor Hours Found"){
+    setLoading(false);
+
+    util.errorMsg("Data not Found");
+return false;
+  }
   const data = Response.data.data.map((time, index) => ({
     label: time,
     value: `${index + 1}`, // You can adjust the value as needed
   }));
-  setData(data)
+  setData(data);
+  setLoading(false);
+
+
+
   
   }catch(erro){
     console.log("Error",erro)
@@ -198,7 +210,7 @@ const GetHours=async(dateObject)=>{
 
       console.log("Formatted Date", formattedDate);
       setSelectedDate(formattedDate);
-
+setLoading(true)
      await GetHours(formattedDate);  // Pass formattedDate directly
     }
   };
@@ -345,12 +357,13 @@ const calculateQuantity = () => {
 return (
   <SafeAreaView >
 
-  {loading ? (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center'}}>Loading....</Text>
-          <ActivityIndicator size="large" color="#FF2E00" />
-        </View>
-) : ( 
+<Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
   <ScrollView style={{backgroundColor:'white',}} scrollEnabled={true}>
    
 {actual_data && (
@@ -359,7 +372,7 @@ return (
    
    <View style={styles.ViewContainer}>    
    {imageData && (
-      <Swiper style={{height:Metrics.ratio(200),top:Metrics.ratio(20)}}>
+      <Swiper style={{height:Metrics.ratio(300),top:Metrics.ratio(20)}}>
         {imageData.map((image, index) => (
           <View key={index} >
             <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${image.pid}/${image.pimage}` }} />
@@ -374,18 +387,17 @@ return (
       </TouchableOpacity>
 
   </View>
-   
+   <View style={{marginLeft:Metrics.ratio(12)}}>
   <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between',}}>
   <View >
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
    </View>
-   <View style={{marginLeft:Metrics.ratio(10)}}>
+   <View >
    <Text style={styles.Text2Container}>${actual_data?.data?.product_info?.single_price}</Text>
    </View>
     </View>
     
    <Text style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(12),
         fontSize:10,
         fontWeight:'300',
         color:'black',
@@ -395,8 +407,7 @@ return (
         }),
         }}>FREE with {actual_data?.data?.product_info?.pfwamples} AmplePoints</Text>
         <Text style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(12),
-        fontSize:10,
+        fontSize:12,
         fontWeight:'500',
         fontFamily: Platform.select({
           ios: 'Times New Roman',
@@ -407,165 +418,106 @@ return (
         }}>By:{actual_data?.data?.product_info?.pvendor}</Text>
         <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, flexDirection:'row'}}>
-        <Image source={require('../assets/ColorOptions.png')} style={{height:Metrics.ratio(25),marginLeft:Metrics.ratio(20),width:Metrics.ratio(25),top:Metrics.ratio(10),backgroundColor:'black'}}></Image>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(15),
+        <Image source={require('../assets/Color.png')} style={{height:Metrics.ratio(20),width:Metrics.ratio(20),top:Metrics.ratio(10)}}></Image>
+   <Text  style={{
+    top:Metrics.ratio(14),
+    left:Metrics.ratio(3),
         fontSize:10,
-        fontWeight:'300',
+        fontWeight:'400',
         color:'black'
+    
         }}>Color Options</Text>
-   <Image source={require('../assets/Sale2.png')} style={{marginLeft:Metrics.ratio(10),width:Metrics.ratio(35),height:Metrics.ratio(10),top:Metrics.ratio(15),left:Metrics.ratio(35)}}></Image>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(40),
+  <Image source={require('../assets/Color.png')} style={{height:Metrics.ratio(20),marginLeft:Metrics.ratio(20),width:Metrics.ratio(20),top:Metrics.ratio(10)}}></Image>
+   <Text  style={{
+    top:Metrics.ratio(14),
+    left:Metrics.ratio(3),
         fontSize:10,
-        fontWeight:'300',
+        fontWeight:'400',
         color:'black'
-        }}>Size Chart(US)</Text>
+    
+        }}>Size Chart (US)</Text>
    </View>
    </View>
    <Text style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
+
         fontSize:20,
         fontWeight:'500',
         color:'#FF2E00'
         }}>Details</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Buy & Earn</Text>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
+   <Text  style={styles.ScreenText}>Buy & Earn</Text>
+   <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pamples} Amples</Text>
      </View>
      <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Reward Value</Text>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(90),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.pdiscountprice}</Text>
+   <Text style={styles.ScreenText}>Reward Value</Text>
+   <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pdiscountprice}</Text>
    </View>
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Your Earn</Text>
-  <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(115),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.pdiscount}</Text>
+   <Text  style={styles.ScreenText}>Your Earn</Text>
+  <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pdiscount}</Text>
     
    </View>
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Applied To :</Text>
-  <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(105),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>50% Total Bill</Text>
+   <Text  style={styles.ScreenText}>Applied To :</Text>
+  <Text  style={styles.ScreenText2}>50% Total Bill</Text>
     
    </View>
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Your Earn</Text>
-  <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(115),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>50</Text>
+   <Text  style={styles.ScreenText}>Your Earn</Text>
+   <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Product Message:</Text>
-  <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(60),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.pro_mess}</Text>  
+   <Text  style={styles.ScreenText}>Product Message:</Text>
+  <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pro_mess}</Text>  
    </View>
-    <Text  style={{  paddingTop:Metrics.ratio(1),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>GIFT CARD DETAILS</Text>
+    <Text  style={styles.ScreenText}>GIFT CARD DETAILS</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-   <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Item Code:</Text>
-  <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(105),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.product_sku}</Text>
+   <Text style={styles.ScreenText}>Item Code:</Text>
+  <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.product_sku}</Text>
 
     </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+    <View>
   <TouchableOpacity onPress={ShowMoreDetail}>
  
- {knowMore && (<Text  style={{  top:Metrics.ratio(10),
+ {knowMore && (
+<View>
+<Text  style={{  top:Metrics.ratio(10),
         paddingLeft:Metrics.ratio(290),
         fontSize:15,
         fontWeight:'600',
         color:'#FF2E00'
         }}>Know More</Text>
+       <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5),marginTop:Metrics.ratio(20)}}>
+</View>
+        </View>
         )}
+        
         </TouchableOpacity>
+       
   </View>  
   
    </View>
    {showMore && (
-  <View>
-  <TouchableOpacity onPress={KnowMoreDetails}>
+    <View>
+  <View style={{flex:1, justifyContent:'space-between',flexDirection:'row'}}>
+ 
+        <Text  style={{  paddingTop:Metrics.ratio(50),
+        fontSize:10,
+        fontWeight:'400',
+        left:Metrics.ratio(10),
+        color:'black'
+        }}>{actual_data?.data?.product_info?.long_desc}</Text>
+        <TouchableOpacity onPress={KnowMoreDetails}>
   <Text  style={{  top:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(290),
+right:5,
         fontSize:15,
         fontWeight:'600',
         color:'#FF2E00'
         }}>Show Less</Text>
         </TouchableOpacity>
-        <Text  style={{  paddingTop:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.long_desc}</Text>
-  </View>  
+        
+  </View>
+  </View>
   )} 
    {isGiftCard && (
     <View>
@@ -617,51 +569,19 @@ return (
         android: 'serif', // You may need to adjust this for Android
       }),}}>Ample Points Calculator</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingTop:Metrics.ratio(20)}}>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Price</Text>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        fontSize:10,
-        fontWeight:'500',
-        color:'black'
-        }}>${actual_data?.data?.product_info?.single_price*quantity}</Text>
+        <Text style={styles.ScreenText1}>Price</Text>
+        <Text style={styles.ScreenText2}>$ {parseFloat(actual_data?.data?.product_info?.single_price*quantity).toFixed(2)}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Buy & Earn</Text>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        fontSize:10,
-        fontWeight:'500',
-        color:'black'
-        }}>{actual_data?.data?.product_info?.pamples} Amples</Text>
+        <Text style={styles.ScreenText1}>Buy & Earn</Text>
+        <Text style={styles.ScreenText2}>{actual_data?.data?.product_info?.pamples} Amples</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Ample Needed to Redeem</Text>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        fontSize:10,
-        fontWeight:'500',
-        color:'black'
-        }}>208.33Amples</Text>
+        <Text style={styles.ScreenText1}>Ample Needed to Redeem</Text>
+        <Text style={styles.ScreenText2}>{actual_data?.data?.product_info?.pfwamples}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
-        <Text style={{  paddingTop:Metrics.ratio(10),
-        left:Metrics.ratio(20),
-        fontSize:10,
-        fontWeight:'300',
-        color:'black'
-        }}>Qty</Text>
+        <Text style={styles.ScreenText1}>Qty</Text>
      
      <View style={styles.container2}>
       <TouchableOpacity style={styles.button1} onPress={decreaseQuantity}>
@@ -740,7 +660,7 @@ return (
     </View>
   
   )}  
-              <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:12, fontFamily: Platform.select({
+              <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(10),fontSize:12, fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'Times New Roman', // You may need to adjust this for Android
       }),bottom:Metrics.ratio(20),top:Metrics.ratio(10)}}>Apply Ample</Text>
@@ -766,9 +686,9 @@ return (
    <Text style={styles.Text6Container}>You Earn :</Text>
    <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
-  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(30)}}>
+  <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(25)}}>
 </View>
-    <Text style={{color:'black',fontWeight:'500',fontSize:13,top:Metrics.ratio(10)}}>Shipping</Text>
+    <Text style={{color:'black',fontWeight:'500',left:Metrics.ratio(10),fontSize:13,top:Metrics.ratio(10)}}>Shipping</Text>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5),marginTop:Metrics.ratio(20)}}>
 </View>
     <View style={{top:Metrics.ratio(1)}}>
@@ -778,7 +698,7 @@ return (
           label="Pickup/Dining"
           value="true"
           color='#FF2E00'
-          labelStyle={{ fontSize: 12 , fontFamily: Platform.select({
+          labelStyle={{ fontSize: 12, fontFamily: Platform.select({
             ios: 'Times New Roman',
             android: 'serif', // You may need to adjust this for Android
           }),}} 
@@ -925,14 +845,14 @@ return (
          <TouchableOpacity onPress={SubmitButton} style={styles.button6}>
       <Text style={styles.buttonText}>Submit</Text>
     </TouchableOpacity>
-    <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(20)}}>
+    <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(10)}}>
 </View>
 
             </View>
             
        )}
-              <TouchableOpacity onPress={()=>navigation.navigate("AskQuestion")} style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
-        <Text style={{fontSize:12,fontWeight:'600',color:'black'}}>Ask Questions</Text>
+              <TouchableOpacity onPress={()=>navigation.navigate("AskQuestion")} style={{flex:1, flexDirection:'row', justifyContent:'space-between',top:Metrics.ratio(5),bottom:Metrics.ratio(10)}}>
+        <Text style={{fontSize:12,fontWeight:'600',color:'black',left:Metrics.ratio(18)}}>Ask Questions</Text>
         <Image style={{width:30,height:30}} source={require('../assets/SideArrow.png')}></Image>
         </TouchableOpacity>
 
@@ -944,11 +864,12 @@ return (
         label={"Add to Cart"}
       />
     </View>
+    </View>
               </View>
 )}
     </ScrollView>
 
-)}
+
    
 </SafeAreaView>
 
@@ -966,6 +887,26 @@ const styles=StyleSheet.create({
     backgroundColor:'#F1F0F7',
     color:'#D8D9D8'
   },
+  ScreenText:{
+    paddingTop:Metrics.ratio(10),
+    fontSize:10,
+    fontWeight:'400',
+    color:'black'
+  },  
+  ScreenText1:{
+    paddingTop:Metrics.ratio(10),
+    fontSize:10,
+    fontWeight:'400',
+    color:'black',
+    left:Metrics.ratio(10)
+  },  
+  ScreenText2:{
+    paddingTop:Metrics.ratio(10),
+    fontSize:10,
+    fontWeight:'400',
+    color:'black',
+    right:Metrics.ratio(100)
+  },  
   DetailsContainer:{
     color:'black',
     borderWidth:1,
@@ -1114,10 +1055,15 @@ const styles=StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     justifyContent: 'space-around',
+    right:Metrics.ratio(100)
   },
   button1: {
-    backgroundColor: '#FF2E00',
-borderRadius: 1,
+    backgroundColor: '#d0d0d0',
+borderRadius: 2,
+height:Metrics.ratio(15),
+width:Metrics.ratio(25),
+alignItems:'center',
+justifyContent:'center'
   },
   button3: {
     alignSelf:'flex-end',
@@ -1160,7 +1106,11 @@ left:Metrics.ratio(110)
   button: {
     color:'white',
     backgroundColor: '#FC3F01',
-borderRadius: 5,
+borderRadius: 2,
+height:Metrics.ratio(15),
+width:Metrics.ratio(24),
+alignItems:'center',
+justifyContent:'center'
   },container3: {
     right:Metrics.ratio(30),
   left:Metrics.ratio(10),
@@ -1208,8 +1158,8 @@ borderRadius: 5,
     borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(20),
-    height:  Metrics.ratio(20),
+    width: Metrics.ratio(10),
+    height:  Metrics.ratio(10),
   },
   quantityContainer: {
     backgroundColor: 'white',
@@ -1218,8 +1168,8 @@ borderRadius: 5,
   },
   quantityText: {
     backgroundColor:'white',
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 10,
+    fontWeight: '600',
     color: 'black',
     margin:Metrics.ratio(5)
   },
@@ -1266,7 +1216,7 @@ borderRadius:Metrics.ratio(70),
         justifyContent: "center",
         alignItems: "center",
         alignSelf:'center',
-        bottom:Metrics.ratio(0)
+        bottom:Metrics.ratio(2)
       },
     ViewContainer:{
   
@@ -1296,8 +1246,7 @@ borderRadius:Metrics.ratio(70),
     }),
 },
   TextContainer:{
-    paddingLeft:Metrics.ratio(10),
-    fontSize:15,
+    fontSize:18,
     fontFamily: Platform.select({
       ios: 'Cambria',
       android: 'Cambria', // You may need to adjust this for Android
@@ -1306,8 +1255,8 @@ borderRadius:Metrics.ratio(70),
     fontWeight:'800',
 },
     Text2Container:{
-       marginRight:Metrics.ratio(10), marginLeft: 8,
-        fontSize:15,
+       marginRight:Metrics.ratio(10),
+        fontSize:18,
         color:'#FF2E00',
  
              fontWeight:'bold', 
@@ -1322,7 +1271,7 @@ borderRadius:Metrics.ratio(70),
         fontSize:12,
         fontFamily: Platform.select({
           ios: 'Arial',
-          android: 'serif', // You may need to adjust this for Android
+          android: 'Arial', // You may need to adjust this for Android
         }),
         color:'#ff3d00',
         fontWeight:'400', 
@@ -1341,7 +1290,7 @@ borderRadius:Metrics.ratio(70),
       ImageContainer:{
 
         width: Metrics.ratio(250), 
-        height: Metrics.ratio(200),
+        height: Metrics.ratio(250),
         borderRadius:20,
         alignContent:'center',
       },

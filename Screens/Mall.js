@@ -8,7 +8,7 @@ import MallDetail from './MallDetail';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const ProductItem = ({ product }) => {
-    console.log("Image",`https://amplepoints.com/mall/logo/${product.top_logo}`)
+    
   return (
 
     <View style={styles.productItem}>     

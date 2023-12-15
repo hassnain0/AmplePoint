@@ -15,12 +15,17 @@ const Checkout= ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false);
   const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
 
-  const [value, setValue] = useState(null);
+  const [valuecountry, setValueCountry] = useState(null);
+  const [valueState, setValueState] = useState(null);
+  const [valueCity, setValueCity] = useState(null);
   const [countrydata,setCountryData]=useState([]);
   const [loader,setLoader]=useState(false);
   const [statedata,setstate]=useState([]);
   const [cityydata,setCity]=useState([])
   const [isFocus, setIsFocus] = useState(false);
+  const [isFocusstate, setIsFocusstate] = useState(false);
+  const [isFocuscity, setIsFocuscity] = useState(false);
+  const [stateName, setStateName] = useState(null);
 
   useEffect(() => {
     getcoutrylist();
@@ -31,10 +36,17 @@ const Checkout= ({navigation}) => {
     
     axios.get(apiurl)
       .then((response) => {
-        console.log("response.data",response.data)
         if (response.data.status === 'S') {
 
-          setCountryData(response.data);
+          var count = Object.keys(response.data.data).length;
+          let countryArray = [];
+          for (var i = 0; i < count; i++) {
+            countryArray.push({
+              value: response.data.data[i].id,
+              label: response.data.data[i].name,
+            });
+          }
+          setCountryData(countryArray);
         } else {
           console.error('Error fetching countries data');
         }  
@@ -43,55 +55,66 @@ const Checkout= ({navigation}) => {
       });
     }
 
-
-//Getting Country List
-
-
-// const {initPaymentSheet,presentPaymentSheet}=useStripe();
-
-// const onCheckout=async()=>{
-//     try {
-           
-//         const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
-  
-//         const response = await axios.get(apiUrl);
-// // Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
-
-
-       
-//   const key=response.data.data.clientSecret
-//   const {initResponse}=await initPaymentSheet({
-//     merchantDisplayName:'notJust.dev',
-//     paymentIntentClientSecret:key,
-//     customFlow: false,
-//     style: 'alwaysDark',
-//   })
-//   console.log("init Response",initResponse)
-// if(initResponse){
-// console.log("Int ",initResponse);
-// }
-//   const { error } = await presentPaymentSheet({key});
-
-//   if (error) {
-//     Alert.alert(`Error code: ${error.code}`, error.message);
-//   } else {
-//     Alert.alert('Success', 'The payment was confirmed successfully');
-//   }
- 
- 
-// }catch(error){
-//           console.log("Error",error)
-//       }
-
+    const handleState = countryCode => {
+      const apiurl='https://amplepoints.com/apiendpoint/getcountrystate?';
     
-// }'
-const data = [
-  { label: 'Refund Only', value: '1' },
-  { label: 'Refund Dispute', value: '2' },
+      axios.get(apiurl,{
+        params:{
+          country_id:countryCode,
+        }
+      })
+        .then((response) => {
+          console.log("Response",response.data.data)
+          if (response.data.status === 'S') {
   
-];
+            var count = Object.keys(response.data.data).length;
+            let countryArray = [];
+            for (var i = 0; i < count; i++) {
+              countryArray.push({
+                value: response.data.data[i].stateid,
+                label: response.data.data[i].statename,
+              });
+            }
+            setstate(countryArray);
+          } else {
+            console.error('Error fetching countries data');
+          }  
+        }).catch((error) => {
+          console.error('Error fetching countries data:', error);
+        });
+    };
+
+    const handleCity = countryCode => {
+      const apiurl='https://amplepoints.com/apiendpoint/getstatecity?';
+    
+      axios.get(apiurl,{
+        params:{
+          state_id:countryCode,
+        }
+      })
+        .then((response) => {
+          console.log("Response",response.data.data)
+          if (response.data.status === 'S') {
+  
+            var count = Object.keys(response.data.data).length;
+            let countryArray = [];
+            for (var i = 0; i < count; i++) {
+              countryArray.push({
+                value: response.data.data[i].country_id,
+                label: response.data.data[i].statename,
+              });
+            }
+            setCity(countryArray);
+          } else {
+            console.error('Error fetching countries data');
+          }  
+        }).catch((error) => {
+          console.error('Error fetching countries data:', error);
+        });
+    };
+
 const onCheckout=()=>{
-  navigation.navigate("OrderSummary")
+ 
 }
 
 const Pay=()=>{
@@ -123,26 +146,84 @@ const Bounce=()=>{
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Phone</Text>
     <TextInput placeholder='Phone' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
-  <View style={{backgroundColor:'#F2F2F2'}}>
-    </View>
-</View>
-<View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
-        <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Zip Code</Text>
+ 
+    <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
+      <Dropdown
+          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={countrydata}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select Country' : '...'}
+          searchPlaceholder="Search Country"
+          value={valuecountry}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValueCountry(item.value);
+            setIsFocus(false);
+            handleState(item.value)
+          }}
+        />
+         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>State</Text>
+      <Dropdown
+          style={[styles.InputContainer, isFocusstate && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={statedata}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocusstate ? 'Select State' : '...'}
+          searchPlaceholder="Search State"
+          value={valueState}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValueState(item.value);
+            setIsFocusstate(false);
+            handleCity(item.value)
+          }}
+        />
+         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>City</Text>
+      <Dropdown
+          style={[styles.InputContainer, isFocuscity && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={cityydata}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocuscity ? 'Select City' : '...'}
+          searchPlaceholder="Search City"
+          value={valueCity}
+          onFocus={() => setIsFocuscity(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValueCity(item.value);
+            setIsFocuscity(false);
+          }}
+        />
+        <Text style={{fontSize:15, fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'serif', // You may need to adjust this for Android
+        }),color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Zip Code</Text>
     <TextInput placeholder='Zip Code'   textAlign='left' keyboardType='numeric' auto style={styles.InputContainer} ></TextInput>
     <Text style={{fontSize:15,color:'#F0F0F0',fontWeight:'400',color:'black'}}>Fax</Text>
     <TextInput placeholder='Fax'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
-    <Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black',textAlign:'auto'}}>Address</Text>
-    <TextInput placeholder='Address'   textAlign='left' auto style={{ marginTop:Metrics.ratio(3),
-     marginBottom:Metrics.ratio(10),
-     backgroundColor:'#D8D9D8',
-     margin:Metrics.ratio(5),
-    right:Metrics.ratio(10),
-    borderRadius:10,
-    fontSize:15,
-    borderWidth:0.5,
-    width:'100%',
-    alignItems:'center',
-   height:Metrics.ratio(60)}} ></TextInput>
+<Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black',textAlign:'auto'}}>Address</Text>
+    <TextInput placeholder='Address'   textAlign='left' auto style={styles.InputContainer3} ></TextInput>
 
  <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(1)}}>
   
@@ -152,10 +233,10 @@ const Bounce=()=>{
         unfillColor="#FFFFFF"
         isChecked={isChecked}
         onPress={Bounce}/>
-    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(5),fontSize:20,bottom:Metrics.ratio(20),top:Metrics.ratio(5)}}>Shipping (As above)</Text>
+    <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(5),fontSize:18,bottom:Metrics.ratio(20),top:Metrics.ratio(5)}}>Shipping (As above)</Text>
        </View> 
         </View>
-        {hiddenFields ? (
+        {!hiddenFields && (
         <View>
        <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
         <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>First Name</Text>
@@ -171,68 +252,70 @@ const Bounce=()=>{
  
     <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>Country</Text>
       <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={countrydata}
           search
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus ? 'Select Country' : '...'}
           searchPlaceholder="Search Country"
-          value={value}
+          value={valuecountry}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={item => {
-            setValue(item.value);
+            setValueCountry(item.value);
             setIsFocus(false);
+            handleState(item.value)
           }}
         />
          <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>State</Text>
       <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocusstate && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={statedata}
           search
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select State' : '...'}
+          placeholder={!isFocusstate ? 'Select State' : '...'}
           searchPlaceholder="Search State"
-          value={value}
+          value={valueState}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueState(item.value);
+            setIsFocusstate(false);
+            handleCity(item.value)
           }}
         />
          <Text style={{fontSize:15,color:'#7D7D7D',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black'}}>City</Text>
       <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocuscity && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={cityydata}
           search
           maxHeight={200}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'Select City' : '...'}
+          placeholder={!isFocuscity ? 'Select City' : '...'}
           searchPlaceholder="Search City"
-          value={value}
-          onFocus={() => setIsFocus(true)}
+          value={valueCity}
+          onFocus={() => setIsFocuscity(true)}
           onBlur={() => setIsFocus(false)}
           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
+            setValueCity(item.value);
+            setIsFocuscity(false);
           }}
         />
     </View>
@@ -245,19 +328,10 @@ const Bounce=()=>{
     <Text style={{fontSize:15,color:'#F0F0F0',fontWeight:'400',color:'black'}}>Fax</Text>
     <TextInput placeholder='Fax'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
 <Text style={{fontSize:15,color:'#F0F0F0',paddingTop:Metrics.ratio(10),fontWeight:'400',color:'black',textAlign:'auto'}}>Address</Text>
-    <TextInput placeholder='Address'   textAlign='left' auto style={{ marginTop:Metrics.ratio(3),
-  marginBottom:Metrics.ratio(10),
-  backgroundColor:'#D8D9D8',
-  margin:Metrics.ratio(5),
-  right:Metrics.ratio(10),
-  borderRadius:10,
-  fontSize:15,
- width:'100%',
- alignItems:'center',
- height:Metrics.ratio(60),}} ></TextInput>
+    <TextInput placeholder='Address'   textAlign='left' auto style={styles.InputContainer3} ></TextInput>
  </View>
 </View>
- ) : null}
+ ) }
 <View style={styles.buttonView}>
       <Button
         loader={loader}
@@ -278,6 +352,17 @@ export default Checkout;
 const styles = StyleSheet.create({  container: {
     backgroundColor: 'white',
     flex:1
+  },
+  InputContainer3:{
+    backgroundColor:'#eeeeee',
+    margin:Metrics.ratio(5),
+    right:Metrics.ratio(10),
+    borderRadius:3,
+    borderWidth:0.5,
+    borderColor:'#C1C3C0',
+    fontSize:12,
+   width:'100%',
+   height:Metrics.ratio(58),
   },
   buttonView: {
     height:Metrics.vh*5,
@@ -328,17 +413,17 @@ borderRadius:Metrics.ratio(70),
     fontSize: 16,
   },
   InputContainer:{
-  backgroundColor:'#eeeeee',
-  margin:Metrics.ratio(5),
-  right:Metrics.ratio(10),
-  borderRadius:5,
-  borderWidth:0.5,
-  borderColor:'black',
-  fontSize:15,
- width:'100%',
- alignItems:'center',
- height:Metrics.ratio(38),
-},
+    backgroundColor:'#eeeeee',
+    margin:Metrics.ratio(5),
+    right:Metrics.ratio(10),
+    borderRadius:2,
+    borderWidth:0.5,
+    borderColor:'#C1C3C0',
+    fontSize:12,
+   width:'100%',
+   alignItems:'center',
+   height:Metrics.ratio(38),
+  },
 
   container: {
     backgroundColor: 'white',
