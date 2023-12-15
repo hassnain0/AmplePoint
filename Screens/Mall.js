@@ -136,7 +136,7 @@ const getProductDetails = async () => {
 
 const styles=StyleSheet.create({
   searchBarContainer: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#eeeeee',
     height: Metrics.ratio(50),
     justifyContent:'center',
     alignItems:'center'
@@ -149,7 +149,7 @@ const styles=StyleSheet.create({
   searchInput: {
     top:Metrics.ratio(1),
     height: Metrics.ratio(35),
-    borderColor: 'black',
+    borderColor: '#eeeeee',
     borderWidth: 0.5,
     padding: 10,
     width: '90%',

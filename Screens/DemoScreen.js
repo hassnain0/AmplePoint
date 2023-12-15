@@ -5,8 +5,8 @@ import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
-
-
+import { Card, Icon } from 'react-native-elements';
+import Swiper from 'react-native-swiper';
 const ProductItem = ({ product }) => {
   return (
 
@@ -47,16 +47,18 @@ const DemoScreen=({navigation})=>{
     navigation.navigate('GiftDetails',{ productData,route });
   };
   useEffect(()=>{
-    
+    getStoreContent();
     getProductDetails();
   },[])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [Content, setContent] = useState(null);
   const [data,setData]=useState(false)
+  const vendorId = route.params.Id;
 
 const getProductDetails = async () => {
   try{
-    const vendorId = route.params.Id;
+    
    
     // Specify the initial page number
     let pageNumber = 1;
@@ -86,6 +88,23 @@ const getProductDetails = async () => {
       // Handle the error, e.g., set an error state or display an error message
     }
   }
+  //Get Comments
+  const getStoreContent=async()=>{
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/vendortestinomial?';
+      const response = await axios.get(apiUrl,{
+        params:{
+          vendor_id:vendorId,
+        }
+      });
+      setContent(response.data.data);
+    console.log("Content",response.data.data)
+      }
+     catch (err) {
+      console.log("Error fetching data:", err);
+    }
+    
+    }
     const renderFlatList = (data) => (
    
       <View>
@@ -133,10 +152,42 @@ const getProductDetails = async () => {
         </View>
   <ScrollView >
     <View style={{backgroundColor:'white'}}>
-    <View style={{backgroundColor:'white',height:Metrics.ratio(100),width:'100%'}}>
+    <View style={{backgroundColor:'white',height:Metrics.ratio(100),width:'100%',position: 'relative' }}>
     <Image   source={{ uri: `https://amplepoints.com/vendor-data/${productData.tbl_vndr_id}/profile/${productData.vendor_profileimage}` }} style={styles.StoreImage} resizeMode="cover" />
  </View>
-    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5)}}></View> 
+    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5)}}></View>
+
+     <View>
+    {Content &&(
+    <Swiper
+      style={{ height: 200 }}
+      showsPagination={false}
+      autoplay
+      autoplayTimeout={4}
+    >
+      {Content.map((item, index) => (
+        <Card
+          key={index}
+          containerStyle={{
+            backgroundColor: 'yellow',
+            borderRadius: 10,
+            margin: Metrics.ratio(5),
+            padding: Metrics.ratio(15),
+          }}
+        >
+          <Image
+            style={{ width: Metrics.ratio(50), height:Metrics.ratio(50), resizeMode: 'cover' }}
+            source={{ uri: `https://amplepoints.com/home_banners/testinomialsliders/${item.banner_image}` }}
+          />
+          <Text style={{ marginTop: 10, fontWeight: 'bold' }}>
+            {item.banner_title}
+          </Text>
+          <Text>{item.tag_line}</Text>
+        </Card>
+      ))}
+    </Swiper>
+    )}
+  </View> 
       <View style={styles.container}>
     
       {data && (
@@ -223,6 +274,8 @@ const styles=StyleSheet.create({
         height: Metrics.ratio(50),
         alignSelf:'left',
         justifyContent:'left',
+        position: 'absolute', bottom: 0, width: 60, height: 60
+  
         
       },
       header: {

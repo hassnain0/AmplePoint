@@ -1,17 +1,23 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler,} from 'react-native';
+import {View,Text, StyleSheet,FlatList,Alert, ActivityIndicator,ScrollView,Image, TextInput,TouchableOpacity, BackHandler, SafeAreaView,} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-const ProductItem = ({ product }) => {
-    const vendors = product.vendor_list;
-    return (
-      <View>
-        <Text>{product.category_name}</Text>
-        {vendors.map((vendor) => (
-        <View style={styles.productItem} key={vendor.tbl_vndr_id}>
+const ProductItem = ({ product, onProductPress }) => {
+  
+  const vendors = product.vendor_list;
+
+  return (
+    <View>
+      <Text>{product.category_name}</Text>
+      {vendors.map((vendor) => (
+        <TouchableOpacity
+          style={styles.productItem}
+          key={vendor.tbl_vndr_id}
+          onPress={() => handleProductPress(product)}
+        >
           <Image
             source={{
               uri: `https://amplepoints.com/vendor-data/${vendor.tbl_vndr_id}/profile/${vendor.vendor_profileimage}`,
@@ -34,12 +40,11 @@ const ProductItem = ({ product }) => {
               {vendor.tbl_vndr_zip}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
-      </View>
-    );
-  };
-  
+    </View>
+  );
+};
 
 const MallDetail=({navigation})=>{
     const route=useRoute();
@@ -59,12 +64,7 @@ const MallDetail=({navigation})=>{
     }
   }, [searchQuery, storeProducts]);
    
-  const handleProductPress = (productData) => {
-    const Id=productData.tbl_vndr_id
-    navigation.navigate('DemoScreen',{
-      Id,
-    });
-  };
+ 
   useEffect(()=>{
     
     getProductDetails();
@@ -106,14 +106,13 @@ const getProductDetails = async () => {
    
       <View>
    <FlatList
-     numColumns={3} 
+     
     data={data}
-    showsVerticalScrollIndicator={false}  // hides the vertical scroll indicator
+    showsHorizontalScrollIndicator={false}  // hides the vertical scroll indicator
     keyExtractor={(item) => item.tbl_vndr_id}
     renderItem={({ item }) => (
-      <TouchableOpacity onPress={() => handleProductPress(item)}>
+
         <ProductItem product={item} />
-      </TouchableOpacity>
     )}
   />
 
@@ -131,8 +130,8 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
-  <ScrollView>
-       <View style={styles.header}>
+      <SafeAreaView>
+        <View style={styles.header}>
           <TouchableOpacity
             activeOpacity={1}
             style={styles.leftIconView}
@@ -141,6 +140,8 @@ const getProductDetails = async () => {
           </TouchableOpacity>
           <Text style={styles.textHeader}>{Name} Mall</Text>
         </View>
+  <ScrollView>
+       
     <View style={styles.container}>
     <Spinner
           visible={loading}
@@ -156,6 +157,7 @@ const getProductDetails = async () => {
             ))}
       </View>
     </ScrollView>
+    </SafeAreaView>
 )
       }
 
@@ -234,12 +236,7 @@ leftIconView: {
         height:Metrics.ratio(40),
         left:Metrics.ratio(10)
       },
-      header: {
-        backgroundColor: "#EEEEEE",
-        flexDirection: 'row',
-        paddingVertical: Metrics.ratio(1),
-        // paddingHorizontal:Metrics.ratio(5),
-      },
+      
       productItem: {
         backgroundColor:'#FFFF',
         margin: Metrics.ratio(10),
@@ -247,7 +244,7 @@ leftIconView: {
         elevation:3
       },
       header: {
-        backgroundColor:'#FF2E00',
+        backgroundColor:'#ff3d00',
         alignItems: 'center',
         flexDirection: 'row',
         paddingVertical: Metrics.ratio(30),

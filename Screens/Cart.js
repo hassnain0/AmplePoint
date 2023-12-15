@@ -49,6 +49,24 @@ setLoading(false)
     return prevData;
   });
 };
+const decreaseQuantity = (item) => {
+  setActualData((prevData) => {
+  
+    const newData = [...prevData.data];
+    const itemIndex = newData.findIndex((dataItem) => dataItem.id === item.id);
+    if (itemIndex !== -1 && parseInt(newData[itemIndex].item_added_quantity, 10) > 0) {
+      newData[itemIndex].item_added_quantity = (parseInt(newData[itemIndex].item_added_quantity, 10) - 1).toString();
+    
+      const updatedData = { ...prevData, data: newData };
+    
+    
+      return updatedData;
+    }
+
+    
+    return prevData;
+  });
+};
 
 
 
@@ -166,17 +184,20 @@ setLoader(true);
       <View>
         {actulaData?.data?.map((item, index) => (
 
-          <View key={index} style={{  left: Metrics.ratio(10),top:Metrics.ratio(10)  }}>
+          <View key={index} style={{  left: Metrics.ratio(10),top:Metrics.ratio(20)  }}>
              <Text style={{ fontSize: 12, color: 'black', fontWeight: 'bold', left: Metrics.ratio(1),bottom:Metrics.ratio(10)}}>{item.meta_description}</Text>
           <View style={{flex:1,flexDirection:'row',top:Metrics.ratio(10)}}>
               <Text style={{ fontSize: 10, color: 'black', fontWeight: 'bold' ,bottom:Metrics.ratio(20)}}>By: </Text>
               <Text style={{ fontSize: 10, fontWeight: '300',bottom:Metrics.ratio(20) }}>{item.supplier_name}</Text>
               </View>
-              <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
+             
             <View>
+            <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
             <Text style={{ fontSize: 12, color: 'black', fontWeight: 'bold', left: Metrics.ratio(12), bottom: Metrics.ratio(50) }}>
                 ${item.discount_price}
               </Text>
+              <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image}` }} />
+              </View>        
               <View style={styles.container2}>
                 <Text style={{ top: Metrics.ratio(-30), fontSize: 15, left: Metrics.ratio(-15), }}>
                   Free with {item.no_of_amples} amplePoints
@@ -186,7 +207,9 @@ setLoader(true);
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{item.item_added_quantity}</Text>
                 <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item)}>
+                 <View>
                   <Image source={require('../assets/PlusButton.png')} style={styles.icon} />
+                  </View>
                 </TouchableOpacity>
               </View>
               <View>
@@ -215,9 +238,15 @@ setLoader(true);
               <ScrollView style={{backgroundColor:'white'}}>  
                 
               <View  style={{flex: 1}}>
-                  <View  style={{height:Metrics.ratio(20),flex:1,flexDirection:'row',backgroundColor:'#eeeeee',justifyContent:'space-between'}}>
-                  <Text style={{left:0,color:'black',fontSize:10,fontWeight:'500',}}>Item({product_no})</Text>
-                  <Text style={{ color: 'black', fontSize: 10, fontWeight: '500' }}>
+                  <View  style={{height:Metrics.ratio(20),flex:1,flexDirection:'row',backgroundColor:'#B6B8B5',justifyContent:'space-between'}}>
+                  <Text style={{textAlign:'center',color:'black',fontSize:10,fontWeight:'800', fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),}}>Item({product_no})</Text>
+                  <Text style={{ textAlign:'center',color: 'black', fontSize: 10, fontWeight: '800', fontFamily: Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }), }}>
   Total: {parseFloat(actulaData.cart_total).toFixed(1)} $
 </Text>
                     </View>
@@ -292,14 +321,14 @@ left:Metrics.ratio(110)
 
     width: Metrics.ratio(80), 
     height: Metrics.ratio(50),
-    borderRadius:20,
-    left:Metrics.ratio(250),
-    bottom:Metrics.ratio(30)
+    borderRadius:10,
+    bottom:Metrics.ratio(30),
+    right:Metrics.ratio(20)
   },
   button: {
     color:'white',
     backgroundColor: '#FC3F01',
-borderRadius: 5,
+borderRadius: 1,
 bottom:Metrics.ratio(30),
 right:Metrics.ratio(40)
   },container3: {
@@ -338,8 +367,7 @@ right:Metrics.ratio(40)
     left:Metrics.ratio(5),
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
   quantityText: {
     backgroundColor:'white',
@@ -347,8 +375,6 @@ right:Metrics.ratio(40)
     fontWeight: 'bold',
     color: 'black',
     bottom:Metrics.ratio(30),
-    marginLeft:Metrics.ratio(10),
-    marginRight:Metrics.ratio(10)
 
   },
   button1: {
