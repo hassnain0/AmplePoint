@@ -29,23 +29,12 @@ const ProductItem = ({ product }) => {
 
 const Store=({navigation})=>{
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(null);
+  // const [filteredProducts, setFilteredProducts] = useState(null);
   const [amplePoints,setAmplePoints]=useState(0);
   const route=useRoute();
   const user_Id=route.params.user_Id;
   
-  useEffect(() => {
-    // Filter products based on search query
-    if (searchQuery) {
-      const filteredData = storeProducts?.data.filter((product) =>
-        product.vendor_name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredProducts(filteredData);
-    } else {
-      setFilteredProducts(null);
-    }
-  }, [searchQuery, storeProducts]);
-   
+  
   const handleProductPress = (productData) => {
     const Name=productData.vendor_name
     const Id=productData.tbl_vndr_id
@@ -155,13 +144,13 @@ const getstores = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
-{storeProducts && (
-  <>
-    {chunkArray(storeProducts.data, 10).map((chunk, index) => (
-      <View key={index}>{renderFlatList(chunk)}</View>
-    ))}
-  </>
-)}
+  {storeProducts !==null && (
+          
+          renderFlatList(storeProducts.data)
+          
+          
+      
+      )}
       </View>
     </ScrollView>
 )

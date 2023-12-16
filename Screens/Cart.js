@@ -11,6 +11,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const Cart= ({navigation}) => {
   const route=useRoute();
+  console.log("route.params",route)
   // const User_Id=route.params.user_ID;
   // console.log("User Id",User_Id)
    const [deleteCount,setDelete]=useState(0);
@@ -110,7 +111,7 @@ setLoader(true);
         const apiUrl = 'https://amplepoints.com/apiendpoint/checkout?';
         const response = await axios.get(apiUrl, {
           params: {
-            user_id:126,
+            user_id:User_Id,
           },
         });
         console.log("Response",response.data.message)
@@ -133,7 +134,7 @@ setLoader(true);
       const apiUrl = 'https://amplepoints.com/apiendpoint/getusercart?';
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:126,
+          user_id:User_Id,
         },
       });
       console.log("Response", response.data.data.item_added);

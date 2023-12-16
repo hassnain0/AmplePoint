@@ -18,6 +18,7 @@ const [isFocus, setIsFocus] = useState(false);
 const [value, setValue] = useState(null);
 const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
+const [addressOnline,setAddressOnline]=useState('');
 const [productId,setProductId]=useState('');
 const [VendorId,setVendorId]=useState('');
 const [TimeData,setTimeData]=useState(null);
@@ -61,16 +62,16 @@ const route=useRoute();
   useEffect(() => {
 
     setLoading(true);
-    // setProductId(route.params.productData.pid);
-    // setVendorId(route.params.productData.vendor_key);
+    setProductId(route.params.productData.pid);
+    setVendorId(route.params.productData.vendor_key);
 
     const getProductDetails = async () => {
          try {
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                  product_id: 59927,
-                  user_id: 126,
+                  product_id: productId,
+                  user_id: VendorId,
                 },
             });
       
@@ -85,7 +86,9 @@ const route=useRoute();
                 if (response.data.data.pickup_address && response.data.data.pickup_address[0].loc_address) {
                     setAddress(response.data.data.pickup_address[0].loc_address);
                 }
-                console.log("response.data.data.delivery_data.is_delevery_availabe ",response.data.data.gift_card_detail_available )
+                if (response.data.data.pickup_address && response.data.data.online_address[0].loc_address) {
+                  setAddressOnline(response.data.data.online_address[0].loc_address);
+              }
                 if (response.data.data && response.data.data && response.data.data.gift_card_detail_available === 1) 
                 {
                   setIsGiftCard(true)
@@ -110,10 +113,11 @@ getComments();
     GetAmples();
 }, [productId, VendorId]);
 
+const Submit=async()=>{
 
+}
 const GetHours=async(dateObject)=>{
   try{
-    console.log("Date",dateObject)
     // const formattedDate = dateObject.toLocaleDateString('en-US', {
     //   year: 'numeric',
     //   month: '2-digit',
@@ -123,14 +127,10 @@ const GetHours=async(dateObject)=>{
    const Response= await axios.get(apiUrl,{
     params:{
       fordate:dateObject,
-      vid:371,
+      vid:VendorId,
     }
    });
-  //  if(Response.data &&Response.data.data.user_total_ample)
-  //  {
-  //   setAmples(Response.data.data.user_total_ample);
-  //  }
-  console.log("Response of Date",Response.data)
+
   if(Response.data.message!=="Vendor Hours Found"){
     setLoading(false);
 
@@ -218,15 +218,15 @@ setLoading(true)
   const [showMore,setShowMore]=useState(false);
   
   const SubmitButton=async()=>{
-
+        if(pickUp!==null){
       try {
       
         const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
          await axios.get(apiUrl, {
           params: {
             user_id:126,
-            product_id:59935,
-            vendor_id:906,
+            product_id:productId,
+            vendor_id:VendorId,
             delivery_type:'pickup',
             pickuplocation:address || '',
             pickup_date:selectedDate,
@@ -235,7 +235,7 @@ setLoading(true)
         
         }).then((response)=>{
           
-           console.log("Response After Submitting",response.data.status);
+           console.log("Response After Submitting Pickup",response.data.status);
         
          if(response.data.message=='Delivery  Detail Added Sucessfully'){
           util.successMsg("Delievery Submitted");     
@@ -251,6 +251,72 @@ setLoading(true)
         console.error('Error fetching product details:', error);
       
     }; 
+  }
+  if(shipping!==null){
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
+       await axios.get(apiUrl, {
+        params: {
+          user_id:126,
+          product_id:productId,
+          vendor_id:VendorId,
+          delivery_type:'shipment',
+          shipp_loc:'ss',
+          shipping_type:'ss',
+        },
+      
+      }).then((response)=>{
+        
+         console.log("Response After Submitting",response.data.status);
+      
+       if(response.data.message=='Delivery  Detail Added Sucessfully'){
+        util.successMsg("Delievery Submitted");     
+        setSubmit(true);   
+      
+       }
+      }).catch((err)=>{
+       console.log("Error",err)
+            
+      });
+     
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    
+  }; 
+}
+if(deleivery!==null){
+  try {
+
+    const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
+     await axios.get(apiUrl, {
+      params: {
+        user_id:126,
+        product_id:productId,
+        vendor_id:VendorId,
+        delivery_type:'delivery',
+        delivery_zipcode:89139,
+        delivery_address:address||' ',
+      },
+    
+    }).then((response)=>{
+      
+       console.log("Response After Submitting",response.data.status);
+    
+     if(response.data.message=='Delivery  Detail Added Sucessfully'){
+      util.successMsg("Delievery Submitted");     
+      setSubmit(true);   
+    
+     }
+    }).catch((err)=>{
+     console.log("Error",err)
+          
+    });
+   
+  } catch (error) {
+    console.error('Error fetching product details:', error);
+  
+}; 
+}
   }
 
   const forMe=()=>{
@@ -301,18 +367,58 @@ setAppliedAmples(text);
     } 
 
 const calculateQuantity = () => {
-  console.log("appliedAmples",appliedAmples)
   if (appliedAmples >= actual_data.data.product_info.single_price && appliedAmples <= amples) {
-    if (appliedAmples === 200) {
+    if (appliedAmples === actual_data.data.product_info.pfwamples) {
       setQuantity(1);
     } else {
+      const data=Math.floor(appliedAmples/actual_data.data.product_info.pfwamples );
+      console.log('data',data);
+      if(data>1){
       // You can customize the quantity logic based on your requirements
-      setQuantity(Math.floor(200 /appliedAmples ));
-      console.log("Quantity",quantity)
+      setQuantity(data);
     }
+  }
   }
   
 };
+const calculateAdjustedPrice = (originalPrice, appliedAmples, totalAmplesNeeded) => {
+  // Calculate the percentage of amples applied
+  const amplesPercentage = appliedAmples / totalAmplesNeeded;
+
+  // Calculate the adjusted price based on the percentage
+  const adjustedPrice = originalPrice * (1 - amplesPercentage);
+
+  // Ensure the adjusted price is at least 0
+  return Math.max(adjustedPrice, 0);
+};
+
+// Function to handle amples application
+const handleAmplesApplication = () => {
+  const totalAmplesNeeded = actual_data.data.pfwamples;
+
+  if (appliedAmples >= totalAmplesNeeded && appliedAmples <= amples) {
+    if (appliedAmples === actual_data.data.product_info.pfwamples) {
+      setQuantity(1);
+    } else {
+      // Calculate the adjusted quantity based on applied amples
+      const adjustedQuantity = Math.floor(appliedAmples / actual_data.data.product_info.pfwamples);
+
+      // Update the quantity
+      setQuantity(Math.max(adjustedQuantity, 1));
+
+      // Calculate the adjusted price and update it as needed
+      const adjustedPrice = calculateAdjustedPrice(
+        actual_data.data.product_info.single_price,
+        appliedAmples,
+        totalAmplesNeeded
+      );
+
+      // Update the price state with the adjusted price
+      setPrice(adjustedPrice);
+    }
+  }
+};
+
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
     if(!submit){
@@ -388,7 +494,7 @@ return (
 
   </View>
    <View style={{marginLeft:Metrics.ratio(12)}}>
-  <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between',}}>
+  <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between',flexWrap:'wrap'}}>
   <View >
    <Text style={styles.TextContainer}>{actual_data?.data?.product_info?.product_name}</Text>
    </View>
@@ -468,7 +574,11 @@ return (
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={styles.ScreenText}>Product Message:</Text>
-  <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pro_mess}</Text>  
+  <Text  style={{ paddingTop:Metrics.ratio(10),
+    fontSize:10,
+    fontWeight:'400',
+    color:'black',
+    right:Metrics.ratio(10)}}>{actual_data?.data?.product_info?.pro_mess}</Text>  
    </View>
     <Text  style={styles.ScreenText}>GIFT CARD DETAILS</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
@@ -535,7 +645,7 @@ right:5,
      {TimeData && (
   <View>
     {TimeData.map((dayInfo, index) => (
-      <View key={index} style={{ height: Metrics.ratio(50), justifyContent:'space-between',flex: 1, flexDirection: 'row', marginBottom: Metrics.ratio(10), marginLeft: Metrics.ratio(15), marginRight: Metrics.ratio(20), backgroundColor: '#CED0CD' }}>
+      <View key={index} style={{ height: Metrics.ratio(50), justifyContent:'space-between',flex: 1, flexDirection: 'row', marginBottom: Metrics.ratio(10), marginLeft: Metrics.ratio(15), marginRight: Metrics.ratio(20),  }}>
         <Text style={{ marginLeft: Metrics.ratio(10), marginTop: Metrics.ratio(10) }}>{dayInfo.day}</Text>
         <Text style={{ marginLeft: Metrics.ratio(30), marginTop: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
         <Text style={{ marginLeft: Metrics.ratio(60), marginTop: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
@@ -570,15 +680,15 @@ right:5,
       }),}}>Ample Points Calculator</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingTop:Metrics.ratio(20)}}>
         <Text style={styles.ScreenText1}>Price</Text>
-        <Text style={styles.ScreenText2}>$ {parseFloat(actual_data?.data?.product_info?.single_price*quantity).toFixed(2)}</Text>
+        <Text style={styles.ScreenText4}>$ {parseFloat(actual_data?.data?.product_info?.single_price*quantity).toFixed(2)}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={styles.ScreenText1}>Buy & Earn</Text>
-        <Text style={styles.ScreenText2}>{actual_data?.data?.product_info?.pamples} Amples</Text>
+        <Text style={styles.ScreenText4}>{actual_data?.data?.product_info?.pamples} Amples</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={styles.ScreenText1}>Ample Needed to Redeem</Text>
-        <Text style={styles.ScreenText2}>{actual_data?.data?.product_info?.pfwamples}</Text>
+        <Text style={styles.ScreenText4}>{actual_data?.data?.product_info?.pfwamples}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={styles.ScreenText1}>Qty</Text>
@@ -784,7 +894,7 @@ right:5,
       )}
       {deleivery && (
         <RadioButton.Item
-        label={address}
+        label={addressOnline}
           value="true"
           color='#FF2E00'
           labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
@@ -900,12 +1010,21 @@ const styles=StyleSheet.create({
     color:'black',
     left:Metrics.ratio(10)
   },  
+  
   ScreenText2:{
     paddingTop:Metrics.ratio(10),
     fontSize:10,
     fontWeight:'400',
     color:'black',
     right:Metrics.ratio(100)
+  },  
+  
+  ScreenText4:{
+    paddingTop:Metrics.ratio(10),
+    fontSize:10,
+    fontWeight:'400',
+    color:'black',
+    right:Metrics.ratio(10)
   },  
   DetailsContainer:{
     color:'black',
@@ -1055,13 +1174,13 @@ const styles=StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     justifyContent: 'space-around',
-    right:Metrics.ratio(100)
+    right:Metrics.ratio(10)
   },
   button1: {
     backgroundColor: '#d0d0d0',
 borderRadius: 2,
-height:Metrics.ratio(15),
-width:Metrics.ratio(25),
+height:Metrics.ratio(20),
+width:Metrics.ratio(20),
 alignItems:'center',
 justifyContent:'center'
   },
@@ -1107,8 +1226,8 @@ left:Metrics.ratio(110)
     color:'white',
     backgroundColor: '#FC3F01',
 borderRadius: 2,
-height:Metrics.ratio(15),
-width:Metrics.ratio(24),
+height:Metrics.ratio(20),
+width:Metrics.ratio(20),
 alignItems:'center',
 justifyContent:'center'
   },container3: {
@@ -1158,8 +1277,8 @@ justifyContent:'center'
     borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(10),
-    height:  Metrics.ratio(10),
+    width: Metrics.ratio(8),
+    height:  Metrics.ratio(8),
   },
   quantityContainer: {
     backgroundColor: 'white',
@@ -1168,8 +1287,8 @@ justifyContent:'center'
   },
   quantityText: {
     backgroundColor:'white',
-    fontSize: 10,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '800',
     color: 'black',
     margin:Metrics.ratio(5)
   },

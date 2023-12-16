@@ -12,7 +12,7 @@ const ProductItem = ({ product }) => {
 
     <View style={styles.productItem}>
   <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
-  {product.pname.split(' ').slice(0, 4).join(' ')}
+  {product.pname.split(' ').slice(0, 3).join(' ')}
 </Text>
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
@@ -188,18 +188,16 @@ const getProductDetails = async () => {
     </Swiper>
     )}
   </View> 
-      <View style={styles.container}>
+      <View style={{flex:1, alignItems:'center'}}>
     
       {data && (
         <View style={styles.overlay}>
           <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
         </View>
       )}
-      {chunkedData.map((chunk, index) => (
-        <View key={index}>
-          {renderFlatList(chunk)}
-        </View>
-      ))}
+    {storeProducts!=null&&(
+          renderFlatList(storeProducts.data)
+    )}
     </View>
     </View>
     </ScrollView>
@@ -239,6 +237,8 @@ const styles=StyleSheet.create({
       productItem: {
         backgroundColor:'#FFFF',
         margin: Metrics.ratio(10),
+        alignItems:'center',
+        justifyContent:'center',
         borderRadius:5,
         elevation:5
       },

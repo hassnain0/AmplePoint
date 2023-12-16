@@ -18,7 +18,9 @@ import Brands from './Brands';
 // Animated.initializeReanimated();
 
 const HomeScreen=({navigation})=>{
-
+const route=useRoute();
+console.log(route.params.user_ID)
+const user_ID=route.params.user_ID
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
 // const videoUrl = 'https://amplepoints.com/images/HowItWork.mp4';

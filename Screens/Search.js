@@ -52,21 +52,21 @@ const Search=({navigation})=>{
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(null);
   useEffect(() => {
-   
+    const filterProducts = () => {
+      if (storeProducts && storeProducts.data) {
+        const filteredData = storeProducts.data.filter((product) =>
+        product.pname && product.pname.includes(searchQuery.toLowerCase())
+        );
+        setFilteredProducts(filteredData);
+      } else {
+        setFilteredProducts(null);
+      }
+    };
+    
     filterProducts();
     getProductDetails();
   },  [searchQuery, storeProducts, pageNumber]);
-  const filterProducts = () => {
-    if (searchQuery && storeProducts && storeProducts.data) {
-      const filteredData = storeProducts.data.filter((product) =>
-      product.pname && product.pname.includes(searchQuery.toLowerCase())
-      );
-      setFilteredProducts(filteredData);
-    } else {
-      setFilteredProducts(null);
-    }
-  };
-
+ 
 const getProductDetails = async () => {
   try{
     // const vendorId = route.params.Id;

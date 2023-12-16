@@ -18,6 +18,7 @@ const tabBarOptions = {
   };
 const TabNavigator = ({navigation}) => {
   const route=useRoute();
+  console.log("route.params.Data",route.params.Data)
   const user_Id=route.params.Data;
  
   return (
@@ -25,7 +26,7 @@ const TabNavigator = ({navigation}) => {
     <Tab.Navigator screenOptions={{
       tabBarStyle: {backgroundColor: "#EEEEEE"}
     }}>
-        <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: ({ color, size }) => (
+        <Tab.Screen name="Home" component={HomeScreen}initialParams={{ user_Id: user_Id }} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/home1.png')}style={{width:22,height:21}} ></Image>
            ),header: () => (
             <View style={{backgroundColor:'#EEEEEE'}}>
@@ -70,7 +71,7 @@ const TabNavigator = ({navigation}) => {
         
         </View>
         ), }}/>
-            <Tab.Screen name="Store" component={Store} initialParams={{ user_Id: route.params.Data }} options={{tabBarIcon: ({ color, size }) => (
+            <Tab.Screen name="Store" component={Store} initialParams={{ user_Id:user_Id }} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/Shop.png')}style={{width:22,height:21}} ></Image>
            ),header: () => (
             <View style={{backgroundColor:'#EEEEEE'}}>
