@@ -1,6 +1,6 @@
 // TabNavigator.js
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text,StyleSheet,Image, TouchableOpacity, View} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Metrics } from '../themes';
@@ -8,6 +8,7 @@ import HomeScreen from './HomeScreen';
 import Store from './Store';
 import { useRoute } from '@react-navigation/native';
 import Profile from './Profile';
+import Search from './Search';
 const Tab = createBottomTabNavigator();
 const tabBarOptions = {
     activeTintColor: 'blue', // Change this to your desired active tab color
@@ -18,15 +19,33 @@ const tabBarOptions = {
   };
 const TabNavigator = ({navigation}) => {
   const route=useRoute();
-  console.log("route.params.Data",route.params.Data)
-  const user_Id=route.params.Data;
- 
+  const user_Id=route.params.Data
+  const [amplePoints,setAmplePints]=useState(0);
+  useEffect(()=>{
+  const getRewards=async()=>{
+    try{
+      const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
+     const Response= await axios.get(apiUrl, {
+        params: {
+          user_id:user_Id,
+        },
+      });
+      setAmplePints(Response.data.data.user_total_ample);
+      console.log('Amples',Amples)
+    }catch(erro){
+      console.log("Error",erro)
+    }
+   }
+   getRewards
+  },[])
+
+  
   return (
     
     <Tab.Navigator screenOptions={{
       tabBarStyle: {backgroundColor: "#EEEEEE"}
     }}>
-        <Tab.Screen name="Home" component={HomeScreen}initialParams={{ user_Id: user_Id }} options={{tabBarIcon: ({ color, size }) => (
+        <Tab.Screen name="Home" component={HomeScreen} initialParams={{ user_Id: user_Id }} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/home1.png')}style={{width:22,height:21}} ></Image>
            ),header: () => (
             <View style={{backgroundColor:'#EEEEEE'}}>
@@ -42,7 +61,7 @@ const TabNavigator = ({navigation}) => {
         android: 'serif', // You may need to adjust this for Android
       }),
     }}>
-    
+    {amplePoints}
     </Text>
     <Text style={{
       color: 'black',
@@ -62,7 +81,9 @@ const TabNavigator = ({navigation}) => {
               </TouchableOpacity>
             </View>
         
-            <TouchableOpacity onPress={()=>navigation.navigate("Search")} style={styles.searchBar2Container}>
+            <TouchableOpacity onPress={()=>navigation.navigate("Search",{
+              user_Id,
+            })} initialParams={{ user_Id: user_Id }} style={styles.searchBar2Container}>
               <View style={styles.searchInput}>
                 <Image source={require('../assets/Search.png')} style={{width:Metrics.ratio(20),height:Metrics.ratio(20)}}></Image>
                 <Text >Search...</Text>
@@ -87,7 +108,7 @@ const TabNavigator = ({navigation}) => {
         android: 'serif', // You may need to adjust this for Android
       }),
     }}>
-      {/* {amplePoints} */}
+     {amplePoints}
     </Text>
     <Text style={{
       color: 'black',
@@ -117,7 +138,7 @@ const TabNavigator = ({navigation}) => {
         </View>
         ), }}/>
           <Tab.Screen name="Profile" component={Profile} initialParams={{ user_Id: route.params.Data }} options={{tabBarIcon: ({ color, size }) => (
-           <Image source={require('../assets/Profile.png')}style={{width:22,height:21}} ></Image>
+           <Image source={require('../assets/Profile2.png')}style={{width:22,height:21}} ></Image>
            ),header: () => (
             <View style={{backgroundColor:'#EEEEEE'}}>
             <View style={styles.header}>
@@ -132,7 +153,7 @@ const TabNavigator = ({navigation}) => {
         android: 'serif', // You may need to adjust this for Android
       }),
     }}>
-      {/* {amplePoints} */}
+      {amplePoints}
     </Text>
     <Text style={{
       color: 'black',

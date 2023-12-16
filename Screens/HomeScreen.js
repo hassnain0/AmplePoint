@@ -19,8 +19,7 @@ import Brands from './Brands';
 
 const HomeScreen=({navigation})=>{
 const route=useRoute();
-console.log(route.params.user_ID)
-const user_ID=route.params.user_ID
+const user_ID=route.params.user_Id
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
 // const videoUrl = 'https://amplepoints.com/images/HowItWork.mp4';
@@ -93,6 +92,7 @@ const getRewards=async()=>{
         user_id:user_ID
       },
     });
+    console.log("Response.data.data.user_total_ample",Response.data.data.user_total_ample)
    if(Response.data &&Response.data.data.user_total_ample)
    {
     setAmplePoints(Response.data.data.user_total_ample);

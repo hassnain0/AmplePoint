@@ -9,9 +9,14 @@ import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useStripe } from '@stripe/stripe-react-native';
 import OrderSummary from './OrderSummary';
+import util from '../helpers/util';
+import { useRoute } from '@react-navigation/native';
 
 
 const Checkout= ({navigation}) => {
+  const route=useRoute();
+  console.log("route",route)
+const user_Id= route.params
   const [isChecked, setIsChecked] = useState(false);
   const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
 
@@ -113,12 +118,110 @@ const Checkout= ({navigation}) => {
         });
     };
 
-const onCheckout=()=>{
- 
+const onCheckout=async()=>{
+  const apiurl='https://amplepoints.com/apiendpoint/checkout?';
+    
+      axios.get(apiurl,{
+        params:{
+          user_id:user_Id,
+        }
+      })
+        .then((response) => {
+          console.log("Response",response.data.data)
+          if (response.data.status === 'S') {
+  
+            var count = Object.keys(response.data.data).length;
+            let countryArray = [];
+            for (var i = 0; i < count; i++) {
+              countryArray.push({
+                value: response.data.data[i].country_id,
+                label: response.data.data[i].statename,
+              });
+            }
+            setCity(countryArray);
+          }  
+        }).catch((error) => {
+          console.error('Error :', error);
+        });
+}
+const [state, setState] = React.useState({
+  first_name: '',
+  last_name: '', 
+  email: '',  
+  phone: '',
+  country: '',
+  state1:'',
+  city:'',
+  zip:'',
+  fax:'',
+  address:''
+
+});
+const validation=()=>{
+  const {first_name,last_name,email, phone,country,state1,zip,fax,address} =
+  state;
+  if(util.stringIsEmpty(first_name)){
+    setLoader(false);
+    util.errorMsg("Please enter first name");
+    return false;
+  }
+  if(util.stringIsEmpty(last_name)){
+    setLoader(false);
+    util.errorMsg("Please enter Last Name");
+    return false;
+  }
+  if(util.stringIsEmpty(email)){
+    setLoader(false);
+    util.errorMsg("Please enter Email");
+    return false;
+  }
+  if(util.stringIsEmpty(phone)){
+    setLoader(false);
+    util.errorMsg("Please enter Phone");
+    return false;
+  }
+  if(util.stringIsEmpty(valuecountry)){
+    setLoader(false);
+    util.errorMsg("Please enter Country");
+    return false;
+  }
+  if(util.stringIsEmpty(valueState)){
+    setLoader(false);
+    util.errorMsg("Please enter State");
+    return false;
+  }
+  if(util.stringIsEmpty(valueCity)){
+    setLoader(false);
+    util.errorMsg("Please enter City");
+    return false;
+  }
+  if(util.stringIsEmpty(zip)){
+    setLoader(false);
+    util.errorMsg("Please enter Zip Code");
+    return false;
+  }
+  if(util.stringIsEmpty(fax)){
+    setLoader(false);
+    util.errorMsg("Please enter fax");
+    return false;
+  }
+  if(util.stringIsEmpty(address)){
+    setLoader(false);
+    util.errorMsg("Please enter Address");
+    return false;
+  }
+return true;
+
 }
 
-const Pay=()=>{
-navigation.navigate("Payement")
+const Pay=async()=>{
+  if(!validation){
+    setLoader(false);
+    return false;
+  }
+navigation.navigate("OrderSummary",{
+  user_Id,
+})
 }
 
 const Bounce=()=>{
@@ -335,7 +438,7 @@ const Bounce=()=>{
 <View style={styles.buttonView}>
       <Button
         loader={loader}
-        btnPress={onCheckout}
+        btnPress={Pay}
         
         label={"Pay"}
       />

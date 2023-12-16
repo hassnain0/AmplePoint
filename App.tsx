@@ -27,6 +27,7 @@ import Video from './Screens/Video';
 import TabNavigator from './Screens/tabNavigator';
 import Profile from './Screens/Profile';
 import EditProfie from './Screens/EditProfile';
+import { Platform } from 'react-native';
 
 
 const Stack=createNativeStackNavigator();
@@ -36,12 +37,16 @@ export default function App() {
       <NavigationContainer>
 
       <Stack.Navigator>
+      <Stack.Screen name='EditProfile' component={EditProfie} options={( ) => ({headerTintColor:'white',title:'Edit Profile',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 , fontFamily:Platform.select({
+          ios: 'Times New Roman',
+          android: 'Times New Roman', // You may need to adjust this for Android
+        }),}})}/> 
+      <Stack.Screen name='MyPurchase' component={MyPurchase} options={( ) => ({headerTintColor:'white',title:'MyPurchase',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='SplashScreen' component={SplashScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
       <Stack.Screen name='GiftDetails' component={GiftDetails} options={( ) => ({headerTintColor:'white',title:'Gift Details',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Checkout',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerBackVisible:true,headerTitleAlign:'center',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Profile' component={Profile} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/>
-      <Stack.Screen name='EditProfile' component={EditProfie} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/> 
       <Stack.Screen name='HomeScreen' component={TabNavigator}options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
       <Stack.Screen name='LocalPurchase' component={LocalPurchase} options={( ) => ({headerTintColor:'white',title:'My Local Purchases',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Return' component={Return} options={( ) => ({headerTintColor:'white',title:'Return Order',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>

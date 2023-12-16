@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet,Image ,TextInput} from 'react-native';
+import { View, Text, Modal, TouchableOpacity, StyleSheet,Image ,TextInput, BackHandler} from 'react-native';
 import { Checkbox } from 'react-native-paper';
+
 import util from '../helpers/util';
 import { Metrics } from '../themes';
 import Button from '../components/Button';

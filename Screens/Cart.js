@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,TouchableOpacity, SafeAreaView} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
-import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import util from '../helpers/util';
 import Checkout from './Checkout';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import Toast from 'react-native-toast-message';
 const Cart= ({navigation}) => {
   const route=useRoute();
-  console.log("route.params",route)
-  // const User_Id=route.params.user_ID;
+  const User_Id=route.params.user_Id;
   // console.log("User Id",User_Id)
    const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
@@ -85,8 +83,6 @@ setLoader(true);
             user_id:User_Id,
           },
         });
-        console.log("Response",response.data.message)
-        // Handle the successful response
       
       if(response.data.status=='F'){
         setLoader(false);
@@ -114,12 +110,11 @@ setLoader(true);
             user_id:User_Id,
           },
         });
-        console.log("Response",response.data.message)
-        // Handle the successful response
       
         util.successMsg("Sucessfull");
         setLoader(false);
-        navigation.navigate("Checkout")
+        navigation.navigate("Checkout",
+        User_Id)
       
       }
        catch (error) {
@@ -137,7 +132,7 @@ setLoader(true);
           user_id:User_Id,
         },
       });
-      console.log("Response", response.data.data.item_added);
+      console.log("Response", response.data.data);
       // Handle the successful response
       setActualData(response.data)
       setProduct_no(response.data.length);
@@ -154,24 +149,24 @@ setLoader(true);
   };
   const delProduct = async (item) => {
     try {
+      console.log("item",item)
     
-      console.log("Item",item)
+      console.log("Item",item.product_id)
       const apiUrl = 'https://amplepoints.com/apiendpoint/removetocart?';
 
       const response = await axios.get(apiUrl, {
         params: {
-        user_id:item.vendor_id,
+        user_id:User_Id,
          product_id:item.product_id,
          product_added_id:item.productaddedid 
         },
 
         
       });
-    console.log("Response",response.data);
+  
     if (response.status === 'S') {
       util.successMsg("Item SUccessfully removed")
-      // Reload your screen or perform any other actions here
-      // For example, you can force a re-render by updating a state variable
+    
       setDelete((prev) => prev + 1); 
     }
       
@@ -277,6 +272,7 @@ setLoader(true);
                     </View>
                   </View>
                   <MyComponent/> 
+                  <Toast ref={ref => Toast.setRef(ref)} />
                   <View style={styles.buttonView}>
              <Button 
                btnPress={Checkout}
@@ -284,7 +280,7 @@ setLoader(true);
                label={"Check Out"}
              />
            </View> 
-                        <Toast ref={ref => Toast.setRef(ref)} />                    
+                                           
                         
             </ScrollView>
              

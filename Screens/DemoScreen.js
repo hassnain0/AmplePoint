@@ -41,10 +41,12 @@ const ProductItem = ({ product }) => {
 const DemoScreen=({navigation})=>{
   const route=useRoute();
   const Name = route.params.Name;
+  const user_Id=route.params.user_Id;
   const productData=route.params.productData
   const handleProductPress = (productData) => {
+console.log("user_Id",route.params.user_Id)
     // Navigate to the next screen, passing the productId as a parameter
-    navigation.navigate('GiftDetails',{ productData,route });
+    navigation.navigate('GiftDetails',{ productData,user_Id });
   };
   useEffect(()=>{
     getStoreContent();
@@ -188,7 +190,7 @@ const getProductDetails = async () => {
     </Swiper>
     )}
   </View> 
-      <View style={{flex:1, alignItems:'center'}}>
+      <View style={{flex:1, }}>
     
       {data && (
         <View style={styles.overlay}>

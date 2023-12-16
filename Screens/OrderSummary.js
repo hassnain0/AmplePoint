@@ -152,10 +152,13 @@ const ProductItem = ({ product, selectedProductId, onSelect }) => {
 };
 
 const OrderSummary=({navigation})=>{
-  const route=useRoute().params;
+
+  const route=useRoute();
+  console.log("User Id",route.params.user_Id)
+  const user_Id=route.params.user_Id;
+  
   const [loader,setLoader]=useState(false);
   const [Total,setTotal]=useState(0);
-  console.log("Route",route)
   const handleProductPress = (productData) => {
     // Navigate to the next screen, passing the productId as a parameter
    
@@ -173,14 +176,17 @@ const OrderSummary=({navigation})=>{
   //Stripe Show 
   const MakePayement=()=>{
     setLoader(true)
-    util.showAlertWithDelay("Please wait while your request done")
-onCheckout();
+   
     if(Total>0){
 
-
+      util.showAlertWithDelay("Please wait while your request done")
+      onCheckout();
+      setLoader(false);
 }
+
 else{
-  util.errorMsg("Please try again letter")
+  util.errorMsg("Please try again letter");
+  setLoader(false)
 }
 
   
@@ -191,8 +197,12 @@ else{
            
         const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
   
-        const response = await axios.get(apiUrl);
-// Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
+        const response = await axios.get(apiUrl,{
+          user_id:user_Id,
+          total_amount:Total,
+          
+
+        });
 
 
        
@@ -224,12 +234,16 @@ else{
 }
 const getProductDetails = async () => {
   try{
-     
-       const apiUrl = 'https://amplepoints.com/apiendpoint/getordersummary?user_id=126'; 
-        await axios.get(apiUrl)
+
+       const apiUrl = 'https://amplepoints.com/apiendpoint/getordersummary?'; 
+        await axios.get(apiUrl,{
+          params:{
+            user_id:user_Id
+          }
+        })
         .then(response => {
           // Handle the successful response
-       
+         console.log(response.data)
             setStoreProducts(response.data.data.shopping_data);
             if(response.data.data.shopping_total.final_total)
           {

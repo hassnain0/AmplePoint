@@ -77,7 +77,7 @@ setLoading(false)
   };
   const getProductDetails = async () => {
     try {    
-      const apiUrl = 'https://amplepoints.com/apiendpoint/getuserlocalorderhistory?';
+      const apiUrl = 'https://amplepoints.com/apiendpoint/getuserorderhistory?';
       const response = await axios.get(apiUrl, {
         params: {
           user_id:126,
@@ -241,12 +241,12 @@ const DialogBox=(item)=>{
           <View >
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
-                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(20),justifyContent: 'space-between',}}>
-                  <Text style={{left:0,color:'black',fontSize:9,textAlign:'center',fontWeight:'700',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
+                  <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(25),justifyContent: 'space-between',}}>
+                  <Text style={{left:0,color:'black',fontSize:10,textAlign:'center',fontWeight:'500',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'Times New Roman', // You may need to adjust this for Android
   }),}}>Item({product_no})</Text>
-                  <Text style={{color:'black',fontSize:9,textAlign:'center',fontWeight:'700',fontFamily: Platform.select({
+                  <Text style={{color:'black',fontSize:10,textAlign:'center',fontWeight:'500',fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'serif', // You may need to adjust this for Android
   }),}}>Total : {actulaData.cart_total} $</Text>

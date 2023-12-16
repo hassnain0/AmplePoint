@@ -30,7 +30,7 @@ const Brands=({navigation})=>{
     // Filter products based on search query
     if (searchQuery) {
       const filteredData = storeProducts?.data.filter((product) =>
-        product.display_name.toLowerCase().includes(searchQuery.toLowerCase())
+      product.vendor_name && product.vendor_name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredProducts(filteredData);
     } else {
@@ -43,6 +43,7 @@ const Brands=({navigation})=>{
     const Name=productData.vendor_name
     console.log("Name",Name)
     navigation.navigate('DemoScreen',{
+      productData,
       Id,
       Name,
     });

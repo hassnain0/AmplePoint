@@ -38,7 +38,9 @@ const Store=({navigation})=>{
   const handleProductPress = (productData) => {
     const Name=productData.vendor_name
     const Id=productData.tbl_vndr_id
+   
     navigation.navigate('DemoScreen',{
+      user_Id,
       productData,
       Id,
       Name,

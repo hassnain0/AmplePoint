@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import {ProgressBarAndroidBase, View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import { Metrics } from '../themes';
+import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
 import axios from 'axios';
 import EditProfie from './EditProfile';
+import { useRoute } from '@react-navigation/native';
 
 // import ProgressBar from 'react-native-progress';
 
 const Profile= ({navigation}) => {
-    //Feidls
+    const route=useRoute();
+    const user_Id=route.params.user_Id
     const [data,setData]=useState(null)
     useEffect(()=>{
         const getHomeContent=async()=>{
             try {
-              const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?user_id=126';
-              const response = await axios.get(apiUrl);
+              const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
+              const response = await axios.get(apiUrl,{
+                params:{
+                  user_id:user_Id
+                }
+              });
                 console.log("response.data.data",response.data.data)
               if(response.data.data)
               {
@@ -31,7 +37,9 @@ const Profile= ({navigation}) => {
     },)
   // Dummy data (replace with actual user data)
  const EditProfie=()=>{
-  navigation.navigate("EditProfile")
+  navigation.navigate("EditProfile",{
+    data
+  })
  }
 
   return (
@@ -112,11 +120,13 @@ const Profile= ({navigation}) => {
         <Text style={styles.address}>Address:</Text>
     <Text style={styles.address1}>{data.address}</Text>
         </View>
-        <View style={{flex:1,flexDirection:'row',alignItems:'flex-end'}}>
+        <View style={{flex:1,flexDirection:'row',alignItems:'flex-end', justifyContent: "center",
+    alignSelf:'right',
+    marginHorizontal:Metrics.ratio(100),}}>
         <View style={styles.buttonView}>
-      <Button
+      {/* <Button
         label={"View More"}
-      />
+      /> */}
     </View>
     </View>
       </View>
@@ -133,12 +143,10 @@ color:'black'
   },
   buttonView: {
     height:Metrics.vh*5,
-    backgroundColor:'#FF2F00',
+    backgroundColor:Colors.transparent,
 borderRadius:Metrics.ratio(70),
     width: Metrics.vw * 30,
-    justifyContent: "center",
-    alignSelf:'right',
-    marginHorizontal:Metrics.ratio(100),
+   
 
     bottom:Metrics.ratio(5)
   },

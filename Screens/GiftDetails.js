@@ -32,10 +32,10 @@ const [lastName,setLastName]=useState(null);
 const [email,setEmail]=useState(null);
 const [phone,setPhone]=useState(null);
 const [isGiftCard,setIsGiftCard]=useState(false);
-const [pickUp,setPickup]=useState(null);
-const [shipping,setShipping]=useState(null);
-const [online,setOnline]=useState(null);
-const [deleivery,setDeleivery]=useState(null);
+const [pickUp,setPickup]=useState('null');
+const [shipping,setShipping]=useState('');
+const [online,setOnline]=useState('');
+const [deleivery,setDeleivery]=useState('');
 const [appliedAmples,setAppliedAmples]=useState(0);
 const [actual_data,setactual_Data]=useState(null);
 const [data, setData] = useState([{ label: 'Select Time', value: '1' }]);
@@ -58,6 +58,8 @@ setisforMe(false)
 }
 
 const route=useRoute();
+const user_Id=route.params.user_Id;
+console.log(route.params.user_Id)
   const [loading,setLoading]=useState(false);
   useEffect(() => {
 
@@ -93,6 +95,7 @@ const route=useRoute();
                 {
                   setIsGiftCard(true)
                 }
+                console.log("response.data.data.product_info.pickUp",response.data.data.product_info.pickUp)
                 setPickup(response.data.data.product_info.pickUp)
                 setOnline(response.data.data.product_info.online);
                 setDeleivery(response.data.data.product_info.delivery)
@@ -157,7 +160,7 @@ return false;
     const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
    const Response= await axios.get(apiUrl, {
       params: {
-        user_id:126,
+        user_id:user_Id,
       },
     });
    if(Response.data &&Response.data.data.user_total_ample)
@@ -224,7 +227,7 @@ setLoading(true)
         const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
          await axios.get(apiUrl, {
           params: {
-            user_id:126,
+            user_id:user_Id,
             product_id:productId,
             vendor_id:VendorId,
             delivery_type:'pickup',
@@ -257,7 +260,7 @@ setLoading(true)
       const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
        await axios.get(apiUrl, {
         params: {
-          user_id:126,
+          user_id:user_Id,
           product_id:productId,
           vendor_id:VendorId,
           delivery_type:'shipment',
@@ -290,7 +293,7 @@ if(deleivery!==null){
     const apiUrl = 'https://amplepoints.com/apiendpoint/submitdelivery?';
      await axios.get(apiUrl, {
       params: {
-        user_id:126,
+        user_id:user_Id,
         product_id:productId,
         vendor_id:VendorId,
         delivery_type:'delivery',
@@ -433,7 +436,7 @@ const handleAmplesApplication = () => {
          
           await axios.get(apiUrl, {
             params: {
-              user_id:126 || '',
+              user_id:user_Id || '',
               product_id:productId || '',
               quantity:quantity || '',
             },
@@ -441,9 +444,16 @@ const handleAmplesApplication = () => {
           }).then((response)=>{
            console.log("response of carr",response.data.message)
              if(response.data.message==='Product Added To Cart'){
-              navigation.navigate("Cart")
+              navigation.navigate("Cart",{
+                user_Id,
+              })
               setLoader(false);
               util.successMsg("Added to Cart Sucessfully");
+             }
+             if(response.data.message==='Please add delivery details')
+             {
+              util.errorMsg(response.data.message);
+              setLoader(false)
              }
           }).catch((err)=>{
             setLoader(false)
@@ -533,7 +543,7 @@ return (
         color:'black'
     
         }}>Color Options</Text>
-  <Image source={require('../assets/Color.png')} style={{height:Metrics.ratio(20),marginLeft:Metrics.ratio(20),width:Metrics.ratio(20),top:Metrics.ratio(10)}}></Image>
+  <Image source={require('../assets/Scale.png')} style={{height:Metrics.ratio(20),marginLeft:Metrics.ratio(20),width:Metrics.ratio(30),top:Metrics.ratio(10)}}></Image>
    <Text  style={{
     top:Metrics.ratio(14),
     left:Metrics.ratio(3),

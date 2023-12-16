@@ -6,18 +6,13 @@ import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const ProductItem = ({ product, onProductPress }) => {
-  
   const vendors = product.vendor_list;
 
   return (
     <View>
       <Text>{product.category_name}</Text>
       {vendors.map((vendor) => (
-        <TouchableOpacity
-          style={styles.productItem}
-          key={vendor.tbl_vndr_id}
-          onPress={() => handleProductPress(product)}
-        >
+       <View>
           <Image
             source={{
               uri: `https://amplepoints.com/vendor-data/${vendor.tbl_vndr_id}/profile/${vendor.vendor_profileimage}`,
@@ -40,7 +35,7 @@ const ProductItem = ({ product, onProductPress }) => {
               {vendor.tbl_vndr_zip}
             </Text>
           </View>
-        </TouchableOpacity>
+</View>
       ))}
     </View>
   );
@@ -64,7 +59,15 @@ const MallDetail=({navigation})=>{
     }
   }, [searchQuery, storeProducts]);
    
- 
+  const handleProductPress = (productData) => {
+    const Name=productData.vendor_name
+    const Id=productData.tbl_vndr_id
+    // navigation.navigate('DemoScreen',{
+    //   productData,
+    //   Id,
+    //   Name,
+    // });
+  };
   useEffect(()=>{
     
     getProductDetails();
@@ -102,33 +105,29 @@ const getProductDetails = async () => {
       setLoading(false);
     }
   }
-    const renderFlatList = (data) => (
-   
-      <View>
-   <FlatList
-     
-    data={data}
-    showsHorizontalScrollIndicator={false}  // hides the vertical scroll indicator
-    keyExtractor={(item) => item.tbl_vndr_id}
-    renderItem={({ item }) => (
-
-        <ProductItem product={item} />
-    )}
-  />
-
-  </View>
-   
-    );
-    const chunkArray = (array, chunkSize) => {
-      const chunks = [];
-      for (let i = 0; i < array.length; i += chunkSize) {
-        chunks.push(array.slice(i, i + chunkSize));
-      }
-      return chunks;
-    };
-
-    const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
-
+  const renderFlatList = (data) => (
+    <FlatList
+      data={data}
+      showsHorizontalScrollIndicator={false}
+      keyExtractor={(item) => item.tbl_vndr_id}
+      renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => handleProductPress(item)}>
+          <ProductItem product={item} />
+        </TouchableOpacity>
+      )}
+    />
+  );
+  
+  const chunkArray = (array, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  };
+  
+  const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 2) : [];
+  
     return (
       <SafeAreaView>
         <View style={styles.header}>
@@ -150,11 +149,14 @@ const getProductDetails = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
-        {filteredProducts
-          ? renderFlatList(filteredProducts)
-          : chunkedData.map((chunk, index) => (
-              <View key={index}>{renderFlatList(chunk)}</View>
-            ))}
+        
+        <View>
+    {chunkedData.map((chunk, index) => (
+      <View key={index}>
+        {renderFlatList(chunk)}
+      </View>
+    ))}
+  </View>
       </View>
     </ScrollView>
     </SafeAreaView>

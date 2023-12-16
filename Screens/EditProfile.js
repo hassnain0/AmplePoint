@@ -1,12 +1,14 @@
 import React, { useState ,useEffect} from 'react';
-import { StyleSheet, Text, View ,ScrollView,TextInput, SafeAreaView, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View ,ScrollView,TextInput, SafeAreaView,Alert, TouchableOpacity} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import { Image } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import util from '../helpers/util';
 const EditProfie= ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false)
   const [isFocus1, setIsFocus1] = useState(false);
@@ -17,7 +19,6 @@ const EditProfie= ({navigation}) => {
   const [isFocus6, setIsFocus6] = useState(false);
   const [isFocus7, setIsFocus7] = useState(false);
   const [isFocus8, setIsFocus8] = useState(false);
-
   const [valuegen, setValueGen] = useState(null);
   const [valueage, setValueAge] = useState(null);
   const [valuequal, setValueQual] = useState(null);
@@ -27,9 +28,191 @@ const EditProfie= ({navigation}) => {
   const [valuestate, setValueState] = useState(null);
   const [valueCity, setValueCity] = useState(null);  
   const [countrydata,setCountryData]=useState([]);
+  const [stateData,setStateData]=useState([]);
+  const [cityData,setCityData]=useState([]);
   const [loader,setLoader]=useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [state, setState] = React.useState({
+    first_name: '',
+    tag_line:'',
+    last_name: '', 
+    email: '',  
+    date:'',
+    address:'',
+    phone: '',
+    gender:'',
+    contact:'',
+    country: '',
+    state1:'',
+    city:'',
+    zip:'',
+    fax:'',
+    address:''
+  
+  });
+  const [selectedImage, setSelectedImage] = useState(null);
+  // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
+
+  const pickImage = () => {
+    Alert.alert(
+      'Select Image Source',
+      'Choose the source of the image',
+      [
+        {
+          text: 'Camera',
+          onPress: () => LaunchCamera(),
+        },
+        {
+          text: 'Image Library',
+          onPress: () => LaunchimageLibrary(),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+
+  const LaunchimageLibrary = () => {
+    const options = {
+      mediaType: 'mixed', // Allow both photos and videos
+      quality: 0.5, // Adjust image quality as needed
+      maxWidth: 800, // Adjust the maximum image width
+      maxHeight: 600, // Adjust the maximum image height
+      allowsEditing: false, // Whether to allow image editing
+      noData: true, // If true, removes the base64-encoded data field from the response
+      mimeTypes: ['image/jpeg', 'image/jpg', 'image/png',],
+      selectionLimit:5,
+    };
+
+    launchImageLibrary(options, (response) => {
+      handleImagePickerResponse(response);
+    });
+  };
+
+  const handleImagePickerResponse = (response) => {
+    if (response.didCancel) {
+      util.errorMsg('cancelled');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else {
+      const source = { uri: response.uri };
+      console.log(response.uri)
+      setSelectedImage(source);
+    }
+  };
+  const validation=()=>{
+    console.log("Hello")
+    const {tag_line,first_name,last_name,email, contact,zip,fax,address} =
+    state;
+    if(util.stringIsEmpty(tag_line)){
+      setLoader(false);
+      util.errorMsg("Please enter tag line");
+      return false;
+    }
+    if(util.stringIsEmpty(first_name)){
+      setLoader(false);
+      util.errorMsg("Please enter first name");
+      return false;
+    }
+    if(util.stringIsEmpty(last_name)){
+      setLoader(false);
+      util.errorMsg("Please enter Last Name");
+      return false;
+    }if(util.stringIsEmpty(valuegen)){
+      setLoader(false);
+      util.errorMsg("Please Select Gender");
+      return false;
+    }
+    if(util.stringIsEmpty(valueage)){
+      setLoader(false);
+      util.errorMsg("Please Select Age");
+      return false;
+    }
+    if(util.stringIsEmpty(email)){
+      setLoader(false);
+      util.errorMsg("Please enter Email");
+      return false;
+    }
+    if(util.stringIsEmpty(contact)){
+      setLoader(false);
+      util.errorMsg("Please enter Phone");
+      return false;
+    }
+    if(util.stringIsEmpty(selectedDate)){
+      setLoader(false);
+      util.errorMsg("Please pick your birthday Date");
+      return false;
+    }
+    if(valuecountry==[]){
+      setLoader(false);
+      util.errorMsg("Please select Country");
+      return false;
+    }
+    if(util.stringIsEmpty(valuestate)){
+      setLoader(false);
+      util.errorMsg("Please enter State");
+      return false;
+    }
+    if(util.stringIsEmpty(valueCity)){
+      setLoader(false);
+      util.errorMsg("Please enter City");
+      return false;
+    }
+    if(util.stringIsEmpty(zip)){
+      setLoader(false);
+      util.errorMsg("Please enter Zip Code");
+      return false;
+    }
+    if(util.stringIsEmpty(fax)){
+      setLoader(false);
+      util.errorMsg("Please enter fax");
+      return false;
+    }
+    if(util.stringIsEmpty(address)){
+      setLoader(false);
+      util.errorMsg("Please enter Address");
+      return false;
+    }
+  return true;
+  
+  }
+  const onCheckout=async()=>{
+    setLoader(true)
+if(!validation()){
+  return false;
+}
+else{
+  const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
+
+  try{
+    const response=await axios.post(apiUrl,)
+  }
+  catch(error){
+
+  }
+}
+  }
+  const handleDateChange =async (event, date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+  
+    if (date) {
+      // Format the date as 'YYYY/MM/DD'
+      const formattedDate = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+
+      console.log("Formatted Date", formattedDate);
+      setSelectedDate(formattedDate);
+    }
+  };
+  
 
   useEffect(() => {
     getcoutrylist();
@@ -40,10 +223,17 @@ const EditProfie= ({navigation}) => {
     
     axios.get(apiurl)
       .then((response) => {
-        console.log("response.data",response.data)
         if (response.data.status === 'S') {
 
-          setCountryData(response.data);
+          var count = Object.keys(response.data.data).length;
+          let countryArray = [];
+          for (var i = 0; i < count; i++) {
+            countryArray.push({
+              value: response.data.data[i].id,
+              label: response.data.data[i].name,
+            });
+          }
+          setCountryData(countryArray);
         } else {
           console.error('Error fetching countries data');
         }  
@@ -51,75 +241,111 @@ const EditProfie= ({navigation}) => {
         console.error('Error fetching countries data:', error);
       });
     }
-    const handleDateChange =async (event, date) => {
-      setShowDatePicker(Platform.OS === 'ios');
+
+    const handleState = countryCode => {
+      const apiurl='https://amplepoints.com/apiendpoint/getcountrystate?';
     
-      if (date) {
-        // Format the date as 'YYYY/MM/DD'
-        const formattedDate = date.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        })
+      axios.get(apiurl,{
+        params:{
+          country_id:countryCode,
+        }
+      })
+        .then((response) => {
+          console.log("Response",response.data.data)
+          if (response.data.status === 'S') {
   
-      
-      }
+            var count = Object.keys(response.data.data).length;
+            let countryArray = [];
+            for (var i = 0; i < count; i++) {
+              countryArray.push({
+                value: response.data.data[i].stateid,
+                label: response.data.data[i].statename,
+              });
+            }
+            setStateData(countryArray);
+          } else {
+            console.error('Error fetching countries data');
+          }  
+        }).catch((error) => {
+          console.error('Error fetching countries data:', error);
+        });
     };
 
-//Getting Country List
-
-
-// const {initPaymentSheet,presentPaymentSheet}=useStripe();
-
-// const onCheckout=async()=>{
-//     try {
-           
-//         const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
-  
-//         const response = await axios.get(apiUrl);
-// // Created","status":"S","data":{"clientSecret":"pi_3OIDtVGY4n5u6WbI0ofZt1tT_secret_MidriThIfH8dy7r57yRgkOO8u"}}
-
-
-       
-//   const key=response.data.data.clientSecret
-//   const {initResponse}=await initPaymentSheet({
-//     merchantDisplayName:'notJust.dev',
-//     paymentIntentClientSecret:key,
-//     customFlow: false,
-//     style: 'alwaysDark',
-//   })
-//   console.log("init Response",initResponse)
-// if(initResponse){
-// console.log("Int ",initResponse);
-// }
-//   const { error } = await presentPaymentSheet({key});
-
-//   if (error) {
-//     Alert.alert(`Error code: ${error.code}`, error.message);
-//   } else {
-//     Alert.alert('Success', 'The payment was confirmed successfully');
-//   }
- 
- 
-// }catch(error){
-//           console.log("Error",error)
-//       }
-
+    const handleCity = countryCode => {
+      const apiurl='https://amplepoints.com/apiendpoint/getstatecity?';
     
-// }'
-const data = [
-  { label: 'Refund Only', value: '1' },
-  { label: 'Refund Dispute', value: '2' },
+      axios.get(apiurl,{
+        params:{
+          state_id:countryCode,
+        }
+      })
+        .then((response) => {
+          console.log("Response",response.data.data)
+          if (response.data.status === 'S') {
+  
+            var count = Object.keys(response.data.data).length;
+            let countryArray = [];
+            for (var i = 0; i < count; i++) {
+              countryArray.push({
+                value: response.data.data[i].country_id,
+                label: response.data.data[i].statename,
+              });
+            }
+            setCityData(countryArray);
+          } else {
+            console.error('Error fetching countries data');
+          }  
+        }).catch((error) => {
+          console.error('Error fetching countries data:', error);
+        });
+    };
+
+
+    const _handleTextChange = (name, val) => {
+      setState({
+        ...state,
+        [name]: val,
+      });
+    };
+const genderdata = [
+ 
+  { label: 'Male', value: '1' },
+  { label: 'Female', value: '2' },
   
 ];
+const qualificationdata = [
+ 
+  { label: 'Select Education', value: '1' },
+  { label: 'Post Graduate', value: '2' },
+  { label: 'Under Graduate', value: '3' },
+ 
+];
+const Employmentdata = [
+ 
+  { label: 'Select Employement', value: '1' },
+  { label: 'Government', value: '2' },
+  { label: 'Private Jobs', value: '3' },
+  { label: 'Self Employeed', value: '4' },
+  { label: 'Student', value: '5' },
+ 
+];
+const Incomedata = [
+ 
+  { label: 'Select Income', value: '1' },
+  { label: '$0-$10,000', value: '2' },
+  { label: '$10,000-$20,000', value: '3' },
+  { label: '$20,000-$$50,000', value: '4' },
+  { label: '$50,000-$100,000', value: '5' },
+  { label: 'Over $100,000', value: '5' },
+  { label: 'Student', value: '6' },
+ 
+];
+const dataAge = Array.from({ length: 150 }, (_, index) => ({
+  label: `${index + 1}`, // Labels will be "1", "2", ..., "150"
+  value: index + 1,       // Values will be 1, 2, ..., 150
+}));
 
-const onCheckout=()=>{
-  navigation.navigate("OrderSummary")
-}
 
-const Pay=()=>{
-navigation.navigate("Payement")
-}
 
 const Bounce=()=>{
   setIsChecked(!isChecked);
@@ -165,17 +391,17 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Tag Line</Text>
-    <TextInput placeholder='Tag Line'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <TextInput placeholder='Tag Line'   textAlign='left' value={state.tag_line} onChangeText={(text)=>_handleTextChange('tag_line',text)}  auto style={styles.InputContainer} ></TextInput>
     <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
-      fontSize:8,
+      fontSize:10,
     color: '#FF2E00',
     left: 0,
     fontWeight:'700',
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
-    }),}}>BY ENTERING YOUR NAME YOU WILL EARN 5 AMPLEPOINTS</Text>
+    }),}}>BY ENTERING YOUR BIRTH DATE YOU WILL EARN 5 AMPLEPOINTS</Text>
   <View style={{flex:1, flexDirection:'row',}}>
     <View style={{width:'45%'}}>
   <Text style={{ top: Metrics.ratio(10),
@@ -187,7 +413,7 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>First Name</Text>
-    <TextInput placeholder='First Name'   textAlign='left' auto style={styles.InputContainer2} ></TextInput>
+    <TextInput placeholder='First Name' value={state.first_name} onChangeText={(text)=>_handleTextChange('first_name',text)}  textAlign='left' auto style={styles.InputContainer2} ></TextInput>
     </View>
     <View style={{width:'45%',marginLeft:Metrics.ratio(20)}}>
   <Text style={{ top: Metrics.ratio(10),
@@ -199,7 +425,7 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Last Name</Text>
-    <TextInput placeholder='Last Name'   textAlign='left' auto style={styles.InputContainer2} ></TextInput>
+    <TextInput placeholder='Last Name' value={state.last_name} onChangeText={(text)=>_handleTextChange('last_name',text)} textAlign='left' auto style={styles.InputContainer2} ></TextInput>
     </View>
   </View>
   <View style={{flex:1, flexDirection:'row',}}>
@@ -219,12 +445,11 @@ const Bounce=()=>{
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={genderdata}
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus1 ? 'Select Gender' : '...'}
-          searchPlaceholder="Select Gender"
           value={valuegen}
           onFocus={() => setIsFocus1(true)}
           onBlur={() => setIsFocus1(false)}
@@ -250,13 +475,11 @@ const Bounce=()=>{
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
-          search
+          data={dataAge}
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus2? 'Select Age' : '...'}
-          searchField={false}
           value={valueage}
           onFocus={() => setIsFocus2(true)}
           onBlur={() => setIsFocus2(false)}
@@ -276,19 +499,19 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Email</Text>
-    <TextInput placeholder='Email'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <TextInput placeholder='Email' value={state.email} onChangeText={(text)=>_handleTextChange('email',text)}  textAlign='left' auto style={styles.InputContainer} ></TextInput>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
-      fontSize:8,
+      fontSize:10,
     color: '#FF2E00',
     left: 0,
-    fontWeight:'600',
+    fontWeight:'700',
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
-    }),}}>BY ENTERING YOUR CELL PHONE YOU WILL EARN 4 AMPLEPOINTS</Text>
+    }),}}>BY ENTERING YOUR BIRTH DATE YOU WILL EARN 5 AMPLEPOINTS</Text>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
       fontSize:12,
@@ -298,15 +521,15 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Contact Number - Cell Phone</Text>
-    <TextInput placeholder='Contact Number' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <TextInput placeholder='Contact Number' keyboardType='numeric' value={state.contact} onChangeText={(text)=>_handleTextChange('contact',text)} textAlign='left' auto style={styles.InputContainer}  ></TextInput>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
-      fontSize:8,
+      fontSize:10,
     color: '#FF2E00',
     left: 0,
-    fontWeight:'600',
+    fontWeight:'700',
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
@@ -351,14 +574,14 @@ const Bounce=()=>{
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
-      fontSize:8,
+      fontSize:10,
     color: '#FF2E00',
     left: 0,
-    fontWeight:'600',
+    fontWeight:'700',
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
-    }),}}>BY ENTERING YOUR EDUCATION YOU WILL EARN 5 AMPLEPOINTS</Text>
+    }),}}>BY ENTERING YOUR BIRTH DATE YOU WILL EARN 5 AMPLEPOINTS</Text>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
       fontSize:12,
@@ -369,18 +592,16 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>INCOME</Text>
       <Dropdown
-          style={[styles.InputContainer, isFocus3 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus3 && { borderColor: 'black',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
-          search
+          data={qualificationdata}
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus3 ? 'Select qualification' : '...'}
-          searchField={false}
           value={valuequal}
           onFocus={() => setIsFocus3(true)}
           onBlur={() => setIsFocus3(false)}
@@ -401,18 +622,17 @@ const Bounce=()=>{
       android: 'Times New Roman',
     }),}}>EMPLOYEEMENT</Text>
     <Dropdown
-          style={[styles.InputContainer, isFocus4 && { borderColor: 'black',backgroundColor:'#D8D9D8',alignItems:'center' }]}
+          style={[styles.InputContainer, isFocus4 && { borderColor: 'black',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={Employmentdata}
           search
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus4 ? 'Select Employment' : '...'}
-          searchField={false}
           value={valueemp}
           onFocus={() => setIsFocus4(true)}
           onBlur={() => setIsFocus4(false)}
@@ -425,14 +645,14 @@ const Bounce=()=>{
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
-      fontSize:8,
+      fontSize:10,
     color: '#FF2E00',
     left: 0,
-    fontWeight:'600',
+    fontWeight:'700',
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
-    }),}}>BY ENTERING YOUR ZIP CODE YOU WILL EARN 5 AMPLEPOINTS</Text>
+    }),}}>BY ENTERING YOUR BIRTH DATE YOU WILL EARN 5 AMPLEPOINTS</Text>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
       fontSize:12,
@@ -442,7 +662,7 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Zip Code</Text>
-    <TextInput placeholder='Zip Code' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <TextInput placeholder='Zip Code' keyboardType='numeric' value={state.zip} onChangeText={(text)=>_handleTextChange('zip',text)} textAlign='left' auto style={styles.InputContainer} ></TextInput>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
@@ -460,19 +680,19 @@ const Bounce=()=>{
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={countrydata}
           search
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus5 ? 'Select Country' : '...'}
-          searchField={false}
           value={valueinc}
           onFocus={() => setIsFocus5(true)}
           onBlur={() => setIsFocus5(false)}
           onChange={item => {
             setValueInc(item.value);
             setIsFocus5(false);
+            handleState(item.value);
           }}
         />
 </View>
@@ -492,19 +712,19 @@ const Bounce=()=>{
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={stateData}
           search
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus6 ? 'Select State' : '...'}
-          searchField={false}
           value={valuestate}
           onFocus={() => setIsFocus6(true)}
           onBlur={() => setIsFocus6(false)}
           onChange={item => {
             setValueState(item.value);
             setIsFocus6(false);
+            handleCity(item.value)
           }}
         />
 </View>
@@ -524,13 +744,11 @@ const Bounce=()=>{
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
-          search
+          data={cityData}
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder={!isFocus7 ? 'Select City' : '...'}
-          searchField={false}
           value={valueCity}
           onFocus={() => setIsFocus7(true)}
           onBlur={() => setIsFocus7(false)}
@@ -550,34 +768,57 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Address</Text>
-    <TextInput placeholder='Address' keyboardType='numeric'  textAlign='left' auto style={styles.InputContainer3} ></TextInput>
+    <TextInput placeholder='Address' value={state.address} onChangeText={(text)=>_handleTextChange('address',text)}  textAlign='left' auto style={styles.InputContainer3} ></TextInput>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
-      fontSize:8,
+      fontSize:10,
     color: '#FF2E00',
     left: 0,
-    fontWeight:'600',
+    fontWeight:'700',
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
-    }),}}>BY ENTERING YOUR PROFILE IMAGE YOU WILL EARN 4 AMPLEPOINTS</Text>
+    }),}}>BY ENTERING YOUR PROFILE IMAGE YOU WILL EARN 5 AMPLEPOINTS</Text>
 </View>
 <View style={{flex:1,flexDirection:'row',alignItems:'center', paddingTop:Metrics.ratio(10),paddingBottom:Metrics.ratio(20),justifyContent:'center'}}>
   <View style={{marginRight:Metrics.ratio(50)}}>
-    <Text style={{fontSize:8,textAlign:'center'}}>Profile Picture</Text>
-    <Image source={require('../assets/Profile.png')} style={{ width: 80,
-    height: 80,
-    borderRadius: 100,}} />
+  
+    <Text style={{fontSize:8,textAlign:'center',fontWeight:'500'}}>Profile Picture</Text>
+    {selectedImage ? (
+        <Image
+          src={selectedImage}
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 100,
+          }}
+        />
+      ) : (
+        <TouchableOpacity onPress={LaunchimageLibrary}>
+          <Image
+            source={require('../assets/EditBane.jpg')} // Default image source
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 100,
+            }}
+          />
+        </TouchableOpacity>
+      )}
+    
   </View>
   <View>
-    <Text style={{fontSize:8,}}>Profile Banner</Text>
-    <Image source={require('../assets/Profile.png')} style={{ width: 80,
+    <Text style={{fontSize:8,fontWeight:'500',textAlign:'center',}}>Profile Banner</Text>
+    <TouchableOpacity>
+    <Image source={require('../assets/EditBane.jpg')} style={{ width: 80,
     height: 80,
     borderRadius: 100,}} />
+    </TouchableOpacity>
   </View>
 </View>
+<Toast ref={ref => Toast.setRef(ref)} /> 
 <View style={styles.buttonView}>
       <Button
         loader={loader}
@@ -586,7 +827,7 @@ const Bounce=()=>{
         label={"Save Changes"}
       />
     </View>
-<Toast ref={ref => Toast.setRef(ref)} /> 
+
 </View>
     </ScrollView>
     </SafeAreaView>
@@ -608,7 +849,7 @@ borderRadius:Metrics.ratio(70),
     alignItems: "center",
     alignSelf:'center',
    marginTop:Metrics.ratio(50),
-    bottom:Metrics.ratio(10)
+    paddingBottom:Metrics.ratio(20)
   },
   dropdown: {
     height: Metrics.ratio(20), 
@@ -633,7 +874,7 @@ borderRadius:Metrics.ratio(70),
     fontSize: 14,
   },
   placeholderStyle: {
-    fontSize: 10,
+    fontSize: 8,
   },
   selectedTextStyle: {
     fontSize: 12,
