@@ -1,35 +1,24 @@
 import React, { useEffect,useRef,useState } from 'react';
 import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet,Alert,BackHandler, Image,TextInput,Platform, ScrollView} from "react-native";
 import Mall from './Mall';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import Store from './Store';
-import Ionicons from 'react-native-vector-icons'
 import { Metrics } from '../themes';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import Cart from './Cart';
 import Brands from './Brands';
+import MyPurchase from './MyPurchase';
+import LocalPurchase from './LocalPurchase';
+const Drawer=createDrawerNavigator();
 
-// import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-// // import { createDrawerNavigator} from '@react-navigation/drawer';
-// const Drawer=createDrawerNavigator();
-// import Animated from 'react-native-reanimated';
-
-// Animated.initializeReanimated();
-
-const HomeScreen=({navigation})=>{
+const  HomeScreen=({navigation})=>{
 const route=useRoute();
-const user_ID=route.params.user_Id
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
-// const videoUrl = 'https://amplepoints.com/images/HowItWork.mp4';
-// const thumbnailUrl = 'https://amplepoints.com/images/vthumbnail.png';
-
-//   const [isPlaying, setIsPlaying] = useState(false);
-//   const [thumbnail, setThumbnail] = useState(thumbnailUrl);
-//   const videoRef = useRef(null);
-
-
+const CompleteProfile=route.params.CompleteProfile;
+console.log("CompleteProfile",route.params)
 useFocusEffect(
   React.useCallback(() => {
     const onBackPress = () => {
@@ -60,11 +49,11 @@ useFocusEffect(
 const MoveStore=()=>{
   
   navigation.navigate("Store",{
-    // user_ID
-
+CompleteProfile,
   })
 }
 useEffect(() => {
+  console.log("route.params",CompleteProfile)
   const getHomeContent=async()=>{
     try {
       const apiUrl = 'https://amplepoints.com/apiendpoint/gethomecontent';
@@ -80,27 +69,11 @@ useEffect(() => {
     } 
 
   getHomeContent();
-  getRewards();
+
   }, []);
 
 
-const getRewards=async()=>{
-  try{
-    const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
-   const Response= await axios.get(apiUrl, {
-      params: {
-        user_id:user_ID
-      },
-    });
-    console.log("Response.data.data.user_total_ample",Response.data.data.user_total_ample)
-   if(Response.data &&Response.data.data.user_total_ample)
-   {
-    setAmplePoints(Response.data.data.user_total_ample);
-   }
-  }catch(erro){
-    console.log("Error",erro)
-  }
- }
+
 //Video section methods
 const handlePlayPause = async () => {
   if (isPlaying) {
@@ -363,18 +336,32 @@ const styles=StyleSheet.create({
   },
 })
 export default HomeScreen;
-//   return (
-//     <View style={{ flex: 1 ,}}>
-//       <DrawerNavigation />
-//     </View>
-//   );
-// }
-
-// function DrawerNavigation() {
-//   return (
-//       <Drawer.Navigator  initialRouteName="HomeScreen"   >
-//       <Drawer.Screen name="HomeScreen" component={HomeScreen} options={{drawerIcon:({color})=>(<Ionicons name='home-outline' size={22} color={color} />),headerTitleAlign:'center'}} />
+const CustomHeader = ({ navigation }) => (
   
-//       </Drawer.Navigator>
-//   );
-// }
+  <View style={{ backgroundColor: '#EEEEEE' }}>
+    <View style={styles.header}>
+      <TouchableOpacity onPress={()=>navigation.openDrawer()}>
+      <Image source={require('../assets/SideBar.png')} style={styles.SideMenu}  />
+      </TouchableOpacity>
+      <Image source={require('../assets/Ample.png')} style={styles.Logo} />
+      <View>
+        <Text style={styles.headerText}>AMkdfd</Text>
+        <Text style={styles.headerText}>Amples</Text>
+      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Cart", { user_Id })}>
+        <Image source={require('../assets/Trolley.png')} style={styles.Icon} />
+      </TouchableOpacity>
+    </View>
+
+    <TouchableOpacity
+      // onPress={() => navigation.navigate("Search", { user_Id })}
+      // initialParams={{ user_Id: user_Id }}
+      style={styles.searchBar2Container}
+    >
+      <View style={styles.searchInput}>
+        <Image source={require('../assets/Search.png')} style={{ width: Metrics.ratio(20), height: Metrics.ratio(20) }} />
+        <Text>Search...</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+);

@@ -3,12 +3,15 @@ import { StyleSheet, Text, View ,ScrollView,TextInput, SafeAreaView,Alert, Touch
 import { Dropdown } from 'react-native-element-dropdown';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
+
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import { Image } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import util from '../helpers/util';
+import { useRoute } from '@react-navigation/native';
+import { cos } from 'react-native-reanimated';
 const EditProfie= ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false)
   const [isFocus1, setIsFocus1] = useState(false);
@@ -33,6 +36,8 @@ const EditProfie= ({navigation}) => {
   const [loader,setLoader]=useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const route=useRoute();
+  console.log("Route",route.params)
   const [state, setState] = React.useState({
     first_name: '',
     tag_line:'',
@@ -52,6 +57,7 @@ const EditProfie= ({navigation}) => {
   
   });
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage2, setSelectedImage2] = useState(null);
   // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
 
   const pickImage = () => {
@@ -78,35 +84,66 @@ const EditProfie= ({navigation}) => {
 
 
   const LaunchimageLibrary = () => {
-    const options = {
-      mediaType: 'mixed', // Allow both photos and videos
-      quality: 0.5, // Adjust image quality as needed
-      maxWidth: 800, // Adjust the maximum image width
-      maxHeight: 600, // Adjust the maximum image height
-      allowsEditing: false, // Whether to allow image editing
-      noData: true, // If true, removes the base64-encoded data field from the response
-      mimeTypes: ['image/jpeg', 'image/jpg', 'image/png',],
-      selectionLimit:5,
-    };
+    
 
-    launchImageLibrary(options, (response) => {
-      handleImagePickerResponse(response);
+    const options = {
+      quality: 1.0,
+      maxWidth: 50,
+      maxHeight: 50,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    launchImageLibrary(options,(response) => {
+      console.log('Response = ', response);
+    
+      if (!response.didCancel && !response.error && !response.customButton) {
+        // Log the entire response for debugging
+        console.log('Response = ', response);
+
+        const firstImage = response.assets[0];
+        const source = { uri: firstImage.uri };
+
+        // Log the URI to check if it looks correct
+        console.log('Image URI = ', source.uri);
+
+        setSelectedImage(source);
+     }
     });
   };
+  const LaunchimageLibrary2 = () => {
+    
 
-  const handleImagePickerResponse = (response) => {
-    if (response.didCancel) {
-      util.errorMsg('cancelled');
-    } else if (response.error) {
-      console.log('ImagePicker Error: ', response.error);
-    } else {
-      const source = { uri: response.uri };
-      console.log(response.uri)
-      setSelectedImage(source);
-    }
+    const options = {
+      quality: 1.0,
+      maxWidth: 50,
+      maxHeight: 50,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    launchImageLibrary(options,(response) => {
+      console.log('Response = ', response);
+    
+      if (!response.didCancel && !response.error && !response.customButton) {
+        // Log the entire response for debugging
+        console.log('Response = ', response);
+
+        const firstImage = response.assets[0];
+        console.log("firstImage.uri",firstImage.uri)
+        const source = { uri: firstImage.uri };
+
+        // Log the URI to check if it looks correct
+        console.log('Image URI = ', source.uri);
+
+        setSelectedImage2(source);
+     }
+    });
   };
+  
+    
+  
   const validation=()=>{
-    console.log("Hello")
     const {tag_line,first_name,last_name,email, contact,zip,fax,address} =
     state;
     if(util.stringIsEmpty(tag_line)){
@@ -178,6 +215,16 @@ const EditProfie= ({navigation}) => {
       util.errorMsg("Please enter Address");
       return false;
     }
+    if(selectedImage==null){
+      setLoader(false);
+      util.errorMsg("Please pick  Image");
+      return false;
+    }
+    if(selectedImage2==null){
+      setLoader(false);
+      util.errorMsg("Please pick banner");
+      return false;
+    }
   return true;
   
   }
@@ -187,13 +234,47 @@ if(!validation()){
   return false;
 }
 else{
-  const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
 
   try{
-    const response=await axios.post(apiUrl,)
+    const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
+
+   const response=await axios.post(apiUrl,{
+      params:{
+        user_id:126,
+        tagline:state.tag_line,
+        first_name:state.first_name,
+        last_name:state.last_name,
+        mobile:state.contact,
+        birthday:selectedDate,
+        email:state.email,
+        education:valuequal,
+        income:valueinc,
+        employment:valueemp,
+        address:state.address,
+        user_country:valuecountry,
+        user_state:valuestate,
+        user_city:valueCity,
+       age:valueage,
+       gender:valuegen,
+       zip_code:state.zip,
+       profile_pic:selectedImage,
+       user_banner:selectedImage2,
+       usrbg_color:'black'}})
+  console.log(response)
+
+    if(await response.data.status==='S'){
+      setLoader(false);
+      util.successMsg("100% Profile Completed");
+      navigation.navigate("Profile")
+    }
+    else{
+      console.log(response.data.message)
+      setLoader(false);
+    }
   }
   catch(error){
-
+    setLoader(false);
+console.log(error);
   }
 }
   }
@@ -223,6 +304,7 @@ else{
     
     axios.get(apiurl)
       .then((response) => {
+       
         if (response.data.status === 'S') {
 
           var count = Object.keys(response.data.data).length;
@@ -280,14 +362,14 @@ else{
         }
       })
         .then((response) => {
-          console.log("Response",response.data.data)
+          console.log("Response of cities",response.data)
           if (response.data.status === 'S') {
   
             var count = Object.keys(response.data.data).length;
             let countryArray = [];
             for (var i = 0; i < count; i++) {
               countryArray.push({
-                value: response.data.data[i].country_id,
+                value: response.data.data[i].stateid,
                 label: response.data.data[i].statename,
               });
             }
@@ -346,7 +428,17 @@ const dataAge = Array.from({ length: 150 }, (_, index) => ({
 }));
 
 
+let options = {
 
+  storageOptions: {
+
+    skipBackup: true,
+
+    path: 'images',
+
+  },
+
+};
 const Bounce=()=>{
   setIsChecked(!isChecked);
   setHiddenFields(!isChecked); // Toggle the visibility of fields
@@ -645,6 +737,37 @@ const Bounce=()=>{
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
+      fontSize:12,
+    left: 0,
+    fontWeight:'600',
+    fontFamily: Platform.select({
+      ios: 'Times New Roman',
+      android: 'Times New Roman',
+    }),}}>INCOME</Text>
+    <Dropdown
+          style={[styles.InputContainer, isFocus8&& { borderColor: 'black',alignItems:'center' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={Incomedata}
+          search
+          maxHeight={200}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus8 ? 'Select Income' : '...'}
+          value={valueinc}
+          onFocus={() => setIsFocus4(true)}
+          onBlur={() => setIsFocus4(false)}
+          onChange={item => {
+            setValueInc(item.value);
+            setIsFocus8(false);
+          }}
+        />
+</View>
+<View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
+<Text style={{ top: Metrics.ratio(10),
+      paddingBottom:Metrics.ratio(10),
       fontSize:10,
     color: '#FF2E00',
     left: 0,
@@ -686,11 +809,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus5 ? 'Select Country' : '...'}
-          value={valueinc}
+          value={valuecountry}
           onFocus={() => setIsFocus5(true)}
           onBlur={() => setIsFocus5(false)}
           onChange={item => {
-            setValueInc(item.value);
+            setValueCountry(item.value);
             setIsFocus5(false);
             handleState(item.value);
           }}
@@ -759,6 +882,18 @@ const Bounce=()=>{
         />
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
+        <Text style={{ top: Metrics.ratio(10),
+      paddingBottom:Metrics.ratio(10),
+      fontSize:12,
+    left: 0,
+    fontWeight:'600',
+    fontFamily: Platform.select({
+      ios: 'Times New Roman',
+      android: 'Times New Roman',
+    }),}}>Fax</Text>
+     <TextInput placeholder='Fax'  value={state.fax} onChangeText={(text)=>_handleTextChange('fax',text)} textAlign='left' auto style={styles.InputContainer}  ></TextInput>
+    </View>
+<View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),
       fontSize:12,
@@ -783,22 +918,25 @@ const Bounce=()=>{
     }),}}>BY ENTERING YOUR PROFILE IMAGE YOU WILL EARN 5 AMPLEPOINTS</Text>
 </View>
 <View style={{flex:1,flexDirection:'row',alignItems:'center', paddingTop:Metrics.ratio(10),paddingBottom:Metrics.ratio(20),justifyContent:'center'}}>
-  <View style={{marginRight:Metrics.ratio(50)}}>
+<View style={{marginRight:Metrics.ratio(50)}}>
   
     <Text style={{fontSize:8,textAlign:'center',fontWeight:'500'}}>Profile Picture</Text>
+
     {selectedImage ? (
-        <Image
-          src={selectedImage}
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 100,
-          }}
-        />
+       
+       <Image
+       source={selectedImage}
+       style={{
+        width: 80,
+        height: 80,
+        borderRadius: 100,
+        resizeMode: 'contain',
+      }}
+     /> 
       ) : (
         <TouchableOpacity onPress={LaunchimageLibrary}>
           <Image
-            source={require('../assets/EditBane.jpg')} // Default image source
+            source={require('../assets/Profile.png')} // Default image source
             style={{
               width: 80,
               height: 80,
@@ -811,11 +949,29 @@ const Bounce=()=>{
   </View>
   <View>
     <Text style={{fontSize:8,fontWeight:'500',textAlign:'center',}}>Profile Banner</Text>
-    <TouchableOpacity>
-    <Image source={require('../assets/EditBane.jpg')} style={{ width: 80,
-    height: 80,
-    borderRadius: 100,}} />
-    </TouchableOpacity>
+    {selectedImage2 ? (
+       
+       <Image
+       source={selectedImage2}
+       style={{
+        width: 80,
+        height: 80,
+        borderRadius: 100,
+        resizeMode: 'contain',
+      }}
+     /> 
+      ) : (
+        <TouchableOpacity onPress={LaunchimageLibrary2}>
+          <Image
+            source={require('../assets/EditBane.jpg')} // Default image source
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 100,
+            }}
+          />
+        </TouchableOpacity>
+      )}
   </View>
 </View>
 <Toast ref={ref => Toast.setRef(ref)} /> 

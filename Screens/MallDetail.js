@@ -62,11 +62,11 @@ const MallDetail=({navigation})=>{
   const handleProductPress = (productData) => {
     const Name=productData.vendor_name
     const Id=productData.tbl_vndr_id
-    // navigation.navigate('DemoScreen',{
-    //   productData,
-    //   Id,
-    //   Name,
-    // });
+    navigation.navigate('DemoScreen',{
+      productData,
+      Id,
+      Name,
+    });
   };
   useEffect(()=>{
     

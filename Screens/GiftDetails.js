@@ -27,10 +27,6 @@ const [submit,setSubmit]=useState(false);
 const [amples,setAmples]=useState(0);
 const [isforGuest,setisforGuest]=useState(false);
 const [isforMe,setisforMe]=useState(true);
-const [firstName,setFirstName]=useState(null);
-const [lastName,setLastName]=useState(null);
-const [email,setEmail]=useState(null);
-const [phone,setPhone]=useState(null);
 const [isGiftCard,setIsGiftCard]=useState(false);
 const [pickUp,setPickup]=useState('null');
 const [shipping,setShipping]=useState('');
@@ -38,8 +34,21 @@ const [online,setOnline]=useState('');
 const [deleivery,setDeleivery]=useState('');
 const [appliedAmples,setAppliedAmples]=useState(0);
 const [actual_data,setactual_Data]=useState(null);
+const [state, setState] = React.useState({
+  first_name: '',
+  last_name: '', 
+  email: '',  
+  phone: '',
+
+
+});
 const [data, setData] = useState([{ label: 'Select Time', value: '1' }]);
- 
+const _handleTextChange = (name, val) => {
+  setState({
+    ...state,
+    [name]: val,
+  });
+};
    const ShowMoreDetail=()=>{
     setKnowMore(false);
     setShowMore(true);
@@ -76,7 +85,12 @@ console.log(route.params.user_Id)
                   user_id: VendorId,
                 },
             });
-      
+            if (response.data.data.gift_card_detail_available === 1) 
+            {
+              console.log("Works")
+              setIsGiftCard(true)
+            }
+      console.log("response.data.data.gift_card_detail_available",response.data.data.gift_card_detail_available)
             if (response.data && response.data.data && response.data.data.tabs_data) {
                 const reviewData = response.data.data.tabs_data.workin_hours_tab;
 
@@ -91,11 +105,8 @@ console.log(route.params.user_Id)
                 if (response.data.data.pickup_address && response.data.data.online_address[0].loc_address) {
                   setAddressOnline(response.data.data.online_address[0].loc_address);
               }
-                if (response.data.data && response.data.data && response.data.data.gift_card_detail_available === 1) 
-                {
-                  setIsGiftCard(true)
-                }
-                console.log("response.data.data.product_info.pickUp",response.data.data.product_info.pickUp)
+               
+               
                 setPickup(response.data.data.product_info.pickUp)
                 setOnline(response.data.data.product_info.online);
                 setDeleivery(response.data.data.product_info.delivery)
@@ -424,6 +435,7 @@ const handleAmplesApplication = () => {
 
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
+    navigation.navigate("Login")
     if(!submit){
       util.errorMsg("Please add deleivery Details");
       return;
@@ -640,32 +652,44 @@ right:5,
   </View>
   )} 
    {isGiftCard && (
-    <View>
+    <View style={{flex:1, justifyContent:'space-between'}}>
          <View>
-           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70),marginTop:Metrics.ratio(100)}}>Working Hours</Text>
+           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),paddingRight:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70),marginTop:Metrics.ratio(100)}}>Working Hours</Text>
          </View>
- <View style={{height:Metrics.ratio(50),bottom:Metrics.ratio(50),flex:1,flexDirection:'row',left:Metrics.ratio(15),marginRight:Metrics.ratio(20),backgroundColor:'#CED0CD'}}>
-        <Text style={{left:Metrics.ratio(10),top:Metrics.ratio(10)}}>Day</Text>
-        <Text style={{left:Metrics.ratio(80),top:Metrics.ratio(10)}}>Open/CLose</Text>
-        <Text style={{left:Metrics.ratio(120),top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{left:Metrics.ratio(145),top:Metrics.ratio(10)}}>End Time</Text>
+ <View style={{justifyContent:'space-between',height:Metrics.ratio(50),bottom:Metrics.ratio(50),paddingRight:Metrics.ratio(20),flex:1,flexDirection:'row',left:Metrics.ratio(15),alignItems:'center',backgroundColor:'#CED0CD'}}>
+ <Text style={{top:Metrics.ratio(10)}}>Day</Text>
+        <Text style={{top:Metrics.ratio(10)}}>Open/CLose</Text>
+        <Text style={{top:Metrics.ratio(10)}}>Start Time</Text>
+        <Text style={{top:Metrics.ratio(10)}}>End Time</Text>
        
         </View>
  
      {TimeData && (
   <View>
     {TimeData.map((dayInfo, index) => (
-      <View key={index} style={{ height: Metrics.ratio(50), justifyContent:'space-between',flex: 1, flexDirection: 'row', marginBottom: Metrics.ratio(10), marginLeft: Metrics.ratio(15), marginRight: Metrics.ratio(20),  }}>
-        <Text style={{ marginLeft: Metrics.ratio(10), marginTop: Metrics.ratio(10) }}>{dayInfo.day}</Text>
-        <Text style={{ marginLeft: Metrics.ratio(30), marginTop: Metrics.ratio(10) }}>{dayInfo.open_close}</Text>
-        <Text style={{ marginLeft: Metrics.ratio(60), marginTop: Metrics.ratio(10) }}>{dayInfo.start_time}</Text>
-        <Text style={{ marginLeft: Metrics.ratio(85), marginTop: Metrics.ratio(10) }}>{dayInfo.end_time}</Text>
+      <View key={index} style={{ left:Metrics.ratio(20),height: Metrics.ratio(30), justifyContent:'space-between',flex: 1, flexDirection: 'row',  marginRight: Metrics.ratio(20), backgroundColor:'#CED0CD' }}>
+        <Text style={{ left:Metrics.ratio(10),
+    fontSize:10,
+    fontWeight:'400',
+    color:'black',}}>{dayInfo.day}</Text>
+        <Text style={{
+            fontSize:10,
+    fontWeight:'400',
+    color:'black', }}>{dayInfo.open_close}</Text>
+        <Text style={{
+    fontSize:10,
+    fontWeight:'400',
+    color:'black', }}>{dayInfo.start_time}</Text>
+        <Text style={{
+    fontSize:10,
+    fontWeight:'400',
+    color:'black', }}>{dayInfo.end_time}</Text>
       </View>
     ))}
   </View>
 )}
 
-     <View style={{top:Metrics.ratio(50)}}>
+     <View style={{marginTop:Metrics.ratio(50)}}>
           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
           <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
           <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
@@ -727,17 +751,19 @@ right:5,
     </View>
     {isforGuest &&(
       <View >
-    <View style={{borderColor:'#FF2E00',borderWidth:2}}>
+    <View style={{borderColor:'#FF2E00',borderWidth:0.5}}>
       <Text style={{fontSize:15,color:'black',textAlign:"center"}}>Before clicking on add to cart please</Text>
       <Text style={{fontSize:10,color:'black',textAlign:"center"}}>fill your guest detail</Text>
       <View style={{ padding: Metrics.ratio(20) }}>
       <View style={{ marginBottom:Metrics.ratio(10)}}>
-        <Text style={{color:'black'}} >To First Name *</Text>
+        <Text style={{color:'black',
+    fontWeight:'400',
+    color:'black',}} >To First Name *</Text>
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter first name"
-          value={firstName}
-          onChangeText={(text) => setFirstName(text)}
+          value={state.first_name}
+          onChangeText={(text) => _handleTextChange('first_name',text)}
         />
       </View>
    
@@ -746,8 +772,8 @@ right:5,
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter last name"
-          value={lastName}
-          onChangeText={(text) => setLastName(text)}
+          value={state.last_name}
+          onChangeText={(text) => _handleTextChange('last_name',text)}
         />
       </View>
       <View style={{ marginBottom: 10 }}>
@@ -755,8 +781,8 @@ right:5,
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
+          value={state.email}
+          onChangeText={(text) => _handleTextChange('email',text)}
           keyboardType="email-address"
         />
       </View>
@@ -765,8 +791,8 @@ right:5,
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter phone number"
-          value={phone}
-          onChangeText={(text) => setPhone(text)}
+          value={state.phone}
+          onChangeText={(text) => _handleTextChange('phone',text)}
           keyboardType="phone-pad"
         />
       </View>
@@ -1038,8 +1064,8 @@ const styles=StyleSheet.create({
   },  
   DetailsContainer:{
     color:'black',
-    borderWidth:1,
-    borderRadius:5
+    borderWidth:0.5,
+    borderRadius:2
   },
   button6: {
     alignSelf:'flex-end',

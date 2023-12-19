@@ -175,19 +175,16 @@ const OrderSummary=({navigation})=>{
 
   //Stripe Show 
   const MakePayement=()=>{
-    setLoader(true)
-   
-    if(Total>0){
+if(Total<0){
+  util.errorMsg("Total must exceed zero");
+  setLoader(false);
+  return ;
+
+}
 
       util.showAlertWithDelay("Please wait while your request done")
       onCheckout();
-      setLoader(false);
-}
 
-else{
-  util.errorMsg("Please try again letter");
-  setLoader(false)
-}
 
   
 

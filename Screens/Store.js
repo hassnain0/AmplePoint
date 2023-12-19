@@ -8,6 +8,8 @@ import Brands from './Brands';
 import Mall from './Mall';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+// const Stack=createNativeStackNavigator();
+
 const ProductItem = ({ product }) => {
 
   return (
@@ -49,6 +51,7 @@ const Store=({navigation})=>{
   useEffect(()=>{
     getstores();
     getRewards();
+    setLoading(false)
   },[storeProducts])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);

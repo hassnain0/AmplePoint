@@ -12,7 +12,7 @@ const ProductItem = ({ product }) => {
 
     <View style={styles.productItem}>
   <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
-  {product.pname.split(' ').slice(0, 3).join(' ')}
+  {product.pname.split(' ').slice(0, 2).join(' ')}
 </Text>
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
@@ -51,6 +51,7 @@ console.log("user_Id",route.params.user_Id)
   useEffect(()=>{
     getStoreContent();
     getProductDetails();
+    setLoading(false)
   },[])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -238,9 +239,8 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor:'#FFFF',
-        margin: Metrics.ratio(10),
-        alignItems:'center',
-        justifyContent:'center',
+        margin: Metrics.ratio(20),
+        marginBottom:Metrics.ratio(20),
         borderRadius:5,
         elevation:5
       },
@@ -267,8 +267,8 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:10,
-        width: Metrics.ratio(100),
-        height: Metrics.ratio(100),
+        width: Metrics.ratio(120),
+        height: Metrics.ratio(120),
         
       },
       StoreImage: {

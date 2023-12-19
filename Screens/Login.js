@@ -131,7 +131,6 @@ const Login=({navigation})=>{
   
   const response = await axios.post(apiUrl, formData, { headers });
  
-    console.log("Data",response.data)
      if(response.data.message=='Invalid Email /Password. Please try again'){
       setLoader(false);
       util.errorMsg("Invalid Email and Password");
@@ -152,9 +151,13 @@ const Login=({navigation})=>{
         setLoader(false)
          if(response.data && response.data.data.total_ample)
   {
+    const CompleteProfile=response.data.data
+    
    const Data=response.data.data.user_id;
+   console.log("CompleteProfile",CompleteProfile)
     navigation.navigate("HomeScreen",{
       Data,
+      CompleteProfile,
     })
   }
    
