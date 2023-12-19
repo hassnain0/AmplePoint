@@ -29,11 +29,11 @@ const TabNavigator = ({navigation}) => {
     navigation1.dispatch(DrawerActions.openDrawer());
   };
 
-  const route=useRoute();
-  console.log("route.params.Data",route.params)
-  const CompleteProfile=route.params.CompleteProfile ||0;
+  // const route=useRoute();
+  // console.log("route.params.Data",route.params)
+  // const CompleteProfile=route.params.CompleteProfile;
 
-  const user_Id=route.params.Data
+  // const user_Id=route.params.Data
   const [amplePoints,setAmplePoints]=useState(0);
   useEffect(()=>{
   const getRewards=async()=>{
@@ -59,132 +59,21 @@ const TabNavigator = ({navigation}) => {
     <Tab.Navigator screenOptions={{
       tabBarStyle: {backgroundColor: "#EEEEEE"}
     }}>
-     <Tab.Screen name="Home" component={HomeScreen} initialParams={{ user_Id: route.params.Data , CompleteProfile:route.params.CompleteProfile}} options={{tabBarIcon: ({ color, size }) => (
+     <Tab.Screen name="Home" component={HomeScreen} initialParams={{ user_Id: 126,}} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/home1.png')}style={{width:22,height:21}} ></Image>
-           ),header: () => (
-            <View style={{backgroundColor:'#EEEEEE'}}>
-            <View style={styles.header}>
-            <TouchableOpacity onPress={openDrawer}>
-            <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
-            </TouchableOpacity>
-    <Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
-              <View>
-              <Text style={{
-      color: 'black',
-      fontSize: 9,
-      fontFamily: Platform.select({
-        ios: 'Times New Roman',
-        android: 'serif', // You may need to adjust this for Android
-      }),
-    }}>
-      {amplePoints}
-    </Text>
-    <Text style={{
-      color: 'black',
-      fontSize: 9,
-      fontFamily: Platform.select({
-        ios: 'Times New Roman',
-        android: 'serif', // You may need to adjust this for Android
-      }),
-    }}>
-    Amples
-    </Text>
-              </View>
-              <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
-                user_Id,
-              })}>
-              <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
-              </TouchableOpacity>
-            </View>
-        
-           
-        
-        </View>
-        ), }}/>
-            <Tab.Screen name="Store" component={Store} initialParams={{ user_Id:user_Id }} options={{tabBarIcon: ({ color, size }) => (
+           ),header(){
+            this.headerShown=false
+           } }}/>
+            <Tab.Screen name="Store" component={Store} initialParams={{ user_Id:126 }} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/Shop.png')}style={{width:22,height:21}} ></Image>
-           ),header: () => (
-            <View style={{backgroundColor:'#EEEEEE'}}>
-            <View style={styles.header}>
-            <TouchableOpacity >
-            <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
-            </TouchableOpacity>
-    <Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
-              <View>
-              <Text style={{
-      color: 'black',
-      fontSize: 9,
-      fontFamily: Platform.select({
-        ios: 'Times New Roman',
-        android: 'serif', // You may need to adjust this for Android
-      }),
-    }}>
-      {amplePoints}
-    </Text>
-    <Text style={{
-      color: 'black',
-      fontSize: 9,
-      fontFamily: Platform.select({
-        ios: 'Times New Roman',
-        android: 'serif', // You may need to adjust this for Android
-      }),
-    }}>
-    Amples
-    </Text>
-              </View>
-              <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
-                user_Id,
-              })}>
-              <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
-              </TouchableOpacity>
-            </View>
-        
-           
-        
-        </View>
-        ), }}/>
-          <Tab.Screen name="Profile" component={Profile} initialParams={{ user_Id: route.params.Data }} options={{tabBarIcon: ({ color, size }) => (
+           ),header(){
+            this.headerShown=false
+           } }}/>
+          <Tab.Screen name="Profile" component={Profile} initialParams={{ user_Id: 126 }} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/Profile2.png')}style={{width:22,height:21}} ></Image>
-           ),header: () => (
-            <View style={{backgroundColor:'#EEEEEE'}}>
-            <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <Image source={require('../assets/SideBar.png') } style={styles.SideMenu}></Image>
-            </TouchableOpacity>
-    <Image source={require('../assets/Ample.png') } style={styles.Logo}></Image>
-              <View>
-              <Text style={{
-      color: 'black',
-      fontSize: 9,
-      fontFamily: Platform.select({
-        ios: 'Times New Roman',
-        android: 'serif', // You may need to adjust this for Android
-      }),
-    }}>
-      {amplePoints}
-    </Text>
-    <Text style={{
-      color: 'black',
-      fontSize: 9,
-      fontFamily: Platform.select({
-        ios: 'Times New Roman',
-        android: 'serif', // You may need to adjust this for Android
-      }),
-    }}>
-    Amples
-    </Text>
-              </View>
-              <TouchableOpacity onPress={()=>navigation.navigate("Cart",{
-                user_Id,
-              })}>
-              <Image source={require('../assets/Trolley.png') } style={styles.Icon}></Image>
-              </TouchableOpacity>
-            </View>
-        
-           
-        
-        </View>
-        ), }}/>
+           ),header(){
+            this.headerShown=false
+           } }}/>
        
     </Tab.Navigator>
   );
