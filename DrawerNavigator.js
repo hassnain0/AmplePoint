@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer'; // assuming you have a TabNavigator component
+import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground } from 'react-native';
+import { createDrawerNavigator,DrawerContentScrollView ,DrawerItemList} from '@react-navigation/drawer'; // assuming you have a TabNavigator component
 import TabNavigator from './Screens/tabNavigator';
 import MyPurchase from './Screens/MyPurchase';
 import LocalPurchase from './Screens/LocalPurchase';
@@ -51,19 +51,20 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
-        {/* Background Image */}
-        <Image source={require('./assets/DrawerBackground.jpg')} style={styles.backgroundImage} />
+      
+        <ImageBackground source={require('./assets/DrawerBackground.jpg')} style={styles.backgroundImage} >
 
-        {/* Profile Section */}
+      
         <View style={styles.profileSection}>
           <Image source={require('./assets/Profile.png')} style={styles.profileImage} />
           <View style={styles.profileText}>
             <Text style={styles.profileName}>John Doe</Text>
             <Text style={styles.profileEmail}>john.doe@example.com</Text>
             <Text style={styles.profilePoints}>9.00 Amples</Text>
+            <Text style={styles.profilePoints}>9.00 Amples</Text>
           </View>
         </View>
-
+</ImageBackground>
         {/* Drawer Items */}
         <DrawerItemList {...props} />
 
@@ -79,16 +80,16 @@ export default function DrawerNavigator() {
     <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} />}   screenOptions={{
       header: (props) => <CustomHeader {...props} />,
     }}>
-      <Drawer.Screen name="Home" component={TabNavigator}   options={{
+      <Drawer.Screen name="Home" component={TabNavigator}   options={{ 
           drawerIcon: ({color}) => (
-            <Image source={require('./assets/home1.png')} style={{width:20,height:20}}/>
+            <Image source={require('./assets/home1.png')} style={{width:10,height:15}}/>
           ),
         }}/>
       <Drawer.Screen name="MyPurchase" component={MyPurchase}  options={{headerShown:false,drawerIcon: ({color}) => (
-            <Image source={require('./assets/Purchase.png')} style={{width:15,height:20}}/>
+            <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
           ),}}   />
       <Drawer.Screen name="LocalPurchase" component={LocalPurchase} options={{headerShown:false,drawerIcon: ({color}) => (
-            <Image source={require('./assets/Purchase.png')} style={{width:15,height:20}}/>
+            <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
           ),}}  />
     </Drawer.Navigator>
   );
@@ -138,5 +139,54 @@ const styles=StyleSheet.create({
     marginLeft:Metrics.ratio(50),
     width:Metrics.ratio(200),
     height:Metrics.ratio(30),
+  },
+  drawerContent: {
+    flex: 1,
+    paddingBottom:Metrics.ratio(50)
+  },
+  backgroundImage: {
+  
+    width: '100%',
+    height: '70%',
+  },
+  profileSection: {
+    justifyContent:'center',
+    alignItems: 'center',
+    padding: Metrics.ratio(20),
+  },
+  profileImage: {
+    borderColor:'white',
+    borderWidth:5,
+    width: Metrics.ratio(80),
+    height: Metrics.ratio(80),
+    borderRadius: Metrics.ratio(100),
+    marginRight: Metrics.ratio(10),
+  },
+  profileText: {
+    fontWeight:"600",
+    fontStyle:'italic',
+    textAlign:'center',
+    flexDirection: 'column',
+    fontFamily: 'Roboto-Medium',
+  },
+  profileName: {
+  
+   fontFamily: 'Roboto-Medium',
+    fontSize: 20,
+    fontWeight:"bold",
+    color: 'white',
+  },
+  profileEmail: {
+    fontStyle:'italic',
+    fontSize: 12,
+    color: 'white',
+    fontWeight:"600",
+  },
+  profilePoints: {
+    fontWeight:"600",
+    fontStyle:'italic',
+    fontSize: 12,
+    color: 'white',
+    fontFamily: 'Roboto-Medium',
   },
 })

@@ -136,7 +136,7 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{backgroundColor:'white'}}>
           <Spinner
           visible={loading}
           size={'large'}
@@ -238,7 +238,7 @@ const styles=StyleSheet.create({
       },
       
       productItem: {
-        backgroundColor:'#FFFF',
+        backgroundColor:'white',
         margin: Metrics.ratio(20),
         marginBottom:Metrics.ratio(20),
         borderRadius:5,
