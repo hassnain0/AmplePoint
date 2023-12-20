@@ -697,106 +697,90 @@ return (
   <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.product_sku}</Text>
 
     </View>
-    <View>
-  <TouchableOpacity onPress={ShowMoreDetail}>
- 
+    <View style={{paddingTop:Metrics.ratio(10)}}>
+  
  {knowMore && (
-<View>
+  <TouchableOpacity onPress={ShowMoreDetail}>
+<View style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}>
+<View></View>
 <Text  style={{  top:Metrics.ratio(10),
-        paddingLeft:Metrics.ratio(290),
-        fontSize:15,
+        fontSize:12,
         fontWeight:'400',
-        color:'#FF2E00'
+        color:'#FF2E00',
+        right:Metrics.ratio(10)
         }}>Know More</Text>
-       <View style={{backgroundColor:'#B6B8B5',height:Metrics.ratio(10),marginTop:Metrics.ratio(20)}}>
-</View>
+      
         </View>
-        )}
-        
-        </TouchableOpacity>
        
+        </TouchableOpacity>
+        
+        )} 
+        {showMore && (
+     <TouchableOpacity onPress={KnowMoreDetails}>
+      <Text style={{color:'black'}}>Product Details</Text>
+     <View style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}>
+     <Text  style={styles.ScreenText}>{actual_data?.data?.product_info?.long_desc}</Text>
+     <Text  style={{  top:Metrics.ratio(10),
+             fontSize:12,
+             fontWeight:'400',
+             color:'#FF2E00',
+             right:Metrics.ratio(10)
+             }}>Know Less</Text>
+           
+             </View>
+           
+             </TouchableOpacity>
+             
+  )}   
   </View>  
   
    </View>
-   {showMore && (
-    <View>
-              <Text style={{color:'black',fontWeight:'800',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(1), fontFamily:'Roboto-Medium',}}>Product Details</Text>
-  <View style={{flex:1, justifyContent:'space-between',flexDirection:'row'}}>
- 
-        <Text  style={{  paddingTop:Metrics.ratio(50),
-        fontSize:10,
-        fontWeight:'400',
-        left:Metrics.ratio(10),
-        color:'black'
-        }}>{actual_data?.data?.product_info?.long_desc}</Text>
-        <TouchableOpacity onPress={KnowMoreDetails}>
-        <Text  style={{  top:Metrics.ratio(10),
-        fontSize:15,
-        right:Metrics.ratio(70),
-        fontWeight:'400',
-        color:'#FF2E00'
-        }}>Show less</Text>
-        </TouchableOpacity>
-        
-  </View>
-  <View style={{backgroundColor:'#B6B8B5',height:Metrics.ratio(10),marginTop:Metrics.ratio(20)}}>
-</View>
-  </View>
-  )} 
+   <View style={{backgroundColor:'#B6B8B5',height:Metrics.ratio(10),marginTop:Metrics.ratio(20)}}>
+     </View> 
    {isGiftCard && (
-    <View style={{flex:1, justifyContent:'space-between'}}>
-         <View>
-           <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(20),paddingRight:Metrics.ratio(20),fontSize:20,bottom:Metrics.ratio(70),marginTop:Metrics.ratio(100)}}>Working Hours</Text>
-         </View>
- <View style={{justifyContent:'space-between',height:Metrics.ratio(50),bottom:Metrics.ratio(50),paddingRight:Metrics.ratio(20),flex:1,flexDirection:'row',left:Metrics.ratio(15),alignItems:'center',backgroundColor:'#CED0CD'}}>
- <Text style={{top:Metrics.ratio(10)}}>Day</Text>
-        <Text style={{top:Metrics.ratio(10)}}>Open/CLose</Text>
-        <Text style={{top:Metrics.ratio(10)}}>Start Time</Text>
-        <Text style={{top:Metrics.ratio(10)}}>End Time</Text>
+    <View style={{flex:1,}}>
+         
+           <Text style={{color:'black',fontWeight:'bold',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(1),fontFamily:'Roboto-Medium',}}>Working Hours</Text>
+         
+ <View style={{justifyContent:'space-between',height:Metrics.ratio(30),flex:1,flexDirection:'row',marginRight:Metrics.ratio(25),right:Metrics.ratio(10),left:Metrics.ratio(15),alignItems:'center',backgroundColor:'#CED0CD'}}>
+ <Text style={{fontFamily:'Roboto-Medium',}}>Day</Text>
+        <Text style={{fontFamily:'Roboto-Medium',}}>Open/CLose</Text>
+        <Text style={{fontFamily:'Roboto-Medium',}}>Start Time</Text>
+        <Text style={{fontFamily:'Roboto-Medium',}}>End Time</Text>
        
         </View>
  
      {TimeData && (
   <View>
     {TimeData.map((dayInfo, index) => (
-      <View key={index} style={{ left:Metrics.ratio(20),height: Metrics.ratio(30), justifyContent:'space-between',flex: 1, flexDirection: 'row',  marginRight: Metrics.ratio(20), backgroundColor:'#CED0CD' }}>
-        <Text style={{ left:Metrics.ratio(10),
-    fontSize:10,
-    fontWeight:'400',
-    color:'black',}}>{dayInfo.day}</Text>
-        <Text style={{
-            fontSize:10,
-    fontWeight:'400',
-    color:'black', }}>{dayInfo.open_close}</Text>
-        <Text style={{
-    fontSize:10,
-    fontWeight:'400',
-    color:'black', }}>{dayInfo.start_time}</Text>
-        <Text style={{
-    fontSize:10,
-    fontWeight:'400',
-    color:'black', }}>{dayInfo.end_time}</Text>
+      <View key={index} style={{justifyContent:'space-between',height:Metrics.ratio(30),flex:1,marginRight:Metrics.ratio(25),flexDirection:'row',left:Metrics.ratio(15),alignItems:'center',}}>
+        <Text style={{fontFamily:'Roboto-Medium',fontSize:10}}>{dayInfo.day}</Text>
+        <Text style={{fontFamily:'Roboto-Medium',fontSize:10}}>{dayInfo.open_close}</Text>
+        <Text style={{fontFamily:'Roboto-Medium',fontSize:10}}>{dayInfo.start_time}</Text>
+        <Text style={{fontFamily:'Roboto-Medium',fontSize:10}}>{dayInfo.end_time}</Text>
       </View>
     ))}
   </View>
 )}
 
-     <View style={{marginTop:Metrics.ratio(50)}}>
-          <Text style={{color:'black',fontWeight:'900',paddingLeft:Metrics.ratio(25),fontSize:20,bottom:Metrics.ratio(70)}}>Gift Card Details</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>3. Customer can use Gift Cards all time</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
-          <Text style={{fontSize:10,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
-          <Text style={{fontSize:10,left:Metrics.ratio(15),bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>6. Cannot be combined with any other offers</Text>
-          <Text style={{fontSize:10,left:Metrics.ratio(-15),bottom:Metrics.ratio(60),alignContent:'center',alignSelf:'center',fontWeight:'500',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>8. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>9. Only One Gift Card per Visit</Text>
-          <Text style={{fontSize:10,alignContent:'center',left:Metrics.ratio(15),alignSelf:'left',bottom:Metrics.ratio(60),fontWeight:'500',color:'black'}}>10. Final Sale</Text>
+<View style={{backgroundColor:'#B6B8B5',height:Metrics.ratio(10),marginTop:Metrics.ratio(20),width:'100%'}}>
+</View>
+          <Text style={{color:'black',fontWeight:'bold',paddingLeft:Metrics.ratio(10),fontSize:15,bottom:Metrics.ratio(70),top:Metrics.ratio(1),     fontFamily:'Roboto-Medium',}}>Gift Card Details</Text>
+        <View style={{marginTop:Metrics.ratio(20),marginLeft:Metrics.baseMargin}}>
+          <Text style={{fontSize:12,alignContent:'center',color:'black'}}>1. Gift Card without AmplePoints, customers get 20 % Discount</Text>
+          <Text style={{fontSize:12,alignContent:'center',color:'black'}}>2. Gift Card without AmplePoints, customers get 50 % Discount</Text>
+          <Text style={{fontSize:12,alignContent:'center',color:'black'}}>3. Customer can use Gift Cards all time</Text>
+          <Text style={{fontSize:12,alignContent:'center',color:'black'}}>4.This Gift Card can be used only for Regular priced Items</Text>
+          <Text style={{fontSize:12,color:'black'}}>5. Gift Card can be redeemed on 50 % of total bill</Text>
+          <Text style={{fontSize:12,color:'black'}}>6. Cannot be combined with any other offers</Text>
+          <Text style={{fontSize:12,alignContent:'center',color:'black'}}>7. No Cash Back , Must use entire amount in one transaction</Text>
+          <Text style={{fontSize:12,alignContent:'center',alignSelf:'left',color:'black'}}>8. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:12,alignContent:'center',alignSelf:'left',color:'black'}}>9. Only One Gift Card per Visit</Text>
+          <Text style={{fontSize:12,alignContent:'center',alignSelf:'left',color:'black'}}>10. Final Sale</Text>
+        
         </View>
-        <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(5)}}>
-
-</View>       
+        <View style={{backgroundColor:'#B6B8B5',height:Metrics.ratio(10),marginTop:Metrics.ratio(20)}}>
+</View>        
         </View>
          )}
      
@@ -857,7 +841,7 @@ return (
       </View>
    
     <View >
-        <Text style={{color:'black'}}>To Last Name *</Text>
+        <Text style={{color:'black',  fontFamily:'Roboto-Medium',}}>To Last Name *</Text>
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter last name"
@@ -866,7 +850,7 @@ return (
         />
       </View>
       <View style={{ marginBottom: 10 }}>
-        <Text style={{color:'black'}}>To Email *</Text>
+        <Text style={{color:'black',  fontFamily:'Roboto-Medium',}}>To Email *</Text>
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter email"
@@ -876,7 +860,7 @@ return (
         />
       </View>
       <View style={{ marginBottom: 10 }}>
-        <Text style={{color:'black'}} >To Phone *</Text>
+        <Text style={{color:'black',  fontFamily:'Roboto-Medium',}} >To Phone *</Text>
         <TextInput
         style={styles.DetailsContainer}
           placeholder="Enter phone number"
@@ -1153,7 +1137,7 @@ const styles=StyleSheet.create({
     fontWeight:'400',
     fontFamily:'Roboto-Medium',
     color:'black',
-    right:Metrics.ratio(100)
+    marginRight:Metrics.ratio(100)
   },  
   
   ScreenText4:{

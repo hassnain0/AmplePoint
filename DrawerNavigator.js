@@ -56,7 +56,8 @@ const CustomDrawerContent = (props) => {
 
       
         <View style={styles.profileSection}>
-          <Image source={require('./assets/Profile.png')} style={styles.profileImage} />
+          
+          <Image source={{ uri: `https://amplepoints.com/user_images/${126}/profile_image//${"hb_prodile.jpg"}` }}  style={styles.profileImage} />
           <View style={styles.profileText}>
             <Text style={styles.profileName}>John Doe</Text>
             <Text style={styles.profileEmail}>john.doe@example.com</Text>
