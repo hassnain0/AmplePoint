@@ -15,7 +15,9 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const GiftDetails=({navigation})=>{
 const [isFocus, setIsFocus] = useState(false);
-const [showNewPrice, setNewPrice] = useState(false);
+const [showNewPrice, setShowNewPrice] = useState(false);
+const [ampleApplied, setAmplesApplied] = useState(false);
+
 const [value, setValue] = useState(null);
 const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
@@ -23,6 +25,8 @@ const [addressOnline,setAddressOnline]=useState('');
 const [productId,setProductId]=useState('');
 const [VendorId,setVendorId]=useState('');
 const [TimeData,setTimeData]=useState(null);
+const [newPrice,setNewPrice]=useState(0);
+const [Reward,setReward]=useState(0);
 const [imageData,setImageData]=useState(null);
 const [submit,setSubmit]=useState(false);
 const [amples,setAmples]=useState(0);
@@ -33,6 +37,7 @@ const [pickUp,setPickup]=useState('null');
 const [shipping,setShipping]=useState('');
 const [online,setOnline]=useState('');
 const [deleivery,setDeleivery]=useState('');
+
 const [appliedAmples,setAppliedAmples]=useState(0);
 const [actual_data,setactual_Data]=useState(null);
 const [state, setState] = React.useState({
@@ -382,57 +387,90 @@ setAppliedAmples(text);
     } 
 
 const calculateQuantity = () => {
-  if (appliedAmples >= actual_data.data.product_info.single_price && appliedAmples <= amples) {
-    if (appliedAmples === actual_data.data.product_info.pfwamples) {
-      setQuantity(1);
-    } else {
-      const data=Math.floor(appliedAmples/actual_data.data.product_info.pfwamples );
-      console.log('data',data);
-      if(data>1){
-      // You can customize the quantity logic based on your requirements
-      setQuantity(data);
-    }
+  
+  var qty = quantity;
+  var totalamples = amples
+  var amplesbyusr = parseFloat(appliedAmples);
+  var totalpamples =actual_data?.data?.product_info?.pfwamples;
+  var totalitemamples = parseFloat(totalpamples);
+
+  var checkusertotal = parseFloat(amples);
+  var checkapplyample = parseFloat(amplesbyusr);
+
+  var pattern = /^\d+(\.\d{1,2})?$/;
+
+  if (!pattern.test(amplesbyusr)) {
+
+    util.errorMsg("Please Enter Valid Amples");
+      return false;
   }
+
+  if (amplesbyusr == '00' || amplesbyusr <= 0) {
+
+      util.errorMsg("Please Enter Valid Amples");
+      return false;
+  }
+
+
+  if (checkapplyample > checkusertotal) {
+
+      util.errorMsg("You Don't Have Enough Ample Please Earn More Ample");
+      return false;
+  }
+
+
+  if (amplesbyusr == '') {
+      util.errorMsg("Please enter number of amples you want to apply");
+  } else if (amplesbyusr > totalitemamples) {
+    util.errorMsg("Please enter the number of amples below to total of amples for this product.");
+
+  } else {
+
+      var amplepricebyuser = ((amplesbyusr * 12) / 100);
+      var itempricebyample = ((totalitemamples * 12) / 100);
+
+      var itemprice =actual_data?.data?.product_info?.single_price;
+      //    alert(itemprice);
+      var itemreward = actual_data?.data?.product_info?.pdiscountprice;
+      var itemdiscount =actual_data?.data?.product_info?.pdiscount;
+      //var newitemreward = (qty * itemreward);
+      var newitemprice = (qty * itemprice);
+      //alert(newitemprice);
+      var newitemdiscount = (qty * itemdiscount);
+
+      // New Price by user = (amples needed to redeem - apply amples)*.12  $...
+
+      // Earn Reward = (new price by user * discount percentage)/.12       Amples....
+
+      // If No amples applied by user then Reward Value = (retail price * discount percentage)  $....
+
+      // Reward Value = (new price by user * discount percentage)      $....
+
+      // You Earn = discount percentage
+
+      var newitempricebyuser = (itempricebyample - amplepricebyuser);
+
+      var earnrewardamples = (((newitempricebyuser * ((itemdiscount) / 100)) / 12) * 100);
+
+      var newitemreward = (newitempricebyuser * ((itemdiscount) / 100));
+      setNewPrice(newitempricebyuser.toFixed(2));
+      setReward(newitemreward.toFixed(2));
+      setShowNewPrice(true);
+      setAmplesApplied(true);
   }
   
 };
-const calculateAdjustedPrice = (originalPrice, appliedAmples, totalAmplesNeeded) => {
-  // Calculate the percentage of amples applied
-  const amplesPercentage = appliedAmples / totalAmplesNeeded;
 
-  // Calculate the adjusted price based on the percentage
-  const adjustedPrice = originalPrice * (1 - amplesPercentage);
-
-  // Ensure the adjusted price is at least 0
-  return Math.max(adjustedPrice, 0);
-};
-
-// Function to handle amples application
-const handleAmplesApplication = () => {
-  const totalAmplesNeeded = actual_data.data.pfwamples;
-
-  if (appliedAmples >= totalAmplesNeeded && appliedAmples <= amples) {
-    if (appliedAmples === actual_data.data.product_info.pfwamples) {
-      setQuantity(1);
-    } else {
-      // Calculate the adjusted quantity based on applied amples
-      const adjustedQuantity = Math.floor(appliedAmples / actual_data.data.product_info.pfwamples);
-
-      // Update the quantity
-      setQuantity(Math.max(adjustedQuantity, 1));
-
-      // Calculate the adjusted price and update it as needed
-      const adjustedPrice = calculateAdjustedPrice(
-        actual_data.data.product_info.single_price,
-        appliedAmples,
-        totalAmplesNeeded
-      );
-
-      // Update the price state with the adjusted price
-      setPrice(adjustedPrice);
+const addtocart=()=>{
+    if(ampleApplied){
+      console.log("Amplrd Appied")
+      withAmpples();
+    } 
+    else{
+      console.log("Amplrd not Appied")
+      withOutAmpples();
     }
-  }
-};
+}
 
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
@@ -452,6 +490,56 @@ const handleAmplesApplication = () => {
               user_id:user_Id || '',
               product_id:productId || '',
               quantity:quantity || '',
+            },
+          
+          }).then((response)=>{
+           console.log("response of carr",response.data.message)
+             if(response.data.message==='Product Added To Cart'){
+              navigation.navigate("Cart",{
+                user_Id,
+              })
+              setLoader(false);
+              util.successMsg("Added to Cart Sucessfully");
+             }
+             if(response.data.message==='Please add delivery details')
+             {
+              util.errorMsg(response.data.message);
+              setLoader(false)
+             }
+          }).catch((err)=>{
+            setLoader(false)
+                console.log("Error",err)
+                
+          });
+         
+          // Log the review ratings
+       
+         
+        } catch (error) {
+          console.error('Error fetching product details:', error);
+        
+      }; 
+  
+  }
+  const withAmpples=async()=>{
+    navigation.navigate("Login");
+    if(!submit){
+      util.errorMsg("Please add deleivery Details");
+      return;
+    }
+    setLoader(true)
+    // user_id=126&product_id=59935&vendor_id=906&delivery_type=pickup&pickuplocation=6131 S Rainbow Blvd. Las Vegas, NV&pickup_date=2023/11/27&pickup_time=12:00 AM
+        try {
+         
+          const apiUrl = 'https://amplepoints.com/apiendpoint/addtocartwithamples?';
+         
+          await axios.get(apiUrl, {
+            params: {
+              user_id:user_Id || '',
+              product_id:productId || '',
+              quantity:quantity || '',
+              newitem_pricebyamples:newPrice||'',
+              applied_amples:appliedAmples ||'',
             },
           
           }).then((response)=>{
@@ -583,7 +671,7 @@ return (
    </View>
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
    <Text  style={styles.ScreenText}>Your Earn</Text>
-  <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pdiscount}</Text>
+  <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pdiscount}%</Text>
     
    </View>
    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
@@ -827,12 +915,12 @@ return (
 
     </View>
     {showNewPrice&&(
-    <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(10)}}>
-   <Text style={styles.Text4Container}>New Price:</Text>
-   <Text style={styles.Text3Container}>{(actual_data?.data?.product_info?.pdiscountprice*quantity).toFixed(2)}</Text>
+   <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(10),marginLeft:Metrics.ratio(14)}}>
+   <Text style={styles.Text4Container}>New Price :</Text>
+   <Text style={styles.Text3Container}>${(newPrice*quantity).toFixed(2)}</Text>
    <View style={styles.line1} />
    <Text style={styles.Text6Container}>You Earn :</Text>
-   <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
+   <Text style={styles.Text5Container}>{Reward}%</Text>
     </View>
     )}
     <View style={{flex:1, flexDirection:'row',top:Metrics.ratio(10)}}>
@@ -840,7 +928,7 @@ return (
    <Text style={styles.Text3Container}>{(actual_data?.data?.product_info?.pdiscountprice*quantity).toFixed(2)}</Text>
    <View style={styles.line1} />
    <Text style={styles.Text6Container}>You Earn :</Text>
-   <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}</Text>
+   <Text style={styles.Text5Container}>{actual_data?.data?.product_info?.pdiscount}%</Text>
     </View>
   <View style={{backgroundColor:'#C1C3C0',height:Metrics.ratio(2),marginTop:Metrics.ratio(25)}}>
 </View>
@@ -1016,7 +1104,7 @@ return (
     <View style={styles.buttonView}>
       <Button
         loader={loader}
-        btnPress={withOutAmpples}
+        btnPress={addtocart}
         label={"Add to Cart"}
       />
     </View>
@@ -1363,8 +1451,8 @@ justifyContent:'center'
     backgroundColor: '#D1D3D0',
     top:Metrics.ratio(15),
     bottom:Metrics.ratio(5),
-    right:Metrics.ratio(1),
-    left:Metrics.ratio(10)
+    marginRight:Metrics.ratio(20),
+    marginLeft:Metrics.ratio(20)
 
     // Change the color of the line
   },

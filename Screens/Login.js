@@ -173,11 +173,14 @@ const Login=({navigation})=>{
 return (
 <View>
   <ImageBackground style={styles.ImageContainer} source={require('../assets/BackgroundImage.png')}>
+ <View style={{flex:1,flexDirection:'row', justifyContent:'space-between'}}>
+  <View></View>
   <TouchableOpacity onPress={SignUPScreen} style={styles.TouchContainer}>
   <Text style={styles.TextContainer}>Sign Up</Text>
   </TouchableOpacity>
+  </View>
   <View style={{borderRadius: Metrics.ratio(40), backgroundColor: '#F0F1EC',  borderRadius:Metrics.ratio(20),
-  backgroundColor:'#F0F1EC',top:Metrics.ratio(290), padding: Metrics.ratio(20),}}>
+  backgroundColor:'#F0F1EC',top:Metrics.ratio(100), padding: Metrics.ratio(5),}}>
   
     <Text style={{fontSize: 35, color: 'black', fontWeight: '600', paddingLeft: Metrics.ratio(30)}}>Login</Text>
     
@@ -208,7 +211,7 @@ return (
 
     <TouchableOpacity onPress={ForgotScreenMove}>
       <Image style={styles.trolleyIcon} source={require('../assets/Lock.png')}></Image>
-      <Text style={{fontSize: 13, color: 'black', paddingLeft: Metrics.ratio(130), bottom: Metrics.ratio(4), fontWeight: '500'}}>Forgot Password</Text>
+      <Text style={{fontSize: 13, color: 'black',alignSelf:'center',alignItems:'center',justifyContent:'center', bottom: Metrics.ratio(4), fontWeight: '500'}}>Forgot Password</Text>
     </TouchableOpacity>
 
     <View>

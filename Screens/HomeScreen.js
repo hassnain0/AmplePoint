@@ -17,8 +17,8 @@ const  HomeScreen=({navigation})=>{
 const route=useRoute();
 const [images,setImages]=useState(null);
 const [amplePoints,setAmplePoints]=useState(0);
-const CompleteProfile=route.params.CompleteProfile;
-console.log("CompleteProfile",route.params)
+
+console.log("CompleteProfile",route.params.CompleteProfile)
 useFocusEffect(
   React.useCallback(() => {
     const onBackPress = () => {
@@ -48,12 +48,10 @@ useFocusEffect(
 //Navigation Store
 const MoveStore=()=>{
   
-  navigation.navigate("Store",{
-CompleteProfile,
-  })
+  navigation.navigate("Store")
 }
 useEffect(() => {
-  console.log("route.params",CompleteProfile)
+
   const getHomeContent=async()=>{
     try {
       const apiUrl = 'https://amplepoints.com/apiendpoint/gethomecontent';
