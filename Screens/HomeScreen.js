@@ -114,8 +114,8 @@ return(
         <Image style={styles.ovalImage2} source={require('../assets/Store.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Store</Text>
-        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>Create your own store to</Text>
-        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>maximizes the sale</Text>
+        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>Create your own store to</Text>
+        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>maximizes the sale</Text>
       
       </TouchableOpacity>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
@@ -123,8 +123,8 @@ return(
         <Image style={styles.ovalImage2} source={require('../assets/Brand.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>BRANDS</Text>
-        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>Add your brand to promote</Text>
-        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>on an interactive platform</Text>
+        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>Add your brand to promote</Text>
+        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>on an interactive platform</Text>
     
       </TouchableOpacity>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
@@ -132,8 +132,8 @@ return(
         <Image style={styles.ovalImage2} source={require('../assets/Mall.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>MALL</Text>
-        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>Find your online shop at </Text>
-        <Text style={{ fontSize:10,fontWeight:'250',textAlign:'center',}}>your online mall</Text>
+        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>Find your online shop at </Text>
+        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>your online mall</Text>
       </TouchableOpacity>
       
     </View>

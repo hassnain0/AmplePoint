@@ -28,8 +28,6 @@ const EditProfie= ({navigation}) => {
   const [valueinc, setValueInc] = useState(null);
   const [valueemp, setValueEmp] = useState(null);
   const [valuecountry, setValueCountryInc] = useState(null);
-  const [valuestate, setValueState] = useState(null);
-  const [valueCity, setValueCity] = useState(null);  
   const [countrydata,setCountryData]=useState([]);
   const [stateData,setStateData]=useState([]);
   const [cityData,setCityData]=useState([]);
@@ -38,23 +36,23 @@ const EditProfie= ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const route=useRoute();
   const data=route.params.data;
-  console.log("Dtaa",data)
+console.log("Dta",data)
   const [state, setState] = React.useState({
     first_name: data.first_name,
     tag_line:data.tag_desc,
     last_name: data.last_name, 
     email: data.email,  
     date:data.birthday,
-    address:'',
     phone: data.mobile,
-    gender:'',
-    contact:'',
-    country: '',
-    state1:'',
-    city:'',
+    gender:data.gender,
+    country: data.user_country,
+    state1:data.user_state,
+    city:data.user_city,
     zip:data.zip_code,
-    fax:'',
-    address:''
+    fax:data.fax,
+    address:data.address,
+    age:data.age,
+    income:data.income,
   
   });
   
@@ -89,7 +87,7 @@ const EditProfie= ({navigation}) => {
     
 
     const options = {
-      quality: 1.0,
+      quality: 5.0,
       maxWidth: 50,
       maxHeight: 50,
       storageOptions: {
@@ -146,7 +144,7 @@ const EditProfie= ({navigation}) => {
     
   
   const validation=()=>{
-    const {tag_line,first_name,last_name,email, contact,zip,fax,address} =
+    const {tag_line,first_name,last_name,email, contact,zip,fax,address,age,country,state1,city,income,employment,education} =
     state;
     if(util.stringIsEmpty(tag_line)){
       setLoader(false);
@@ -162,7 +160,7 @@ const EditProfie= ({navigation}) => {
       setLoader(false);
       util.errorMsg("Please enter Last Name");
       return false;
-    }if(util.stringIsEmpty(valuegen)){
+    }if(util.stringIsEmpty(state.gender)){
       setLoader(false);
       util.errorMsg("Please Select Gender");
       return false;
@@ -192,12 +190,12 @@ const EditProfie= ({navigation}) => {
       util.errorMsg("Please select Country");
       return false;
     }
-    if(util.stringIsEmpty(valuestate)){
+    if(util.stringIsEmpty(state)){
       setLoader(false);
       util.errorMsg("Please enter State");
       return false;
     }
-    if(util.stringIsEmpty(valueCity)){
+    if(util.stringIsEmpty(city)){
       setLoader(false);
       util.errorMsg("Please enter City");
       return false;
@@ -249,14 +247,14 @@ else{
         mobile:state.contact,
         birthday:selectedDate,
         email:state.email,
-        education:valuequal,
-        income:valueinc,
-        employment:valueemp,
+        education:state.education,
+        income:state.income,
+        employment:state.employment,
         address:state.address,
-        user_country:valuecountry,
-        user_state:valuestate,
-        user_city:valueCity,
-       age:valueage,
+        user_country:state.country,
+        user_state:state.state1,
+        user_city:state.city,
+       age:state.age,
        gender:valuegen,
        zip_code:state.zip,
        profile_pic:selectedImage,
@@ -280,7 +278,7 @@ console.log(error);
   }
 }
   }
-  const handleDateChange =async (event, date) => {
+  const handleDateChange = (event, date) => {
     setShowDatePicker(Platform.OS === 'ios');
   
     if (date) {
@@ -289,16 +287,23 @@ console.log(error);
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
-      })
-
+      });
+  
       console.log("Formatted Date", formattedDate);
-      setSelectedDate(formattedDate);
+  
+      // Convert the formatted date back to a Date object
+      const dateObject = new Date(formattedDate);
+  
+      setSelectedDate(dateObject);
     }
+  
   };
   
 
   useEffect(() => {
+    console.log("Data",data.income)
     setValueInc(data.income)
+    console.log("Income",valueinc)
     setValueCountryInc(data.user_country);
     getcoutrylist();
   }, []);
@@ -400,28 +405,23 @@ const genderdata = [
   
 ];
 const qualificationdata = [
- 
-  { label: 'Select Education', value: '1' },
-  { label: 'Post Graduate', value: '2' },
-  { label: 'Under Graduate', value: '3' },
+ { label: 'Post Graduate', value: '1' },
+  { label: 'Under Graduate', value: '2' },
  
 ];
 const Employmentdata = [
- 
-  { label: 'Select Employement', value: '1' },
-  { label: 'Government', value: '2' },
-  { label: 'Private Jobs', value: '3' },
-  { label: 'Self Employeed', value: '4' },
-  { label: 'Student', value: '5' },
+  { label: 'Government', value: '1' },
+  { label: 'Private Jobs', value: '2' },
+  { label: 'Self Employeed', value: '3' },
+  { label: 'Student', value: '4' },
  
 ];
 const Incomedata = [
  
-  { label: 'Select Income', value: '1' },
-  { label: '$0-$10,000', value: '2' },
-  { label: '$10,000-$20,000', value: '3' },
-  { label: '$20,000-$$50,000', value: '4' },
-  { label: '$50,000-$100,000', value: '5' },
+  { label: '$0-$10,000', value: '1' },
+  { label: '$10,000-$20,000', value: '2' },
+  { label: '$20,000-$$50,000', value: '3' },
+  { label: '$50,000-$100,000', value: '4' },
   { label: 'Over $100,000', value: '5' },
   { label: 'Student', value: '6' },
  
@@ -576,11 +576,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus2? 'Select Age' : '...'}
-          value={valueage}
+          value={state.age}
           onFocus={() => setIsFocus2(true)}
           onBlur={() => setIsFocus2(false)}
           onChange={item => {
-            setValueAge(item.value);
+            _handleTextChange('age',item.value)
             setIsFocus2(false);
           }}
         />
@@ -760,11 +760,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus8 ? 'Select Income' : '...'}
-          value={valueinc}
+          value={state.income}
           onFocus={() => setIsFocus4(true)}
           onBlur={() => setIsFocus4(false)}
           onChange={item => {
-            setValueInc(item.value);
+            _handleTextChange('income',item.value)
             setIsFocus8(false);
           }}
         />
@@ -813,11 +813,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus5 ? 'Select Country' : '...'}
-          value={valuecountry}
+          value={state.country}
           onFocus={() => setIsFocus5(true)}
           onBlur={() => setIsFocus5(false)}
           onChange={item => {
-            setValueCountryInc(item.value);
+            _handleTextChange('country',item.value)
             setIsFocus5(false);
             handleState(item.value);
           }}
@@ -845,11 +845,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus6 ? 'Select State' : '...'}
-          value={valuestate}
+          value={state.state1}
           onFocus={() => setIsFocus6(true)}
           onBlur={() => setIsFocus6(false)}
           onChange={item => {
-            setValueState(item.value);
+            _handleTextChange('state',item.value)
             setIsFocus6(false);
             handleCity(item.value)
           }}
@@ -876,11 +876,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus7 ? 'Select City' : '...'}
-          value={valueCity}
+          value={state.city}
           onFocus={() => setIsFocus7(true)}
           onBlur={() => setIsFocus7(false)}
           onChange={item => {
-            setValueCity(item.value);
+            _handleTextChange('city',item.value)
             setIsFocus7(false);
           }}
         />
@@ -940,7 +940,7 @@ const Bounce=()=>{
       ) : (
         <TouchableOpacity onPress={LaunchimageLibrary}>
           <Image
-            source={require('../assets/Profile.png')} // Default image source
+            source={{uri:data.user_image}}
             style={{
               width: 80,
               height: 80,
@@ -967,7 +967,7 @@ const Bounce=()=>{
       ) : (
         <TouchableOpacity onPress={LaunchimageLibrary2}>
           <Image
-            source={require('../assets/EditBane.jpg')} // Default image source
+            source={{uri:data.user_banner}}
             style={{
               width: 80,
               height: 80,
