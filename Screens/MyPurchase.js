@@ -317,7 +317,7 @@ left:Metrics.ratio(110)
   },
   ImageContainer:{
     width: Metrics.ratio(90), 
-    height: Metrics.ratio(90),
+    height: Metrics.ratio(80),
     bottom:Metrics.ratio(30)
   },
   button: {

@@ -83,7 +83,7 @@ const Return=()=>{
 
   }
 const route=useRoute();
-
+console.log("Rote",route.params.product_sku)
 const item=route.params.item;
         return (
             <ScrollView style={{flex:1, flexDirection:"column",backgroundColor:'white',}}>

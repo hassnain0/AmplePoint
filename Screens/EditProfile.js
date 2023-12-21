@@ -47,6 +47,7 @@ console.log("Dta",data)
     gender:data.gender,
     country: data.user_country,
     state1:data.user_state,
+    employment:data.employment,
     city:data.user_city,
     zip:data.zip_code,
     fax:data.fax,
@@ -144,7 +145,7 @@ console.log("Dta",data)
     
   
   const validation=()=>{
-    const {tag_line,first_name,last_name,email, contact,zip,fax,address,age,country,state1,city,income,employment,education} =
+    const {tag_line,first_name,last_name,email, phone,zip,fax,address,age,country,state1,city,income,employment,education,gender} =
     state;
     if(util.stringIsEmpty(tag_line)){
       setLoader(false);
@@ -160,12 +161,12 @@ console.log("Dta",data)
       setLoader(false);
       util.errorMsg("Please enter Last Name");
       return false;
-    }if(util.stringIsEmpty(state.gender)){
+    }if(util.stringIsEmpty(gender)){
       setLoader(false);
       util.errorMsg("Please Select Gender");
       return false;
     }
-    if(util.stringIsEmpty(valueage)){
+    if(util.stringIsEmpty(age)){
       setLoader(false);
       util.errorMsg("Please Select Age");
       return false;
@@ -175,7 +176,7 @@ console.log("Dta",data)
       util.errorMsg("Please enter Email");
       return false;
     }
-    if(util.stringIsEmpty(contact)){
+    if(util.stringIsEmpty(phone)){
       setLoader(false);
       util.errorMsg("Please enter Phone");
       return false;
@@ -185,7 +186,28 @@ console.log("Dta",data)
       util.errorMsg("Please pick your birthday Date");
       return false;
     }
-    if(valuecountry==[]){
+    if(util.stringIsEmpty(education)){
+      setLoader(false);
+      util.errorMsg("Please select education");
+      return false;
+    }
+    if(util.stringIsEmpty(employment)){
+      setLoader(false);
+      util.errorMsg("Please select employement");
+      return false;
+    }
+
+    if(util.stringIsEmpty(income)){
+      setLoader(false);
+      util.errorMsg("Please select income");
+      return false;
+    }
+    if(util.stringIsEmpty(zip)){
+      setLoader(false);
+      util.errorMsg("Please enter Zip Code");
+      return false;
+    }
+    if(util.stringIsEmpty(country)){
       setLoader(false);
       util.errorMsg("Please select Country");
       return false;
@@ -200,11 +222,7 @@ console.log("Dta",data)
       util.errorMsg("Please enter City");
       return false;
     }
-    if(util.stringIsEmpty(zip)){
-      setLoader(false);
-      util.errorMsg("Please enter Zip Code");
-      return false;
-    }
+   
     if(util.stringIsEmpty(fax)){
       setLoader(false);
       util.errorMsg("Please enter fax");
@@ -215,25 +233,16 @@ console.log("Dta",data)
       util.errorMsg("Please enter Address");
       return false;
     }
-    if(selectedImage==null){
-      setLoader(false);
-      util.errorMsg("Please pick  Image");
-      return false;
-    }
-    if(selectedImage2==null){
-      setLoader(false);
-      util.errorMsg("Please pick banner");
-      return false;
-    }
+    
   return true;
   
   }
   const onCheckout=async()=>{
     setLoader(true)
-if(!validation()){
-  return false;
-}
-else{
+// if(!validation()){
+//   return false;
+// }
+
 
   try{
     const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
@@ -246,7 +255,6 @@ else{
         last_name:state.last_name,
         mobile:state.contact,
         birthday:selectedDate,
-        email:state.email,
         education:state.education,
         income:state.income,
         employment:state.employment,
@@ -255,13 +263,13 @@ else{
         user_state:state.state1,
         user_city:state.city,
        age:state.age,
-       gender:valuegen,
+       gender:state.gender,
        zip_code:state.zip,
-       profile_pic:selectedImage,
-       user_banner:selectedImage2,
+       profile_pic:selectedImage||data.user_image,
+       user_banner:selectedImage2||data.user_banner,
        usrbg_color:'black'}})
-  console.log(response)
-
+  
+console.log("Response",response.data)
     if(await response.data.status==='S'){
       setLoader(false);
       util.successMsg("100% Profile Completed");
@@ -276,7 +284,7 @@ else{
     setLoader(false);
 console.log(error);
   }
-}
+
   }
   const handleDateChange = (event, date) => {
     setShowDatePicker(Platform.OS === 'ios');
@@ -289,8 +297,6 @@ console.log(error);
         day: '2-digit',
       });
   
-      console.log("Formatted Date", formattedDate);
-  
       // Convert the formatted date back to a Date object
       const dateObject = new Date(formattedDate);
   
@@ -301,10 +307,6 @@ console.log(error);
   
 
   useEffect(() => {
-    console.log("Data",data.income)
-    setValueInc(data.income)
-    console.log("Income",valueinc)
-    setValueCountryInc(data.user_country);
     getcoutrylist();
   }, []);
 
