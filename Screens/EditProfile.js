@@ -11,7 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import util from '../helpers/util';
 import { useRoute } from '@react-navigation/native';
-import { cos } from 'react-native-reanimated';
+
 const EditProfie= ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false)
   const [isFocus1, setIsFocus1] = useState(false);
@@ -37,25 +37,27 @@ const EditProfie= ({navigation}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const route=useRoute();
-  console.log("Route",route.params)
+  const data=route.params.data;
+  console.log("Dtaa",data)
   const [state, setState] = React.useState({
-    first_name: '',
-    tag_line:'',
-    last_name: '', 
-    email: '',  
-    date:'',
+    first_name: data.first_name,
+    tag_line:data.tag_desc,
+    last_name: data.last_name, 
+    email: data.email,  
+    date:data.birthday,
     address:'',
-    phone: '',
+    phone: data.mobile,
     gender:'',
     contact:'',
     country: '',
     state1:'',
     city:'',
-    zip:'',
+    zip:data.zip_code,
     fax:'',
     address:''
   
   });
+  
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImage2, setSelectedImage2] = useState(null);
   // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
@@ -296,6 +298,8 @@ console.log(error);
   
 
   useEffect(() => {
+    setValueInc(data.income)
+    setValueCountryInc(data.user_country);
     getcoutrylist();
   }, []);
 
@@ -613,7 +617,7 @@ const Bounce=()=>{
       ios: 'Times New Roman',
       android: 'Times New Roman',
     }),}}>Contact Number - Cell Phone</Text>
-    <TextInput placeholder='Contact Number' keyboardType='numeric' value={state.contact} onChangeText={(text)=>_handleTextChange('contact',text)} textAlign='left' auto style={styles.InputContainer}  ></TextInput>
+    <TextInput placeholder='Contact Number' keyboardType='numeric' value={state.phone} onChangeText={(text)=>_handleTextChange('phone',text)} textAlign='left' auto style={styles.InputContainer}  ></TextInput>
 </View>
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
@@ -682,7 +686,7 @@ const Bounce=()=>{
     fontFamily: Platform.select({
       ios: 'Times New Roman',
       android: 'Times New Roman',
-    }),}}>INCOME</Text>
+    }),}}>Education</Text>
       <Dropdown
           style={[styles.InputContainer, isFocus3 && { borderColor: 'black',alignItems:'center' }]}
           placeholderStyle={styles.placeholderStyle}
@@ -813,7 +817,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus5(true)}
           onBlur={() => setIsFocus5(false)}
           onChange={item => {
-            setValueCountry(item.value);
+            setValueCountryInc(item.value);
             setIsFocus5(false);
             handleState(item.value);
           }}

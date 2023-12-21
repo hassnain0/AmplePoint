@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import {View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Colors, Metrics } from '../themes';
 import axios from 'axios';
 import EditProfie from './EditProfile';
@@ -19,7 +19,7 @@ const Profile= ({navigation}) => {
                   user_id:user_Id
                 }
               });
-              console.log(response.data.data.profile_completed)
+              console.log(response.data.data.user_image)
               if(response.data.data)
               {
                 setData(response.data.data)
@@ -34,32 +34,37 @@ const Profile= ({navigation}) => {
           getHomeContent();
     },)
   // Dummy data (replace with actual user data)
- const EditProfie=()=>{
+ const Edit_Profie=()=>{
   navigation.navigate("EditProfile",{
-    data
+    data,
   })
  }
 
   return (
     
-    <ImageBackground source={require('../assets/EditBane.jpg')} style={styles.containerImage}>
-     <View style={styles.container}>
+        
+    <ImageBackground
+  source={{ uri: data && data.user_banner ? data.user_banner : '' }}
+  style={styles.containerImage}
+>
+     {data &&(
+    <View style={styles.container}>
      
-      {data &&(
+     
         <View>
-           <TouchableOpacity style={{alignItems:'flex-end'}} onPress={EditProfie}>
+           <TouchableOpacity style={{alignItems:'flex-end'}} onPress={Edit_Profie}>
       <Image style={{width:40,height:40}} source={require('../assets/EditIcon.png')}></Image>
       </TouchableOpacity>
       <View style={styles.card}>
-        <Image source={require('../assets/Profile.png')} style={styles.profilePicture} />
+        <Image source={{uri:data.user_image}} style={styles.profilePicture} />
 
         <Text style={styles.userName}>{data.first_name} {data.last_name}</Text>
         
-       <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+       <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
         <Text style={styles.points}> Amples: </Text>
         <Text style={styles.amplepoints}>{data.total_ample}</Text>
         </View>      
-        <View style={{flex:1, alignItems:'center',justifyContent:'center',flexDirection:'row',top:Metrics.ratio(2)}}>
+        <View style={{flex:1, alignItems:'center',justifyContent:'center',flexDirection:'row',marginTop:Metrics.ratio(2)}}>
         <Progress.Bar style={{width:Metrics.ratio(60),borderRadius:1}} progress={29} width={200}  color='#ff3d00'/>
         <Text style={{color:'#ff3d00',fontSize:10,left:Metrics.ratio(5)}}>{data.profile_completed}%</Text>
         <Text style={{color:'black',fontSize:10,left:Metrics.ratio(15),fontWeight:'400'}}>completed</Text>
@@ -136,9 +141,13 @@ const Profile= ({navigation}) => {
     </View>
       </View>
       </View>
-      )}
+      
+      
         </View>
-    </ImageBackground>
+   )}
+   </ImageBackground>
+      
+    
   );
 };
 
