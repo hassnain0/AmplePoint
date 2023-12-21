@@ -6,10 +6,11 @@ import MyPurchase from './Screens/MyPurchase';
 import LocalPurchase from './Screens/LocalPurchase';
 import { Metrics } from './themes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
-const CustomHeader = ({ navigation }) => {
+const CustomHeader = ({ navigation,user_Id }) => {
   // Customize your header content here
   return (
     <View style={{ backgroundColor: '#EEEEEE' }}>
@@ -47,7 +48,8 @@ const CustomHeader = ({ navigation }) => {
     </View>
   );
 };
-const CustomDrawerContent = (props) => {
+const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
+  
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
@@ -57,31 +59,35 @@ const CustomDrawerContent = (props) => {
       
         <View style={styles.profileSection}>
           
-          <Image source={{ uri: `https://amplepoints.com/user_images/${126}/profile_image//${"hb_prodile.jpg"}` }}  style={styles.profileImage} />
+          <Image source={{ uri:CompleteProfile.user_image ||'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANUAAACUCAMAAAAzmpx4AAAAMFBMVEXk5ueutLfn6erq7O2qsLTZ3N21ur3P0tTIzM6nrrHd3+DU19mxt7rBxsjg4uO6v8I4tUPFAAAE8klEQVR4nO2d0XqkIAxGNSCgiLz/2y7oTLudqqMQ5Lftudlv7+ZsIECEbNMUh4SgZrA6Yof5b3eHms74tg/IwPynMl1zbzHr2l62L8heentTsTDq1pSeYq3rav/C8wQnv6X0FPM384px2nf68LrPQKTBtG+dZi9phpt4UWPVIafZS90jb9BkjiotuAlfizp/OFAPfIeuRVaddFpGITYJUoHRQkfLjilS2FrUjWfn1KdW7R+/SbpUAHSjQVPSnPqIVu3fv8HplP4F6RGnFuk+R6ptewOoNWRKBS28qUW5TlFL1LZ4QZjsUIWp5cC0JgapEKwBamqJvPz3wYgULMpPFQsSaeckstbf/1E4VtQxhSqgYbSEZ5PCCRZNPKliAeVgLE4WKvZBWbOILVdE1FTbZ4Y6Tql2xMgXwrFagQxB3gEYhmBtoZkhsQKzBUQJgzSzVYtweuSeVhgTi3NjseBrK0WYk0Ur1VBbqWk6biuEQm7K54J3VvXXYcGeAhGSoDAFrKonQf7EHlJ7/Vj9Wf1Z/Vn9Wf1mq5+5Xml2KYC9BaVeRtgGYB/4M/fsJc5XAF9S+b6HPEE4C/Of8CHqFvw1JgAr9nogxr069totxOcD7j2TRxiAYR1mlUJYgyPEOrFGiAHIPQQxBmC8bcH5XRhhuzTzI7/hh3zBFyyQXBERbPlixJHiuxwjgUIVN+5MYxBJiuvSWY9yMeaBcAzBkihr1Sf5Um1f2+E7+QmjhziCfIVcppasX9xcIzMPYj6poCkvVABf7tfIunwmAcplG6SfH6Wu/dt3SC66I0tRo9MeliFLRXRCJhzRpeJ74bNSGAXAfWg4WcZwYFvadWg6MQrlqG/wYD1C1Dl5zEs6S/eQamK47JueHTO9tzcJ1AIFL/WuF4kKg+9OUk1cuqbYCmczTDLE6RadLV4IP3nQXq71+OmVGZo7Oj2ZrFFzG6aHTzByFqSUnkWYZJ02M7q75bD7LZD4xo2jRYFpsNo471VsUiTnlVl558zcxe1uWT12mdJOPZu2vabApY2bHL25zyIckl5Ypw7sLFoZtZWxoAWLmfivPliztkDtu/X96PQwAa5fYY5Mc6PAtOKZjF0F7QCV9YmSgvTNrHVhOQPJIXGNNUd26EfEwljsmvpi1HR6ZxObIKZiZqzqRY116uAB8bhYGIkV+++Fo7zL6cC04+VNVyde1Gh/rPdhkpgyFYo0grQvEqdPlLu634qwpZ1mL9Nc+ElVTOy3Ure89FUbfCrx3GATP1wSLsF9I/Udpny4qMRrlzeornC4RF43vVTK3gMq8dTlCL0vt9cgMuWz+TpSlVqTaWJq+5WkVepzZMd1ryxNqzclpOwFm4l9L8M/uWy5nexhLfaO05WS31eYtQhCKmR4Ti0CGH4LvWObW8wPQbLoua7bMXf8yoTpFiFNF+/R3yBZntJRxR3FKtLma1U4ebxjzK5nCA0WqUhuH220SfUgc2rBTaqFMetccmnd5QxZz7+nqoePPTLGIGD+e5LegYDqnhN3Sd9iEMc7nUIkFzIKdBlhJDVYyKFKDhbyrIrItOpMteLfQZL+g6nhqq85ySTUqZEOwOtIl3B5En0AxpX4bLBowNzX/s/5101YxYp1pDk9BBFPi6/4s4fiCXoJfiBPTizCz+uB/uTEusO0Or+9IMt3jawgZ1es3P947BrUxseEf1TZS9u3A43xAAAAAElFTkSuQmCC'}}  style={styles.profileImage} />
           <View style={styles.profileText}>
-            <Text style={styles.profileName}>John Doe</Text>
-            <Text style={styles.profileEmail}>john.doe@example.com</Text>
-            <Text style={styles.profilePoints}>9.00 Amples</Text>
-            <Text style={styles.profilePoints}>9.00 Amples</Text>
+            <Text style={styles.profileName}>{CompleteProfile.first_name}</Text>
+            <Text style={styles.profileEmail}>{CompleteProfile.email}</Text>
+            <Text style={styles.profilePoints}>{CompleteProfile.total_ample}Amples</Text>
+            <Text style={styles.profilePoints}>{CompleteProfile.reward_time}Rewards Time</Text>
           </View>
         </View>
 </ImageBackground>
-        {/* Drawer Items */}
+
         <DrawerItemList {...props} />
 
-        {/* Additional Items or Sections */}
-        {/* Add any additional items or sections as needed */}
       </View>
     </DrawerContentScrollView>
   );
 };
 
 export default function DrawerNavigator() {
+
+  const route=useRoute();
+
+const CompleteProfile=route.params.CompleteProfile;
+const user_Id=route.params.CompleteProfile.user_Id;
+
   return (
-    <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} />}   screenOptions={{
-      header: (props) => <CustomHeader {...props} />,
+    <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} CompleteProfile={CompleteProfile}/>}   screenOptions={{
+      header: (props) => <CustomHeader {...props} user_Id={user_Id}/>,
     }}>
-      <Drawer.Screen name="Home" component={TabNavigator}   options={{ 
+      <Drawer.Screen name="Home" initialParams={CompleteProfile=route.params.CompleteProfile} component={TabNavigator}   options={{ 
           drawerIcon: ({color}) => (
             <Image source={require('./assets/home1.png')} style={{width:10,height:15}}/>
           ),
@@ -148,7 +154,7 @@ const styles=StyleSheet.create({
   backgroundImage: {
   
     width: '100%',
-    height: '70%',
+    height: '75%',
   },
   profileSection: {
     justifyContent:'center',
@@ -156,8 +162,7 @@ const styles=StyleSheet.create({
     padding: Metrics.ratio(20),
   },
   profileImage: {
-    borderColor:'white',
-    borderWidth:5,
+    
     width: Metrics.ratio(80),
     height: Metrics.ratio(80),
     borderRadius: Metrics.ratio(100),
@@ -167,26 +172,30 @@ const styles=StyleSheet.create({
     fontWeight:"600",
     fontStyle:'italic',
     textAlign:'center',
+    fontSize:15,
     flexDirection: 'column',
     fontFamily: 'Roboto-Medium',
   },
   profileName: {
-  
+    textAlign:'center',
+    fontSize:15,
    fontFamily: 'Roboto-Medium',
     fontSize: 20,
     fontWeight:"bold",
     color: 'white',
   },
   profileEmail: {
+    textAlign:'center',
+    fontSize:15,
     fontStyle:'italic',
-    fontSize: 12,
     color: 'white',
     fontWeight:"600",
   },
   profilePoints: {
+        textAlign:'center',
     fontWeight:"600",
     fontStyle:'italic',
-    fontSize: 12,
+    fontSize:15,
     color: 'white',
     fontFamily: 'Roboto-Medium',
   },

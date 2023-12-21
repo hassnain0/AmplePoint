@@ -14,6 +14,8 @@ const Return=()=>{
   const [isFocus, setIsFocus] = useState(false);
   const [loader, setLoader] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage2, setSelectedImage2] = useState(null);
+  const [selectedImage3, setSelectedImage3]= useState(null);
   // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
 
   const pickImage = () => {
@@ -40,40 +42,34 @@ const Return=()=>{
 
 
   const LaunchimageLibrary = () => {
-    const options = {
-      mediaType: 'mixed', // Allow both photos and videos
-      quality: 0.5, // Adjust image quality as needed
-      maxWidth: 800, // Adjust the maximum image width
-      maxHeight: 600, // Adjust the maximum image height
-      allowsEditing: false, // Whether to allow image editing
-      noData: true, // If true, removes the base64-encoded data field from the response
-      mimeTypes: ['image/jpeg', 'image/jpg', 'image/png',],
-      selectionLimit:5,
-    };
-
-    launchImageLibrary(options, (response) => {
-      handleImagePickerResponse(response);
-    });
-  };
-
-  const handleImagePickerResponse = (response) => {
-    if (response.didCancel) {
-      util.errorMsg('cancelled');
-    } else if (response.error) {
-      console.log('ImagePicker Error: ', response.error);
-    } else {
-      const source = { uri: response.uri };
-      setSelectedImage(source);
-    }
-  };
-  const checkPermission=async()=>{
-    // const newCameraPermission=await Camera.requestCameraPermission();
-    // const newMicrophonePermission=await Camera.requestMicrophonePermission();
-    // console.log("newCameraPermission",newCameraPermission);
-    // console.log("newMicrophonePermission",newMicrophonePermission);
     
-  }
-  const data = [
+
+    const options = {
+      quality: 1.0,
+      maxWidth: 50,
+      maxHeight: 50,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    launchImageLibrary(options,(response) => {
+      console.log('Response = ', response);
+    
+      if (!response.didCancel && !response.error && !response.customButton) {
+        // Log the entire response for debugging
+        console.log('Response = ', response);
+
+        const firstImage = response.assets[0];
+        console.log("firstImage.uri",firstImage.uri)
+        const source = { uri: firstImage.uri };
+
+        // Log the URI to check if it looks correct
+        console.log('Image URI = ', source.uri);
+
+        setSelectedImage(source);
+     }
+    });
+  };const data = [
     { label: 'Refund Only', value: '1' },
     { label: 'Refund Dispute', value: '2' },
     

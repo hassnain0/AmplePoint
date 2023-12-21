@@ -50,10 +50,10 @@ console.log("Dta",data)
     employment:data.employment,
     city:data.user_city,
     zip:data.zip_code,
-    fax:data.fax,
     address:data.address,
     age:data.age,
     income:data.income,
+    education:data.education,
   
   });
   
@@ -145,7 +145,7 @@ console.log("Dta",data)
     
   
   const validation=()=>{
-    const {tag_line,first_name,last_name,email, phone,zip,fax,address,age,country,state1,city,income,employment,education,gender} =
+    const {tag_line,first_name,last_name,email, phone,zip,address,age,country,state1,city,income,employment,education,gender} =
     state;
     if(util.stringIsEmpty(tag_line)){
       setLoader(false);
@@ -223,11 +223,7 @@ console.log("Dta",data)
       return false;
     }
    
-    if(util.stringIsEmpty(fax)){
-      setLoader(false);
-      util.errorMsg("Please enter fax");
-      return false;
-    }
+   
     if(util.stringIsEmpty(address)){
       setLoader(false);
       util.errorMsg("Please enter Address");
@@ -239,50 +235,75 @@ console.log("Dta",data)
   }
   const onCheckout=async()=>{
     setLoader(true)
-// if(!validation()){
-//   return false;
-// }
-
+if(!validation()){
+  return false;
+}
+console.log("profile Pic Data",data.user_image)
 
   try{
     const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
 
-   const response=await axios.post(apiUrl,{
-      params:{
-        user_id:126,
-        tagline:state.tag_line,
-        first_name:state.first_name,
-        last_name:state.last_name,
-        mobile:state.contact,
-        birthday:selectedDate,
-        education:state.education,
-        income:state.income,
-        employment:state.employment,
-        address:state.address,
-        user_country:state.country,
-        user_state:state.state1,
-        user_city:state.city,
-       age:state.age,
-       gender:state.gender,
-       zip_code:state.zip,
-       profile_pic:selectedImage||data.user_image,
-       user_banner:selectedImage2||data.user_banner,
-       usrbg_color:'black'}})
-  
-console.log("Response",response.data)
-    if(await response.data.status==='S'){
+    // const response = await axios.post(apiUrl, {
+    //   user_id: 126,
+    //   tagline: state.tag_line,
+    //   first_name: state.first_name,
+    //   last_name: state.last_name,
+    //   mobile: state.contact,
+    //   birthday: selectedDate,
+    //   education: state.education,
+    //   income: state.income,
+    //   employment: state.employment,
+    //   address: state.address,
+    //   user_country: state.country,
+    //   user_state: state.state1,
+    //   user_city: state.city,
+    //   age: state.age,
+    //   gender: state.gender,
+    //   zip_code: state.zip,
+    //   profile_pic: selectedImage || data.user_image,
+    //   user_banner: selectedImage2 || data.user_banner,
+    //   usrbg_color: 'black'
+    // });
+    
+   const formData = new FormData();
+   formData.append("user_id",126);
+    formData.append("first_name",state.first_name);
+    formData.append("mobile",state.mobile);
+    formData.append("birthday", selectedDate);
+    formData.append("education",state.education);
+    formData.append("income", state.income);
+    formData.append("employment", state.employment);
+    formData.append("address", state.address);
+    formData.append("user_country", state.user_country);
+    formData.append("user_state", state.user_state);
+    formData.append("user_city", state.user_city);
+    formData.append("age", state.age);
+    formData.append("gender", state.gender);
+    formData.append("zip_code", state.zip);
+    formData.append("profile_pic", selectedImage);
+    formData.append("user_banner", selectedImage2);
+    formData.append("usrbg_color", 'black');
+    
+    
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      "Accept": "application/json",
+    };
+
+    const response = await axios.post(apiUrl, formData);  
+console.log("Response",response)
+    
       setLoader(false);
       util.successMsg("100% Profile Completed");
       navigation.navigate("Profile")
-    }
-    else{
-      console.log(response.data.message)
+    
+      console.log(response)
       setLoader(false);
-    }
+    
   }
   catch(error){
     setLoader(false);
-console.log(error);
+    console.error('Error updating profile:', error);
   }
 
   }
@@ -700,11 +721,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus3 ? 'Select qualification' : '...'}
-          value={valuequal}
+          value={state.education}
           onFocus={() => setIsFocus3(true)}
           onBlur={() => setIsFocus3(false)}
           onChange={item => {
-            setValueQual(item.value);
+            _handleTextChange('education',item.value)
             setIsFocus3(false);
           }}
         />
@@ -731,11 +752,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus4 ? 'Select Employment' : '...'}
-          value={valueemp}
+          value={state.employment}
           onFocus={() => setIsFocus4(true)}
           onBlur={() => setIsFocus4(false)}
           onChange={item => {
-            setValueEmp(item.value);
+            _handleTextChange('employment',item.value)
             setIsFocus4(false);
           }}
         />
@@ -887,18 +908,7 @@ const Bounce=()=>{
           }}
         />
 </View>
-<View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
-        <Text style={{ top: Metrics.ratio(10),
-      paddingBottom:Metrics.ratio(10),
-      fontSize:12,
-    left: 0,
-    fontWeight:'600',
-    fontFamily: Platform.select({
-      ios: 'Times New Roman',
-      android: 'Times New Roman',
-    }),}}>Fax</Text>
-     <TextInput placeholder='Fax'  value={state.fax} onChangeText={(text)=>_handleTextChange('fax',text)} textAlign='left' auto style={styles.InputContainer}  ></TextInput>
-    </View>
+
 <View style={{left:Metrics.ratio(10),marginRight:Metrics.ratio(10)}}>
 <Text style={{ top: Metrics.ratio(10),
       paddingBottom:Metrics.ratio(10),

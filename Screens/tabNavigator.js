@@ -29,6 +29,9 @@ const TabNavigator = ({navigation}) => {
     navigation1.dispatch(DrawerActions.openDrawer());
   };
 
+  const route=useRoute();
+  console.log("Route",route.params)
+  const user_id=route.params.user_id;
   // const route=useRoute();
   // console.log("route.params.Data",route.params)
   // const CompleteProfile=route.params.CompleteProfile;
@@ -45,9 +48,9 @@ const TabNavigator = ({navigation}) => {
         },
       });
       setAmplePoints(Response.data.data.user_total_ample);
-      console.log('Amples',Amples)
+    
     }catch(erro){
-      console.log("Error",erro)
+    
     }
    }
    getRewards();
@@ -69,7 +72,7 @@ const TabNavigator = ({navigation}) => {
            ),header(){
             this.headerShown=false
            } }}/>
-          <Tab.Screen name="Profile" component={Profile} initialParams={{ user_Id: 126 }} options={{tabBarIcon: ({ color, size }) => (
+          <Tab.Screen name="Profile" component={Profile} initialParams={{ user_Id: user_id }} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/Profile2.png')}style={{width:22,height:21}} ></Image>
            ),header(){
             this.headerShown=false

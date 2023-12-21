@@ -56,8 +56,10 @@ const Profile= ({navigation}) => {
       <Image style={{width:40,height:40}} source={require('../assets/EditIcon.png')}></Image>
       </TouchableOpacity>
       <View style={styles.card}>
-        <Image source={{uri:data.user_image}} style={styles.profilePicture} />
-
+      <Image
+  source={{ uri: data.user_image || 'URI_TO_FALLBACK_IMAGE' }}
+  style={styles.profilePicture}
+/>
         <Text style={styles.userName}>{data.first_name} {data.last_name}</Text>
         
        <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
