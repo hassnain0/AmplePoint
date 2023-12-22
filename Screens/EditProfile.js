@@ -23,11 +23,6 @@ const EditProfie= ({navigation}) => {
   const [isFocus7, setIsFocus7] = useState(false);
   const [isFocus8, setIsFocus8] = useState(false);
   const [valuegen, setValueGen] = useState(null);
-  const [valueage, setValueAge] = useState(null);
-  const [valuequal, setValueQual] = useState(null);
-  const [valueinc, setValueInc] = useState(null);
-  const [valueemp, setValueEmp] = useState(null);
-  const [valuecountry, setValueCountryInc] = useState(null);
   const [countrydata,setCountryData]=useState([]);
   const [stateData,setStateData]=useState([]);
   const [cityData,setCityData]=useState([]);
@@ -286,13 +281,12 @@ console.log("profile Pic Data",data.user_image)
     
     
     const headers = {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
       "Accept": "application/json",
     };
-
-    const response = await axios.post(apiUrl, formData);  
-console.log("Response",response)
     
+
+    const response = await axios.post(apiUrl, formData);
       setLoader(false);
       util.successMsg("100% Profile Completed");
       navigation.navigate("Profile")
@@ -401,7 +395,7 @@ console.log("Response",response)
             let countryArray = [];
             for (var i = 0; i < count; i++) {
               countryArray.push({
-                value: response.data.data[i].stateid,
+                value: response.data.data[i].country_id,
                 label: response.data.data[i].statename,
               });
             }
@@ -569,11 +563,11 @@ const Bounce=()=>{
           labelField="label"
           valueField="value"
           placeholder={!isFocus1 ? 'Select Gender' : '...'}
-          value={valuegen}
+          value={state.gender}
           onFocus={() => setIsFocus1(true)}
           onBlur={() => setIsFocus1(false)}
           onChange={item => {
-            setValueGen(item.value);
+            _handleTextChange('gender',item.value)
             setIsFocus1(false);
           }}
         />
@@ -951,8 +945,8 @@ const Bounce=()=>{
      /> 
       ) : (
         <TouchableOpacity onPress={LaunchimageLibrary}>
-          <Image
-            source={{uri:data.user_image}}
+           <Image
+           source={{ uri: data.user_image  ||'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANUAAACUCAMAAAAzmpx4AAAAMFBMVEXk5ueutLfn6erq7O2qsLTZ3N21ur3P0tTIzM6nrrHd3+DU19mxt7rBxsjg4uO6v8I4tUPFAAAE8klEQVR4nO2d0XqkIAxGNSCgiLz/2y7oTLudqqMQ5Lftudlv7+ZsIECEbNMUh4SgZrA6Yof5b3eHms74tg/IwPynMl1zbzHr2l62L8heentTsTDq1pSeYq3rav/C8wQnv6X0FPM384px2nf68LrPQKTBtG+dZi9phpt4UWPVIafZS90jb9BkjiotuAlfizp/OFAPfIeuRVaddFpGITYJUoHRQkfLjilS2FrUjWfn1KdW7R+/SbpUAHSjQVPSnPqIVu3fv8HplP4F6RGnFuk+R6ptewOoNWRKBS28qUW5TlFL1LZ4QZjsUIWp5cC0JgapEKwBamqJvPz3wYgULMpPFQsSaeckstbf/1E4VtQxhSqgYbSEZ5PCCRZNPKliAeVgLE4WKvZBWbOILVdE1FTbZ4Y6Tql2xMgXwrFagQxB3gEYhmBtoZkhsQKzBUQJgzSzVYtweuSeVhgTi3NjseBrK0WYk0Ur1VBbqWk6biuEQm7K54J3VvXXYcGeAhGSoDAFrKonQf7EHlJ7/Vj9Wf1Z/Vn9Wf1mq5+5Xml2KYC9BaVeRtgGYB/4M/fsJc5XAF9S+b6HPEE4C/Of8CHqFvw1JgAr9nogxr069totxOcD7j2TRxiAYR1mlUJYgyPEOrFGiAHIPQQxBmC8bcH5XRhhuzTzI7/hh3zBFyyQXBERbPlixJHiuxwjgUIVN+5MYxBJiuvSWY9yMeaBcAzBkihr1Sf5Um1f2+E7+QmjhziCfIVcppasX9xcIzMPYj6poCkvVABf7tfIunwmAcplG6SfH6Wu/dt3SC66I0tRo9MeliFLRXRCJhzRpeJ74bNSGAXAfWg4WcZwYFvadWg6MQrlqG/wYD1C1Dl5zEs6S/eQamK47JueHTO9tzcJ1AIFL/WuF4kKg+9OUk1cuqbYCmczTDLE6RadLV4IP3nQXq71+OmVGZo7Oj2ZrFFzG6aHTzByFqSUnkWYZJ02M7q75bD7LZD4xo2jRYFpsNo471VsUiTnlVl558zcxe1uWT12mdJOPZu2vabApY2bHL25zyIckl5Ypw7sLFoZtZWxoAWLmfivPliztkDtu/X96PQwAa5fYY5Mc6PAtOKZjF0F7QCV9YmSgvTNrHVhOQPJIXGNNUd26EfEwljsmvpi1HR6ZxObIKZiZqzqRY116uAB8bhYGIkV+++Fo7zL6cC04+VNVyde1Gh/rPdhkpgyFYo0grQvEqdPlLu634qwpZ1mL9Nc+ElVTOy3Ure89FUbfCrx3GATP1wSLsF9I/Udpny4qMRrlzeornC4RF43vVTK3gMq8dTlCL0vt9cgMuWz+TpSlVqTaWJq+5WkVepzZMd1ryxNqzclpOwFm4l9L8M/uWy5nexhLfaO05WS31eYtQhCKmR4Ti0CGH4LvWObW8wPQbLoua7bMXf8yoTpFiFNF+/R3yBZntJRxR3FKtLma1U4ebxjzK5nCA0WqUhuH220SfUgc2rBTaqFMetccmnd5QxZz7+nqoePPTLGIGD+e5LegYDqnhN3Sd9iEMc7nUIkFzIKdBlhJDVYyKFKDhbyrIrItOpMteLfQZL+g6nhqq85ySTUqZEOwOtIl3B5En0AxpX4bLBowNzX/s/5101YxYp1pDk9BBFPi6/4s4fiCXoJfiBPTizCz+uB/uTEusO0Or+9IMt3jawgZ1es3P947BrUxseEf1TZS9u3A43xAAAAAElFTkSuQmCC' }}
             style={{
               width: 80,
               height: 80,
@@ -979,7 +973,7 @@ const Bounce=()=>{
       ) : (
         <TouchableOpacity onPress={LaunchimageLibrary2}>
           <Image
-            source={{uri:data.user_banner}}
+           source={{ uri: data.user_banner  ||'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANUAAACUCAMAAAAzmpx4AAAAMFBMVEXk5ueutLfn6erq7O2qsLTZ3N21ur3P0tTIzM6nrrHd3+DU19mxt7rBxsjg4uO6v8I4tUPFAAAE8klEQVR4nO2d0XqkIAxGNSCgiLz/2y7oTLudqqMQ5Lftudlv7+ZsIECEbNMUh4SgZrA6Yof5b3eHms74tg/IwPynMl1zbzHr2l62L8heentTsTDq1pSeYq3rav/C8wQnv6X0FPM384px2nf68LrPQKTBtG+dZi9phpt4UWPVIafZS90jb9BkjiotuAlfizp/OFAPfIeuRVaddFpGITYJUoHRQkfLjilS2FrUjWfn1KdW7R+/SbpUAHSjQVPSnPqIVu3fv8HplP4F6RGnFuk+R6ptewOoNWRKBS28qUW5TlFL1LZ4QZjsUIWp5cC0JgapEKwBamqJvPz3wYgULMpPFQsSaeckstbf/1E4VtQxhSqgYbSEZ5PCCRZNPKliAeVgLE4WKvZBWbOILVdE1FTbZ4Y6Tql2xMgXwrFagQxB3gEYhmBtoZkhsQKzBUQJgzSzVYtweuSeVhgTi3NjseBrK0WYk0Ur1VBbqWk6biuEQm7K54J3VvXXYcGeAhGSoDAFrKonQf7EHlJ7/Vj9Wf1Z/Vn9Wf1mq5+5Xml2KYC9BaVeRtgGYB/4M/fsJc5XAF9S+b6HPEE4C/Of8CHqFvw1JgAr9nogxr069totxOcD7j2TRxiAYR1mlUJYgyPEOrFGiAHIPQQxBmC8bcH5XRhhuzTzI7/hh3zBFyyQXBERbPlixJHiuxwjgUIVN+5MYxBJiuvSWY9yMeaBcAzBkihr1Sf5Um1f2+E7+QmjhziCfIVcppasX9xcIzMPYj6poCkvVABf7tfIunwmAcplG6SfH6Wu/dt3SC66I0tRo9MeliFLRXRCJhzRpeJ74bNSGAXAfWg4WcZwYFvadWg6MQrlqG/wYD1C1Dl5zEs6S/eQamK47JueHTO9tzcJ1AIFL/WuF4kKg+9OUk1cuqbYCmczTDLE6RadLV4IP3nQXq71+OmVGZo7Oj2ZrFFzG6aHTzByFqSUnkWYZJ02M7q75bD7LZD4xo2jRYFpsNo471VsUiTnlVl558zcxe1uWT12mdJOPZu2vabApY2bHL25zyIckl5Ypw7sLFoZtZWxoAWLmfivPliztkDtu/X96PQwAa5fYY5Mc6PAtOKZjF0F7QCV9YmSgvTNrHVhOQPJIXGNNUd26EfEwljsmvpi1HR6ZxObIKZiZqzqRY116uAB8bhYGIkV+++Fo7zL6cC04+VNVyde1Gh/rPdhkpgyFYo0grQvEqdPlLu634qwpZ1mL9Nc+ElVTOy3Ure89FUbfCrx3GATP1wSLsF9I/Udpny4qMRrlzeornC4RF43vVTK3gMq8dTlCL0vt9cgMuWz+TpSlVqTaWJq+5WkVepzZMd1ryxNqzclpOwFm4l9L8M/uWy5nexhLfaO05WS31eYtQhCKmR4Ti0CGH4LvWObW8wPQbLoua7bMXf8yoTpFiFNF+/R3yBZntJRxR3FKtLma1U4ebxjzK5nCA0WqUhuH220SfUgc2rBTaqFMetccmnd5QxZz7+nqoePPTLGIGD+e5LegYDqnhN3Sd9iEMc7nUIkFzIKdBlhJDVYyKFKDhbyrIrItOpMteLfQZL+g6nhqq85ySTUqZEOwOtIl3B5En0AxpX4bLBowNzX/s/5101YxYp1pDk9BBFPi6/4s4fiCXoJfiBPTizCz+uB/uTEusO0Or+9IMt3jawgZ1es3P947BrUxseEf1TZS9u3A43xAAAAAElFTkSuQmCC' }}
             style={{
               width: 80,
               height: 80,

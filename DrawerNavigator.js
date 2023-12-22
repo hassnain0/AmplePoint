@@ -81,18 +81,18 @@ export default function DrawerNavigator() {
   const route=useRoute();
 
 const CompleteProfile=route.params.CompleteProfile;
-const user_Id=route.params.CompleteProfile.user_Id;
+const user_ID=route.params.CompleteProfile.user_Id;
 
   return (
     <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} CompleteProfile={CompleteProfile}/>}   screenOptions={{
-      header: (props) => <CustomHeader {...props} user_Id={user_Id}/>,
+      header: (props) => <CustomHeader {...props} user_Id={user_ID}/>,
     }}>
-      <Drawer.Screen name="Home" initialParams={CompleteProfile=route.params.CompleteProfile} component={TabNavigator}   options={{ 
+      <Drawer.Screen name="Home" initialParams={CompleteProfile1=CompleteProfile} component={TabNavigator}   options={{ 
           drawerIcon: ({color}) => (
             <Image source={require('./assets/home1.png')} style={{width:10,height:15}}/>
           ),
         }}/>
-      <Drawer.Screen name="MyPurchase" component={MyPurchase}  options={{headerShown:false,drawerIcon: ({color}) => (
+      <Drawer.Screen name="MyPurchase" component={MyPurchase} initialParams={user_Id=user_ID} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
           ),}}   />
       <Drawer.Screen name="LocalPurchase" component={LocalPurchase} options={{headerShown:false,drawerIcon: ({color}) => (
