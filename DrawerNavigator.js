@@ -79,7 +79,7 @@ const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
 export default function DrawerNavigator() {
 
   const route=useRoute();
-
+console.log("Progile",route.params.CompleteProfile)
 const CompleteProfile=route.params.CompleteProfile;
 const user_ID=route.params.CompleteProfile.user_Id;
 
@@ -92,7 +92,7 @@ const user_ID=route.params.CompleteProfile.user_Id;
             <Image source={require('./assets/home1.png')} style={{width:10,height:15}}/>
           ),
         }}/>
-      <Drawer.Screen name="MyPurchase" component={MyPurchase} initialParams={user_Id=user_ID} options={{headerShown:false,drawerIcon: ({color}) => (
+      <Drawer.Screen name="MyPurchase" component={MyPurchase} initialParams={{Profile:route.params.CompleteProfile.user_id}} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
           ),}}   />
       <Drawer.Screen name="LocalPurchase" component={LocalPurchase} options={{headerShown:false,drawerIcon: ({color}) => (

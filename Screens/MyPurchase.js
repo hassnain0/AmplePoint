@@ -7,53 +7,21 @@ import Return from './Return';
 import AskQuestion from './AskQuestion';
 import CustomDialog from './CustomDialog';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { useRoute } from '@react-navigation/native';
 
 const MyPurchase= ({navigation}) => {
-//   const route=useRoute();
+  const route=useRoute();
+  const user_Id=route.params.Profile;
+   console.log("Route",route.params.Profile)
 //   const User_Id=route.params.user_ID;
 //   console.log("User Id",User_Id)
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
    
-      const services = ['Painter','Electrician','Flat Tire Mechanic','Key Maker','Denter','Auto Mechanic','Body-Mechanic']; // Add other services as needed  
-      const handleServiceSelect =async (selected) => {
-          try{
-  
-            const data={
-              Latitude: "24.8787702",
-              Longitude: "66.87899999999999",
-              Specialties: ["Painter","Denter"]          }
-            const url="https://zohaib964242.pythonanywhere.com/predict";
-      
-            // Using axios:
-            try {
-             
-              const response = await axios.post(url,data);
-             
-              if(response.data){
-                
-                navigation.navigate("Locations",{
-                  Data:response.data,
-                })
-                setLoading(false);
-              }
-              else{
-                setLoading(false);
-                setVisible(false);
-                util.errorMsg("No Nearby Mechanic found");
-                return false;
-              }
-            }
-          catch(erro){
-            console.log("Error",erro)
-          }}
-          catch(erro){
-            console.log("Error",erro)
-          }
-          }
-
+    
   
   useEffect(()=>{
+    setLoading(true);
 getProductDetails();
 setLoading(false)
   },[deleteCount])
@@ -121,7 +89,15 @@ const DialogBox=(item)=>{
 }
     return (
       <View style={{flex:1,}}>
-      
+       
+      {loading &&(
+       <Swiper
+      style={{ height: 200 }}
+      showsPagination={false}
+      autoplay
+      autoplayTimeout={4}
+    ></Swiper>
+    )}
         {actulaData?.data?.map((item, index) => (
           <View>
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
@@ -316,8 +292,8 @@ left:Metrics.ratio(110)
     borderRadius:20
   },
   ImageContainer:{
-    width: Metrics.ratio(90), 
-    height: Metrics.ratio(80),
+    width: Metrics.ratio(70), 
+    height: Metrics.ratio(60),
     bottom:Metrics.ratio(30)
   },
   button: {
