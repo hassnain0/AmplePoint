@@ -13,8 +13,8 @@ const MyPurchase= ({navigation}) => {
   const route=useRoute();
   const user_Id=route.params.Profile;
    console.log("Route",route.params.Profile)
-//   const User_Id=route.params.user_ID;
-//   console.log("User Id",User_Id)
+  const User_Id=route.params.user_ID;
+  console.log("User Id",User_Id)
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
    
@@ -23,7 +23,7 @@ const MyPurchase= ({navigation}) => {
   useEffect(()=>{
     setLoading(true);
 getProductDetails();
-setLoading(false)
+setLoading(false);
   },[deleteCount])
   const [quantity, setQuantity] = useState(1);
   const [visibile, setVisible] = useState(false);
@@ -90,14 +90,13 @@ const DialogBox=(item)=>{
     return (
       <View style={{flex:1,}}>
        
-      {loading &&(
-       <Swiper
-      style={{ height: 200 }}
-      showsPagination={false}
-      autoplay
-      autoplayTimeout={4}
-    ></Swiper>
-    )}
+       <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {actulaData?.data?.map((item, index) => (
           <View>
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >

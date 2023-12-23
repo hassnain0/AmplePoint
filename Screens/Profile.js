@@ -67,7 +67,7 @@ const Profile= ({navigation}) => {
         <Text style={styles.amplepoints}>{data.total_ample}</Text>
         </View>      
         <View style={{flex:1, alignItems:'center',justifyContent:'center',flexDirection:'row',marginTop:Metrics.ratio(2)}}>
-        <Progress.Bar style={{width:Metrics.ratio(60),borderRadius:1}} progress={29} width={200}  color='#ff3d00'/>
+        <Progress.Bar style={{width:Metrics.ratio(60),borderRadius:1,borderColor:'black',borderWidth:0.2}} progress={data.profile_completed} width={200}  color='#ff3d00'/>
         <Text style={{color:'#ff3d00',fontSize:10,left:Metrics.ratio(5)}}>{data.profile_completed}%</Text>
         <Text style={{color:'black',fontSize:10,left:Metrics.ratio(15),fontWeight:'400'}}>completed</Text>
         </View>
@@ -227,7 +227,7 @@ justifyContent:'center',
     fontWeight:'900',
     fontSize: 13,
     fontStyle:'italic',
-  
+    marginBottom:Metrics.ratio(10),
     color:'#ff3d00',
     fontFamily: Platform.select({
         ios: 'Times New Roman',

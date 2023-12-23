@@ -6,15 +6,19 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Button from '../components/Button';
 import {launchImageLibrary} from 'react-native-image-picker';
 import util from '../helpers/util';
+import Toast from 'react-native-toast-message';
+import axios from 'axios';
 // import { Camera } from 'react-native-vision-camera';
 
 const Return=()=>{
   const [isRecording, setIsRecording] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [reason,setReason]=useState(null);
   const [loader, setLoader] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImage2, setSelectedImage2] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedImage3, setSelectedImage3]= useState(null);
   // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
 
@@ -39,7 +43,27 @@ const Return=()=>{
       { cancelable: false }
     );
   };
+  const handleChooseVideo = () => {
+    const options = {
+      mediaType: 'video', // Set mediaType to 'video' for picking videos
+      includeBase64: false,
+    };
 
+    launchImageLibrary(options, (response) => {
+      console.log('Response = ', response);
+
+      if (!response.didCancel && !response.error && !response.customButton) {
+        const firstVideo = response.assets[0];
+        console.log("firstVideo.uri", firstVideo.uri);
+        const source = { uri: firstVideo.uri };
+
+        console.log('Video URI = ', source.uri);
+
+        setSelectedVideo(source);
+        util.successMsg("Video Selected");
+      }
+    });
+  };
 
   const LaunchimageLibrary = () => {
     
@@ -67,23 +91,190 @@ const Return=()=>{
         console.log('Image URI = ', source.uri);
 
         setSelectedImage(source);
+        util.successMsg("Image Selected")
      }
     });
-  };const data = [
+  };
+  const pickImage2= () => {
+    Alert.alert(
+      'Select Image Source',
+      'Choose the source of the image',
+      [
+        {
+          text: 'Camera',
+          onPress: () => LaunchCamera(),
+        },
+        {
+          text: 'Image Library',
+          onPress: () => LaunchimageLibrary2(),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+
+  const LaunchimageLibrary2 = () => {
+    
+
+    const options = {
+      quality: 1.0,
+      maxWidth: 50,
+      maxHeight: 50,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    launchImageLibrary(options,(response) => {
+      console.log('Response = ', response);
+    
+      if (!response.didCancel && !response.error && !response.customButton) {
+        // Log the entire response for debugging
+        console.log('Response = ', response);
+
+        const firstImage = response.assets[0];
+        console.log("firstImage.uri",firstImage.uri)
+        const source = { uri: firstImage.uri };
+
+        // Log the URI to check if it looks correct
+        console.log('Image URI = ', source.uri);
+
+        setSelectedImage2(source);
+        util.successMsg("Image Selected")
+     }
+    });
+  }
+  const pickImage3 = () => {
+    Alert.alert(
+      'Select Image Source',
+      'Choose the source of the image',
+      [
+        {
+          text: 'Camera',
+          onPress: () => LaunchCamera(),
+        },
+        {
+          text: 'Image Library',
+          onPress: () => LaunchimageLibrary3(),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+
+  const LaunchimageLibrary3 = () => {
+    
+
+    const options = {
+      quality: 1.0,
+      maxWidth: 50,
+      maxHeight: 50,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    launchImageLibrary(options,(response) => {
+      console.log('Response = ', response);
+    
+      if (!response.didCancel && !response.error && !response.customButton) {
+        // Log the entire response for debugging
+        console.log('Response = ', response);
+
+        const firstImage = response.assets[0];
+        console.log("firstImage.uri",firstImage.uri)
+        const source = { uri: firstImage.uri };
+
+        // Log the URI to check if it looks correct
+        console.log('Image URI = ', source.uri);
+
+        setSelectedImage3(source);
+        util.successMsg("Image Selected")
+     }
+    });
+  }
+  const data = [
     { label: 'Refund Only', value: '1' },
     { label: 'Refund Dispute', value: '2' },
     
   ];
- 
-  const Submit=()=>{
 
+  const validation=()=>{
+    if(util.stringIsEmpty(value)){
+      setLoader(false);
+      util.errorMsg("Please select choice ")
+      return false;
+    }
+    if(util.stringIsEmpty(reason)){
+      setLoader(false);
+      util.errorMsg("Please enter Reason")
+      return false;
+    }
+    if(selectedImage==null){
+      setLoader(false);
+      util.errorMsg("Please choose Image1")
+      return false;
+    }
+    if(selectedImage2==null){
+      setLoader(false);
+      util.errorMsg("Please Choose Image2 ")
+      return false;
+    }
+    if(selectedVideo==null){
+      setLoader(false);
+      util.errorMsg("Please Choose Video")
+      return false;
+    }
+    return true;
   }
+ 
+  const Submit=async()=>{
+setLoader(true);
+    if(!validation){
+      return false
+    }
+    console.log("Evidance",)
+    const apiUrl='https://amplepoints.com/apiendpoint/submitdispute';
+    const requestBody = {
+      user_id:126,
+      vendor_id:906,
+      apply_for:value,
+      resone:reason,
+      evidance: [selectedImage, selectedImage2], // Use an array to store multiple evidence items
+      videofile:selectedVideo,
+      
+    };
+    axios.post(apiUrl, requestBody, {
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any additional headers if needed
+      },
+    })
+      .then(response => {
+        setLoader(false)
+        console.log('Response:', response.data);
+      })
+      .catch(error => {
+        // Handle errors
+        setLoader(false)
+        console.error('Error:', error);
+      });
+  }
+
 const route=useRoute();
 console.log("Rote",route.params.product_sku)
 const item=route.params.item;
         return (
             <ScrollView style={{flex:1, flexDirection:"column",backgroundColor:'white',}}>
-                    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>
+                   <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>
               <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
         <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
         <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>
@@ -106,11 +297,11 @@ const item=route.params.item;
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
         <Text style={{ fontSize:8,fontWeight:'600',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android
       }), }}>SKU:#{item.product_sku}</Text>
-      <Text style={{ fontSize:8,
-              fontWeight:'800',bottom:Metrics.ratio(20),color:'black',marginRight:Metrics.ratio(25), fontFamily: Platform.select({
-          ios: 'Arial',
-          android: 'Arial', // You may need to adjust this for Android
-        }), }}>${item.total_amount}</Text>
+      <Text style={{ fontSize:12,
+        fontWeight:'800',bottom:Metrics.ratio(20),color:'black',marginRight:Metrics.ratio(25), fontFamily: Platform.select({
+    ios: 'Arial',
+    android: 'Arial', // You may need to adjust this for Android
+  }), }}>${item.total_amount}</Text>
         </View>
         <View>
       
@@ -159,41 +350,41 @@ const item=route.params.item;
           }}
         />
          <Text style={{fontSize:15,fontWeight:'400',marginTop:20}}>Reason for Dispute</Text>
-    <TextInput placeholder='Enter Reason for Dispute'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+    <TextInput placeholder='Enter Reason for Dispute'  value={reason} onChangeText={(text)=>setReason(text)} textAlign='left' auto style={styles.InputContainer} ></TextInput>
     <Text style={{fontSize:15,fontWeight:'400',}}>Please Upload Your Evidence</Text>
     <TouchableOpacity onPress={pickImage}>
     <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
       <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
     <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
-    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 1</Text>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>{selectedImage ? `${selectedImage.uri}` : 'Choose File 1'}</Text>
     <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
     </View>
     </View>
     </TouchableOpacity>
-    <TouchableOpacity onPress={pickImage}>
+    <TouchableOpacity onPress={pickImage2}>
     <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
       <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
     <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
-    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 2</Text>
+    <Text style={{top:5,textAlign:'center',color:'black'}}> {selectedImage2 ? `${selectedImage2.uri}` : 'Choose File 2'}</Text>
     <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
     </View>
     </View>
     </TouchableOpacity>
-    <TouchableOpacity onPress={pickImage}>
+    <TouchableOpacity onPress={pickImage3}>
     <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
       <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
     <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
-    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 3</Text>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>{selectedImage3 ? `${selectedImage3.uri}` : 'Choose File 3'}</Text>
     <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
     </View>
     </View>
     </TouchableOpacity>
     <Text style={{fontSize:15,fontWeight:'400',marginTop:30}}>Upload Video</Text>
-    <TouchableOpacity onPress={pickImage}>
+    <TouchableOpacity onPress={handleChooseVideo}>
     <View style={{flex:1,flexDirection:"row",backgroundColor:'#F1F0F7',borderRadius:10,height:Metrics.ratio(35),marginBottom:Metrics.ratio(10)}}>
       <Image style={{top:2,width:25,height:25,alignItems:'center'}} source={require('../assets/Attach.png')}></Image>
     <View style={{flex:1,flexDirection:'row' ,justifyContent:'space-between'}}>
-    <Text style={{top:5,textAlign:'center',color:'black'}}>Choose File 1</Text>
+    <Text style={{top:5,textAlign:'center',color:'black'}}>{selectedVideo ? `${selectedVideo.uri}` : 'Choose File 1'}</Text>
     <Image style={{top:5,right:Metrics.ratio(10),width:25,height:25,alignItems:'center'}} source={require('../assets/Cross.png')}></Image>
     </View>
     </View>
@@ -201,6 +392,7 @@ const item=route.params.item;
 </View>
 
         </View>
+        <Toast ref={ref => Toast.setRef(ref)} />
         <View style={styles.buttonView}>
     <Button 
     loader={loader}

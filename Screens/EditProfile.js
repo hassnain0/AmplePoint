@@ -224,7 +224,16 @@ console.log("Dta",data)
       util.errorMsg("Please enter Address");
       return false;
     }
-    
+    if(selectedImage==null){
+      setLoader(false);
+      util.errorMsg("Please pick profile Image");
+      return false;
+    }
+    if(selectedImage2==null){
+      setLoader(false);
+      util.errorMsg("Please pick Banner Image");
+      return false;
+    }
   return true;
   
   }
@@ -237,62 +246,47 @@ console.log("profile Pic Data",data.user_image)
 
   try{
     const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
+ 
+    const requestBody = {
 
-    // const response = await axios.post(apiUrl, {
-    //   user_id: 126,
-    //   tagline: state.tag_line,
-    //   first_name: state.first_name,
-    //   last_name: state.last_name,
-    //   mobile: state.contact,
-    //   birthday: selectedDate,
-    //   education: state.education,
-    //   income: state.income,
-    //   employment: state.employment,
-    //   address: state.address,
-    //   user_country: state.country,
-    //   user_state: state.state1,
-    //   user_city: state.city,
-    //   age: state.age,
-    //   gender: state.gender,
-    //   zip_code: state.zip,
-    //   profile_pic: selectedImage || data.user_image,
-    //   user_banner: selectedImage2 || data.user_banner,
-    //   usrbg_color: 'black'
-    // });
-    
-   const formData = new FormData();
-   formData.append("user_id",126);
-    formData.append("first_name",state.first_name);
-    formData.append("mobile",state.mobile);
-    formData.append("birthday", selectedDate);
-    formData.append("education",state.education);
-    formData.append("income", state.income);
-    formData.append("employment", state.employment);
-    formData.append("address", state.address);
-    formData.append("user_country", state.user_country);
-    formData.append("user_state", state.user_state);
-    formData.append("user_city", state.user_city);
-    formData.append("age", state.age);
-    formData.append("gender", state.gender);
-    formData.append("zip_code", state.zip);
-    formData.append("profile_pic", selectedImage);
-    formData.append("user_banner", selectedImage2);
-    formData.append("usrbg_color", 'black');
-    
-    
-    const headers = {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
+        tagline: state.tag_line,
+        first_name: state.first_name,
+        last_name: state.last_name,
+        mobile: state.contact,
+        birthday: selectedDate,
+        education: state.education,
+        income: state.income,
+        employment: state.employment,
+        address: state.address,
+        user_country: state.country,
+        user_state: state.state1,
+        user_city: state.city,
+        age: state.age,
+        gender: state.gender,
+        zip_code: state.zip,
+        profile_pic: selectedImage || data.user_image,
+        user_banner: selectedImage2 || data.user_banner,
+        usrbg_color: 'black'
+
     };
-    
-
-    const response = await axios.post(apiUrl, formData);
-      setLoader(false);
-      util.successMsg("100% Profile Completed");
-      navigation.navigate("Profile")
-    
-      console.log(response)
-      setLoader(false);
+    axios.post(apiUrl, requestBody, {
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any additional headers if needed
+      },
+    })
+      .then(response => {
+        setLoader(false);
+        util.successMsg("100% Profile Completed");
+      
+        console.log(response)
+        setLoader(false);
+      })
+      .catch(error => {
+        // Handle errors
+        console.error('Error:', error);
+      });
+      
     
   }
   catch(error){
@@ -315,7 +309,7 @@ console.log("profile Pic Data",data.user_image)
       // Convert the formatted date back to a Date object
       const dateObject = new Date(formattedDate);
   
-      setSelectedDate(dateObject);
+      setSelectedDate(formattedDate);
     }
   
   };
@@ -673,7 +667,7 @@ const Bounce=()=>{
         <Text style={{ left:Metrics.ratio(10) ,textAlign: 'center',top:2,fontWeight:'300', fontFamily: Platform.select({
             ios: 'Arial',
             android: 'Arial', // You may need to adjust this for Android
-          }),}}>Select Date</Text> 
+          }),}}>{selectedDate ? `${selectedDate}` : 'PickUp Date'}</Text> 
         <Image source={require('../assets/Date.png')} style={{right:Metrics.ratio(10),width:25,height:25}}/>      
               </TouchableOpacity> 
               {showDatePicker && (
@@ -984,7 +978,7 @@ const Bounce=()=>{
       )}
   </View>
 </View>
-<Toast ref={ref => Toast.setRef(ref)} /> 
+
 <View style={styles.buttonView}>
       <Button
         loader={loader}
@@ -993,7 +987,7 @@ const Bounce=()=>{
         label={"Save Changes"}
       />
     </View>
-
+    <Toast ref={ref => Toast.setRef(ref)} /> 
 </View>
     </ScrollView>
     </SafeAreaView>
@@ -1119,7 +1113,6 @@ borderRadius:Metrics.ratio(70),
     justifyContent: "center",
     alignItems: "center",
     alignSelf:'center',
-    top:Metrics.ratio(0),
     bottom:Metrics.ratio(25)
   },
   placeholderStyle: {
