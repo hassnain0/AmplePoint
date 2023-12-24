@@ -474,7 +474,7 @@ const addtocart=()=>{
 
   //Submit Product withoutAmpples
   const withOutAmpples=async()=>{
-    navigation.navigate("Login");
+    
     if(!submit){
       util.errorMsg("Please add deleivery Details");
       return;
@@ -522,7 +522,7 @@ const addtocart=()=>{
   
   }
   const withAmpples=async()=>{
-    navigation.navigate("Login");
+    
     if(!submit){
       util.errorMsg("Please add deleivery Details");
       return;

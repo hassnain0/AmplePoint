@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,TouchableOpacity, SafeAreaView} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
@@ -11,8 +11,8 @@ import Toast from 'react-native-toast-message';
 const Cart= ({navigation}) => {
   const route=useRoute();
   const User_Id=route.params.user_Id;
-  // console.log("User Id",User_Id)
-   const [deleteCount,setDelete]=useState(0);
+
+   const [deleteCount,setDeleteCount]=useState(0);
   const [actulaData,setActualData]=useState(null);
   
   
@@ -135,9 +135,9 @@ setLoader(true);
       console.log("Response", response.data.data);
       // Handle the successful response
       setActualData(response.data)
-      setProduct_no(response.data.length);
+      setProduct_no(response.data.length||0);
       const cart_items=response.data.data;
-      setProduct_no(cart_items.length)
+      setProduct_no(cart_items.length||0)
       if(response.data && response.data.data.item_added_quantity){
       setQuantity(response.data.data.item_added_quantity)
       }
@@ -149,11 +149,9 @@ setLoader(true);
   };
   const delProduct = async (item) => {
     try {
-      console.log("item",item)
-    
-      console.log("Item",item.product_id)
+      
       const apiUrl = 'https://amplepoints.com/apiendpoint/removetocart?';
-
+console.log("Item ",item)
       const response = await axios.get(apiUrl, {
         params: {
         user_id:User_Id,
@@ -161,13 +159,11 @@ setLoader(true);
          product_added_id:item.productaddedid 
         },
 
-        
       });
-  
-    if (response.status === 'S') {
+      
+    if (response.data.status === 'S') {
       util.successMsg("Item SUccessfully removed")
-    
-      setDelete((prev) => prev + 1); 
+      setDeleteCount((prev) => prev + 1); 
     }
       
     } catch (error) {

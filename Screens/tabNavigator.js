@@ -10,24 +10,13 @@ import { DrawerActions, useNavigation, useRoute } from '@react-navigation/native
 import Profile from './Profile';
 import Search from './Search';
 import Cart from './Cart';
-import DrawerNavigator from '../DrawerNavigator';
 
 
 const Tab = createBottomTabNavigator();
-const tabBarOptions = {
-    activeTintColor: 'blue', // Change this to your desired active tab color
-    inactiveTintColor: 'gray', // Change this to your desired inactive tab color
-    style: {
-      backgroundColor: 'black', // Change this to your desired background color
-    },
-  };
+
 const TabNavigator = ({navigation}) => {
   
-  const navigation1 = useNavigation();
-
-  const openDrawer = () => {
-    navigation1.dispatch(DrawerActions.openDrawer());
-  };
+  
 
   const route=useRoute();
   console.log("Route",route.params)
@@ -44,7 +33,7 @@ const TabNavigator = ({navigation}) => {
       const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
      const Response= await axios.get(apiUrl, {
         params: {
-          user_id:user_Id,
+          user_id:user_id,
         },
       });
       setAmplePoints(Response.data.data.user_total_ample);

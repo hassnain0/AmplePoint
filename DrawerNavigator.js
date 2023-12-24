@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground } from 'react-native';
 import { createDrawerNavigator,DrawerContentScrollView ,DrawerItemList} from '@react-navigation/drawer'; // assuming you have a TabNavigator component
 import TabNavigator from './Screens/tabNavigator';
@@ -7,10 +7,31 @@ import LocalPurchase from './Screens/LocalPurchase';
 import { Metrics } from './themes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 const Drawer = createDrawerNavigator();
 
 const CustomHeader = ({ navigation,user_Id }) => {
+  const [amplePoints,setAmplePoints]=useState(0);
+
+  useEffect(()=>{
+    const getRewards=async()=>{
+      try{
+        const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
+       const Response= await axios.get(apiUrl, {
+          params: {
+            user_id:user_Id.user_id,
+          },
+        });
+        console.log("Ample Points",Response.data.data.user_total_ample)
+        setAmplePoints(Response.data.data.user_total_ample);
+      
+      }catch(erro){
+      console.log("Error",erro)
+      }
+     }
+     getRewards();
+    },[])
   // Customize your header content here
   return (
     <View style={{ backgroundColor: '#EEEEEE' }}>
@@ -28,7 +49,7 @@ const CustomHeader = ({ navigation,user_Id }) => {
         android: 'serif', // You may need to adjust this for Android
       }),
     }}>
-    9.00
+    {amplePoints}
     </Text>
           <Text style={{
       color: 'black',
@@ -85,7 +106,7 @@ const user_ID=route.params.CompleteProfile.user_Id;
 
   return (
     <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} CompleteProfile={CompleteProfile}/>}   screenOptions={{
-      header: (props) => <CustomHeader {...props} user_Id={user_ID}/>,
+      header: (props) => <CustomHeader {...props} user_Id={CompleteProfile}/>,
     }}>
       <Drawer.Screen name="Home" initialParams={CompleteProfile1=CompleteProfile} component={TabNavigator}   options={{ 
           drawerIcon: ({color}) => (

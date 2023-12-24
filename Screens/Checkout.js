@@ -105,8 +105,8 @@ const user_Id= route.params
             let countryArray = [];
             for (var i = 0; i < count; i++) {
               countryArray.push({
-                value: response.data.data[i].country_id,
-                label: response.data.data[i].statename,
+                value: response.data.data[i].id,
+                label: response.data.data[i].name,
               });
             }
             setCity(countryArray);
