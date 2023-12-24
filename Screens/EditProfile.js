@@ -239,69 +239,65 @@ console.log("Dta",data)
   }
   const onCheckout=async()=>{
     setLoader(true)
-// if(!validation()){
-//   return false;
-// }
+if(!validation()){
+  return false;
+}
 
   try{
     const apiUrl='https://amplepoints.com/apiendpoint/updateprofile';
- console.log("State",state)
-    const requestBody = {
-        // user_id:38518,
-        // tagline: state.tag_line,
-        // first_name: state.first_name,
-        // last_name: state.last_name,
-        // mobile: state.contact,
-        // birthday: '12/30/2023',
-        // education: state.education,
-        // income: state.income,
-        // employment: state.employment,
-        // address: state.address,
-        // user_country: state.country,
-        // user_state: state.state1,
-        // user_city: state.city,
-        // age: state.age,
-        // gender: state.gender,
-        // zip_code: state.zip,
-        // profile_pic: selectedImage || data.user_image,
-        // user_banner: selectedImage2 || data.user_banner,
-        // usrbg_color: 'black'
-          user_id:38518,
-        tagline:'Hello',
-        first_name: 'Hassnain',
-        last_name: "Kasr Name",
-        mobile:38518,
-        birthday: '12/30/2023',
-        education: 'Graduate',
-        income: '10$-dafjl',
-        employment: 'Student',
-        address: 'asdlsa',
-        user_country: 'sjsdf',
-        user_state: 'dfhld',
-        user_city: 'sdflsd',
-        age: 12,
-        gender: 'Male',
-        zip_code: 121,
-        profile_pic: 'IMage' || data.user_image,
-        user_banner: 'Udfjk' || data.user_banner,
-        usrbg_color: 'black'
+
+    const formData = new FormData();
+    formData.append('user_id', data.user_id);
+formData.append('tagline', state.tag_line);
+formData.append('first_name',  state.first_name);
+formData.append('last_name', state.last_name);
+formData.append('mobile', state.phone);
+formData.append('birthday', selectedDate);
+formData.append('education', state.education);
+formData.append('income', state.income);
+formData.append('employment',state.employment);
+formData.append('address',state.address);
+formData.append('user_country', state.country);
+formData.append('user_state', state.state1);
+formData.append('user_city', state.city);
+formData.append('age', state.age);
+formData.append('gender', state.gender);
+formData.append('zip_code', state.zip);
+formData.append('profile_pic', selectedImage);
+formData.append('user_banner', selectedImage2);
 
 
-    };
-    axios.post(apiUrl, requestBody, {
-      headers: {
-        'Content-Type': 'application/json',
-        "Accept": "application/json",
-      },
-    })
-      .then(response => {
-        setLoader(false);
-          console.log("Response",response.data.message)
-      })
-      .catch(error => {
-        // Handle errors
-        console.error('Error:', error);
-      });
+const headers = {
+  "Content-Type": "multipart/form-data",
+  "Accept": "application/json",
+};
+
+const response = await axios.post(apiUrl, formData, { headers });
+console.log("Response of Hello",response.data);
+
+if(response.data.message=='Profile Updated Sucessfully')
+{
+  setLoader(false)
+  util.successMsg("Profile Updated");
+
+}
+else{
+  setLoader(false)
+}
+    // axios.post(apiUrl, formData, {F
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //     "Accept": "application/json",
+    //   },
+    // })
+    //   .then(response => {
+    //     setLoader(false);
+    //       console.log("Response",response.data.message)
+    //   })
+    //   .catch(error => {
+    //     // Handle errors
+    //     console.error('Error:', error);
+    //   });
       
     
   }
@@ -577,7 +573,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus1(true)}
           onBlur={() => setIsFocus1(false)}
           onChange={item => {
-            _handleTextChange('gender',item.label)
+            _handleTextChange('gender',item.value)
             setIsFocus1(false);
           }}
         />
@@ -607,7 +603,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus2(true)}
           onBlur={() => setIsFocus2(false)}
           onChange={item => {
-            _handleTextChange('age',item.label)
+            _handleTextChange('age',item.value)
             setIsFocus2(false);
           }}
         />
@@ -729,7 +725,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus3(true)}
           onBlur={() => setIsFocus3(false)}
           onChange={item => {
-            _handleTextChange('education',item.label)
+            _handleTextChange('education',item.value)
             setIsFocus3(false);
           }}
         />
@@ -760,7 +756,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus4(true)}
           onBlur={() => setIsFocus4(false)}
           onChange={item => {
-            _handleTextChange('employment',item.label)
+            _handleTextChange('employment',item.value)
             setIsFocus4(false);
           }}
         />
@@ -791,7 +787,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus4(true)}
           onBlur={() => setIsFocus4(false)}
           onChange={item => {
-            _handleTextChange('income',item.label)
+            _handleTextChange('income',item.value)
             setIsFocus8(false);
           }}
         />
@@ -844,7 +840,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus5(true)}
           onBlur={() => setIsFocus5(false)}
           onChange={item => {
-            _handleTextChange('country',item.label)
+            _handleTextChange('country',item.value)
             setIsFocus5(false);
             handleState(item.value);
           }}
@@ -876,7 +872,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus6(true)}
           onBlur={() => setIsFocus6(false)}
           onChange={item => {
-            _handleTextChange('state1',item.label)
+            _handleTextChange('state1',item.value)
             setIsFocus6(false);
             handleCity(item.value)
           }}
@@ -907,7 +903,7 @@ const Bounce=()=>{
           onFocus={() => setIsFocus7(true)}
           onBlur={() => setIsFocus7(false)}
           onChange={item => {
-            _handleTextChange('city',item.label)
+            _handleTextChange('city',item.value)
             setIsFocus7(false);
           }}
         />

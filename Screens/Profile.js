@@ -46,17 +46,7 @@ const Profile= ({navigation}) => {
   source={{ uri: (data && data.user_banner) ||  'https://media.istockphoto.com/id/1573329496/photo/multi-layers-color-texture-3d-papercut-layers-in-gradient-vector-banner-carving-art-cover.webp?b=1&s=612x612&w=0&k=20&c=3vyrUMlb4A8NFTdPuJ_tVsjbKg5B586CJjm9C9Zebbk='}}
   style={styles.containerImage}
 >
-<View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.leftIconView}
-            onPress={() => console.log('navigation', navigation.goBack())}>
-          <Image source={require('../assets/ArrowBack.png')} style={{width:28,height:28}}/>
-          </TouchableOpacity>
-          
-        </View>
-  
-     {data &&(
+{data &&(
     <View style={styles.container}>
      
      
@@ -265,20 +255,7 @@ justifyContent:'center',
     textAlign:"center",
     paddingBottom:Metrics.ratio(20)
   },
-  leftIconView: {
-    paddingHorizontal: Metrics.ratio(25),
-    height: Metrics.ratio(20),
-    width:Metrics.ratio(20),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.transparent,
-  },header: {
-    backgroundColor:'#ff3d00',
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingVertical: Metrics.ratio(30),
-    // paddingHorizontal:Metrics.ratio(5),
-  },
+
 });
 
 export default Profile;
