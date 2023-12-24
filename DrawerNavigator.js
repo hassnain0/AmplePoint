@@ -40,10 +40,11 @@ const CustomHeader = ({ navigation,user_Id }) => {
           <Image source={require('./assets/SideBar.png')} style={styles.SideMenu} />
         </TouchableOpacity>
         <Image source={require('./assets/Ample.png')} style={styles.Logo} />
-        <View>
+        <View style={{marginLeft:Metrics.ratio(10)}}>
         <Text style={{
       color: 'black',
       fontSize: 9,
+      fontWeight:'800',
       fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'serif', // You may need to adjust this for Android
@@ -54,6 +55,7 @@ const CustomHeader = ({ navigation,user_Id }) => {
           <Text style={{
       color: 'black',
       fontSize: 9,
+      fontWeight:'800',
       fontFamily: Platform.select({
         ios: 'Times New Roman',
         android: 'serif', // You may need to adjust this for Android
@@ -112,13 +114,29 @@ const user_ID=route.params.CompleteProfile.user_Id;
           drawerIcon: ({color}) => (
             <Image source={require('./assets/home1.png')} style={{width:10,height:15}}/>
           ),
+          drawerLabelStyle: {
+            fontSize: 10,
+            fontWeight:'700',
+            fontFamily:'Arial',
+            color:'black'
+          },
         }}/>
       <Drawer.Screen name="MyPurchase" component={MyPurchase} initialParams={{Profile:route.params.CompleteProfile.user_id}} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
-          ),}}   />
+          ),drawerLabelStyle: {
+            fontSize: 10,
+            fontFamily:'Arial',
+            fontWeight:'700',
+            color:'black'
+          },}}   />
       <Drawer.Screen name="LocalPurchase" component={LocalPurchase} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
-          ),}}  />
+          ),drawerLabelStyle: {
+            fontSize: 10,
+            fontFamily:'Arial',
+            fontWeight:'700',
+            color:'black'
+          },}}  />
     </Drawer.Navigator>
   );
 }

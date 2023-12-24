@@ -248,26 +248,26 @@ if(!validation()){
 
     const formData = new FormData();
     formData.append('user_id', data.user_id);
-formData.append('tagline', state.tag_line);
-formData.append('first_name',  state.first_name);
-formData.append('last_name', state.last_name);
-formData.append('mobile', state.phone);
-formData.append('birthday', selectedDate);
-formData.append('education', state.education);
-formData.append('income', state.income);
-formData.append('employment',state.employment);
-formData.append('address',state.address);
-formData.append('user_country', state.country);
-formData.append('user_state', state.state1);
-formData.append('user_city', state.city);
-formData.append('age', state.age);
-formData.append('gender', state.gender);
-formData.append('zip_code', state.zip);
-formData.append('profile_pic', selectedImage);
-formData.append('user_banner', selectedImage2);
+    formData.append('tagline', state.tag_line);
+    formData.append('first_name',  state.first_name);
+    formData.append('last_name', state.last_name);
+    formData.append('mobile', state.phone);
+    formData.append('birthday', selectedDate);
+    formData.append('education', state.education);
+    formData.append('income', state.income);
+    formData.append('employment',state.employment);
+    formData.append('address',state.address);
+    formData.append('user_country', state.country);
+    formData.append('user_state', state.state1);
+    formData.append('user_city', state.city);
+    formData.append('age', state.age);
+    formData.append('gender', state.gender);
+    formData.append('zip_code', state.zip);
+    formData.append('profile_pic', selectedImage);
+    formData.append('user_banner', selectedImage2);
 
 
-const headers = {
+   const headers = {
   "Content-Type": "multipart/form-data",
   "Accept": "application/json",
 };
@@ -279,7 +279,6 @@ if(response.data.message=='Profile Updated Sucessfully')
 {
   setLoader(false)
   util.successMsg("Profile Updated");
-
 }
 else{
   setLoader(false)

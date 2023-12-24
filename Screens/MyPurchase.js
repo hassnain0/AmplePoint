@@ -174,19 +174,8 @@ const DialogBox=(item)=>{
     android: 'serif', // You may need to adjust this for Android
   }),}}>Question</Text>
            </TouchableOpacity>
-          {item.product_order_status === 'In Process' ? (
-    <TouchableOpacity style={styles.buttonView} onPress={()=>handleOpenDialog(item)}>
-      <Text style={{
-        color: 'white',
-        fontSize: 7,
-        fontWeight: '600',
-        fontFamily: Platform.select({
-          ios: 'Arial',
-          android: 'serif', // You may need to adjust this for Android
-        }),
-      }}>Redeem Order</Text>
-    </TouchableOpacity>
-  ) : null}
+   
+  
   </View>
   </View>
 

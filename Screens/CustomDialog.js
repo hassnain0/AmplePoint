@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet,Image ,TextInput, BackHandler} from 'react-native';
-import { Checkbox } from 'react-native-paper';
-
 import util from '../helpers/util';
 import { Metrics } from '../themes';
 import Button from '../components/Button';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const CustomDialog = ({ visible, onClose,item, }) => {
-   const navigate=useNavigation();
-    const [selectedServices, setSelectedServices] = useState([]);
+   const [order,setOrder]=useState(null);
   const [loader,setLoader]=useState(false)
   useFocusEffect(
     React.useCallback(() => {
@@ -22,8 +21,34 @@ const CustomDialog = ({ visible, onClose,item, }) => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
   );
-  const Submit=()=>{
-    
+  const Submit=async()=>{
+    setLoader(true);
+    if(util.stringIsEmpty(order)){
+     setLoader(false);
+     util.errorMsg("Please enter redeem order");
+     return false;
+    }
+try{
+    const apiUrl='https://amplepoints.com/apiendpoint/confirmpickuporder?';
+    const response= await axios.get(apiUrl,{
+      params:{
+        productadded_id:item.productadded_id,
+        order_confirm_vendor_id:order
+      }
+    })
+    console.log("Response",response.data)
+    if(response.data.status=='F'){
+      setLoader(false);
+      util.errorMsg(response.data.message);
+    }
+    else{
+      util.successMsg("Submitted");
+      visible(false);
+    }
+}
+catch(err){
+  console.log(err)
+}
   }
   return (
     <Modal
@@ -101,7 +126,7 @@ const CustomDialog = ({ visible, onClose,item, }) => {
         </View>
         
         </View>
-        <TextInput placeholder='Enter Redeem Code'   textAlign='left' auto style={styles.InputContainer} ></TextInput>
+        <TextInput placeholder='Enter Redeem Code'  value={order} onChangeText={(text)=>setOrder(text)}  textAlign='left' auto style={styles.InputContainer} ></TextInput>
 <View style={styles.buttonView}>
     <Button 
     loader={loader}
@@ -109,7 +134,7 @@ const CustomDialog = ({ visible, onClose,item, }) => {
       label={"Submit"}
     />
 </View> 
-   
+<Toast ref={ref => Toast.setRef(ref)} />
         </View>
         
 )}      
@@ -130,14 +155,17 @@ const styles=StyleSheet.create({
         alignSelf:'center',
         
       }, InputContainer:{
-        marginTop:Metrics.ratio(3),
-        marginBottom:Metrics.ratio(10),
-        backgroundColor:'#F1F0F7',
-        borderRadius:5,
-        fontSize:15,
-       width:'100%',
-       height:Metrics.ratio(40),
-      },
+    backgroundColor:'#eeeeee',
+    margin:Metrics.ratio(5),
+    right:Metrics.ratio(10),
+    borderRadius:2,
+    borderWidth:0.5,
+    borderColor:'#C1C3C0',
+    fontSize:12,
+   width:'100%',
+   alignItems:'center',
+   height:Metrics.ratio(38),
+  },
       ImageContainer:{
         width: Metrics.ratio(90), 
         height: Metrics.ratio(90),

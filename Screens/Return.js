@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,} from 'react';
 import {Image,TextInput, View,Text, StyleSheet,ScrollView, TouchableOpacity,Alert} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Metrics } from '../themes';
@@ -11,15 +11,19 @@ import axios from 'axios';
 // import { Camera } from 'react-native-vision-camera';
 
 const Return=()=>{
+  
+const route=useRoute();
+const item=route.params.item;
+console.log("Item",item)
   const [isRecording, setIsRecording] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
   const [isFocus, setIsFocus] = useState(false);
-  const [reason,setReason]=useState(null);
+  const [reason,setReason]=useState('');
   const [loader, setLoader] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedImage2, setSelectedImage2] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const [selectedImage3, setSelectedImage3]= useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage2, setSelectedImage2] = useState('');
+  const [selectedVideo, setSelectedVideo] = useState('');
+  const [selectedImage3, setSelectedImage3]= useState('');
   // const { devices, selectCamera, currentCamera } =  useCameraDevice('back')
 
   const pickImage = () => {
@@ -210,25 +214,25 @@ const Return=()=>{
   const validation=()=>{
     if(util.stringIsEmpty(value)){
       setLoader(false);
-      util.errorMsg("Please select choice ")
+      util.errorMsg("Please select choice")
       return false;
     }
-    if(util.stringIsEmpty(reason)){
+    if(reason==''){
       setLoader(false);
       util.errorMsg("Please enter Reason")
       return false;
     }
-    if(selectedImage==null){
+    if(selectedImage==''){
       setLoader(false);
       util.errorMsg("Please choose Image1")
       return false;
     }
-    if(selectedImage2==null){
+    if(selectedImage2==''){
       setLoader(false);
       util.errorMsg("Please Choose Image2 ")
       return false;
     }
-    if(selectedVideo==null){
+    if(selectedVideo==''){
       setLoader(false);
       util.errorMsg("Please Choose Video")
       return false;
@@ -238,40 +242,45 @@ const Return=()=>{
  
   const Submit=async()=>{
 setLoader(true);
-    if(!validation){
-      return false
+    if(!validation()){
+      return false;
+
     }
-    console.log("Evidance",)
+   
+
+    try{
+
     const apiUrl='https://amplepoints.com/apiendpoint/submitdispute';
-    const requestBody = {
-      user_id:126,
-      vendor_id:906,
-      apply_for:value,
-      resone:reason,
-      evidance: [selectedImage, selectedImage2], // Use an array to store multiple evidence items
-      videofile:selectedVideo,
-      
-    };
-    axios.post(apiUrl, requestBody, {
-      headers: {
-        'Content-Type': 'application/json',
-        // Add any additional headers if needed
-      },
-    })
-      .then(response => {
-        setLoader(false)
-        console.log('Response:', response.data);
-      })
-      .catch(error => {
-        // Handle errors
-        setLoader(false)
-        console.error('Error:', error);
-      });
+    const formData = new FormData();
+    formData.append('product_added_id',item.productadded_id);
+    formData.append('order_id', item.order_id);
+    formData.append('product_id',  item.product_id);
+    formData.append('user_id', 38518);
+    formData.append('vendor_id', item.vendor_id);
+    formData.append('apply_for', value);
+    formData.append('resone', reason);
+    formData.append('evidance', [selectedImage,selectedImage2]);
+    formData.append('videofile',selectedVideo);
+    
+   const headers = {
+  "Content-Type": "multipart/form-data",
+  "Accept": "application/json",
+};
+
+const response = await axios.post(apiUrl, formData, { headers });
+console.log("Response of Return",response.data);
+
+if(response.data.status=='S')
+{setLoader(false);
+  util.successMsg("Successfully Submitted")
+}
+    }
+    catch(error){
+      setLoader(false)
+      console.log("Error",error)
+    }
   }
 
-const route=useRoute();
-console.log("Rote",route.params.product_sku)
-const item=route.params.item;
         return (
             <ScrollView style={{flex:1, flexDirection:"column",backgroundColor:'white',}}>
                    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10),width:'100%',marginRight:Metrics.ratio(100)}}></View>

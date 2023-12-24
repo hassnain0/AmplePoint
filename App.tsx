@@ -26,11 +26,13 @@ import Profile from './Screens/Profile';
 import EditProfie from './Screens/EditProfile';
 import { Platform } from 'react-native';
 import DrawerNavigator from './DrawerNavigator';
+import { AuthProvider } from './Screens/AuthContext';
 
 const Stack=createNativeStackNavigator();
 
 export default function App() {
   return (
+    <AuthProvider>
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
       <Stack.Navigator>
@@ -65,5 +67,6 @@ export default function App() {
       </Stack.Navigator>
       </NavigationContainer>
       </StripeProvider>
+      </AuthProvider>
 );
 }

@@ -154,7 +154,7 @@ const Login=({navigation})=>{
     const CompleteProfile=response.data.data
     
    const Data=response.data.data.user_id;
-   console.log("CompleteProfile",CompleteProfile)
+   
     navigation.navigate("HomeScreen",{
       Data,
       CompleteProfile,
