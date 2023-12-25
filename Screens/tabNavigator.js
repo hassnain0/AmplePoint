@@ -52,7 +52,7 @@ const TabNavigator = ({navigation}) => {
       tabBarStyle: {backgroundColor: "#EEEEEE"}
     }}>
      <Tab.Screen name="Home" component={HomeScreen} initialParams={{ user_Id: 126,}} options={{tabBarIcon: ({ color, size }) => (
-           <Image source={require('../assets/home1.png')}style={{width:22,height:21}} ></Image>
+           <Image source={require('../assets/home1.png')}style={{width:25,height:25}} ></Image>
            ),header(){
             this.headerShown=false
            } }}/>

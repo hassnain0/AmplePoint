@@ -87,7 +87,7 @@ console.log(route.params.user_Id)
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                  product_id: productId,
+                  product_id: 55715,
                   user_id: VendorId,
                 },
             });

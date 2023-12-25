@@ -44,20 +44,7 @@ const ProductItem = ({ product, onProductPress }) => {
 const MallDetail=({navigation})=>{
     const route=useRoute();
     const Name=route.params.Name
-    console.log("Route",route.params.Name)
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(null);
-  useEffect(() => {
-    // Filter products based on search query
-    if (searchQuery) {
-      const filteredData = storeProducts?.data.filter((product) =>
-        product.display_name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredProducts(filteredData);
-    } else {
-      setFilteredProducts(null);
-    }
-  }, [searchQuery, storeProducts]);
+ 
    
   const handleProductPress = (productData) => {
     const Name=productData.vendor_name
@@ -106,6 +93,7 @@ const getProductDetails = async () => {
     }
   }
   const renderFlatList = (data) => (
+    <View>
     <FlatList
       data={data}
       showsHorizontalScrollIndicator={false}
@@ -116,17 +104,9 @@ const getProductDetails = async () => {
         </TouchableOpacity>
       )}
     />
+    </View>
   );
   
-  const chunkArray = (array, chunkSize) => {
-    const chunks = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunks.push(array.slice(i, i + chunkSize));
-    }
-    return chunks;
-  };
-  
-  const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 2) : [];
   
     return (
       <SafeAreaView>
@@ -151,11 +131,9 @@ const getProductDetails = async () => {
         />
         
         <View>
-    {chunkedData.map((chunk, index) => (
-      <View key={index}>
-        {renderFlatList(chunk)}
-      </View>
-    ))}
+{storeProducts &&(
+        renderFlatList(storeProducts)
+        )}
   </View>
       </View>
     </ScrollView>

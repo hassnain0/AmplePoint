@@ -12,8 +12,10 @@ import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
 import { useFocusEffect } from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login=({navigation})=>{
+  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -151,10 +153,12 @@ const Login=({navigation})=>{
         setLoader(false)
          if(response.data && response.data.data.total_ample)
   {
+    
     const CompleteProfile=response.data.data
     
    const Data=response.data.data.user_id;
-   
+   const response=await AsyncStorage.setItem("KeepLoggedIn",JSON.stringify(true));
+   console.log("Done",JSON.stringify(response))
     navigation.navigate("HomeScreen",{
       Data,
       CompleteProfile,
@@ -168,6 +172,10 @@ const Login=({navigation})=>{
       // Handle errors
       console.error("Error:", error);
     }
+  }
+
+  const setAsyncStorage=async()=>{
+   
   }
  
 return (
@@ -284,7 +292,7 @@ const styles=StyleSheet.create({
       },
       ImageContainer:{
        backgroundColor:'white',
-        width: Metrics.ratio(400) ,
+        width: '100%',
         height: Metrics.ratio(450),
       
       },

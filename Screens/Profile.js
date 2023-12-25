@@ -5,12 +5,20 @@ import axios from 'axios';
 import EditProfie from './EditProfile';
 import { useRoute } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Profile= ({navigation}) => {
     const route=useRoute();
-    const user_Id=route.params.user_Id
+   
+   
+    const user_Id=route.params.user_Id;
+    
     const [data,setData]=useState(null)
     useEffect(()=>{
+      const data=AsyncStorage.getItem("keepLoggedIn");
+      console.log("Data",data)      
+     
         const getHomeContent=async()=>{
             try {
               const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
@@ -32,7 +40,7 @@ const Profile= ({navigation}) => {
             } 
         
           getHomeContent();
-    },)
+    },[])
   // Dummy data (replace with actual user data)
  const Edit_Profie=()=>{
   navigation.navigate("EditProfile",{

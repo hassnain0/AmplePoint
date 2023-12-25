@@ -26,21 +26,16 @@ import Profile from './Screens/Profile';
 import EditProfie from './Screens/EditProfile';
 import { Platform } from 'react-native';
 import DrawerNavigator from './DrawerNavigator';
-import { AuthProvider } from './Screens/AuthContext';
 
 const Stack=createNativeStackNavigator();
 
 export default function App() {
   return (
-    <AuthProvider>
     <StripeProvider publishableKey='pk_test_51 NpOZ4GY4n5u6WbIlWOsccAKTTMLq7xnjfG8fFboidp6jZCx2XlssuBHyNbvBsqfGDkbVkZH2Knka498eIzAjdPZ00YZBjdzik'>
       <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name='SplashScreen' component={SplashScreen} options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
-      <Stack.Screen name='EditProfile' component={EditProfie} options={( ) => ({headerTintColor:'white',title:'Edit Profile',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 , fontFamily:Platform.select({
-          ios: 'Times New Roman',
-          android: 'Times New Roman', // You may need to adjust this for Android
-        }),}})}/> 
+      <Stack.Screen name='EditProfile' component={EditProfie} options={( ) => ({headerTintColor:'white',title:'Edit Profile',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 , fontFamily:'Times New Roman',}})}/> 
         <Stack.Screen name='Return' component={Return} options={( ) => ({headerTintColor:'white',title:'Return Order',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
     <Stack.Screen name='MyPurchase' component={MyPurchase} options={( ) => ({headerTintColor:'white',title:'MyPurchase',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
         <Stack.Screen name='Drawer' component={DrawerNavigator} options={{ headerShown: false }} />
@@ -67,6 +62,5 @@ export default function App() {
       </Stack.Navigator>
       </NavigationContainer>
       </StripeProvider>
-      </AuthProvider>
 );
 }

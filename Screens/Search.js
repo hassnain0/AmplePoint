@@ -4,22 +4,28 @@ import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const ProductItem = ({ product }) => {
   return (
 
     <View style={styles.productItem}>
-  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
-  {product.pname}
-</Text>
+      
+        <View style={{ width: 100, flex: 1 }}>
+  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black', flexWrap: 'wrap' }}>
+    {product.product_name}
+  </Text>
+</View>
+      
+
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
     </View>
     <Text style={styles.ProductContainer}>{product.pvendor}</Text>
 
     <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
+      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.single_price}`}</Text>
       <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
         <Text style={{ color: '#618ED7', fontWeight: '600', fontSize: 10 }}>{`${product.pdiscount} % Back`}</Text>
       </View>
@@ -39,101 +45,96 @@ const ProductItem = ({ product }) => {
 
 const Search=({navigation})=>{
   const route=useRoute();
+  const [loading,setLoading]=useState(false);
   const handleProductPress = (productData) => {
-    // Navigate to the next screen, passing the productId as a parameter
     navigation.navigate('GiftDetails',{ productData,route });
   };
-  useEffect(()=>{
-
-    getProductDetails();
-  },[])
+  const [data,setData]=useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [storeProducts, setStoreProducts] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(null);
-  useEffect(() => {
-    const filterProducts = () => {
-      if (storeProducts && storeProducts.data) {
-        const filteredData = storeProducts.data.filter((product) =>
-        product.pname && product.pname.includes(searchQuery.toLowerCase())
-        );
-        setFilteredProducts(filteredData);
-      } else {
-        setFilteredProducts(null);
-      }
-    };
-    
-    filterProducts();
-    getProductDetails();
-  },  [searchQuery, storeProducts, pageNumber]);
  
-const getProductDetails = async () => {
-  try{
-    // const vendorId = route.params.Id;
-    // Specify the initial page number
-    
-    const apiUrl = 'https://amplepoints.com/apiendpoint/searchproduct?';
-        const response = await axios.get(apiUrl, {
-          params: {
-            search_query:searchQuery,
-            page: pageNumber,
-          },
-        });
-       
+const getProducts = async () => {
+if(searchQuery){
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/searchproduct';
+      // setLoading(true);
 
-      if (setStoreProducts && typeof setStoreProducts === 'function') {
-        setStoreProducts(response.data);
+      const response = await axios.get(apiUrl, {
+        params: {
+          search_query: searchQuery,
+          page: pageNumber,
+        },
+      });
+    
+      if (response && response.data.data) {
+        setStoreProducts(response.data.data);
         setPageNumber((prevPage) => prevPage + 1);
+        setLoading(false); // Set loading to false when the operation completes
+        setData(false)
       }
-      
+
     } catch (error) {
       console.error('Error fetching data:', error);
-      // Handle the error, e.g., set an error state or display an error message
+      setLoading(false);
     }
   }
-    const renderFlatList = (data) => (
-
-      <View>
-    <FlatList
-      data={data}
-      numColumns={2} 
-      showsVerticalScrollIndicator={false} 
-      keyExtractor={(item) => item.pid}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleProductPress(item)}>
-          <ProductItem product={item} />
-        </TouchableOpacity>
-      )}
-    />
-  </View>
-
-    );
-    const chunkArray = (array, chunkSize) => {
-      const chunks = [];
-      for (let i = 0; i < array.length; i += chunkSize) {
-        chunks.push(array.slice(i, i + chunkSize));
-      }
-      return chunks;
+  else{
+  
+  }
+  };
+  const renderFlatList = (data) => {
+    return(
+        <View>
+          <FlatList
+            data={data}
+            numColumns={2} 
+            showsVerticalScrollIndicator={false} 
+            keyExtractor={(item) => item.pid}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleProductPress(item)}>
+                <ProductItem product={item} />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+        )
     };
-
-    const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
   <ScrollView>
-    <View style={styles.searchBar2Container}>
+     <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
+        {data && (
+        <View style={styles.overlay}>
+          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
+        </View>
+      )}
+  <View style={styles.searchBar2Container}>
       <TextInput style={styles.searchInput}
-      onChangeText={(text)=>setSearchQuery(text)}
+      onChangeText={(text)=>{
+        setSearchQuery(text);
+        getProducts(text)
+      }}
       placeholder="Search..."
       value={searchQuery}
       ></TextInput>
     </View>
       <View style={styles.container}>
-      {filteredProducts
-          ? renderFlatList(filteredProducts)
-          : chunkedData.map((chunk, index) => (
-              <View key={index}>{renderFlatList(chunk)}</View>
-            ))}
+      {storeProducts 
+      // && 
+      //   storeProducts.map(e=>{
+      //     <ProductItem product={e}/>
+      // })
+          && renderFlatList(storeProducts)
+            }
     </View>
+    
     </ScrollView>
 )}
 const styles=StyleSheet.create({
@@ -201,7 +202,7 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:10,
-        width: Metrics.ratio(190),
+        width: Metrics.ratio(150),
         height: Metrics.ratio(180),
 
       },

@@ -1,14 +1,13 @@
-import React ,{useEffect} from 'react';
+import React ,{useEffect, useState} from 'react';
 import {StyleSheet,ImageBackground, View} from 'react-native';
 import HomeScreen from './HomeScreen';
-import Login from './Login';
 
 const  SplashScreen = ({navigation}) => {
 
-  
   useEffect(() => {
    setTimeout(() => {
-      navigation.navigate('Login');
+   
+      navigation.navigate('HomeScreen');
     },3000 );
 
     return () => {

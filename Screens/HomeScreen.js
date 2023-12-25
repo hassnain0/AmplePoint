@@ -297,7 +297,7 @@ const styles=StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     top:Metrics.ratio(10),
-    bottom:Metrics.ratio(10)
+    paddingVertical:Metrics.ratio(10)
   },
   ovalImage: {
     width: Metrics.ratio(90), // Adjust the width and height as needed

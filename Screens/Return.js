@@ -259,7 +259,7 @@ setLoader(true);
     formData.append('vendor_id', item.vendor_id);
     formData.append('apply_for', value);
     formData.append('resone', reason);
-    formData.append('evidance', [selectedImage,selectedImage2]);
+    formData.append('evidance', [selectedImage,selectedImage2,selectedImage3]);
     formData.append('videofile',selectedVideo);
     
    const headers = {

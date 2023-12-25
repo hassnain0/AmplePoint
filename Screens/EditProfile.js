@@ -31,7 +31,7 @@ const EditProfie= ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const route=useRoute();
   const data=route.params.data;
-console.log("Dta",data)
+
   const [state, setState] = React.useState({
     first_name: data.first_name,
     tag_line:data.tag_desc,
