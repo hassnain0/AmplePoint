@@ -16,9 +16,9 @@ const Profile= ({navigation}) => {
     
     const [data,setData]=useState(null)
     useEffect(()=>{
-      const data=AsyncStorage.getItem("keepLoggedIn");
-      console.log("Data",data)      
+      
      
+      get();
         const getHomeContent=async()=>{
             try {
               const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
@@ -41,6 +41,17 @@ const Profile= ({navigation}) => {
         
           getHomeContent();
     },[])
+
+    const get=async()=>{
+    try{
+      const response=await AsyncStorage.getItem("KeepLoggedIn");
+      console.log("Response",response)
+      if(response==null)
+      navigation.navigate("Login")
+        }
+      catch(Error){
+        console.log("Error",Error)
+      }    }
   // Dummy data (replace with actual user data)
  const Edit_Profie=()=>{
   navigation.navigate("EditProfile",{
@@ -49,7 +60,7 @@ const Profile= ({navigation}) => {
  }
 
   return (
-    
+    <>
     <ImageBackground
   source={{ uri: (data && data.user_banner) ||  'https://media.istockphoto.com/id/1573329496/photo/multi-layers-color-texture-3d-papercut-layers-in-gradient-vector-banner-carving-art-cover.webp?b=1&s=612x612&w=0&k=20&c=3vyrUMlb4A8NFTdPuJ_tVsjbKg5B586CJjm9C9Zebbk='}}
   style={styles.containerImage}
@@ -156,7 +167,7 @@ const Profile= ({navigation}) => {
    )}
    </ImageBackground>
       
-    
+   </>
   );
 };
 

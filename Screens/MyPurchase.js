@@ -48,7 +48,7 @@ setLoading(false);
       const apiUrl = 'https://amplepoints.com/apiendpoint/getuserorderhistory?';
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:126,
+          user_id:user_Id,
         },
       });
   

@@ -8,6 +8,7 @@ import Checkout from './Checkout';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Cart= ({navigation}) => {
   const route=useRoute();
   const User_Id=route.params.user_Id;
@@ -17,9 +18,19 @@ const Cart= ({navigation}) => {
   
   
   useEffect(()=>{
+    get();
 getProductDetails();
 setLoading(false)
   },[deleteCount])
+  const get=async()=>{
+    try{
+      const response=await AsyncStorage.getItem("KeepLoggedIn");
+      if(response==null)
+      navigation.navigate("Login")
+        }
+      catch(Error){
+        console.log("Error",Error)
+      }    }
   const [quantity, setQuantity] = useState(1);
   const [loader, setLoader] = useState(false);
  const [loading,setLoading]=useState(true);
