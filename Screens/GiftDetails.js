@@ -87,7 +87,7 @@ console.log(route.params.user_Id)
             const apiUrl = 'https://amplepoints.com/apiendpoint/getproductdetail?';
             const response = await axios.get(apiUrl, {
                 params: {
-                  product_id: productId,
+                  product_id: 55715,
                   user_id: VendorId,
                 },
             });
@@ -814,7 +814,7 @@ return (
     </View>
  {isGiftCard &&(
   <View>
-    <View style={{margin:Metrics.ratio(5),flex:1, flexDirection:'row',backgroundColor:'#FF2E00' , borderRadius:Metrics.ratio(20)}}>
+    <View style={{margin:Metrics.ratio(20),flex:1, flexDirection:'row',backgroundColor:'#FF2E00' , borderRadius:Metrics.ratio(20)}}>
     <RadioButton.Group onValueChange={forMe}  value={isforMe.toString()}>
             <RadioButton.Item color='white' label={"This is for me"}  labelStyle={{ color: 'white' }} value="true" />
          </RadioButton.Group >
@@ -1400,9 +1400,8 @@ justifyContent:'center'
     borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(10),
-    color:'white',
-    height:  Metrics.ratio(10),
+    width: Metrics.ratio(8),
+    height:  Metrics.ratio(8),
   },
   quantityContainer: {
     backgroundColor: 'white',
@@ -1468,7 +1467,7 @@ borderRadius:Metrics.ratio(70),
    
     Text4Container:{
       paddingTop:Metrics.ratio(20),
-      marginLeft:Metrics.ratio(40),
+      paddingLeft:Metrics.ratio(60),
       fontSize:12,
       color:'black',
       fontFamily: Platform.select({

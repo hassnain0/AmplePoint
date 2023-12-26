@@ -1,7 +1,7 @@
 import React, { useEffect,useRef,useState } from 'react';
 import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet,Alert,BackHandler, Image,TextInput,Platform, ScrollView} from "react-native";
 import Mall from './Mall';
-import { createDrawerNavigator} from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import Store from './Store';
 import { Metrics } from '../themes';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
@@ -11,7 +11,6 @@ import Cart from './Cart';
 import Brands from './Brands';
 import MyPurchase from './MyPurchase';
 import LocalPurchase from './LocalPurchase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 const Drawer=createDrawerNavigator();
 
 const  HomeScreen=({navigation})=>{
@@ -324,8 +323,8 @@ const styles=StyleSheet.create({
   },
   ovalImage2: {
     width: Metrics.ratio(90), // Adjust the width and height as needed
-    height: Metrics.ratio(110),
-    borderRadius: Metrics.ratio(60),
+    height: Metrics.ratio(120),
+    borderRadius: Metrics.ratio(40),
     borderColor:'purple',
     borderWidth:0.7
   },

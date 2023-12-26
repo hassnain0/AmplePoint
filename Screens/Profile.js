@@ -6,17 +6,19 @@ import EditProfie from './EditProfile';
 import { useRoute } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Login from './Login';
 
 
 const Profile= ({navigation}) => {
     const route=useRoute();
+   
+   
     const user_Id=route.params.user_Id;
+    
     const [data,setData]=useState(null)
     useEffect(()=>{
-
-      Check();
-
+      const data=AsyncStorage.getItem("keepLoggedIn");
+      console.log("Data",data)      
+     
         const getHomeContent=async()=>{
             try {
               const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
@@ -39,19 +41,6 @@ const Profile= ({navigation}) => {
         
           getHomeContent();
     },[])
-    const Check=async()=>{
-      try{
-        const userLoggedIn = await AsyncStorage.getItem("userLoggedIn");
-      console.log("User LoggedIn",userLoggedIn)
-      if(userLoggedIn==null){
-        navigation.navigate("Login")
-      }
-  }
-  catch(err){
-    console.log(err)
-  }
-}
-  
   // Dummy data (replace with actual user data)
  const Edit_Profie=()=>{
   navigation.navigate("EditProfile",{

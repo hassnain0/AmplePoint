@@ -274,8 +274,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#FFFF',
         borderRadius:5,
         elevation:3,
-        marginLeft:Metrics.ratio(10),
-        marginBottom:Metrics.ratio(10)
+        margin:Metrics.ratio(10)
       },
       TextContainer: {
         fontSize:15,
