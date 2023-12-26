@@ -19,20 +19,24 @@ const ProductItem = ({ product }) => {
     </View>
     <Text style={styles.ProductContainer}>{product.pvendor}</Text>
   
-    <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
-      <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
-        <Text style={{ color: '#618ED7', fontWeight: '600', fontSize: 10 }}>{`${product.pdiscount} % Back`}</Text>
-      </View>
-    </View>
     <View>
-      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
-        Get <Text style={{ color: '#ff3d00' }}>{product.pamples}</Text> AmplePoints $<Text style={{ color: '#FF2E00' }}>{product.pdiscountprice}</Text>
-      </Text>
+  <View style={{ flex: 1, flexDirection: 'row' }}>
+    <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
+    <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
+      <Text style={{ color: '#618ED7', fontWeight: '600', fontSize: 10 }}>{`${product.pdiscount} % Back`}</Text>
     </View>
+  </View>
+
+  <View>
     <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
-      or get it <Text style={{ color: '#FF2E00' }}>FREE</Text> with <Text style={{ color: '#FF2E00' }}>{product.pfwamples}</Text> points
+      Get <Text style={{ color: '#ff3d00' }}>{product.pamples}</Text> AmplePoints $<Text style={{ color: '#FF2E00' }}>{product.pdiscountprice}</Text>
     </Text>
+  </View>
+
+  <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '600', color: 'black', fontSize: 10 }}>
+    or get it <Text style={{ color: '#FF2E00' }}>FREE</Text> with <Text style={{ color: '#FF2E00' }}>{product.pfwamples}</Text> points
+  </Text>
+</View>
   </View>
   
   );
@@ -239,8 +243,8 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor:'white',
-        margin: Metrics.ratio(20),
-        marginBottom:Metrics.ratio(20),
+       marginLeft:Metrics.ratio(10),
+        marginBottom:Metrics.ratio(10),
         borderRadius:5,
         elevation:5
       },
@@ -285,7 +289,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#ff3d00',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: Metrics.ratio(30),
+        paddingVertical: Metrics.ratio(1),
         // paddingHorizontal:Metrics.ratio(5),
       },
       ProductContainer:{

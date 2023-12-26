@@ -157,12 +157,13 @@ const Login=({navigation})=>{
     const CompleteProfile=response.data.data
     
    const Data=response.data.data.user_id;
-   const response=await AsyncStorage.setItem("KeepLoggedIn",JSON.stringify(true));
-   console.log("Done",JSON.stringify(response))
-    navigation.navigate("HomeScreen",{
-      Data,
-      CompleteProfile,
-    })
+
+   
+    await AsyncStorage.setItem("userLoggedIn", JSON.stringify(true));
+    const userLoggedIn = await AsyncStorage.getItem("userLoggedIn");
+    console.log("User LoggedIn",userLoggedIn)
+    
+    navigation.navigate("HomeScreen")
   }
    
       
@@ -174,9 +175,6 @@ const Login=({navigation})=>{
     }
   }
 
-  const setAsyncStorage=async()=>{
-   
-  }
  
 return (
 <View>
