@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, TextInput } from 'react-native';
-import { createDrawerNavigator,DrawerContentScrollView ,DrawerItemList} from '@react-navigation/drawer'; // assuming you have a TabNavigator component
+import { createDrawerNavigator,DrawerContentScrollView ,DrawerItemList,} from '@react-navigation/drawer'; // assuming you have a TabNavigator component
 import TabNavigator from './Screens/tabNavigator';
 import MyPurchase from './Screens/MyPurchase';
 import LocalPurchase from './Screens/LocalPurchase';
@@ -40,7 +40,7 @@ const CustomHeader = ({ navigation,user_Id }) => {
           <Image source={require('./assets/SideBar.png')} style={styles.SideMenu} />
         </TouchableOpacity>
         <Image source={require('./assets/Ample.png')} style={styles.Logo} />
-        <View style={{marginLeft:Metrics.ratio(10)}}>
+        <View >
         <Text style={{
       color: 'black',
       fontSize: 9,
