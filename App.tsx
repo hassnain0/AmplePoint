@@ -45,7 +45,6 @@ export default function App() {
       <Stack.Screen name='Profile' component={Profile} options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
       <Stack.Screen name='HomeScreen' component={DrawerNavigator} options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
       <Stack.Screen name='LocalPurchase' component={LocalPurchase} options={( ) => ({headerTintColor:'white',title:'My Local Purchases',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
-
       <Stack.Screen name='AskQuestion' component={AskQuestion} options={( ) => ({headerTintColor:'white',title:'Ask Question',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Search' component={Search} options={( ) => ({headerTintColor:'white',title:'Search',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='MallDetail' component={MallDetail}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>

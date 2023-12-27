@@ -9,6 +9,9 @@ import {  useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Search from './Screens/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TermsCondition from './Screens/TermsCondition';
+import Contact from './Screens/Contact';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -143,6 +146,12 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="LocalPurchase" component={LocalPurchase} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
           ),}}  />
+              <Drawer.Screen name="TermsCondition" component={TermsCondition} options={{headerShown:false,drawerIcon: ({color}) => (
+            <Image source={require('./assets/letter.png')} style={{width:10,height:15}}/>
+          ),}}  />
+          <Drawer.Screen name="Contact Us" component={Contact} options={{headerShown:false,drawerIcon: ({color}) => (
+            <Image source={require('./assets/Us.png')} style={{width:15,height:20}}/>
+          ),}}  />
     </Drawer.Navigator>
   );
 }
@@ -158,9 +167,7 @@ const styles=StyleSheet.create({
     height: '50%',
 }, Icon:{
   width:Metrics.ratio(27),
-  height:Metrics.ratio(32),
-  left:Metrics.ratio(10)
-},
+  height:Metrics.ratio(32)},
   searchBar2Container: {
     flex: 1, // This ensures the inner container takes up all available space
     alignItems: 'center', // Center the content horizontally
@@ -199,7 +206,7 @@ const styles=StyleSheet.create({
   backgroundImage: {
   
     width: '100%',
-    height: '75%',
+    height: '55%',
   },
   profileSection: {
     justifyContent:'center',

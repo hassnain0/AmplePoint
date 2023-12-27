@@ -68,11 +68,6 @@ const decreaseQuantity = (item) => {
 };
 
 
-
-  const CheckOutScreen=()=>{
-    navigation.navigate("Checkout")
-  }
-
   //CheckOut
   const Checkout=async()=>{
 setLoader(true);
@@ -110,20 +105,19 @@ setLoader(true);
             user_id:User_Id,
           },
         });
-      
+        if(response.data.status=='S'){
         util.successMsg("Sucessfull");
         setLoader(false);
         navigation.navigate("Checkout",
         User_Id)
+        }
       
       }
        catch (error) {
         // Handle the error
         console.error('Error:', error);
       }
-    
   }
-
   const getProductDetails = async () => {
     try {    
       const apiUrl = 'https://amplepoints.com/apiendpoint/getusercart?';
@@ -132,8 +126,7 @@ setLoader(true);
           user_id:User_Id,
         },
       });
-      console.log("Response", response.data.data);
-      // Handle the successful response
+      
       setActualData(response.data)
       setProduct_no(response.data.length||0);
       const cart_items=response.data.data;

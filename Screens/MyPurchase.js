@@ -84,9 +84,6 @@ const handleProductPress=(item)=>{
     item,
   })
 }
-const DialogBox=(item)=>{
-
-}
     return (
       <View style={{flex:1,}}>
        
