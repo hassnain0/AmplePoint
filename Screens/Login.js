@@ -158,8 +158,8 @@ const Login=({navigation})=>{
     
    const Data=response.data.data.user_id;
    const response=await AsyncStorage.setItem("KeepLoggedIn",JSON.stringify(true));
-   console.log("Done",JSON.stringify(response))
-    navigation.navigate("HomeScreen",{
+
+    navigation.replace("HomeScreen",{
       Data,
       CompleteProfile,
     })

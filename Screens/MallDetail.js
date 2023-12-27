@@ -120,7 +120,7 @@ const MallDetail = ({ navigation }) => {
           onPress={() => console.log('navigation', navigation.goBack())}>
           <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
         </TouchableOpacity>
-        <Text style={styles.textHeader}>{Name} Mall</Text>
+        <Text style={styles.textHeader}>{Name}</Text>
       </View>
       <ScrollView>
 

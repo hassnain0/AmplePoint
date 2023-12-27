@@ -1,13 +1,14 @@
 import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, TextInput } from 'react-native';
-import { createDrawerNavigator,DrawerContentScrollView ,DrawerItemList,} from '@react-navigation/drawer'; // assuming you have a TabNavigator component
+import { createDrawerNavigator,DrawerContentScrollView ,DrawerItemList,DrawerItem} from '@react-navigation/drawer'; // assuming you have a TabNavigator component
 import TabNavigator from './Screens/tabNavigator';
 import MyPurchase from './Screens/MyPurchase';
 import LocalPurchase from './Screens/LocalPurchase';
 import { Metrics } from './themes';
-import { useRoute } from '@react-navigation/native';
+import {  useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Search from './Screens/Search';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 
@@ -83,7 +84,22 @@ const CustomHeader = ({ navigation,user_Id }) => {
   );
 };
 const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
-  
+  handleLogout=async()=>{
+    try{
+      await AsyncStorage.setItem("KeepLoggedIn","false");
+     const data= await AsyncStorage.getItem("KeepLoggedIn");
+     console.log("Data",data)
+    //  navigation.replace("HomeScreen");
+    }
+    catch(Error){
+      console.log("Eror",Error)
+    }
+    
+  }
+  const CustomIcon = () => {
+    // Customize this component based on your needs
+    return <Image source={require('./assets/logout.png')} style={{ width: 15, height: 15 }} />;
+  };
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
@@ -99,9 +115,7 @@ const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
           </View>
         </View>
 </ImageBackground>
-
         <DrawerItemList {...props} />
-
       </View>
     </DrawerContentScrollView>
   );
@@ -114,36 +128,21 @@ export default function DrawerNavigator() {
   const user_ID = CompleteProfile.user_Id || null;
 
   return (
-    <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} CompleteProfile={CompleteProfile}/>}   screenOptions={{
+    <Drawer.Navigator   drawerContent={(props) => <CustomDrawerContent {...props} CompleteProfile={CompleteProfile} />}   screenOptions={{
       header: (props) => <CustomHeader {...props} user_Id={CompleteProfile}/>,
     }}>
       <Drawer.Screen name="Home" initialParams={CompleteProfile1=CompleteProfile} component={TabNavigator}   options={{ 
           drawerIcon: ({color}) => (
             <Image source={require('./assets/home1.png')} style={{width:10,height:15}}/>
           ),
-          drawerLabelStyle: {
-            fontSize: 10,
-            fontWeight:'700',
-            fontFamily:'Arial',
-            color:'black'
-          },
+       
         }}/>
       <Drawer.Screen name="MyPurchase" component={MyPurchase} initialParams={{Profile:route.params?.CompleteProfile.user_id|| {}}} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
-          ),drawerLabelStyle: {
-            fontSize: 10,
-            fontFamily:'Arial',
-            fontWeight:'700',
-            color:'black'
-          },}}   />
+          ),}}   />
       <Drawer.Screen name="LocalPurchase" component={LocalPurchase} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Purchase.png')} style={{width:10,height:15}}/>
-          ),drawerLabelStyle: {
-            fontSize: 10,
-            fontFamily:'Arial',
-            fontWeight:'700',
-            color:'black'
-          },}}  />
+          ),}}  />
     </Drawer.Navigator>
   );
 }

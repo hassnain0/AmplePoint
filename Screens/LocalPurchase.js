@@ -6,52 +6,18 @@ import axios from 'axios';
 import Return from './Return';
 import AskQuestion from './AskQuestion';
 import CustomDialog from './CustomDialog';
+import { useRoute } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 // import Spinner from 'react-native-loading-spinner-overlay';
 
 const LocalPurchase= ({navigation}) => {
-//   const route=useRoute();
-//   const User_Id=route.params.user_ID;
-//   console.log("User Id",User_Id)
+  const route=useRoute();
+  const user_Id=route.params.Profile;
+   console.log("Route",route.params.Profile)
+  const User_Id=route.params.user_ID;
+  console.log("User Id",User_Id)
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
-   
-      const services = ['Painter','Electrician','Flat Tire Mechanic','Key Maker','Denter','Auto Mechanic','Body-Mechanic']; // Add other services as needed  
-      const handleServiceSelect =async (selected) => {
-          try{
-  
-            const data={
-              Latitude: "24.8787702",
-              Longitude: "66.87899999999999",
-              Specialties: ["Painter","Denter"]          }
-            const url="https://zohaib964242.pythonanywhere.com/predict";
-      
-            // Using axios:
-            try {
-             
-              const response = await axios.post(url,data);
-             
-              if(response.data){
-                
-                navigation.navigate("Locations",{
-                  Data:response.data,
-                })
-                setLoading(false);
-              }
-              else{
-                setLoading(false);
-                setVisible(false);
-                util.errorMsg("No Nearby Mechanic found");
-                return false;
-              }
-            }
-          catch(erro){
-            console.log("Error",erro)
-          }}
-          catch(erro){
-            console.log("Error",erro)
-          }
-          }
-
   
   useEffect(()=>{
 getProductDetails();
@@ -80,7 +46,7 @@ setLoading(false)
       const apiUrl = 'https://amplepoints.com/apiendpoint/getuserlocalorderhistory?';
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:126,
+          user_id:User_Id,
         },
       });
   
@@ -92,6 +58,7 @@ setLoading(false)
       if(response.data && response.data.data.quantity){
       setQuantity(response.data.data.quantity)
       }
+      setLoading(false)
     } catch (error) {
       // Handle the error
       console.error('Error:', error);
@@ -116,12 +83,16 @@ const handleProductPress=(item)=>{
     item,
   })
 }
-const DialogBox=(item)=>{
-
-}
     return (
-      <View style={{flex:1,}}>
       
+      <View style={{flex:1,}}>
+      <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {actulaData?.data?.map((item, index) => (
           <View>
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
