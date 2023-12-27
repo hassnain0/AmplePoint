@@ -17,6 +17,7 @@ const Cart= ({navigation}) => {
   
   
   useEffect(()=>{
+    get();
 getProductDetails();
 setLoading(false)
   },[deleteCount])
@@ -140,6 +141,25 @@ setLoader(true);
       console.error('Error:', error);
     }
   };
+  const get=async()=>{
+    
+     
+    try{
+      AsyncStorage.getItem("keepLoggedIn", (error, result) => {
+        if (error) {
+          console.error("Error retrieving keepLoggedIn:", error);
+        } else {
+          console.log("keepLoggedIn value:", result);
+          // Continue with your navigation logic here
+         navigation.navigate("Login")
+        }
+      });
+  
+    }
+    catch(err){
+      console.log("Error",err)
+    }
+}
   const delProduct = async (item) => {
     try {
       

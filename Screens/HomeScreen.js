@@ -106,7 +106,6 @@ return(
     />
   )}
 </View>
-
  </View> 
   <View style={styles.rowContainer}>
       <TouchableOpacity style={styles.itemContainer} onPress={MoveStore}>
@@ -343,8 +342,6 @@ const CustomHeader = ({ navigation }) => (
       </TouchableOpacity>
       <Image source={require('../assets/Ample.png')} style={styles.Logo} />
       <View>
-        <Text style={styles.headerText}>AMkdfd</Text>
-        <Text style={styles.headerText}>Amples</Text>
       </View>
       <TouchableOpacity onPress={() => navigation.navigate("Cart", { user_Id })}>
         <Image source={require('../assets/Trolley.png')} style={styles.Icon} />

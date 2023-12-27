@@ -5,7 +5,7 @@ import TabNavigator from './Screens/tabNavigator';
 import MyPurchase from './Screens/MyPurchase';
 import LocalPurchase from './Screens/LocalPurchase';
 import { Metrics } from './themes';
-import {  useRoute } from '@react-navigation/native';
+import {  useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Search from './Screens/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -86,6 +86,18 @@ const CustomHeader = ({ navigation,user_Id }) => {
     </View>
   );
 };
+function Logout(){
+const navigate=useNavigation();
+    try{
+         AsyncStorage.setItem("KeepLoggedIn","false");
+            
+       navigate.replace("HomeScreen");
+      }
+      catch(Error){
+        console.log("Eror",Error)
+      }
+
+}
 const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
   handleLogout=async()=>{
     try{
@@ -119,6 +131,7 @@ const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
         </View>
 </ImageBackground>
         <DrawerItemList {...props} />
+       
       </View>
     </DrawerContentScrollView>
   );
@@ -152,6 +165,10 @@ export default function DrawerNavigator() {
           <Drawer.Screen name="Contact Us" component={Contact} options={{headerShown:false,drawerIcon: ({color}) => (
             <Image source={require('./assets/Us.png')} style={{width:15,height:20}}/>
           ),}}  />
+          <Drawer.Screen name="Logout" component={Logout} options={{headerShown:false,drawerIcon: ({color}) => (
+            <Image source={require('./assets/logout.png')} style={{width:20,height:20}}/>
+          ),}}  />
+          
     </Drawer.Navigator>
   );
 }
@@ -204,9 +221,8 @@ const styles=StyleSheet.create({
     paddingBottom:Metrics.ratio(50)
   },
   backgroundImage: {
-  
     width: '100%',
-    height: '55%',
+    height: Metrics.ratio(200),
   },
   profileSection: {
     justifyContent:'center',
