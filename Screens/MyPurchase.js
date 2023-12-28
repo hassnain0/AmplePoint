@@ -8,6 +8,7 @@ import AskQuestion from './AskQuestion';
 import CustomDialog from './CustomDialog';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPurchase= ({navigation}) => {
   const route=useRoute();
@@ -18,9 +19,25 @@ const MyPurchase= ({navigation}) => {
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
    
-    
+  const checkAuthentication = async () => {
+    try {
+      // Check if a user token exists in AsyncStorage
+      const userToken = await AsyncStorage.getItem('userToken');
+
+      // If the token exists, the user is logged in
+      if (userToken) {
+        console.log('User is logged in');
+      } else {
+        // If the token doesn't exist, navigate to the login screen
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+    }
+  };
   
   useEffect(()=>{
+    checkAuthentication();
     setLoading(true);
 getProductDetails();
 setLoading(false);

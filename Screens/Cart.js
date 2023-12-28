@@ -11,6 +11,7 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Cart= ({navigation}) => {
   const route=useRoute();
+  console.log("User ID",route.params.user_Id)
   const User_Id=route.params.user_Id;
 
    const [deleteCount,setDeleteCount]=useState(0);

@@ -146,13 +146,12 @@ const navigation1=useNavigation();
     const CompleteProfile=response.data.data
     
    const Data=response.data.data.user_id;
-  login();
+  login(CompleteProfile);
    navigation.replace("HomeScreen",{
       Data,
       CompleteProfile,
     })
   }
-   
       
       }
       
@@ -163,14 +162,19 @@ const navigation1=useNavigation();
   }
 
 
-  const login = async () => {
+  const login = async (CompleteProfile) => {
     try {
       // Perform login logic here
 
       // If login is successful, store the user token in AsyncStorage
      const data= await AsyncStorage.setItem('userToken', 'userTokenValue');
-      console.log("Token",data)
-      // Navigate to the home screen
+     const profileString = JSON.stringify(CompleteProfile);
+
+// Store the string in AsyncStorage
+await AsyncStorage.setItem('CompleteProfile', profileString);
+const storedProfileString = await AsyncStorage.getItem('CompleteProfile');
+console.log("Sotred",storedProfileString)
+// Navigate to the home screen
     } catch (error) {
       console.error('Error during login:', error);
     }

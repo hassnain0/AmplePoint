@@ -678,8 +678,8 @@ return (
    </View>
    <Text style={{  paddingTop:Metrics.ratio(10),
 
-        fontSize:20,
-        fontWeight:'500',
+        fontSize:18,
+        fontWeight:'400',
         color:'#FF2E00'
         }}>Details</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
@@ -704,9 +704,10 @@ return (
    <Text  style={styles.ScreenText}>Your Earn</Text>
    <Text  style={styles.ScreenText2}>{actual_data?.data?.product_info?.pdiscount}</Text>
     </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
+    <View style={{ flexDirection: 'row', }}>
    <Text  style={styles.ScreenText}>Product Message:</Text>
   <Text  style={{ paddingTop:Metrics.ratio(10),
+  marginLeft:Metrics.ratio(150),
     fontSize:10,
     fontWeight:'400',
     color:'black',
@@ -1508,7 +1509,7 @@ borderRadius:Metrics.ratio(70),
       android: 'Cambria', // You may need to adjust this for Android
     }),
     color:'black',
-    fontWeight:'800',
+    fontWeight:'700',
 },
     Text2Container:{
        marginRight:Metrics.ratio(10),

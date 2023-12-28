@@ -113,8 +113,8 @@ return(
         <Image style={styles.ovalImage2} source={require('../assets/Store.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Store</Text>
-        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>Create your own store to</Text>
-        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>maximizes the sale</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Create your own store to</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>maximizes the sale</Text>
       
       </TouchableOpacity>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
@@ -122,8 +122,8 @@ return(
         <Image style={styles.ovalImage2} source={require('../assets/Brand.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>BRANDS</Text>
-        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>Add your brand to promote</Text>
-        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>on an interactive platform</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Add your brand to promote</Text>
+        <Text style={{  fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>on an interactive platform</Text>
     
       </TouchableOpacity>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
@@ -131,8 +131,8 @@ return(
         <Image style={styles.ovalImage2} source={require('../assets/Mall.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>MALL</Text>
-        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>Find your online shop at </Text>
-        <Text style={{ fontSize:10,fontWeight:'200',textAlign:'center',}}>your online mall</Text>
+        <Text style={{  fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Find your online shop at </Text>
+        <Text style={{  fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>your online mall</Text>
       </TouchableOpacity>
       
     </View>
@@ -146,9 +146,9 @@ return(
         <Image style={styles.ovalImageCarts} source={require('../assets/Join.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Join Free</Text>
-        <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>SignUp for A Free</Text>
-        <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>Membership & Get 42</Text>
-        <Text style={{ fontSize:8,fontWeight:'300',textAlign:'center',}}>Ample Points Valued at $5</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>SignUp for A Free</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Membership & Get 42</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Ample Points Valued at $5</Text>
         <View style={styles.horizontalLine} />
         <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>1 Ample Point=12 cents</Text>
       </View>
@@ -158,9 +158,9 @@ return(
         <Image style={styles.ovalImageCarts} source={require('../assets/Earn.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Earn More</Text>
-        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Earn Ample Points For</Text>
-        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Shopping, Sharing Links &</Text>
-        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Watching Personlized Ads</Text>
+        <Text style={{ fontSize:9,fontWeight:'400',textAlign:'center',color:'black'}}>Earn Ample Points For</Text>
+        <Text style={{ fontSize:9,fontWeight:'400',textAlign:'center',color:'black'}}>Shopping, Sharing Links &</Text>
+        <Text style={{ fontSize:9,fontWeight:'400',textAlign:'center',color:'black'}}>Watching Personlized Ads</Text>
         <View style={styles.horizontalLine} />
         <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>60 min = 60 AmplePoints =$7.20</Text>
       </View>
@@ -169,9 +169,9 @@ return(
         <Image style={styles.ovalImageCarts} source={require('../assets/Cards.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Use Amples</Text>
-        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Use Your Ample Points </Text>
-        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>To Get Free Products &</Text>
-        <Text style={{ fontSize:9,fontWeight:'300',textAlign:'center',}}>Discounts</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Use Your Ample Points </Text>
+        <Text style={{  fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>To Get Free Products &</Text>
+        <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',color:'black'}}>Discounts</Text>
         <View style={styles.horizontalLine} />
         <Text style={{ color:'#FF2E00',fontSize:9,fontWeight:'300',textAlign:'center',bottom:Metrics.ratio(10)}}>100 AmplePoints= $12.00</Text>
       </View>

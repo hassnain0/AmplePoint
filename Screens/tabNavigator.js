@@ -19,31 +19,14 @@ const TabNavigator = ({navigation}) => {
   
 
   const route=useRoute();
-  console.log("Route",route.params)
-  const user_id=route.params.user_id;
+  console.log("Route",route)
+  const user_id=route.params.Complete;
   // const route=useRoute();
   // console.log("route.params.Data",route.params)
   // const CompleteProfile=route.params.CompleteProfile;
 
   // const user_Id=route.params.Data
   const [amplePoints,setAmplePoints]=useState(0);
-  useEffect(()=>{
-  const getRewards=async()=>{
-    try{
-      const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
-     const Response= await axios.get(apiUrl, {
-        params: {
-          user_id:user_id,
-        },
-      });
-      setAmplePoints(Response.data.data.user_total_ample);
-    
-    }catch(erro){
-    
-    }
-   }
-   getRewards();
-  },[])
 
   
   return (
@@ -51,12 +34,12 @@ const TabNavigator = ({navigation}) => {
     <Tab.Navigator screenOptions={{
       tabBarStyle: {backgroundColor: "#EEEEEE"}
     }}>
-     <Tab.Screen name="Home" component={HomeScreen} initialParams={{ user_Id: 126,}} options={{tabBarIcon: ({ color, size }) => (
+     <Tab.Screen name="Home" component={HomeScreen} initialParams={{ user_Id: user_id,}} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/home1.png')}style={{width:25,height:25}} ></Image>
            ),header(){
             this.headerShown=false
            } }}/>
-            <Tab.Screen name="Store" component={Store} initialParams={{ user_Id:126 }} options={{tabBarIcon: ({ color, size }) => (
+            <Tab.Screen name="Store" component={Store} initialParams={{ user_Id:user_id}} options={{tabBarIcon: ({ color, size }) => (
            <Image source={require('../assets/Shop.png')}style={{width:22,height:21}} ></Image>
            ),header(){
             this.headerShown=false
