@@ -12,14 +12,17 @@ import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
 import HomeScreen from './HomeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 const Login=({navigation})=>{
   
+const navigation1=useNavigation();
 
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        navigation.replace("HomeScreen")
+       navigation1.replace("HomeScreen");
+       return true       
         
       };
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
@@ -124,16 +127,18 @@ const Login=({navigation})=>{
       return false;
      }
      
-      // if(response.data.data.is_verified==0){
-      //   const Data=response.data;
-      //   setLoader(false);
-      //   util.errorMsg("User not registered");
-      //    navigation.navigate("Verify",{
-      //     Data,})
-      // }
+      if(response.data.data.is_verified==0){
+        const Data=response.data;
+        setLoader(false);
+        util.errorMsg("User not registered");
+         navigation.navigate("Verify",{
+          Data,})
+      }
 
-      else{
-             resetForm();
+
+      else
+      {
+                     resetForm();
         setLoader(false)
          if(response.data && response.data.data.total_ample)
   {
@@ -141,9 +146,8 @@ const Login=({navigation})=>{
     const CompleteProfile=response.data.data
     
    const Data=response.data.data.user_id;
-   const response1=await AsyncStorage.setItem("KeepLoggedIn",JSON.stringify(true));
-   console.log("Done",JSON.stringify(response1))
-    navigation.replace("HomeScreen",{
+  login();
+   navigation.replace("HomeScreen",{
       Data,
       CompleteProfile,
     })
@@ -158,9 +162,19 @@ const Login=({navigation})=>{
     }
   }
 
-  const setAsyncStorage=async()=>{
-   
-  }
+
+  const login = async () => {
+    try {
+      // Perform login logic here
+
+      // If login is successful, store the user token in AsyncStorage
+     const data= await AsyncStorage.setItem('userToken', 'userTokenValue');
+      console.log("Token",data)
+      // Navigate to the home screen
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
  
 return (
 <View>

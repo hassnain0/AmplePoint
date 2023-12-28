@@ -8,6 +8,7 @@ import Checkout from './Checkout';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Cart= ({navigation}) => {
   const route=useRoute();
   const User_Id=route.params.user_Id;
@@ -17,7 +18,7 @@ const Cart= ({navigation}) => {
   
   
   useEffect(()=>{
-    get();
+    checkAuthentication();
 getProductDetails();
 setLoading(false)
   },[deleteCount])
@@ -141,25 +142,22 @@ setLoader(true);
       console.error('Error:', error);
     }
   };
-  const get=async()=>{
-    
-     
-    try{
-      AsyncStorage.getItem("keepLoggedIn", (error, result) => {
-        if (error) {
-          console.error("Error retrieving keepLoggedIn:", error);
-        } else {
-          console.log("keepLoggedIn value:", result);
-          // Continue with your navigation logic here
-         navigation.navigate("Login")
-        }
-      });
-  
+  const checkAuthentication = async () => {
+    try {
+      // Check if a user token exists in AsyncStorage
+      const userToken = await AsyncStorage.getItem('userToken');
+
+      // If the token exists, the user is logged in
+      if (userToken) {
+        console.log('User is logged in');
+      } else {
+        // If the token doesn't exist, navigate to the login screen
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
     }
-    catch(err){
-      console.log("Error",err)
-    }
-}
+  };
   const delProduct = async (item) => {
     try {
       

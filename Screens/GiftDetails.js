@@ -12,12 +12,14 @@ import Swiper from 'react-native-swiper';
 import { useRoute } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Login from './Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GiftDetails=({navigation})=>{
 const [isFocus, setIsFocus] = useState(false);
 const [showNewPrice, setShowNewPrice] = useState(false);
 const [ampleApplied, setAmplesApplied] = useState(false);
-
+const [deleivery_address,setDeleiveryAddress]=useState(null);
 const [value, setValue] = useState(null);
 const [loader,setLoader]=useState(false)
 const [address,setAddress]=useState('');
@@ -45,8 +47,6 @@ const [state, setState] = React.useState({
   last_name: '', 
   email: '',  
   phone: '',
-
-
 });
 const [data, setData] = useState([{ label: 'Select Time', value: '1' }]);
 const _handleTextChange = (name, val) => {
@@ -206,8 +206,12 @@ return false;
   const [isShippingSelected,setIsShippingSelected]=useState(false);
 
   const showShippingDetails = () => {
+    if(checkAuthentication()){
     setIsShippingSelected(!isShippingSelected); 
-   
+    }
+    else{
+      navigation.replace("Login")
+    }
   };
 
   //Method to get Product Details 
@@ -314,8 +318,8 @@ if(deleivery!==null){
         product_id:productId,
         vendor_id:VendorId,
         delivery_type:'delivery',
-        delivery_zipcode:89139,
-        delivery_address:address||' ',
+        delivery_zipcode:'',
+        delivery_address:deleivery_address,
       },
     
     }).then((response)=>{
@@ -521,6 +525,23 @@ const addtocart=()=>{
       }; 
   
   }
+  const checkAuthentication = async () => {
+    try {
+      // Check if a user token exists in AsyncStorage
+      const userToken = await AsyncStorage.getItem('userToken');
+
+      // If the token exists, the user is logged in
+      if (userToken) {
+        console.log('User is logged in');
+        return true;
+      } else {
+        // If the token doesn't exist, navigate to the login screen
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+    }
+  };
   const withAmpples=async()=>{
     
     if(!submit){
@@ -1011,16 +1032,9 @@ return (
         />
       )}
       {deleivery && (
-        <RadioButton.Item
-        label={addressOnline}
-          value="true"
-          color='#FF2E00'
-          labelStyle={{ fontSize: 10 , fontFamily: Platform.select({
-            ios: 'Times New Roman',
-            android: 'serif', // You may need to adjust this for Android
-          }),}} 
-          // Add other props as needed
-        />
+        <>
+        <TextInput placeholder='Enter your Delivery Address' value={deleivery_address} onChangeText={(text)=>setDeleiveryAddress(text)} textAlign='left' auto style={styles.InputContainer3} ></TextInput>
+        </>
       )}
          </RadioButton.Group>
        {pickUp &&( 
@@ -1400,8 +1414,8 @@ justifyContent:'center'
     borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(8),
-    height:  Metrics.ratio(8),
+    width: Metrics.ratio(10),
+    height:  Metrics.ratio(10),
   },
   quantityContainer: {
     backgroundColor: 'white',
@@ -1649,6 +1663,19 @@ slide: {
 image: {
   width: '100%',
   height: '100%',
+},
+InputContainer3:{
+  backgroundColor:'#eeeeee',
+  margin:Metrics.ratio(5),
+  right:Metrics.ratio(10),
+  borderRadius:3,
+  borderWidth:0.5,
+  alignSelf:'center',
+  borderColor:'#C1C3C0',
+  fontSize:12,
+ width:'100%',
+ marginLeft:Metrics.ratio(10),
+ height:Metrics.ratio(58),
 },
 })
 export default GiftDetails;

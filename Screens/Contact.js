@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
       backgroundColor:'#F1F0F7',
       borderRadius:5,
       fontSize:15,
-     width:'100%',
+     width:'90%',
      height:Metrics.ratio(80),
     },
     InputContainer2:{

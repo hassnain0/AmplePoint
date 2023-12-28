@@ -7,17 +7,12 @@ import { useRoute } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from './Login';
-
 const Profile= ({navigation}) => {
     const route=useRoute();
-   
-   
     const user_Id=route.params.user_Id;
-    
     const [data,setData]=useState(null)
     useEffect(()=>{    
-
-    get();
+     checkAuthentication();
         const getHomeContent=async()=>{
             try {
               const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
@@ -35,26 +30,26 @@ const Profile= ({navigation}) => {
              catch (err) {
               console.log("Error fetching data:", err);
             }
-            
             } 
-        
-          getHomeContent();
+        getHomeContent();
     },[])
 
-    const get=async()=>{
-    
-     
-        try{
-          const response1=await AsyncStorage.getItem("KeepLoggedIn");
-          console.log("Response of navigation",response1)
-          if(response1=="false"){
-            navigation.replace("Login")
-          }
-          
+    const checkAuthentication = async () => {
+      try {
+        // Check if a user token exists in AsyncStorage
+        const userToken = await AsyncStorage.getItem('userToken');
+  
+        // If the token exists, the user is logged in
+        if (userToken) {
+          console.log('User is logged in');
+        } else {
+          // If the token doesn't exist, navigate to the login screen
+          navigation.navigate('Login');
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
       }
- catch(Error){
-        console.log("Error",Error)
-      }    }
+    };
   // Dummy data (replace with actual user data)
  const Edit_Profie=()=>{
   navigation.navigate("EditProfile",{
@@ -280,5 +275,4 @@ justifyContent:'center',
   },
 
 });
-
 export default Profile;

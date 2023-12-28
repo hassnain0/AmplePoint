@@ -17,7 +17,6 @@ const Drawer = createDrawerNavigator();
 
 const CustomHeader = ({ navigation,user_Id }) => {
   const [amplePoints,setAmplePoints]=useState(0);
-
   useEffect(()=>{
     const getRewards=async()=>{
       try{
@@ -102,7 +101,6 @@ const CustomDrawerContent = ({ CompleteProfile, ...props }) => {
   handleLogout=async()=>{
     try{
       await AsyncStorage.setItem("KeepLoggedIn","false");
-     const data= await AsyncStorage.getItem("KeepLoggedIn");
      console.log("Data",data)
     //  navigation.replace("HomeScreen");
     }
