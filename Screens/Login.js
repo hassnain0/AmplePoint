@@ -10,7 +10,6 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
-import { useFocusEffect } from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -20,23 +19,8 @@ const Login=({navigation})=>{
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        Alert.alert(
-          'Exit App',
-          'Are you sure you want to exit?',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => null,
-              style: 'cancel'
-            },
-            {
-              text: 'Exit',
-              onPress: () => BackHandler.exitApp()
-            }
-          ],
-          { cancelable: false }
-        );
-        return true;
+        navigation.replace("HomeScreen")
+        
       };
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
       return () =>

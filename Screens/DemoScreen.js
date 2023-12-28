@@ -144,22 +144,13 @@ const getProductDetails = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
-          <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.leftIconView}
-            onPress={() => console.log('navigation', navigation.goBack())}>
-          <Image source={require('../assets/ArrowBack.png')} style={{width:28,height:28}}/>
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>{Name}</Text>
-        </View>
+          
   <ScrollView >
     <View style={{backgroundColor:'white'}}>
-    <View style={{backgroundColor:'white',height:Metrics.ratio(100),width:'100%',position: 'relative' }}>
+    <View style={{backgroundColor:'white',height:Metrics.ratio(70),width:'100%',position: 'relative' }}>
     <Image   source={{ uri: `https://amplepoints.com/vendor-data/${productData.tbl_vndr_id}/profile/${productData.vendor_profileimage}` }} style={styles.StoreImage} resizeMode="cover" />
  </View>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5)}}></View>
-
      <View>
     {Content &&(
     <Swiper
@@ -285,7 +276,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#ff3d00',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: Metrics.ratio(30),
+        paddingVertical: Metrics.ratio(10),
         // paddingHorizontal:Metrics.ratio(5),
       },
       ProductContainer:{

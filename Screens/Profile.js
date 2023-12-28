@@ -17,9 +17,7 @@ const Profile= ({navigation}) => {
     const [data,setData]=useState(null)
     useEffect(()=>{    
 
-     if(get()){
-      navigation.replace("Login")
-     }
+    get();
         const getHomeContent=async()=>{
             try {
               const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
@@ -28,7 +26,7 @@ const Profile= ({navigation}) => {
                   user_id:user_Id
                 }
               });
-              console.log(response.data.data.user_image)
+              console.log("response.data.data.user_image",response.data.data.user_image)
               if(response.data.data)
               {
                 setData(response.data.data)
@@ -47,17 +45,14 @@ const Profile= ({navigation}) => {
     
      
         try{
-          AsyncStorage.getItem("keepLoggedIn", (error, result) => {
-            if (error) {
-              console.error("Error retrieving keepLoggedIn:", error);
-            } else {
-              return true;
-            }
-          });
+          const response1=await AsyncStorage.getItem("KeepLoggedIn");
+          console.log("Response of navigation",response1)
+          if(response1=="false"){
+            navigation.replace("Login")
+          }
+          
       }
-
-        
-      catch(Error){
+ catch(Error){
         console.log("Error",Error)
       }    }
   // Dummy data (replace with actual user data)

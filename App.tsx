@@ -52,7 +52,7 @@ export default function App() {
       <Stack.Screen name='Store' component={Store} options={( ) => ({headerTintColor:'white',headerShown:false,statusBarColor:'#ff3d00',})}/>   
       <Stack.Screen name='Mall' component={Mall} options={( ) => ({headerTintColor:'white',title:'Mall',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Brands' component={Brands} options={( ) => ({headerTintColor:'white',title:'Brands',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
-      <Stack.Screen name='DemoScreen' component={DemoScreen}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
+      <Stack.Screen name='DemoScreen' component={DemoScreen}options={( ) => ({headerTintColor:'white',title:'Products',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Register' component={Register}options={{ statusBarColor:'#ff3d00',headerShown:false}}/>
       <Stack.Screen name='Login' component={Login}options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>  
       <Stack.Screen name='Verify' component={Verify}options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>  
