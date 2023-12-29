@@ -186,11 +186,10 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor:'rgba(245,245,245,255)',
-        margin: Metrics.ratio(10),
         borderRadius:5,
         elevation:3,
         alignItems:'center',
-        padding:Metrics.ratio(7)
+        margin:moderateScale(30),
       },
       TextContainer: {
         fontSize:15,
@@ -208,7 +207,7 @@ const styles=StyleSheet.create({
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
-        marginTop:Metrics.smallMargin,
+        margin:moderateScale(25),
         width: Metrics.ratio(90),
         height: Metrics.ratio(90),
         

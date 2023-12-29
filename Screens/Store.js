@@ -7,7 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import Brands from './Brands';
 import Mall from './Mall';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 // const Stack=createNativeStackNavigator();
 
 const ProductItem = ({ product }) => {
@@ -274,7 +274,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#FFFF',
         borderRadius:5,
         elevation:3,
-        margin:'5%'
+        margin:moderateScale(10),
       },
       TextContainer: {
         fontSize:15,
@@ -292,11 +292,9 @@ const styles=StyleSheet.create({
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
-        margin:'1%',
-        
         width: Metrics.ratio(60),
         height: Metrics.ratio(60),
-        
+        margin:moderateScale(25),
       },
       ProductContainer:{
         fontWeight:'bold',
