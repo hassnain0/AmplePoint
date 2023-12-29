@@ -240,7 +240,10 @@ const styles=StyleSheet.create({
     height: '50%',
 }, Icon:{
   width:Metrics.ratio(27),
-  height:Metrics.ratio(32)},
+  height:Metrics.ratio(32),
+  left:"1%"
+},
+
   searchBar2Container: {
     flex: 1, // This ensures the inner container takes up all available space
     alignItems: 'center', // Center the content horizontally
@@ -268,7 +271,7 @@ const styles=StyleSheet.create({
     backgroundColor:'white'
   },
   Logo:{
-    marginLeft:Metrics.ratio(50),
+    marginLeft:'10%',
     width:Metrics.ratio(200),
     height:Metrics.ratio(30),
   },

@@ -10,7 +10,6 @@ import Login from './Login';
 const Profile= ({navigation}) => {
     const route=useRoute();
     const user_Id=route.params.user_Id;
-    console.log("User ID",user_Id)
     const [data,setData]=useState(null)
     useEffect(()=>{    
      checkAuthentication();

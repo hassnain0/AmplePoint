@@ -19,8 +19,8 @@ const TabNavigator = ({navigation}) => {
   
 
   const route=useRoute();
-  console.log("Route",route.params.CompleteProfile.user_id)
-  const user_id=route.params.CompleteProfile.user_id;
+  // console.log("Route",route.params.CompleteProfile.user_id)
+  const user_id=route.params.CompleteProfile?.user_id;
   
   return (
     
