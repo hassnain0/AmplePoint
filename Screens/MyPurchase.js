@@ -12,10 +12,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPurchase= ({navigation}) => {
   const route=useRoute();
-  const user_Id=route.params.Profile;
-   console.log("Route",route.params.Profile)
-  const User_Id=route.params.user_ID;
-  console.log("User Id",User_Id)
+  const user_id=route.params.CompleteProfile.user_id;
+  
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
    
@@ -37,6 +35,7 @@ const MyPurchase= ({navigation}) => {
   };
   
   useEffect(()=>{
+    console.log("ROute",route.params)
     checkAuthentication();
     setLoading(true);
 getProductDetails();
@@ -65,7 +64,7 @@ setLoading(false);
       const apiUrl = 'https://amplepoints.com/apiendpoint/getuserorderhistory?';
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:user_Id,
+          user_id:user_id,
         },
       });
   

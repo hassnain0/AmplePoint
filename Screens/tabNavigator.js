@@ -19,15 +19,8 @@ const TabNavigator = ({navigation}) => {
   
 
   const route=useRoute();
-  console.log("Route",route)
-  const user_id=route.params.Complete;
-  // const route=useRoute();
-  // console.log("route.params.Data",route.params)
-  // const CompleteProfile=route.params.CompleteProfile;
-
-  // const user_Id=route.params.Data
-  const [amplePoints,setAmplePoints]=useState(0);
-
+  console.log("Route",route.params.CompleteProfile.user_id)
+  const user_id=route.params.CompleteProfile.user_id;
   
   return (
     

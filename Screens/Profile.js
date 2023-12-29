@@ -10,6 +10,7 @@ import Login from './Login';
 const Profile= ({navigation}) => {
     const route=useRoute();
     const user_Id=route.params.user_Id;
+    console.log("User ID",user_Id)
     const [data,setData]=useState(null)
     useEffect(()=>{    
      checkAuthentication();
@@ -21,11 +22,12 @@ const Profile= ({navigation}) => {
                   user_id:user_Id
                 }
               });
-              console.log("response.data.data.user_image",response.data.data.user_image)
-              if(response.data.data)
+              console.log("response.data.data.user_image",response.data.data.total_ample)
+              if(response.data &&response.data.data)
               {
                 setData(response.data.data)
               }
+              
               }
              catch (err) {
               console.log("Error fetching data:", err);

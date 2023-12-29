@@ -20,6 +20,7 @@ const LocalPurchase= ({navigation}) => {
   const [actulaData,setActualData]=useState(null);
   
   useEffect(()=>{
+    checkAuthentication();
 getProductDetails();
 setLoading(false)
   },[deleteCount])
@@ -41,6 +42,23 @@ setLoading(false)
     setSelectedItem(item);
     setVisible(true);
   };
+  const checkAuthentication = async () => {
+    try {
+      // Check if a user token exists in AsyncStorage
+      const userToken = await AsyncStorage.getItem('userToken');
+
+      // If the token exists, the user is logged in
+      if (userToken) {
+        console.log('User is logged in');
+      } else {
+        // If the token doesn't exist, navigate to the login screen
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+    }
+  };
+  
   const getProductDetails = async () => {
     try {    
       const apiUrl = 'https://amplepoints.com/apiendpoint/getuserlocalorderhistory?';
@@ -83,6 +101,23 @@ const handleProductPress=(item)=>{
     item,
   })
 }
+const checkAuthentication = async () => {
+  try {
+    // Check if a user token exists in AsyncStorage
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    // If the token exists, the user is logged in
+    if (userToken) {
+      console.log('User is logged in');
+    } else {
+      // If the token doesn't exist, navigate to the login screen
+      navigation.navigate('Login');
+    }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
+
     return (
       
       <View style={{flex:1,}}>
