@@ -13,13 +13,12 @@ const ProductItem = ({ product,navigation,randomColor }) => {
   return (
     <>
       <View style={styles.productItem}>
-        <Text style={{fontSize:12,color:'black',fontWeight:'700',fontFamily:'Arial',paddingTop:verticalScale(10)}}>{product.category_name}</Text>
+        <Text style={{fontSize:13,color:'black',fontWeight:'600',fontFamily:'Arial',paddingTop:verticalScale(10)}}>{product.category_name}</Text>
         {vendors && vendors.length > 0 && (renderFlatList(vendors,navigation,randomColor))}
       </View>
     </>
   );
 };
-
 const handleProductPress = (productData,navigation) => {
   const Name = productData.vendor_name
   const Id = productData.tbl_vndr_id
@@ -29,7 +28,6 @@ const handleProductPress = (productData,navigation) => {
     Name,
   });
 };
-
 const renderFlatList = (data,navigation,randomColor) => (
 <View>
     <FlatList
@@ -45,7 +43,7 @@ const renderFlatList = (data,navigation,randomColor) => (
         height:verticalScale(70),
         width:Metrics.ratio(70),
         alignSelf:'center', 
-        margin:scale(20),
+        margin:moderateScale(15),
         }}>   
             <Image
               source={{
@@ -55,18 +53,18 @@ const renderFlatList = (data,navigation,randomColor) => (
               resizeMode="cover"
             />
             </View>
-            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 10 }}>
-              {item.vendor_name}
+            <Text style={{ fontSize: 10, fontWeight: '700', paddingBottom: 10,textAlign:'center' }}>
+              {item.vendor_name.split(' ').slice(0, 1).join(' ')}
             </Text>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
               <Image source={require('../assets/pin.jpg')} style={{ width: 15, height: 15 }} />
-              <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: Metrics.ratio(5) }}>
+              <Text style={{ fontSize: 8, fontWeight: 'bold', paddingBottom: Metrics.ratio(5) }}>
                 {item.tbl_vndr_city}
               </Text>
             </View>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
               <Image source={require('../assets/Pin2.png')} style={{ width: 15, height: 15 }} />
-              <Text style={{ fontSize: 10, fontWeight: 'bold',}}>
+              <Text style={{ fontSize: 8, fontWeight: 'bold',}}>
                 {item.tbl_vndr_zip}
               </Text>
             </View>
@@ -99,9 +97,7 @@ const MallDetail = ({ navigation }) => {
         .then(response => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data.data);
-          }
-          console.log("Response", response.data)
-
+          } 
         })
         .catch(error => {
           // Handle the error
@@ -222,14 +218,14 @@ const styles = StyleSheet.create({
   },
   productItem: {
     
-    margin: scale(7),
+    margin: scale(6),
 
   },
   header: {
     backgroundColor: '#ff3d00',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: verticalScale(20),
+    paddingVertical: verticalScale(1),
     // paddingHorizontal:Metrics.ratio(5),
   },
   TextContainer: {

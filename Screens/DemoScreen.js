@@ -7,16 +7,15 @@ import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Card, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import { moderateScale, scale, verticalScale,horizantalScale } from 'react-native-size-matters';
+import { moderateScale,verticalScale, } from 'react-native-size-matters';
 const ProductItem = ({ product }) => {
   return (
-
-    <View style={styles.productItem}>
+<View style={styles.productItem}>
   <Text style={{  fontSize: moderateScale(10), fontWeight: 'bold', color: 'black' }}>
   {product.pname.split(' ').slice(0, 2).join(' ')}
 </Text>
     <View>
-      <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
+      <Image source={{ uri: `https://amplepoints.com/product_images/${product?.pid}/${product?.img_name}` }} style={styles.productImage} resizeMode="cover" />
     </View>
     <Text style={styles.ProductContainer}>{product.pvendor}</Text>
   
@@ -230,7 +229,7 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor: 'white',
-        margin: moderateScale(12),
+        margin: moderateScale(10),
         borderRadius: 5,
         elevation: 5,
         flexDirection: 'column', // Make sure items are stacked vertically

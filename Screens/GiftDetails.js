@@ -1,5 +1,5 @@
-import React,{useEffect, useState} from 'react';
-import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Share} from 'react-native';
+import React,{useEffect, useRef, useState} from 'react';
+import {View,Text, StyleSheet,ScrollView,Image,TouchableOpacity,TextInput, SafeAreaView,Share, Platform} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
 import { ActivityIndicator, RadioButton } from 'react-native-paper';
@@ -14,6 +14,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Login from './Login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { verticalScale } from 'react-native-size-matters';
 
 const GiftDetails=({navigation})=>{
 const [isFocus, setIsFocus] = useState(false);
@@ -215,7 +216,6 @@ checkAuthentication();
   
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
 
   const handleDateChange =async (event, date) => {
@@ -604,17 +604,22 @@ return (
       <View>
     <View >
    
-   <View style={styles.ViewContainer}>    
-   {imageData && (
-      <Swiper style={{height:Metrics.ratio(300),top:Metrics.ratio(20)}}>
-        {imageData.map((image, index) => (
-          <View key={index} >
-            <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${image.pid}/${image.pimage}` }} />
-          </View>
-        ))}
-      </Swiper>
-    )} 
-     </View>
+    <View style={styles.ViewContainer}>
+      {imageData && (
+        <Swiper
+          style={{ height: verticalScale(300), top: Metrics.ratio(20) }}        >
+          {imageData.map((image, index) => (
+            <View key={index}>
+              <Image
+                style={styles.ImageContainer}
+                source={{ uri: `https://amplepoints.com/product_images/${image.pid}/${image.pimage}` }}
+              />
+            </View>
+          ))}
+        </Swiper>
+      )}
+
+    </View>
    <View style={styles.ShareContainer}>
   <TouchableOpacity onPress={handleShare} style={{ backgroundColor: 'transparent', padding: 10, margin: 10 }}>
         <Image source={require('../assets/Share.png')} style={{width:Metrics.ratio(30), height:Metrics.ratio(30)}}/>
