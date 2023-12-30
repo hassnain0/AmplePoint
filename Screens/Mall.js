@@ -6,14 +6,35 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import MallDetail from './MallDetail';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 const ProductItem = ({ product }) => {
-    
+  const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
+console.log("Producy",product)
+  // Randomly select a background color for each image
+  const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+
   return (
 
-    <View style={styles.productItem}>     
+    <View style={styles.productItem}> 
+    <View style={{backgroundColor:randomColor,borderRadius:100,alignContent:'center',
+        alignItems:'center',
+        height:verticalScale(70),
+        width:Metrics.ratio(70),
+        alignSelf:'center', 
+        margin:scale(20),
+        }}>    
     <Image   source={{ uri: `https://amplepoints.com/mall/logo/${product.logo_image}` }} style={styles.productImage} resizeMode="cover" />
-    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20,textAlign:'center'}}>{product.display_name}</Text>
+    </View>
+    <Text style={{fontSize:10,fontWeight:'600', color:'black',paddingBottom:verticalScale(20),paddingBottom:20,textAlign:'center'}}>{product.display_name}</Text>
+    <View style={{flex:1,flexDirection:'row'}}>
+        <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
+        <Text style={{fontSize:10,fontWeight:'bold',}}>{product.vendor_city}</Text>
+    </View>
+    <View style={{flex:1,flexDirection:'row'}}>
+        <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
+        <Text style={{fontSize:10,fontWeight:'bold', }}>{product.tbl_vndr_zip}</Text>
+    </View>
     </View>
   );
 };
@@ -59,7 +80,7 @@ const getProductDetails = async () => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
           }
-          console.log("Response",response.data)
+          console.log("Response",response.data.data)
         })
         .catch(error => {
           // Handle the error
@@ -104,7 +125,7 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
-  <ScrollView>
+  <ScrollView style={{backgroundColor:'white'}}>
     <View style={styles.container}>
         <View style={styles.searchBarContainer}>
         
@@ -185,11 +206,11 @@ const styles=StyleSheet.create({
       },
       
       productItem: {
-        backgroundColor:'rgba(245,245,245,255)',
+        backgroundColor:'#f5f5f5',
         borderRadius:5,
         elevation:3,
         alignItems:'center',
-        margin:moderateScale(30),
+        margin:moderateScale(5),
       },
       TextContainer: {
         fontSize:15,
@@ -203,13 +224,13 @@ const styles=StyleSheet.create({
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       productImage: {
-        borderRadius:100,
+
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
-        margin:moderateScale(25),
-        width: Metrics.ratio(90),
-        height: Metrics.ratio(90),
+        margin:moderateScale(20),
+        width: Metrics.ratio(50),
+        height: Metrics.ratio(50),
         
       },
       ProductContainer:{

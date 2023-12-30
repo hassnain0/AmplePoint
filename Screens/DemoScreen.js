@@ -7,11 +7,12 @@ import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Card, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 const ProductItem = ({ product }) => {
   return (
 
     <View style={styles.productItem}>
-  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
+  <Text style={{  fontSize: moderateScale(10), fontWeight: 'bold', color: 'black' }}>
   {product.pname.split(' ').slice(0, 2).join(' ')}
 </Text>
     <View>
@@ -20,8 +21,8 @@ const ProductItem = ({ product }) => {
     <Text style={styles.ProductContainer}>{product.pvendor}</Text>
   
     <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
-      <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
+      <Text style={{ paddingRight: moderateScale(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
+      <View style={{ paddingHorizontal: moderateScale(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
         <Text style={{ color: '#618ED7', fontWeight: '600', fontSize: 10 }}>{`${product.pdiscount} % Back`}</Text>
       </View>
     </View>
@@ -229,11 +230,11 @@ const styles=StyleSheet.create({
       },
       
       productItem: {
-        backgroundColor:'white',
-        margin: Metrics.ratio(20),
-        marginBottom:Metrics.ratio(20),
-        borderRadius:5,
-        elevation:5
+        backgroundColor: 'white',
+        margin: moderateScale(8),
+        borderRadius: 5,
+        elevation: 5,
+        flexDirection: 'column', // Make sure items are stacked vertically
       },
       TextContainer: {
         fontSize:15,
@@ -257,9 +258,10 @@ const styles=StyleSheet.create({
         }),
       },
       productImage: {
-        borderRadius:10,
-        width: Metrics.ratio(120),
-        height: Metrics.ratio(120),
+        borderRadius:moderateScale(10),
+        width: '50%', // This ensures the image takes the full width of the container
+        height: moderateScale(100), // Adjust the height as needed
+        borderRadius: 5,
         
       },
       StoreImage: {
@@ -267,7 +269,8 @@ const styles=StyleSheet.create({
         height: Metrics.ratio(50),
         alignSelf:'left',
         justifyContent:'left',
-        position: 'absolute', bottom: 0, width: 60, height: 60,
+        position: 'absolute', 
+        bottom: 0, width: 60, height: 60,
         
   
         
@@ -276,7 +279,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#ff3d00',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: Metrics.ratio(10),
+        paddingVertical: verticalScale(10),
         // paddingHorizontal:Metrics.ratio(5),
       },
       ProductContainer:{

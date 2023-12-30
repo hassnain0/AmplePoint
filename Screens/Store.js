@@ -294,7 +294,7 @@ const styles=StyleSheet.create({
         alignSelf:'center',
         width: Metrics.ratio(60),
         height: Metrics.ratio(60),
-        margin:moderateScale(25),
+        margin:moderateScale(20),
       },
       ProductContainer:{
         fontWeight:'bold',

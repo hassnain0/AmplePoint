@@ -13,6 +13,7 @@ import TermsCondition from './Screens/TermsCondition';
 import Contact from './Screens/Contact';
 import Login from './Screens/Login';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { scale } from 'react-native-size-matters';
 
 
 const Drawer = createDrawerNavigator();
@@ -56,7 +57,7 @@ const CustomHeader = ({ navigation,user_Id }) => {
         </TouchableOpacity>
         <Image source={require('./assets/Ample.png')} style={styles.Logo} />
       {amplePoints>0 &&(
-        <View >
+        <View style={{marginLeft:scale(10)}}>
         <Text style={{
       color: 'black',
       fontSize: 9,
@@ -241,7 +242,7 @@ const styles=StyleSheet.create({
 }, Icon:{
   width:Metrics.ratio(27),
   height:Metrics.ratio(32),
-  left:"1%"
+  marginLeft:scale(20)
 },
 
   searchBar2Container: {

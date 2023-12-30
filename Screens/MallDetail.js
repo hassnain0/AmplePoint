@@ -4,6 +4,7 @@ import { Colors, Metrics } from '../themes';
 import axios from 'axios';
 import {  useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { scale, verticalScale } from 'react-native-size-matters';
 
 const ProductItem = ({ product,navigation }) => {
   
@@ -11,8 +12,8 @@ const ProductItem = ({ product,navigation }) => {
   
   return (
     <>
-      <View>
-        <Text style={{fontSize:12,color:'black',fontWeight:'700',fontFamily:'Arial'}}>{product.category_name}</Text>
+      <View style={styles.productItem}>
+        <Text style={{fontSize:12,color:'black',fontWeight:'600',fontFamily:'Arial',paddingTop:verticalScale(10)}}>{product.category_name}</Text>
         {vendors && vendors.length > 0 && (renderFlatList(vendors,navigation))}
       </View>
     </>
@@ -38,7 +39,7 @@ const renderFlatList = (data,navigation) => (
       keyExtractor={(item) => item.tbl_vndr_id}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => handleProductPress(item,navigation)}>
-          <View style={{padding : Metrics.ratio(5), backgroundColor : "rgba(245,245,245,255)", borderRadius : Metrics.ratio(10),margin : Metrics.ratio(2),elevation:3}}>
+          <View style={{padding : scale(5), backgroundColor : "#f5f5f5", borderRadius : Metrics.ratio(10),margin : scale(2),elevation:3}}>
             <Image
               source={{
                 uri: `https://amplepoints.com/vendor-data/${item.tbl_vndr_id}/profile/${item.vendor_profileimage}`,
@@ -112,7 +113,7 @@ const MallDetail = ({ navigation }) => {
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView >
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={1}
@@ -122,7 +123,7 @@ const MallDetail = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.textHeader}>{Name}</Text>
       </View>
-      <ScrollView>
+      <ScrollView style={{backgroundColor:'white'}}>
 
         <View style={styles.container}>
           <Spinner
@@ -222,16 +223,15 @@ const styles = StyleSheet.create({
   },
 
   productItem: {
-    backgroundColor: '#FFFF',
-    margin: Metrics.ratio(5),
-    borderRadius: 5,
-    elevation: 3
+    
+    margin: scale(7),
+
   },
   header: {
     backgroundColor: '#ff3d00',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: Metrics.ratio(20),
+    paddingVertical: verticalScale(20),
     // paddingHorizontal:Metrics.ratio(5),
   },
   TextContainer: {
