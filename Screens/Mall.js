@@ -27,14 +27,7 @@ console.log("Producy",product)
     <Image   source={{ uri: `https://amplepoints.com/mall/logo/${product.logo_image}` }} style={styles.productImage} resizeMode="cover" />
     </View>
     <Text style={{fontSize:10,fontWeight:'600', color:'black',paddingBottom:verticalScale(20),paddingBottom:20,textAlign:'center'}}>{product.display_name}</Text>
-    <View style={{flex:1,flexDirection:'row'}}>
-        <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold',}}>{product.vendor_city}</Text>
-    </View>
-    <View style={{flex:1,flexDirection:'row'}}>
-        <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', }}>{product.tbl_vndr_zip}</Text>
-    </View>
+   
     </View>
   );
 };

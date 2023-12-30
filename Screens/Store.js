@@ -12,19 +12,33 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 const ProductItem = ({ product }) => {
 
+  const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
+
+  // Randomly select a background color for each image
+  const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+
   return (
 
-    <View style={styles.productItem}>     
+    <View style={styles.productItem}> 
+    <View style={{backgroundColor:randomColor,borderRadius:100,alignContent:'center',
+        alignItems:'center',
+        height:verticalScale(70),
+        width:Metrics.ratio(70),
+        alignSelf:'center', 
+        margin:scale(20),
+        }}> 
     <Image   source={{ uri: `https://amplepoints.com/vendor-data/${product.tbl_vndr_id}/profile/${product.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
-    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:Metrics.ratio(10)}}>{product.vendor_name}</Text>
-    <View style={{flex:1,flexDirection:'row'}}>
-        <Image source={require('../assets/pin.jpg')} style={{width:15,height:15}}/>
+    </View>
+    <Text style={{fontSize:10,fontWeight:'400', color:'black',paddingBottom:Metrics.ratio(10)}}>{product.vendor_name}</Text>
+    <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
+        <Image source={require('../assets/pin.jpg')} style={{width:10,height:10}}/>
         <Text style={{fontSize:10,fontWeight:'bold',}}>{product.vendor_city}</Text>
     </View>
-    <View style={{flex:1,flexDirection:'row'}}>
-        <Image source={require('../assets/Pin2.png')} style={{width:15,height:15}}/>
+    <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
+        <Image source={require('../assets/Pin2.png')} style={{width:10,height:10}}/>
         <Text style={{fontSize:10,fontWeight:'bold', }}>{product.tbl_vndr_zip}</Text>
-    </View>
+    
+        </View>
     </View>
   );
 };
@@ -124,11 +138,9 @@ const getstores = async () => {
   
     
     return (
-  <ScrollView style={{backgroundColor:'#EEEEEE'}}>
 
-    
-    
-        <View style={styles.rowContainer}>
+      <>
+      <View style={styles.rowContainer}>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
         <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
       </TouchableOpacity>
@@ -139,7 +151,8 @@ const getstores = async () => {
       </TouchableOpacity>
       
     </View>
-    <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10)}} >  
+  <ScrollView style={{backgroundColor:'#EEEEEE'}}>
+  <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10)}} >  
     </View>
     <View style={{backgroundColor:'white'}}>
     <Spinner
@@ -158,6 +171,7 @@ const getstores = async () => {
       )}
       </View>
     </ScrollView>
+    </>
 )
       }
 
@@ -271,10 +285,11 @@ const styles=StyleSheet.create({
         // paddingHorizontal:Metrics.ratio(5),
       },
       productItem: {
-        backgroundColor:'#FFFF',
+        backgroundColor:'#f5f5f5',
         borderRadius:5,
         elevation:3,
-        margin:moderateScale(10),
+        alignItems:'center',
+        margin:moderateScale(5),
       },
       TextContainer: {
         fontSize:15,
@@ -288,13 +303,14 @@ const styles=StyleSheet.create({
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       productImage: {
-        borderRadius:100,
+
         alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
-        width: Metrics.ratio(60),
-        height: Metrics.ratio(60),
         margin:moderateScale(20),
+        width: Metrics.ratio(50),
+        height: Metrics.ratio(50),
+        
       },
       ProductContainer:{
         fontWeight:'bold',
