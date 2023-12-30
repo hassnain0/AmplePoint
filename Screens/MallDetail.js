@@ -4,17 +4,17 @@ import { Colors, Metrics } from '../themes';
 import axios from 'axios';
 import {  useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { scale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
-const ProductItem = ({ product,navigation }) => {
-  
+const ProductItem = ({ product,navigation,randomColor }) => {
+
   const vendors = product.vendor_list;
-  
+  console.log("Vendors",vendors)
   return (
     <>
       <View style={styles.productItem}>
-        <Text style={{fontSize:12,color:'black',fontWeight:'600',fontFamily:'Arial',paddingTop:verticalScale(10)}}>{product.category_name}</Text>
-        {vendors && vendors.length > 0 && (renderFlatList(vendors,navigation))}
+        <Text style={{fontSize:12,color:'black',fontWeight:'700',fontFamily:'Arial',paddingTop:verticalScale(10)}}>{product.category_name}</Text>
+        {vendors && vendors.length > 0 && (renderFlatList(vendors,navigation,randomColor))}
       </View>
     </>
   );
@@ -29,9 +29,9 @@ const handleProductPress = (productData,navigation) => {
     Name,
   });
 };
-const renderFlatList = (data,navigation) => (
-  
-  <View>
+
+const renderFlatList = (data,navigation,randomColor) => (
+<View>
     <FlatList
       data={data}
       showsHorizontalScrollIndicator={false}
@@ -40,6 +40,13 @@ const renderFlatList = (data,navigation) => (
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => handleProductPress(item,navigation)}>
           <View style={{padding : scale(5), backgroundColor : "#f5f5f5", borderRadius : Metrics.ratio(10),margin : scale(2),elevation:3}}>
+          <View style={{backgroundColor:randomColor,borderRadius:moderateScale(100),alignContent:'center',
+        alignItems:'center',
+        height:verticalScale(70),
+        width:Metrics.ratio(70),
+        alignSelf:'center', 
+        margin:scale(20),
+        }}>   
             <Image
               source={{
                 uri: `https://amplepoints.com/vendor-data/${item.tbl_vndr_id}/profile/${item.vendor_profileimage}`,
@@ -47,6 +54,7 @@ const renderFlatList = (data,navigation) => (
               style={styles.productImage}
               resizeMode="cover"
             />
+            </View>
             <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 10 }}>
               {item.vendor_name}
             </Text>
@@ -110,10 +118,11 @@ const MallDetail = ({ navigation }) => {
       setLoading(false);
     }
   }
-
+  const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
+const randomColor = backgroundColors[Math.floor(Math.random()* backgroundColors.length)];
 
   return (
-    <SafeAreaView >
+    <SafeAreaView style={{backgroundColor:'white'}} >
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={1}
@@ -125,7 +134,7 @@ const MallDetail = ({ navigation }) => {
       </View>
       <ScrollView style={{backgroundColor:'white'}}>
 
-        <View style={styles.container}>
+        <View style={{backgroundColor:'white'}} >
           <Spinner
             visible={loading}
             size={'large'}
@@ -136,7 +145,7 @@ const MallDetail = ({ navigation }) => {
 
           <View>
             {storeProducts && storeProducts.map(e =>
-              <ProductItem product={e} navigation={navigation}/>
+              <ProductItem product={e} navigation={navigation} randomColor={randomColor}/>
               // renderFlatList(storeProducts)
             )}
           </View>
@@ -211,17 +220,6 @@ const styles = StyleSheet.create({
     color: 'black', // Optional: set the text color
     fontWeight: 'bold'
   },
-  Icon: {
-    width: Metrics.ratio(27),
-    height: Metrics.ratio(32),
-    left: Metrics.ratio(10)
-  },
-  SideMenu: {
-    width: Metrics.ratio(40),
-    height: Metrics.ratio(40),
-    left: Metrics.ratio(10)
-  },
-
   productItem: {
     
     margin: scale(7),
@@ -246,14 +244,14 @@ const styles = StyleSheet.create({
     paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
   },
   productImage: {
-    borderRadius: 100,
-    alignContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: Metrics.smallMargin,
-    width: Metrics.ratio(100),
-    height: Metrics.ratio(90),
 
+    alignContent:'center',
+    alignItems:'center',
+    alignSelf:'center',
+    margin:moderateScale(20),
+    width: Metrics.ratio(50),
+    height: Metrics.ratio(50),
+    
   },
   ProductContainer: {
     fontWeight: 'bold',

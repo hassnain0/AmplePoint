@@ -7,7 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Card, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, scale, verticalScale,horizantalScale } from 'react-native-size-matters';
 const ProductItem = ({ product }) => {
   return (
 
@@ -110,8 +110,7 @@ const getProductDetails = async () => {
     
     }
     const renderFlatList = (data) => (
-   
-      <View>
+   <View>
     <FlatList
       data={data}
       numColumns={2} 
@@ -231,7 +230,7 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor: 'white',
-        margin: moderateScale(8),
+        margin: moderateScale(12),
         borderRadius: 5,
         elevation: 5,
         flexDirection: 'column', // Make sure items are stacked vertically
@@ -259,9 +258,11 @@ const styles=StyleSheet.create({
       },
       productImage: {
         borderRadius:moderateScale(10),
-        width: '50%', // This ensures the image takes the full width of the container
-        height: moderateScale(100), // Adjust the height as needed
+        width: '60%', // This ensures the image takes the full width of the container
+        height: moderateScale(150), // Adjust the height as needed
         borderRadius: 5,
+        alignContent:'center',
+        alignItems:'center'
         
       },
       StoreImage: {

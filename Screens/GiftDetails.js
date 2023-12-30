@@ -206,12 +206,9 @@ return false;
   const [isShippingSelected,setIsShippingSelected]=useState(false);
 
   const showShippingDetails = () => {
-    if(checkAuthentication()){
-    setIsShippingSelected(!isShippingSelected); 
-    }
-    else{
-      navigation.replace("Login")
-    }
+checkAuthentication();
+    setIsShippingSelected(!isShippingSelected);
+   
   };
 
   //Method to get Product Details 
@@ -532,8 +529,7 @@ const addtocart=()=>{
 
       // If the token exists, the user is logged in
       if (userToken) {
-        console.log('User is logged in');
-        return true;
+return true;
       } else {
         // If the token doesn't exist, navigate to the login screen
         navigation.navigate('Login');
