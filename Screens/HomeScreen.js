@@ -1,12 +1,13 @@
-import React, { useEffect,useRef,useState } from 'react';
-import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet,Alert,BackHandler, Image,TextInput,Platform, ScrollView} from "react-native";
+import React, { useEffect,useState } from 'react';
+import { Text, View,TouchableOpacity, SafeAreaView, StyleSheet,Alert,BackHandler, Image,ScrollView, Dimensions} from "react-native";
 import Mall from './Mall';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+
+import { createDrawerNavigator,  } from '@react-navigation/drawer';
 import Store from './Store';
 import { Metrics } from '../themes';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import { ImageSlider } from 'react-native-image-slider-banner';
+import { CarouselSlider } from "react-native-carousel-image-slider";
 import Cart from './Cart';
 import Brands from './Brands';
 import MyPurchase from './MyPurchase';
@@ -86,37 +87,63 @@ const handlePlayPause = async () => {
 
   setIsPlaying(!isPlaying);
 };
+
+const { width: screenWidth } = Dimensions.get('window');
+const RoundedImageSlider = ({ images }) => {
+  if (!images || !Array.isArray(images) || images.length === 0) {
+    return null; // or handle the case when images are not available
+  }
+  const renderDots = (index, currentIndex, opacity) => (
+    <View
+      key={index}
+      style={{
+        height: 8,
+        width: 8,
+        borderRadius: 4,
+        marginHorizontal: 5,
+        backgroundColor: 'white',
+        opacity,
+      }}
+    />
+  );
+
+  return (
+    <CarouselSlider
+      autoplay
+      autoplayTimeout={5000}
+      loop
+      index={0}
+      items={images.map(imgUrl => ({ image: imgUrl }))}
+      renderItem={(item, index) => (
+        <View key={index} style={{ borderRadius: 10, overflow: 'hidden' }}>
+          <Image
+            source={{ uri: item.image }}
+            style={{ width: '100%', aspectRatio: 16 / 9, borderRadius: 10 }}
+          />
+        </View>
+      )}
+      renderDots={renderDots} // Pass the renderDots function to CarouselSlider
+    />
+  );
+};
+  
 return(
   <SafeAreaView>
     <ScrollView>
   
     <View style={{backgroundColor:'white'}}>
-    <View style={{
-  marginLeft: Metrics.ratio(7),
-  bottom: Metrics.ratio(50),
-  width: Metrics.ratio(370),
-  height: Metrics.ratio(150),
-  borderRadius: 20,
-  
-  }}> 
-  {images && (
-    <ImageSlider
-      data={images.map((imgUrl) => ({ img: imgUrl }))}
-      autoPlay={true}
-      closeIconColor="white"
-    />
-  )}
-</View>
+     
+    {images && <RoundedImageSlider images={images} />}
+
  </View> 
   <View style={styles.rowContainer}>
       <TouchableOpacity style={styles.itemContainer} onPress={MoveStore}>
-      
+
         <Image style={styles.ovalImage2} source={require('../assets/Store.jpeg')} />
         <Text style={{ fontSize:12,fontWeight:'700',textAlign:'center',
        color:'black',fontStyle:'italic'}}>Store</Text>
         <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',}}>Create your own store to</Text>
         <Text style={{ fontSize:8,fontWeight:'400',textAlign:'center',}}>maximizes the sale</Text>
-      
       </TouchableOpacity>
       <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
     
@@ -142,7 +169,6 @@ return(
     <Text style={{ fontSize:15,fontWeight:'700',textAlign:'left',paddingTop:Metrics.ratio(10),paddingLeft:Metrics.ratio(20),
        color:'black',}}>How it Works</Text>
         <View style={styles.AnotherrowContainer}>
-
       <View style={styles.cartContainer}>
         <Image style={styles.ovalImageCarts} source={require('../assets/Join.png')} />
         <Text style={{ fontSize:8,fontWeight:'700',textAlign:'center',
