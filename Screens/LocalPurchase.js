@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text,Image, StyleSheet,ActivityIndicator,ScrollView,Modal,TouchableOpacity, SafeAreaView} from 'react-native';
+import { View, Text,Image, StyleSheet,ScrollView,TouchableOpacity, SafeAreaView} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
@@ -8,21 +8,20 @@ import AskQuestion from './AskQuestion';
 import CustomDialog from './CustomDialog';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
-// import Spinner from 'react-native-loading-spinner-overlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LocalPurchase= ({navigation}) => {
-  const route=useRoute();
-  const user_Id=route.params.Profile;
-   console.log("Route",route.params.Profile)
-  const User_Id=route.params.user_ID;
-  console.log("User Id",User_Id)
-  const [deleteCount,setDelete]=useState(0);
-  const [actulaData,setActualData]=useState(null);
+  const LocalPurchase= ({navigation}) => {
+
+    const route=useRoute();
+    console.log("ROute",route.params)
+    const user_id=route.params.user_id;
+  const [deleteCount,setDelete]=useState(0);                  
+  const [actulaData,setActualData]=useState(null);                   
   
   useEffect(()=>{
-    checkAuthentication();
-getProductDetails();
-setLoading(false)
+  checkAuthentication();
+  getProductDetails();
+  setLoading(false)
   },[deleteCount])
   const [quantity, setQuantity] = useState(1);
   const [visibile, setVisible] = useState(false);
@@ -32,12 +31,6 @@ setLoading(false)
  //Number of Carts recieved from API
  const [product_no,setProduct_no]=useState(0);
 
-
-//   const CheckOutScreen=()=>{
-//     navigation.navigate("Checkout")
-//   }
-
-  //CheckOut
   const handleOpenDialog = (item) => {
     setSelectedItem(item);
     setVisible(true);
@@ -64,11 +57,11 @@ setLoading(false)
       const apiUrl = 'https://amplepoints.com/apiendpoint/getuserlocalorderhistory?';
       const response = await axios.get(apiUrl, {
         params: {
-          user_id:User_Id,
+          user_id:user_id,
         },
       });
-  
-      // Handle the successful response
+
+      
       setActualData(response.data)
       setProduct_no(response.data.length);
       const cart_items=response.data.data;
@@ -78,14 +71,9 @@ setLoading(false)
       }
       setLoading(false)
     } catch (error) {
-      // Handle the error
       console.error('Error:', error);
     }
   };
- 
-  const Return=()=>{
-
-  }
   const Question=(item)=>{
     navigation.navigate("AskQuestion",{
       item,
@@ -96,30 +84,12 @@ setLoading(false)
     setVisible(false);
   };
   const MyComponent =()=>{
-const handleProductPress=(item)=>{
-  navigation.navigate("Return",{
+  const handleProductPress=(item)=>{
+   navigation.navigate("Return",{
     item,
   })
 }
-const checkAuthentication = async () => {
-  try {
-    // Check if a user token exists in AsyncStorage
-    const userToken = await AsyncStorage.getItem('userToken');
-
-    // If the token exists, the user is logged in
-    if (userToken) {
-      console.log('User is logged in');
-    } else {
-      // If the token doesn't exist, navigate to the login screen
-      navigation.navigate('Login');
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
-
-    return (
-      
+   return (
       <View style={{flex:1,}}>
       <Spinner
           visible={loading}
@@ -141,7 +111,6 @@ const checkAuthentication = async () => {
     ios: 'Arial',
     android: 'Arial', // You may need to adjust this for Android
   }), }}>{item.purchase_date}</Text>
-
   </View>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
   <Text style={{ fontSize:8,fontWeight:'00',bottom:Metrics.ratio(20) ,color:'black',fontFamily: Platform.select({ios: 'Arial',android: 'Arial', // You may need to adjust this for Android

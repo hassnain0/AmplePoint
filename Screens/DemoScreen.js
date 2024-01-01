@@ -1,5 +1,5 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Platform, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler, SafeAreaView,} from 'react-native';
+import {View,Text, StyleSheet,FlatList,ScrollView,Image,TouchableOpacity, BackHandler, SafeAreaView,} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
@@ -244,18 +244,8 @@ const styles=StyleSheet.create({
         bottom: Metrics.ratio(10), // Adjust as needed
         left: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
-      },  textHeader: {
-        textAlign:'center',
-        alignContent:'center',
-        color: Colors.white,
-        fontSize: Metrics.ratio(15),
-        paddingLeft: Metrics.ratio(20),
-        fontFamily: Platform.select({
-          ios: 'Times New Roman',
-          android: 'serif', // You may need to adjust this for Android
-        }),
-      },
-      productImage: {
+      }, 
+      protextHeaderductImage: {
         borderRadius:moderateScale(10),
         width: '60%', // This ensures the image takes the full width of the container
         height: moderateScale(150), // Adjust the height as needed

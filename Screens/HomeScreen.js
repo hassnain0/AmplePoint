@@ -58,16 +58,12 @@ useEffect(() => {
     try {
       const apiUrl = 'https://amplepoints.com/apiendpoint/gethomecontent';
       const response = await axios.get(apiUrl);
-      console.log(response.data.data.sider_images)
-     
         setImages(response.data.data.sider_images);
       }
      catch (err) {
       console.log("Error fetching data:", err);
     }
-    
-    } 
-
+    }
   getHomeContent();
 
   }, []);
@@ -93,6 +89,8 @@ const RoundedImageSlider = ({ images }) => {
   if (!images || !Array.isArray(images) || images.length === 0) {
     return null; // or handle the case when images are not available
   }
+  console.log("IMage",images)
+
   const renderDots = (index, currentIndex, opacity) => (
     <View
       key={index}
@@ -108,12 +106,14 @@ const RoundedImageSlider = ({ images }) => {
   );
 
   return (
-    <CarouselSlider
+  <>
+  {images && (  <CarouselSlider
       autoplay
       autoplayTimeout={5000}
       loop
       index={0}
-      items={images.map(imgUrl => ({ image: imgUrl }))}
+      
+      items={images?.map(imgUrl => ({ image: imgUrl }))}
       renderItem={(item, index) => (
         <View key={index} style={{ borderRadius: 10, overflow: 'hidden' }}>
           <Image
@@ -122,8 +122,11 @@ const RoundedImageSlider = ({ images }) => {
           />
         </View>
       )}
-      renderDots={renderDots} // Pass the renderDots function to CarouselSlider
+     
     />
+    
+    )}
+    </>
   );
 };
   
@@ -133,7 +136,7 @@ return(
   
     <View style={{backgroundColor:'white'}}>
      
-    {images && <RoundedImageSlider images={images} />}
+    {/* {images && <RoundedImageSlider images={images} />} */}
 
  </View> 
   <View style={styles.rowContainer}>

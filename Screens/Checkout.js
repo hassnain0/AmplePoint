@@ -19,7 +19,7 @@ const Checkout= ({navigation}) => {
 const user_Id= route.params
   const [isChecked, setIsChecked] = useState(false);
   const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
-
+  const [CompleteProfile,setCompleteProfile]=useState(null);
   const [valuecountry, setValueCountry] = useState(null);
   const [valueState, setValueState] = useState(null);
   const [valueCity, setValueCity] = useState(null);
@@ -117,6 +117,29 @@ const user_Id= route.params
           console.error('Error fetching countries data:', error);
         });
     };
+    const getData=async()=>{
+
+
+      try {
+        // Check if a user token exiconst storedProfileString = await AsyncStorage.getItem('CompleteProfile');
+      // Retrieve the string from AsyncStorage
+      const storedProfileString = await AsyncStorage.getItem('CompleteProfile');
+      
+      // Convert the string back to an object
+      const storedProfile = JSON.parse(storedProfileString);
+      
+      if(storedProfileString!=null){
+      setCompleteProfile(storedProfile)
+      }
+      }
+      catch (error)
+      {
+        console.error('Error checking authentication:', error);
+      }
+      finally{
+        setLoading(false)
+      }
+      }
 
 const onCheckout=async()=>{
   const apiurl='https://amplepoints.com/apiendpoint/checkout?';

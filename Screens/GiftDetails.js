@@ -1416,8 +1416,8 @@ justifyContent:'center'
     borderRadius:20
   },
   icon: {
-    width: Metrics.ratio(10),
-    height:  Metrics.ratio(10),
+    width: Metrics.ratio(12),
+    height:  Metrics.ratio(12),
   },
   quantityContainer: {
     backgroundColor: 'white',
