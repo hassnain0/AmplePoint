@@ -265,6 +265,12 @@ const styles=StyleSheet.create({
   
         
       },
+      productImage: {
+        borderRadius:10,
+        width: '100%',
+        height: Metrics.ratio(120),
+        
+      },
       header: {
         backgroundColor:'#ff3d00',
         alignItems: 'center',

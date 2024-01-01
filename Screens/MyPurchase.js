@@ -11,8 +11,10 @@ import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPurchase= ({navigation}) => {
+
+  
   const route=useRoute();
-  const user_id=route.params.CompleteProfile.user_id;
+  const user_id=route.params.CompleteProfile?.user_id;
   
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
