@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
   const LocalPurchase= ({navigation}) => {
 
     const route=useRoute();
-    console.log("ROute",route.params)
+const [NoData,setNoData]=useState(false);
     const user_id=route.params.user_id;
   const [deleteCount,setDelete]=useState(0);                  
   const [actulaData,setActualData]=useState(null);                   
@@ -63,13 +63,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
       
       setActualData(response.data)
-      setProduct_no(response.data.length);
-      const cart_items=response.data.data;
-      setProduct_no(cart_items.length)
-      if(response.data && response.data.data.quantity){
-      setQuantity(response.data.data.quantity)
-      }
-      setLoading(false)
+      if(response.data.data&&response.data.length){
+        const cart_items=response.data.data;
+        setProduct_no(cart_items.length)
+        }
+        if(response.data && response.data.data &&response.data.data.quantity){
+        setQuantity(response.data.data.quantity)
+        }
+  
+        if(response.data.status=='F')
+  {
+    setLoading(false)
+    setNoData(true);
+  }      
     } catch (error) {
       console.error('Error:', error);
     }
@@ -98,6 +104,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           textStyle={{ color: '#ff3d00' }}
           
         />
+        
         {actulaData?.data?.map((item, index) => (
           <View>
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
@@ -199,19 +206,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.leftIconView}
+          onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>Local Purhcases</Text>
+      </View>
                   <CustomDialog
         visible={visibile}
         onClose={handleCloseDialog}
         item={selectedItem}
       
       />
-   {/* <Spinner
-          visible={loading}
-          size={'large'}
-          textContent={'Loading...'}
-          textStyle={{ color: '#FFF' }}
-        />   */}
-          {actulaData &&(
+        {NoData && (
+        <View style={{display:'flex',flex:1}}>
+          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> No Data Found</Text>
+        </View>
+      )}
+  
+          {actulaData && actulaData!=null&&(
           <View >
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
@@ -241,6 +257,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 };
 
 const styles = StyleSheet.create({
+  leftIconView: {
+    paddingHorizontal: Metrics.ratio(25),
+    height: Metrics.ratio(20),
+    width: Metrics.ratio(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
   header: {
     backgroundColor: '#FF2E00',
     alignItems: 'center',
@@ -253,8 +277,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: Metrics.ratio(15),
     fontWeight: 'bold',
-    paddingLeft: Metrics.ratio(100),
-    textAlign:'center'
+    paddingLeft: Metrics.ratio(10),
+    textAlign:'left'
   },
   buttonView: {
     height:Metrics.ratio(15),

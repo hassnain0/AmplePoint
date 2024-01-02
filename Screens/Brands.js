@@ -5,6 +5,7 @@ import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import DemoScreen from './DemoScreen';
 import { moderateScale,verticalScale,scale } from 'react-native-size-matters';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const ProductItem = ({ product }) => {
@@ -63,7 +64,6 @@ const Brands=({navigation})=>{
   const handleProductPress = (productData) => {
     const Id=productData.tbl_vndr_id;
     const Name=productData.vendor_name
-    console.log("Name",Name)
     navigation.navigate('DemoScreen',{
       productData,
       Id,
@@ -144,14 +144,13 @@ const getProductDetails = async () => {
           />
         </View>
         </View>
-        {loading && (
-          <View style={styles.overlay}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
-              Loading....
-            </Text>
-            <ActivityIndicator size="large" color="#FF2E00" />
-          </View>
-        )}
+        <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {filteredProducts
           ? renderFlatList(filteredProducts)
           : chunkedData.map((chunk, index) => (

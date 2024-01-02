@@ -15,7 +15,7 @@ const MyPurchase= ({navigation}) => {
   
   const route=useRoute();
   const user_id=route.params.CompleteProfile?.user_id;
-  
+  const [NoData,setNoData]=useState(false);
   const [deleteCount,setDelete]=useState(0);
   const [actulaData,setActualData]=useState(null);
    
@@ -37,7 +37,7 @@ const MyPurchase= ({navigation}) => {
   };
   
   useEffect(()=>{
-    console.log("ROute",route.params)
+  
     checkAuthentication();
     setLoading(true);
 getProductDetails();
@@ -70,23 +70,30 @@ setLoading(false);
         },
       });
   
+      
       // Handle the successful response
       setActualData(response.data)
-      setProduct_no(response.data.length);
+      
+      if(response.data.data&&response.data.length){
       const cart_items=response.data.data;
       setProduct_no(cart_items.length)
-      if(response.data && response.data.data.quantity){
+      }
+      if(response.data && response.data.data &&response.data.data.quantity){
       setQuantity(response.data.data.quantity)
       }
+
+      if(response.data.status=='F')
+{
+  setLoading(false)
+  setNoData(true);
+}      
     } catch (error) {
+      setLoading(false)
       // Handle the error
       console.error('Error:', error);
     }
   };
  
-  const Return=()=>{
-
-  }
   const Question=(item)=>{
     navigation.navigate("AskQuestion",{
       item,
@@ -105,14 +112,8 @@ const handleProductPress=(item)=>{
     return (
       <View style={{flex:1,}}>
        
-       <Spinner
-          visible={loading}
-          size={'large'}
-          textContent={'Loading...'}
-          textStyle={{ color: '#ff3d00' }}
-          
-        />
-        {actulaData?.data?.map((item, index) => (
+        
+        {actulaData && actulaData?.data?.map((item, index) => (
           <View>
             <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
   <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
@@ -203,20 +204,33 @@ const handleProductPress=(item)=>{
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.leftIconView}
+          onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>My Purchases</Text>
+      </View>
+      {NoData && (
+                <View style={{display:'flex',flex:1}}>
+          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> No Data Found</Text>
+        </View>
+      )}
        <Spinner
           visible={loading}
           size={'large'}
           textContent={'Loading...'}
           textStyle={{ color: '#FFF' }}
         /> 
-                  <CustomDialog
+      <CustomDialog
         visible={visibile}
         onClose={handleCloseDialog}
         item={selectedItem}
       
       />
-  
-          {actulaData &&(
+       {actulaData && actulaData!=null &&(
           <View >
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>
@@ -246,6 +260,14 @@ const handleProductPress=(item)=>{
 };
 
 const styles = StyleSheet.create({
+  leftIconView: {
+    paddingHorizontal: Metrics.ratio(25),
+    height: Metrics.ratio(20),
+    width: Metrics.ratio(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
   header: {
     backgroundColor: '#FF2E00',
     alignItems: 'center',
@@ -258,8 +280,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: Metrics.ratio(15),
     fontWeight: 'bold',
-    paddingLeft: Metrics.ratio(100),
-    textAlign:'center'
+    paddingLeft: Metrics.ratio(10),
+    textAlign:'left'
   },
   buttonView: {
     height:Metrics.ratio(15),

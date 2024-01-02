@@ -1,4 +1,4 @@
-import React,{useState,} from 'react';
+import React,{useEffect, useState,} from 'react';
 import {Image,TextInput, View,Text, StyleSheet,ScrollView, TouchableOpacity,Alert} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import Button from '../components/Button';
@@ -6,9 +6,10 @@ import util from '../helpers/util';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import { RadioButton } from 'react-native-paper';
-// import { Camera } from 'react-native-vision-camera';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { verticalScale } from 'react-native-size-matters';
 
-const Contact=()=>{
+const Contact=({navigation})=>{
   
   const [value, setValue] = useState('');
   const [reason,setReason]=useState('');
@@ -73,7 +74,6 @@ setLoader(true);
 };
 
 const response = await axios.post(apiUrl, formData, { headers });
-console.log("Response of Return",response.data);
 
 if(response.data.status=='S')
 {setLoader(false);
@@ -98,6 +98,25 @@ else{
      setIsCustomer(false)
      setIsBussiness(true)
   }
+  useEffect(()=>{
+    checkAuthentication();
+  })
+  const checkAuthentication = async () => {
+    try {
+      // Check if a user token exists in AsyncStorage
+      const userToken = await AsyncStorage.getItem('userToken');
+
+      // If the token exists, the user is logged in
+      if (userToken) {
+        console.log('User is logged in');
+      } else {
+        // If the token doesn't exist, navigate to the login screen
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+    }
+  };
         return (
             <>
               <View style={styles.header}>
@@ -112,7 +131,7 @@ else{
         
             <ScrollView style={{flex:1, flexDirection:"column",backgroundColor:'white',}}>
             <View  style={{flex:1,flexDirection:'row',backgroundColor:'#F1F0F7',height:Metrics.ratio(25),justifyContent: 'space-between',}}>
-                  <Text style={{left:0,color:'black',fontSize:10,textAlign:'center',fontWeight:'500',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
+                  <Text style={{color:'black',fontSize:12,textAlign:'center',fontWeight:'500',marginLeft:Metrics.ratio(10),fontFamily: Platform.select({
     ios: 'Times New Roman',
     android: 'Times New Roman', // You may need to adjust this for Android
   }),}}>Contact Info</Text>
@@ -233,20 +252,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'left', // Align items at the center horizontally
     alignItems: 'center', // Align items at the center vertically
-    marginVertical: 10,
+    marginVertical: verticalScale(10),
   },
   radioButtonLabel: {
     color: 'black',
     fontSize:10,
   },
     InputContainer:{
-     marginLeft:Metrics.ratio(10),
       marginTop:Metrics.ratio(3),
       marginBottom:Metrics.ratio(10),
       backgroundColor:'#F1F0F7',
       borderRadius:5,
       fontSize:15,
      width:'90%',
+alignSelf:'center',
+     justifyContent:'center',
      height:Metrics.ratio(80),
     },
     InputContainer2:{
@@ -254,8 +274,10 @@ const styles = StyleSheet.create({
         marginBottom:Metrics.ratio(10),
         backgroundColor:'#F1F0F7',
         borderRadius:5,
+        alignSelf:'center',
+        justifyContent:'center',
         fontSize:15,
-       width:'100%',
+       width:'95%',
        height:Metrics.ratio(80),
       },
     icon: {
@@ -340,11 +362,13 @@ const styles = StyleSheet.create({
       
     },
     header: {
-        backgroundColor:'#ff3d00',
-        alignItems: 'center',
-        flexDirection: 'row',
-        // paddingHorizontal:Metrics.ratio(5),
-      },
+      backgroundColor: '#FF2E00',
+      alignItems: 'center',
+      flexDirection: 'row',
+      paddingVertical: Metrics.ratio(15),
+      
+      // paddingHorizontal:Metrics.ratio(5),
+    },
       leftIconView: {
         paddingHorizontal: Metrics.ratio(25),
         height: Metrics.ratio(20),

@@ -44,13 +44,7 @@ const CustomHeader = ({ navigation,user_Id }) => {
 
     return (
     <View style={{ backgroundColor: '#EEEEEE' }}>
-      <Spinner
-          visible={loading}
-          size={'large'}
-          textContent={'Loading...'}
-          indicatorStyle={{ color: '#ff3d00' }}
-          
-        />
+     
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image source={require('./assets/SideBar.png')} style={styles.SideMenu} />

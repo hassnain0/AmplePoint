@@ -330,7 +330,7 @@ const styles=StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor:'white',
-    height:'35%'
+    height:'30%'
    
   },
   itemContainer: {

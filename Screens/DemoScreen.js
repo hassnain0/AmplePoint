@@ -78,7 +78,7 @@ const getProductDetails = async () => {
         setStoreProducts(response.data);
         setLoading(false)
       }
-      console.log("Responnse",response.data)
+      
         if (response.data.message === 'Data Not Found') {
           setData(true);
         } else {
@@ -146,7 +146,7 @@ const getProductDetails = async () => {
           
   <ScrollView >
     <View style={{backgroundColor:'white'}}>
-    <View style={{backgroundColor:'white',height:Metrics.ratio(70),width:'100%',position: 'relative' }}>
+    <View style={{backgroundColor:'white',height:Metrics.ratio(100),width:'100%',position: 'relative' }}>
     <Image   source={{ uri: `https://amplepoints.com/vendor-data/${productData.tbl_vndr_id}/profile/${productData.vendor_profileimage}` }} style={styles.StoreImage} resizeMode="cover" />
  </View>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5)}}></View>
@@ -229,7 +229,7 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor: 'white',
-        margin: moderateScale(10),
+        margin: moderateScale(8),
         borderRadius: 5,
         elevation: 5,
         flexDirection: 'column', // Make sure items are stacked vertically
@@ -268,7 +268,7 @@ const styles=StyleSheet.create({
       productImage: {
         borderRadius:10,
         width: '100%',
-        height: Metrics.ratio(120),
+        height: Metrics.ratio(150),
         
       },
       header: {
