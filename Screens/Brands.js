@@ -11,7 +11,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 const ProductItem = ({ product }) => {
 
   const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
-  console.log("Producy",product)
+  
     // Randomly select a background color for each image
     const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
     console.log("Image",`https://amplepoints.com/mall/logo/${product.top_logo}`)
@@ -85,6 +85,7 @@ const getProductDetails = async () => {
        
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
+            setLoading(false)
           }
 
         })

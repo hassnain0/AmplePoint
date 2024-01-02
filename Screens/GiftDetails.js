@@ -444,17 +444,6 @@ const GiftDetails = ({ navigation }) => {
       var newitemprice = (qty * itemprice);
       //alert(newitemprice);
       var newitemdiscount = (qty * itemdiscount);
-
-      // New Price by user = (amples needed to redeem - apply amples)*.12  $...
-
-      // Earn Reward = (new price by user * discount percentage)/.12       Amples....
-
-      // If No amples applied by user then Reward Value = (retail price * discount percentage)  $....
-
-      // Reward Value = (new price by user * discount percentage)      $....
-
-      // You Earn = discount percentage
-
       var newitempricebyuser = (itempricebyample - amplepricebyuser);
       var newitemreward = (newitempricebyuser * ((itemdiscount) / 100));
       setNewPrice(newitempricebyuser.toFixed(2));

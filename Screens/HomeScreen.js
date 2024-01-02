@@ -92,51 +92,7 @@ const HomeScreen = ({ navigation }) => {
     setIsPlaying(!isPlaying);
   };
 
-  const { width: screenWidth } = Dimensions.get('window');
-  const RoundedImageSlider = ({ images }) => {
-    if (!images || !Array.isArray(images) || images.length === 0) {
-      return null; // or handle the case when images are not available
-    }
-    console.log("IMage", images)
-
-    const renderDots = (index, currentIndex, opacity) => (
-      <View
-        key={index}
-        style={{
-          height: 8,
-          width: 8,
-          borderRadius: 4,
-          marginHorizontal: 5,
-          backgroundColor: 'white',
-          opacity,
-        }}
-      />
-    );
-
-    return (
-      <>
-        {images && (<CarouselSlider
-          autoplay
-          autoplayTimeout={5000}
-          loop
-          index={0}
-
-          items={images?.map(imgUrl => ({ image: imgUrl }))}
-          renderItem={(item, index) => (
-            <View key={index} style={{ borderRadius: 10, overflow: 'hidden' }}>
-              <Image
-                source={{ uri: item.image }}
-                style={{ width: '100%', aspectRatio: 16 / 9, borderRadius: 10 }}
-              />
-            </View>
-          )}
-
-        />
-
-        )}
-      </>
-    );
-  };
+  
 
   return (
     <SafeAreaView>
@@ -256,7 +212,9 @@ const styles = StyleSheet.create({
 
   },
   wrapper: {
-    
+   height:200,
+   width:'100%', 
+   backgroundColor:'white',
     borderRadius: scale(10), // Set border radius for the Swiper
   }, 
   horizontalLine: {
@@ -420,7 +378,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '90%',
-    height: '20%',
+    height: '90%',
     resizeMode: 'cover',
     borderRadius: 10, // Set border radius for the Image
   },
