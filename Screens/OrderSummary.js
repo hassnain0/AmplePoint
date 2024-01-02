@@ -20,8 +20,6 @@ const ProductItem = ({ product, selectedProductId, onSelect }) => {
   <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 'bold', color: 'black', paddingBottom: 20 }}>
     {product.product_name}
   </Text>
-  
-  {/* <Image source={{ uri: product.product_image }} style={styles.productImage} resizeMode="cover" /> */}
 </View>
 
   
@@ -154,7 +152,6 @@ const ProductItem = ({ product, selectedProductId, onSelect }) => {
 const OrderSummary=({navigation})=>{
 
   const route=useRoute();
-  console.log("User Id",route.params.user_Id)
   const user_Id=route.params.user_Id;
   
   const [loader,setLoader]=useState(false);

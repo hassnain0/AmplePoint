@@ -11,8 +11,8 @@ import { moderateScale,verticalScale, } from 'react-native-size-matters';
 const ProductItem = ({ product }) => {
   return (
 <View style={styles.productItem}>
-  <Text style={{  fontSize: moderateScale(10), fontWeight: 'bold', color: 'black' }}>
-  {product.pname.split(' ').slice(0, 3).join(' ')}
+  <Text style={{  fontSize: moderateScale(10), fontWeight: 'bold', color: 'black' ,flexWrap:'wrap'}}>
+  {product.pname.split(' ').slice(0, 2).join(' ')}
 </Text>
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product?.pid}/${product?.img_name}` }} style={styles.productImage} resizeMode="cover" />
