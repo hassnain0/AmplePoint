@@ -84,10 +84,11 @@ const GiftDetails = ({ navigation }) => {
   const route = useRoute();
 
   const user_Id = route.params.user_Id;
-  console.log(route.params.user_Id)
+  const name=route.params.productData.pname;
+
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-
+ 
     setLoading(true);
     setProductId(route.params.productData.pid);
     setVendorId(route.params.productData.vendor_key);
@@ -117,19 +118,19 @@ const GiftDetails = ({ navigation }) => {
           if (response.data && response.data.data.pickup_address && response.data.data.pickup_address[0].loc_address) {
             setAddress(response.data.data.pickup_address[0].loc_address);
           }
-          if (response.data && response.data.data.pickup_address && response.data.data.online_address[0].loc_address) {
+          if (response.data && response.data.data.pickup_address ) {
             setAddressOnline(response.data.data.online_address[0].loc_address);
           }
-          if (response.data && response.data.data.product_info.pickUp) {
+          if (response.data && response.data.data.product_info.pickUp ) {
             setPickup(response.data.data.product_info.pickUp)
           }
-          if (response.data && response.data.data.product_info.online) {
-            setPickup(response.data.data.product_info.online)
+          if (response.data && response.data.data.product_info.online ) {
+            setShipping(response.data.data.product_info.online)
           }
-          if (response.data && response.data.data.product_info.delivery) {
+          if (response.data && response.data.data.product_info.delivery ) {
             setDeleivery(response.data.data.product_info.delivery)
           }
-          if (response.data.data.product_info.shipping) {
+          if (response.data.data.product_info.shipping ) {
             setShipping(response.data.data.product_info.shipping)
           }
         }
@@ -588,8 +589,16 @@ const GiftDetails = ({ navigation }) => {
 
   }
   return (
-    <SafeAreaView >
-
+    <SafeAreaView style={{flex:1}}>
+  <View style={styles.header}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.leftIconView}
+          onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>{name}</Text>
+      </View>
       <Spinner
         visible={loading}
         size={'large'}
@@ -597,7 +606,7 @@ const GiftDetails = ({ navigation }) => {
         textStyle={{ color: '#ff3d00' }}
 
       />
-      <ScrollView style={{ backgroundColor: 'white', }} scrollEnabled={true}>
+      <ScrollView style={{ backgroundColor: 'white',flex:1 }} scrollEnabled={true}>
 
         {actual_data && (
           <View>
@@ -1222,13 +1231,13 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: Metrics.ratio(15),
     fontWeight: 'bold',
-    paddingLeft: Metrics.ratio(100),
+    flexWrap:'nowrap'
   },
   header: {
-    backgroundColor: '#FF2E00',
+    backgroundColor: '#ff3d00',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: Metrics.ratio(15),
+    paddingVertical: verticalScale(5),
 
     // paddingHorizontal:Metrics.ratio(5),
   },

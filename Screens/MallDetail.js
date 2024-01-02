@@ -118,7 +118,7 @@ const MallDetail = ({ navigation }) => {
 const randomColor = backgroundColors[Math.floor(Math.random()* backgroundColors.length)];
 
   return (
-    <SafeAreaView style={{backgroundColor:'white'}} >
+    <SafeAreaView style={{backgroundColor:'white',flex:1}} >
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={1}
@@ -222,10 +222,10 @@ const styles = StyleSheet.create({
 
   },
   header: {
-    backgroundColor: '#ff3d00',
+    backgroundColor:'#ff3d00',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: verticalScale(1),
+    paddingVertical: verticalScale(10),
     // paddingHorizontal:Metrics.ratio(5),
   },
   TextContainer: {

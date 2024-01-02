@@ -5,6 +5,7 @@ import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { moderateScale } from 'react-native-size-matters';
 
 
 const ProductItem = ({ product }) => {
@@ -13,7 +14,7 @@ const ProductItem = ({ product }) => {
     <View style={styles.productItem}>
       
         <View style={{ width: 100, flex: 1 }}>
-  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black', flexWrap: 'wrap' }}>
+  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black',  }}>
     {product.product_name}
   </Text>
 </View>
@@ -53,8 +54,9 @@ const Search=({navigation})=>{
   const [pageNumber, setPageNumber] = useState(1);
   const [storeProducts, setStoreProducts] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
- 
+ const [noData,setNoData]=useState(false)
 const getProducts = async () => {
+  setLoading(true);
 if(searchQuery){
     try {
       const apiUrl = 'https://amplepoints.com/apiendpoint/searchproduct';
@@ -67,11 +69,16 @@ if(searchQuery){
         },
       });
     
+      if(response.data.status=='F'){
+        setNoData(true);
+        setLoading(false);
+      }
+    
       if (response && response.data.data) {
         setStoreProducts(response.data.data);
         setPageNumber((prevPage) => prevPage + 1);
         setLoading(false); // Set loading to false when the operation completes
-        setData(false)
+        setNoData(false)
       }
 
     } catch (error) {
@@ -110,17 +117,20 @@ if(searchQuery){
           textStyle={{ color: '#ff3d00' }}
           
         />
-        {data && (
-        <View style={styles.overlay}>
-          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Sorry Data Not Found</Text>
+         {noData && (
+                <View style={{display:'flex',flex:1}}>
+          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> Data Not found</Text>
         </View>
       )}
   <View style={styles.searchBar2Container}>
       <TextInput style={styles.searchInput}
       onChangeText={(text)=>{
         setSearchQuery(text);
-        getProducts(text)
       }}
+      onSubmitEditing={() => {
+        getProducts(searchQuery);
+      }}
+
       placeholder="Search..."
       value={searchQuery}
       ></TextInput>
@@ -139,7 +149,7 @@ if(searchQuery){
 )}
 const styles=StyleSheet.create({
    ImageContainer:{
-        width: Metrics.ratio(200), 
+        width:'100%', 
         height: Metrics.ratio(130),
         borderRadius:20, 
       },
@@ -166,10 +176,12 @@ const styles=StyleSheet.create({
       },
 
       productItem: {
-        backgroundColor:'#FFFF',
-        margin: Metrics.ratio(10),
-        borderRadius:5,
-        elevation:3
+        backgroundColor: 'white',
+        margin: moderateScale(10),
+        borderRadius: 5,
+        elevation: 5,
+        left:'1.5%',
+        flexDirection: 'column', // Make sure items are stacked vertically
       },
       TextContainer: {
         fontSize:15,

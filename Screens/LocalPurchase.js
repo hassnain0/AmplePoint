@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
 
   },
   header: {
-    backgroundColor: '#FF2E00',
+    backgroundColor: '#ff3d00',
     alignItems: 'center',
     flexDirection: 'row',
     paddingVertical: Metrics.ratio(15),

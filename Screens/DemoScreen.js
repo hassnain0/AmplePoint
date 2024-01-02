@@ -12,7 +12,7 @@ const ProductItem = ({ product }) => {
   return (
 <View style={styles.productItem}>
   <Text style={{  fontSize: moderateScale(10), fontWeight: 'bold', color: 'black' }}>
-  {product.pname.split(' ').slice(0, 2).join(' ')}
+  {product.pname.split(' ').slice(0, 3).join(' ')}
 </Text>
     <View>
       <Image source={{ uri: `https://amplepoints.com/product_images/${product?.pid}/${product?.img_name}` }} style={styles.productImage} resizeMode="cover" />
@@ -135,7 +135,7 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
-      <SafeAreaView style={{backgroundColor:'white'}}>
+      <SafeAreaView style={{backgroundColor:'white',flex:1}}>
           <Spinner
           visible={loading}
           size={'large'}
@@ -143,6 +143,16 @@ const getProductDetails = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
+           <View style={styles.header}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.leftIconView}
+          onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>{Name}</Text>
+      </View>
+      
           
   <ScrollView >
     <View style={{backgroundColor:'white'}}>
@@ -199,7 +209,12 @@ const getProductDetails = async () => {
       }
 
 const styles=StyleSheet.create({
-   
+  textHeader: {
+    color: Colors.white,
+    fontSize: Metrics.ratio(15),
+    fontWeight: 'bold',
+    flexWrap:'nowrap'
+  },
       ImageContainer:{
         width: Metrics.ratio( 150), 
         height: Metrics.ratio(130),
@@ -229,9 +244,10 @@ const styles=StyleSheet.create({
       
       productItem: {
         backgroundColor: 'white',
-        margin: moderateScale(8),
+        margin: moderateScale(10),
         borderRadius: 5,
         elevation: 5,
+        left:'1.5%',
         flexDirection: 'column', // Make sure items are stacked vertically
       },
       TextContainer: {

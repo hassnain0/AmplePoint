@@ -12,14 +12,16 @@ import Cart from './Cart';
 import Brands from './Brands';
 import MyPurchase from './MyPurchase';
 import LocalPurchase from './LocalPurchase';
-import { moderateScale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import Swiper from 'react-native-swiper';
+
 const Drawer = createDrawerNavigator();
 
 const HomeScreen = ({ navigation }) => {
   const route = useRoute();
   const [images, setImages] = useState(null);
   const [amplePoints, setAmplePoints] = useState(0);
-
+  const [data, setData] = useState(null);
   console.log("CompleteProfile", route.params.CompleteProfile)
   useFocusEffect(
     React.useCallback(() => {
@@ -58,7 +60,13 @@ const HomeScreen = ({ navigation }) => {
       try {
         const apiUrl = 'https://amplepoints.com/apiendpoint/gethomecontent';
         const response = await axios.get(apiUrl);
-        setImages(response.data.data.sider_images);
+
+        if (response.data && response.data.data) {
+          console.log("Dtaa", response.data.data)
+          setData(response.data.data)
+          setImages(response.data.data.sider_images);
+        }
+        console.log("Response", response.data.data)
       }
       catch (err) {
         console.log("Error fetching data:", err);
@@ -134,11 +142,19 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView>
       <ScrollView>
 
-        <View style={{ backgroundColor: 'white' }}>
+       
+          {images && (
+            <Swiper style={styles.wrapper} showsButtons={false} dotColor='white' activeDotColor='#ff3d00'>
+              {images.map((imageUrl, index) => (
+                <View key={index} style={styles.slide}>
+                  <Image source={{ uri: imageUrl }} style={styles.image} />
+                </View>
+              ))}
 
-          {/* {images && <RoundedImageSlider images={images} />} */}
+            </Swiper>
+          )}
+        
 
-        </View>
         <View style={styles.rowContainer}>
           <TouchableOpacity style={styles.itemContainer} onPress={MoveStore}>
 
@@ -222,13 +238,13 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <View >
           </View>
-          <View style={{ alignItems: 'center', paddingTop: Metrics.ratio(30), paddingBottom: Metrics.ratio(40), backgroundColor: 'white' }}>
-          <VideoPlayer
-    video={{ uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }}
-    videoWidth={1600}
-    videoHeight={900}
-    thumbnail={{ uri: 'https://i.picsum.photos/id/866/1600/900.jpg' }}
-/>
+          <View style={{ paddingTop: Metrics.ratio(30), width: '100%', paddingBottom: Metrics.ratio(40), backgroundColor: 'white' }}>
+            <VideoPlayer
+              video={{ uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }}
+              videoWidth={1600}
+              videoHeight={900}
+              thumbnail={{ uri: 'https:\/\/amplepoints.com\/images\/vthumbnail.png' }}
+            />
           </View>
         </View>
       </ScrollView>
@@ -238,7 +254,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-  }, horizontalLine: {
+  },
+  wrapper: {
+    
+    borderRadius: scale(10), // Set border radius for the Swiper
+  }, 
+  horizontalLine: {
     borderBottomWidth: 1.5,
     borderBottomColor: '#B6B8B5', // Adjust the color as needed
     alignSelf: 'stretch',
@@ -391,6 +412,17 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginTop: 8, // Adjust the margin as needed
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '90%',
+    height: '20%',
+    resizeMode: 'cover',
+    borderRadius: 10, // Set border radius for the Image
   },
 })
 export default HomeScreen;
