@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
+import { View, Text, StyleSheet,} from 'react-native';
 import { Metrics } from '../themes';
 import { OtpInput } from "react-native-otp-entry";
 const OTP= () => {

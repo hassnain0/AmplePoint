@@ -255,7 +255,7 @@ setLoader(true);
     formData.append('product_added_id',item.productadded_id);
     formData.append('order_id', item.order_id);
     formData.append('product_id',  item.product_id);
-    formData.append('user_id', 38518);
+    formData.append('user_id', );
     formData.append('vendor_id', item.vendor_id);
     formData.append('apply_for', value);
     formData.append('resone', reason);

@@ -19,7 +19,7 @@ const Checkout= ({navigation}) => {
 const user_Id= route.params
   const [isChecked, setIsChecked] = useState(false);
   const [hiddenFields, setHiddenFields] = useState(true); // Initially, fields are visible
-
+  const [CompleteProfile,setCompleteProfile]=useState(null);
   const [valuecountry, setValueCountry] = useState(null);
   const [valueState, setValueState] = useState(null);
   const [valueCity, setValueCity] = useState(null);
@@ -30,8 +30,6 @@ const user_Id= route.params
   const [isFocus, setIsFocus] = useState(false);
   const [isFocusstate, setIsFocusstate] = useState(false);
   const [isFocuscity, setIsFocuscity] = useState(false);
-  const [stateName, setStateName] = useState(null);
-
   useEffect(() => {
     getcoutrylist();
   }, []);
@@ -98,7 +96,7 @@ const user_Id= route.params
         }
       })
         .then((response) => {
-          console.log("Response",response.data.data)
+          console.log("Response of cities",response.data)
           if (response.data.status === 'S') {
   
             var count = Object.keys(response.data.data).length;
@@ -109,7 +107,7 @@ const user_Id= route.params
                 label: response.data.data[i].name,
               });
             }
-            setCity(countryArray);
+            setCityData(countryArray);
           } else {
             console.error('Error fetching countries data');
           }  
@@ -117,6 +115,7 @@ const user_Id= route.params
           console.error('Error fetching countries data:', error);
         });
     };
+ 
 
 const onCheckout=async()=>{
   const apiurl='https://amplepoints.com/apiendpoint/checkout?';

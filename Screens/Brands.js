@@ -4,13 +4,27 @@ import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
 import DemoScreen from './DemoScreen';
+import { moderateScale,verticalScale,scale } from 'react-native-size-matters';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const ProductItem = ({ product }) => {
+
+  const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
+  
+    // Randomly select a background color for each image
+    const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
     console.log("Image",`https://amplepoints.com/mall/logo/${product.top_logo}`)
   return (
 
-    <View style={styles.productItem}>     
+    <View style={styles.productItem}> 
+     <View style={{backgroundColor:randomColor,borderRadius:100,alignContent:'center',
+        alignItems:'center',
+        height:verticalScale(70),
+        width:Metrics.ratio(70),
+        alignSelf:'center',
+        margin:scale(20),
+        }}>       
     <Image
             source={{
               uri: `https://amplepoints.com/vendor-data/${product.tbl_vndr_id}/profile/${product.vendor_profileimage}`,
@@ -18,7 +32,16 @@ const ProductItem = ({ product }) => {
             style={styles.productImage}
             resizeMode="cover"
           />
-    <Text style={{fontSize:10,fontWeight:'bold', color:'black',paddingBottom:20,textAlign:'center'}}>{product.vendor_name}</Text>
+          </View>
+    <Text style={{fontSize:10,fontWeight:'500', color:'black',paddingBottom:5,textAlign:'center'}}>  {product.vendor_name.split(' ').slice(0, 1).join(' ')}</Text>
+    <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
+        <Image source={require('../assets/pin.jpg')} style={{width:10,height:10}}/>
+        <Text style={{fontSize:10,fontWeight:'400',}}>{product.vendor_city}</Text>
+    </View>
+    <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
+        <Image source={require('../assets/Pin2.png')} style={{width:10,height:10}}/>
+        <Text style={{fontSize:10,fontWeight:'400', }}>{product.tbl_vndr_zip}</Text>
+    </View>
     </View>
   );
 };
@@ -41,7 +64,6 @@ const Brands=({navigation})=>{
   const handleProductPress = (productData) => {
     const Id=productData.tbl_vndr_id;
     const Name=productData.vendor_name
-    console.log("Name",Name)
     navigation.navigate('DemoScreen',{
       productData,
       Id,
@@ -63,6 +85,7 @@ const getProductDetails = async () => {
        
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data);
+            setLoading(false)
           }
 
         })
@@ -122,14 +145,13 @@ const getProductDetails = async () => {
           />
         </View>
         </View>
-        {loading && (
-          <View style={styles.overlay}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
-              Loading....
-            </Text>
-            <ActivityIndicator size="large" color="#FF2E00" />
-          </View>
-        )}
+        <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
         {filteredProducts
           ? renderFlatList(filteredProducts)
           : chunkedData.map((chunk, index) => (
@@ -188,10 +210,11 @@ const styles=StyleSheet.create({
       },
       
       productItem: {
-        backgroundColor:'#FFFF',
-        margin: Metrics.ratio(10),
+        backgroundColor: '#eeeeee',
         borderRadius:5,
-        elevation:3
+        elevation:1,
+        alignItems:'center',
+        margin:moderateScale(5),
       },
       TextContainer: {
         fontSize:15,
@@ -205,13 +228,12 @@ const styles=StyleSheet.create({
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
       },
       productImage: {
-        borderRadius:100,
-        alignContent:'center',
+alignContent:'center',
         alignItems:'center',
         alignSelf:'center',
-        marginTop:Metrics.smallMargin,
-        width: Metrics.ratio(110),
-        height: Metrics.ratio(110),
+        margin:moderateScale(20),
+        width: Metrics.ratio(50),
+        height: Metrics.ratio(50),
         
       },
       ProductContainer:{

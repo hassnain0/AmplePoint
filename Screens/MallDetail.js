@@ -2,24 +2,18 @@ import React, { useState, useEffect, } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, ScrollView, Image, TextInput, TouchableOpacity, BackHandler, SafeAreaView, } from 'react-native';
 import { Colors, Metrics } from '../themes';
 import axios from 'axios';
-import {  useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import GridView from '../components/GridLayout/GridItems';
 
-const ProductItem = ({ product,navigation }) => {
-  
-  const vendors = product.vendor_list;
-  
-  return (
-    <>
-      <View>
-        <Text style={{fontSize:12,color:'black',fontWeight:'700',fontFamily:'Arial'}}>{product.category_name}</Text>
-        {vendors && vendors.length > 0 && (renderFlatList(vendors,navigation))}
-      </View>
-    </>
-  );
-};
+// const ProductItem = ({ product, navigation, randomColor }) => {
 
-const handleProductPress = (productData,navigation) => {
+//   console.log("product", product)
+//   return (
+//   );
+// };
+const handleProductPress = (productData, navigation) => {
   const Name = productData.vendor_name
   const Id = productData.tbl_vndr_id
   navigation.navigate('DemoScreen', {
@@ -28,45 +22,6 @@ const handleProductPress = (productData,navigation) => {
     Name,
   });
 };
-const renderFlatList = (data,navigation) => (
-  
-  <View>
-    <FlatList
-      data={data}
-      showsHorizontalScrollIndicator={false}
-      numColumns={3}
-      keyExtractor={(item) => item.tbl_vndr_id}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleProductPress(item,navigation)}>
-          <View style={{padding : Metrics.ratio(5), backgroundColor : "rgba(245,245,245,255)", borderRadius : Metrics.ratio(10),margin : Metrics.ratio(2),elevation:3}}>
-            <Image
-              source={{
-                uri: `https://amplepoints.com/vendor-data/${item.tbl_vndr_id}/profile/${item.vendor_profileimage}`,
-              }}
-              style={styles.productImage}
-              resizeMode="cover"
-            />
-            <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: 10 }}>
-              {item.vendor_name}
-            </Text>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Image source={require('../assets/pin.jpg')} style={{ width: 15, height: 15 }} />
-              <Text style={{ fontSize: 10, fontWeight: 'bold', paddingBottom: Metrics.ratio(5) }}>
-                {item.tbl_vndr_city}
-              </Text>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Image source={require('../assets/Pin2.png')} style={{ width: 15, height: 15 }} />
-              <Text style={{ fontSize: 10, fontWeight: 'bold',}}>
-                {item.tbl_vndr_zip}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )}
-    />
-  </View>
-);
 const MallDetail = ({ navigation }) => {
   const route = useRoute();
   const Name = route.params.Name
@@ -91,8 +46,6 @@ const MallDetail = ({ navigation }) => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
             setStoreProducts(response.data.data);
           }
-          console.log("Response", response.data)
-
         })
         .catch(error => {
           // Handle the error
@@ -109,10 +62,11 @@ const MallDetail = ({ navigation }) => {
       setLoading(false);
     }
   }
-
+  const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
+  const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }} >
       <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={1}
@@ -120,11 +74,11 @@ const MallDetail = ({ navigation }) => {
           onPress={() => console.log('navigation', navigation.goBack())}>
           <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
         </TouchableOpacity>
-        <Text style={styles.textHeader}>{Name} Mall</Text>
+        <Text style={styles.textHeader}>{Name}</Text>
       </View>
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: 'white' }}>
 
-        <View style={styles.container}>
+        <View style={{ backgroundColor: 'white' }} >
           <Spinner
             visible={loading}
             size={'large'}
@@ -134,9 +88,32 @@ const MallDetail = ({ navigation }) => {
           />
 
           <View>
-            {storeProducts && storeProducts.map(e =>
-              <ProductItem product={e} navigation={navigation}/>
-              // renderFlatList(storeProducts)
+            {storeProducts && storeProducts.length > 0 && (
+              <GridView storeProducts={storeProducts} handleProductPress={handleProductPress} navigation={navigation}>
+                {(item) => (
+                  <>
+                    <View style={{
+                      backgroundColor: randomColor, borderRadius: moderateScale(100), alignContent: 'center',
+                      alignItems: 'center',
+                      height: verticalScale(70),
+                      width: Metrics.ratio(70),
+                      alignSelf: 'center',
+                      margin: moderateScale(15),
+                    }}>
+                      <Image
+                        source={{
+                          uri: `https://amplepoints.com/vendor-data/${item.tbl_vndr_id}/profile/${item.vendor_profileimage}`,
+                        }}
+                        style={styles.productImage}
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <Text style={{ fontSize: 10, fontWeight: '700', paddingBottom: 10, textAlign: 'center' }}>
+                      {item.vendor_name.split(' ').slice(0, 1).join(' ')}
+                    </Text>
+                  </>
+                )}
+              </GridView >
             )}
           </View>
         </View>
@@ -146,6 +123,17 @@ const MallDetail = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+  gridContainer: {
+    flex: 3,
+    marginHorizontal: "auto",
+    width: "100%",
+    backgroundColor: "red",
+  },
+
+  gridColumns: {
+
+  },
+
   searchBarContainer: {
     backgroundColor: '#e0e0e0',
     height: 50,
@@ -210,28 +198,16 @@ const styles = StyleSheet.create({
     color: 'black', // Optional: set the text color
     fontWeight: 'bold'
   },
-  Icon: {
-    width: Metrics.ratio(27),
-    height: Metrics.ratio(32),
-    left: Metrics.ratio(10)
-  },
-  SideMenu: {
-    width: Metrics.ratio(40),
-    height: Metrics.ratio(40),
-    left: Metrics.ratio(10)
-  },
-
   productItem: {
-    backgroundColor: '#FFFF',
-    margin: Metrics.ratio(5),
-    borderRadius: 5,
-    elevation: 3
+
+    margin: scale(6),
+
   },
   header: {
     backgroundColor: '#ff3d00',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: Metrics.ratio(20),
+    paddingVertical: verticalScale(10),
     // paddingHorizontal:Metrics.ratio(5),
   },
   TextContainer: {
@@ -246,13 +222,13 @@ const styles = StyleSheet.create({
     paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
   },
   productImage: {
-    borderRadius: 100,
+
     alignContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    marginTop: Metrics.smallMargin,
-    width: Metrics.ratio(100),
-    height: Metrics.ratio(90),
+    margin: moderateScale(20),
+    width: Metrics.ratio(50),
+    height: Metrics.ratio(50),
 
   },
   ProductContainer: {

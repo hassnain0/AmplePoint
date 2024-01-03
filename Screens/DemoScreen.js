@@ -1,5 +1,5 @@
 import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,Platform, ActivityIndicator,ScrollView,Image, TouchableOpacity, BackHandler, SafeAreaView,} from 'react-native';
+import {View,Text, StyleSheet,FlatList,ScrollView,Image,TouchableOpacity, BackHandler, SafeAreaView,} from 'react-native';
 import { Colors, Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
@@ -7,21 +7,21 @@ import { useRoute } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Card, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import { moderateScale,verticalScale, } from 'react-native-size-matters';
 const ProductItem = ({ product }) => {
   return (
-
-    <View style={styles.productItem}>
-  <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'black' }}>
+<View style={styles.productItem}>
+  <Text style={{  fontSize: moderateScale(10), fontWeight: 'bold', color: 'black' ,flexWrap:'wrap'}}>
   {product.pname.split(' ').slice(0, 2).join(' ')}
 </Text>
     <View>
-      <Image source={{ uri: `https://amplepoints.com/product_images/${product.pid}/${product.img_name}` }} style={styles.productImage} resizeMode="cover" />
+      <Image source={{ uri: `https://amplepoints.com/product_images/${product?.pid}/${product?.img_name}` }} style={styles.productImage} resizeMode="cover" />
     </View>
     <Text style={styles.ProductContainer}>{product.pvendor}</Text>
   
     <View style={{ flex: 1, flexDirection: 'row' }}>
-      <Text style={{ paddingRight: Metrics.ratio(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
-      <View style={{ paddingLeft: Metrics.ratio(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
+      <Text style={{ paddingRight: moderateScale(10), fontWeight: '800', color: '#618ED7', fontSize: 10 }}>{`$ ${product.pprice}`}</Text>
+      <View style={{ paddingHorizontal: moderateScale(5), backgroundColor: '#C1D0EC', borderRadius: 5 }}>
         <Text style={{ color: '#618ED7', fontWeight: '600', fontSize: 10 }}>{`${product.pdiscount} % Back`}</Text>
       </View>
     </View>
@@ -78,7 +78,7 @@ const getProductDetails = async () => {
         setStoreProducts(response.data);
         setLoading(false)
       }
-      console.log("Responnse",response.data)
+      
         if (response.data.message === 'Data Not Found') {
           setData(true);
         } else {
@@ -109,8 +109,7 @@ const getProductDetails = async () => {
     
     }
     const renderFlatList = (data) => (
-   
-      <View>
+   <View>
     <FlatList
       data={data}
       numColumns={2} 
@@ -136,7 +135,7 @@ const getProductDetails = async () => {
     const chunkedData = storeProducts?.data ? chunkArray(storeProducts.data, 10) : [];
 
     return (
-      <SafeAreaView style={{backgroundColor:'white'}}>
+      <SafeAreaView style={{backgroundColor:'white',flex:1}}>
           <Spinner
           visible={loading}
           size={'large'}
@@ -144,22 +143,23 @@ const getProductDetails = async () => {
           textStyle={{ color: '#ff3d00' }}
           
         />
-          <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.leftIconView}
-            onPress={() => console.log('navigation', navigation.goBack())}>
-          <Image source={require('../assets/ArrowBack.png')} style={{width:28,height:28}}/>
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>{Name}</Text>
-        </View>
+           <View style={styles.header}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.leftIconView}
+          onPress={() => console.log('navigation', navigation.goBack())}>
+          <Image source={require('../assets/ArrowBack.png')} style={{ width: 28, height: 28 }} />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>{Name}</Text>
+      </View>
+      
+          
   <ScrollView >
     <View style={{backgroundColor:'white'}}>
     <View style={{backgroundColor:'white',height:Metrics.ratio(100),width:'100%',position: 'relative' }}>
     <Image   source={{ uri: `https://amplepoints.com/vendor-data/${productData.tbl_vndr_id}/profile/${productData.vendor_profileimage}` }} style={styles.StoreImage} resizeMode="cover" />
  </View>
     <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(5)}}></View>
-
      <View>
     {Content &&(
     <Swiper
@@ -209,7 +209,12 @@ const getProductDetails = async () => {
       }
 
 const styles=StyleSheet.create({
-   
+  textHeader: {
+    color: Colors.white,
+    fontSize: Metrics.ratio(15),
+    fontWeight: 'bold',
+    flexWrap:'nowrap'
+  },
       ImageContainer:{
         width: Metrics.ratio( 150), 
         height: Metrics.ratio(130),
@@ -238,11 +243,12 @@ const styles=StyleSheet.create({
       },
       
       productItem: {
-        backgroundColor:'white',
-        margin: Metrics.ratio(20),
-        marginBottom:Metrics.ratio(20),
-        borderRadius:5,
-        elevation:5
+        backgroundColor: 'white',
+        margin: moderateScale(10),
+        borderRadius: 5,
+        elevation: 5,
+        left:'1.5%',
+        flexDirection: 'column', // Make sure items are stacked vertically
       },
       TextContainer: {
         fontSize:15,
@@ -254,21 +260,14 @@ const styles=StyleSheet.create({
         bottom: Metrics.ratio(10), // Adjust as needed
         left: Metrics.ratio(15), // Adjust as needed// Optional: add a background color to make the text more readable
         paddingRight: Metrics.ratio(10), // Optional: add padding for better visibility
-      },  textHeader: {
-        textAlign:'center',
+      }, 
+      protextHeaderductImage: {
+        borderRadius:moderateScale(10),
+        width: '60%', // This ensures the image takes the full width of the container
+        height: moderateScale(150), // Adjust the height as needed
+        borderRadius: 5,
         alignContent:'center',
-        color: Colors.white,
-        fontSize: Metrics.ratio(15),
-        paddingLeft: Metrics.ratio(20),
-        fontFamily: Platform.select({
-          ios: 'Times New Roman',
-          android: 'serif', // You may need to adjust this for Android
-        }),
-      },
-      productImage: {
-        borderRadius:10,
-        width: Metrics.ratio(120),
-        height: Metrics.ratio(120),
+        alignItems:'center'
         
       },
       StoreImage: {
@@ -276,16 +275,23 @@ const styles=StyleSheet.create({
         height: Metrics.ratio(50),
         alignSelf:'left',
         justifyContent:'left',
-        position: 'absolute', bottom: 0, width: 60, height: 60,
+        position: 'absolute', 
+        bottom: 0, width: 60, height: 60,
         
   
+        
+      },
+      productImage: {
+        borderRadius:10,
+        width: '100%',
+        height: Metrics.ratio(150),
         
       },
       header: {
         backgroundColor:'#ff3d00',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: Metrics.ratio(30),
+        paddingVertical: verticalScale(10),
         // paddingHorizontal:Metrics.ratio(5),
       },
       ProductContainer:{

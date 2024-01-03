@@ -10,33 +10,20 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import ForgotScreen from './ForgotPassword';
 import Verify from './Verify';
-import { useFocusEffect } from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 const Login=({navigation})=>{
   
+const navigation1=useNavigation();
 
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        Alert.alert(
-          'Exit App',
-          'Are you sure you want to exit?',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => null,
-              style: 'cancel'
-            },
-            {
-              text: 'Exit',
-              onPress: () => BackHandler.exitApp()
-            }
-          ],
-          { cancelable: false }
-        );
-        return true;
+       navigation1.replace("HomeScreen");
+       return true       
+        
       };
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
       return () =>
@@ -140,16 +127,18 @@ const Login=({navigation})=>{
       return false;
      }
      
-      // if(response.data.data.is_verified==0){
-      //   const Data=response.data;
-      //   setLoader(false);
-      //   util.errorMsg("User not registered");
-      //    navigation.navigate("Verify",{
-      //     Data,})
-      // }
+      if(response.data.data.is_verified==0){
+        const Data=response.data;
+        setLoader(false);
+        util.errorMsg("User not registered");
+         navigation.navigate("Verify",{
+          Data,})
+      }
 
-      else{
-             resetForm();
+
+      else
+      {
+                     resetForm();
         setLoader(false)
          if(response.data && response.data.data.total_ample)
   {
@@ -157,13 +146,12 @@ const Login=({navigation})=>{
     const CompleteProfile=response.data.data
     
    const Data=response.data.data.user_id;
-   const response=await AsyncStorage.setItem("KeepLoggedIn",JSON.stringify(true));
-    navigation.replace("HomeScreen",{
+  login(CompleteProfile);
+   navigation.replace("HomeScreen",{
       Data,
       CompleteProfile,
     })
   }
-   
       
       }
       
@@ -173,9 +161,24 @@ const Login=({navigation})=>{
     }
   }
 
-  const setAsyncStorage=async()=>{
-   
-  }
+
+  const login = async (CompleteProfile) => {
+    try {
+      // Perform login logic here
+
+      // If login is successful, store the user token in AsyncStorage
+     const data= await AsyncStorage.setItem('userToken', 'userTokenValue');
+     const profileString = JSON.stringify(CompleteProfile);
+
+// Store the string in AsyncStorage
+await AsyncStorage.setItem('CompleteProfile', profileString);
+const storedProfileString = await AsyncStorage.getItem('CompleteProfile');
+console.log("Sotred",storedProfileString)
+// Navigate to the home screen
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
  
 return (
 <View>

@@ -6,52 +6,58 @@ import EditProfie from './EditProfile';
 import { useRoute } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import Login from './Login';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { verticalScale } from 'react-native-size-matters';
 const Profile= ({navigation}) => {
     const route=useRoute();
-   
-   
     const user_Id=route.params.user_Id;
-    
+    const [loading,setLoading]=useState(true);
     const [data,setData]=useState(null)
-    useEffect(()=>{
-      
-     
-      get();
+    useEffect(()=>{    
+     checkAuthentication();
         const getHomeContent=async()=>{
             try {
+              
               const apiUrl = 'https://amplepoints.com/apiendpoint/getprofile?';
               const response = await axios.get(apiUrl,{
                 params:{
                   user_id:user_Id
                 }
               });
-              console.log(response.data.data.user_image)
-              if(response.data.data)
+              console.log("response.data.data.user_image",response.data.data.total_ample)
+              if(response.data &&response.data.data)
               {
                 setData(response.data.data)
               }
+              console.log("Dataa",data)
               }
              catch (err) {
               console.log("Error fetching data:", err);
             }
-            
+            finally{
+              setLoading(false)
+            }
             } 
-        
-          getHomeContent();
+        getHomeContent();
     },[])
 
-    const get=async()=>{
-    try{
-      const response=await AsyncStorage.getItem("KeepLoggedIn");
-      console.log("Response",response)
-      if(response==null)
-      navigation.navigate("Login")
+    const checkAuthentication = async () => {
+      try {
+        // Check if a user token exists in AsyncStorage
+        const userToken = await AsyncStorage.getItem('userToken');
+  
+        // If the token exists, the user is logged in
+        if (userToken) {
+          console.log('User is logged in');
+        } else {
+          // If the token doesn't exist, navigate to the login screen
+          navigation.navigate('Login');
         }
-      catch(Error){
-        console.log("Error",Error)
-      }    }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+      }
+    };
   // Dummy data (replace with actual user data)
  const Edit_Profie=()=>{
   navigation.navigate("EditProfile",{
@@ -61,11 +67,19 @@ const Profile= ({navigation}) => {
 
   return (
     <>
+    <Spinner
+          visible={loading}
+          size={'large'}
+          textContent={'Loading...'}
+          textStyle={{ color: '#ff3d00' }}
+          
+        />
+{data && data!=null &&(
     <ImageBackground
   source={{ uri: (data && data.user_banner) ||  'https://media.istockphoto.com/id/1573329496/photo/multi-layers-color-texture-3d-papercut-layers-in-gradient-vector-banner-carving-art-cover.webp?b=1&s=612x612&w=0&k=20&c=3vyrUMlb4A8NFTdPuJ_tVsjbKg5B586CJjm9C9Zebbk='}}
   style={styles.containerImage}
 >
-{data &&(
+
     <View style={styles.container}>
      
      
@@ -80,7 +94,7 @@ const Profile= ({navigation}) => {
 />
         <Text style={styles.userName}>{data.first_name} {data.last_name}</Text>
         
-       <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
+       <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center',marginBottom:verticalScale(10)}}>
         <Text style={styles.points}> Amples: </Text>
         <Text style={styles.amplepoints}>{data.total_ample}</Text>
         </View>      
@@ -164,9 +178,9 @@ const Profile= ({navigation}) => {
       
       
         </View>
-   )}
+   
    </ImageBackground>
-      
+   )}   
    </>
   );
 };
@@ -276,5 +290,4 @@ justifyContent:'center',
   },
 
 });
-
 export default Profile;
