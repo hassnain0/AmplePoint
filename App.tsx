@@ -24,7 +24,6 @@ import Return from './Screens/Return';
 import AskQuestion from './Screens/AskQuestion';
 import Profile from './Screens/Profile';
 import EditProfie from './Screens/EditProfile';
-import { Platform } from 'react-native';
 import DrawerNavigator from './DrawerNavigator';
 
 const Stack=createNativeStackNavigator();
@@ -43,7 +42,7 @@ export default function App() {
       <Stack.Screen name='Checkout' component={Checkout} options={( ) => ({headerTintColor:'white',title:'Checkout',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Cart' component={Cart} options={( ) => ({headerTintColor:'white',title:'My Cart',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Profile' component={Profile} options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
-      <Stack.Screen name='HomeScreen' component={DrawerNavigator} options={{ headerShown:false,statusBarColor:'#ff3d00'}}/>
+      {/* <Stack.Screen name='HomeScreen' component={DrawerNavigator} options={{ headerShown:false,statusBarColor:'#ff3d00'}}/> */}
       <Stack.Screen name='LocalPurchase' component={LocalPurchase} options={( ) => ({headerTintColor:'white',title:'My Local Purchases',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#FF2F00',headerStyle: {backgroundColor: '#FF2F00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='AskQuestion' component={AskQuestion} options={( ) => ({headerTintColor:'white',title:'Ask Question',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
       <Stack.Screen name='Search' component={Search} options={( ) => ({headerTintColor:'white',title:'Search',headerBackVisible:true,headerTitleAlign:'left',statusBarColor:'#ff3d00',headerStyle: {backgroundColor: '#ff3d00',}, headerTitleStyle: {fontWeight: '600',fontSize:15 }})}/>
