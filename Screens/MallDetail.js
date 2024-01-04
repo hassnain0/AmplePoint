@@ -7,12 +7,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import GridView from '../components/GridLayout/GridItems';
 
-// const ProductItem = ({ product, navigation, randomColor }) => {
-
-//   console.log("product", product)
-//   return (
-//   );
-// };
 const handleProductPress = (productData, navigation) => {
   const Name = productData.vendor_name
   const Id = productData.tbl_vndr_id
@@ -44,7 +38,12 @@ const MallDetail = ({ navigation }) => {
       })
         .then(response => {
           if (setStoreProducts && typeof setStoreProducts === 'function') {
-            setStoreProducts(response.data.data);
+            let data = response.data.data;
+            data = data.map((e) => ({
+              data: e.vendor_list,
+              title: e.category_name,
+            }));
+            setStoreProducts(data);
           }
         })
         .catch(error => {
@@ -86,19 +85,19 @@ const MallDetail = ({ navigation }) => {
             textStyle={{ color: '#ff3d00' }}
 
           />
-
           <View>
             {storeProducts && storeProducts.length > 0 && (
-              <GridView storeProducts={storeProducts} handleProductPress={handleProductPress} navigation={navigation}>
+              <GridView sections={storeProducts} handleProductPress={handleProductPress} navigation={navigation} itemDimension={90}>
                 {(item) => (
                   <>
                     <View style={{
                       backgroundColor: randomColor, borderRadius: moderateScale(100), alignContent: 'center',
                       alignItems: 'center',
                       height: verticalScale(70),
-                      width: Metrics.ratio(70),
+                      width: Metrics.ratio(80),
                       alignSelf: 'center',
-                      margin: moderateScale(15),
+                      margin: moderateScale(8),
+                      marginTop: verticalScale(10)
                     }}>
                       <Image
                         source={{
@@ -111,14 +110,22 @@ const MallDetail = ({ navigation }) => {
                     <Text style={{ fontSize: 10, fontWeight: '700', paddingBottom: 10, textAlign: 'center' }}>
                       {item.vendor_name.split(' ').slice(0, 1).join(' ')}
                     </Text>
+                    <View style={{ flexDirection: 'row', }}>
+                      <Image source={require('../assets/pin.png')} style={{ width: 10, height: 10 }} />
+                      <Text style={{ fontSize: 10, fontWeight: '400', }}>{item.vendor_city}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', }}>
+                      <Image source={require('../assets/Pin2.png')} style={{ width: 10, height: 10 }} />
+                      <Text style={{ fontSize: 10, fontWeight: '400', }}>{item.tbl_vndr_zip}</Text>
+                    </View>
                   </>
                 )}
               </GridView >
             )}
-          </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </ScrollView>
+    </SafeAreaView >
   )
 }
 

@@ -97,6 +97,7 @@ setLoading(false);
   const Question=(item)=>{
     navigation.navigate("AskQuestion",{
       item,
+      user_id
     })
     
   }
@@ -115,7 +116,7 @@ const handleProductPress=(item)=>{
         
         {actulaData && actulaData?.data?.map((item, index) => (
           <View>
-            <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
+  <View style={{flex:1, flexDirection:'row',marginTop:Metrics.ratio(30),marginLeft:Metrics.ratio(10),}} >
   <Image style={styles.ImageContainer} source={{ uri: `https://amplepoints.com/product_images/${item.id}/${item.image_name}` }} />
   <View style={{flex:1, flexDirection:'column',left:Metrics.ratio(7)}}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
@@ -213,11 +214,7 @@ const handleProductPress=(item)=>{
         </TouchableOpacity>
         <Text style={styles.textHeader}>My Purchases</Text>
       </View>
-      {NoData && (
-                <View style={{display:'flex',flex:1}}>
-          <Text style={{textAlign:'center',alignSelf:'center',color:'black'}}> No Data Found</Text>
-        </View>
-      )}
+     
        <Spinner
           visible={loading}
           size={'large'}
@@ -230,7 +227,7 @@ const handleProductPress=(item)=>{
         item={selectedItem}
       
       />
-       {actulaData && actulaData!=null &&(
+       {actulaData && (
           <View >
               <ScrollView style={{backgroundColor:'white'}}>
               <View  style={{flex: 1,}}>

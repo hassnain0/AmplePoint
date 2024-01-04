@@ -127,16 +127,14 @@ const navigation1=useNavigation();
       return false;
      }
      
-      if(response.data.data.is_verified==0){
+      if(response.data && response.data &&response.data.data.is_verified==0){
         const Data=response.data;
         setLoader(false);
         util.errorMsg("User not registered");
          navigation.navigate("Verify",{
           Data,})
       }
-
-
-      else
+else
       {
                      resetForm();
         setLoader(false)
@@ -172,9 +170,6 @@ const navigation1=useNavigation();
 
 // Store the string in AsyncStorage
 await AsyncStorage.setItem('CompleteProfile', profileString);
-const storedProfileString = await AsyncStorage.getItem('CompleteProfile');
-console.log("Sotred",storedProfileString)
-// Navigate to the home screen
     } catch (error) {
       console.error('Error during login:', error);
     }
