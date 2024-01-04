@@ -14,6 +14,7 @@ import MyPurchase from './MyPurchase';
 import LocalPurchase from './LocalPurchase';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import Swiper from 'react-native-swiper';
+import Video1 from './Video';
 
 const Drawer = createDrawerNavigator();
 
@@ -51,8 +52,7 @@ const HomeScreen = ({ navigation }) => {
   );
   //Navigation Store
   const MoveStore = () => {
-
-    navigation.navigate("Store")
+   navigation.navigate("Store")
   }
   useEffect(() => {
 
@@ -62,11 +62,9 @@ const HomeScreen = ({ navigation }) => {
         const response = await axios.get(apiUrl);
 
         if (response.data && response.data.data) {
-          console.log("Dtaa", response.data.data)
           setData(response.data.data)
           setImages(response.data.data.sider_images);
         }
-        console.log("Response", response.data.data)
       }
       catch (err) {
         console.log("Error fetching data:", err);
@@ -78,39 +76,19 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  //Video section methods
-  const handlePlayPause = async () => {
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      const thumbnail = await getThumbnail(videoUrl);
-      setThumbnail(thumbnail);
-      videoRef.current.seek(0); // Reset video to the beginning
-      videoRef.current.play();
-    }
-
-    setIsPlaying(!isPlaying);
-  };
-
-  
-
   return (
     <SafeAreaView>
       <ScrollView>
+        {images && (
+          <Swiper style={styles.wrapper} showsButtons={false} dotColor='white' activeDotColor='#ff3d00'>
+            {images.map((imageUrl, index) => (
+              <View key={index} style={styles.slide}>
+                <Image source={{ uri: imageUrl }} style={styles.image} />
+              </View>
+            ))}
 
-       
-          {images && (
-            <Swiper style={styles.wrapper} showsButtons={false} dotColor='white' activeDotColor='#ff3d00'>
-              {images.map((imageUrl, index) => (
-                <View key={index} style={styles.slide}>
-                  <Image source={{ uri: imageUrl }} style={styles.image} />
-                </View>
-              ))}
-
-            </Swiper>
-          )}
-        
-
+          </Swiper>
+        )}
         <View style={styles.rowContainer}>
           <TouchableOpacity style={styles.itemContainer} onPress={MoveStore}>
 
@@ -146,7 +124,7 @@ const HomeScreen = ({ navigation }) => {
 
         </View>
 
-        <View style={{ backgroundColor: '#EEEEEE', top: Metrics.ratio(5), }}>
+        <View style={{ backgroundColor: '#EEEEEE',  }}>
           <Text style={{
             fontSize: 15, fontWeight: '700', textAlign: 'left', paddingTop: Metrics.ratio(10), paddingLeft: Metrics.ratio(20),
             color: 'black',
@@ -192,31 +170,45 @@ const HomeScreen = ({ navigation }) => {
               <Text style={{ color: '#FF2E00', fontSize: 8, fontWeight: '400', textAlign: 'center', bottom: Metrics.ratio(10) }}>100 AmplePoints= $12.00</Text>
             </View>
           </View>
-          <View >
+          <View style={styles.container}>
+            <Image source={{ uri: data?.how_it_work_video_poster }} style={{ width: '100%', height: verticalScale(200), marginBottom: scale(20) }} />
+            <TouchableOpacity style={styles.playButtonContainer} onPress={()=>navigation.navigate("Video1",{
+              data:data.how_it_work_video
+            })}>
+              <Image source={require(".././assets/play.png")} style={styles.playButton} />
+            </TouchableOpacity>
           </View>
-          <View style={{ paddingTop: Metrics.ratio(30), width: '100%', paddingBottom: Metrics.ratio(40), backgroundColor: 'white' }}>
-            <VideoPlayer
-              video={{ uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }}
-              videoWidth={1600}
-              videoHeight={900}
-              thumbnail={{ uri: 'https:\/\/amplepoints.com\/images\/vthumbnail.png' }}
-            />
-          </View>
+          <View></View>
         </View>
       </ScrollView>
-    </SafeAreaView>)
-}
+    </SafeAreaView>
+  )
+};
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    marginBottom : 15
+  },
+  playButtonContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  playButton: {
+    width: Metrics.ratio(150),
+    height: Metrics.ratio(50),
+    // Add other styles for the play button as needed
+  },
   container: {
     flex: 1,
 
   },
   wrapper: {
-   height:200,
-   width:'100%', 
-   backgroundColor:'white',
+    height: 150,
+    width: '100%',
+    backgroundColor: 'white',
     borderRadius: scale(10), // Set border radius for the Swiper
-  }, 
+  },
   horizontalLine: {
     borderBottomWidth: 1.5,
     borderBottomColor: '#B6B8B5', // Adjust the color as needed
@@ -240,7 +232,7 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     elevation: 4,
     backgroundColor: 'white',
-    margin: moderateScale(5)
+    margin: moderateScale(4)
 
   },
   cartImage: {
@@ -324,19 +316,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: Metrics.ratio(10),
     // paddingHorizontal:Metrics.ratio(5),
-  }, rowContainer: {
+  }, 
+  rowContainer: {
     marginTop: Metrics.ratio(10),
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'white',
-    height: '30%'
+    height: '25%'
 
   },
   itemContainer: {
     flex: 1,
     alignItems: 'center',
     top: Metrics.ratio(10),
-    paddingVertical: Metrics.ratio(10)
+    paddingVertical: Metrics.ratio(5)
   },
   ovalImage: {
     width: Metrics.ratio(90), // Adjust the width and height as needed

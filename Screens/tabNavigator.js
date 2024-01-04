@@ -49,6 +49,7 @@ const TabNavigator = ({ navigation }) => {
         tabBarIcon: ({ color, size }) => (
           <Image source={require('../assets/home1.png')} style={{ width: 25, height: 25 }} ></Image>
         ),
+        headerShown:false
       }} />
       <Tab.Screen name="Store" component={Store} initialParams={{ user_Id: user_id }} options={{
         tabBarIcon: ({ color, size }) => (

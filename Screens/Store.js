@@ -1,86 +1,50 @@
-import React,{useState,useEffect,} from 'react';
-import {View,Text, StyleSheet,FlatList,ScrollView,Image, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect, } from 'react';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, Image, TextInput, TouchableOpacity, } from 'react-native';
 import { Metrics } from '../themes';
 import GiftDetails from './GiftDetails';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
-import Brands from './Brands';
-import Mall from './Mall';
+import MallDetail from './MallDetail';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-// const Stack=createNativeStackNavigator();
+import GridView from '../components/GridLayout/GridItems';
+import { useRoute } from '@react-navigation/native';
 
-const ProductItem = ({ product }) => {
-
+const Store = ({ navigation }) => {
+  const [randomColor, setRandomColor] = useState("#ffcccb");
   const backgroundColors = ['#ffcccb', '#b0e57c', '#add8e6', '#f0e68c', '#dda0dd'];
 
-  // Randomly select a background color for each image
-  const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
 
-  return (
+  useEffect(() => {
 
-    <View style={styles.productItem}> 
-    <View style={{backgroundColor:randomColor,borderRadius:100,alignContent:'center',
-        alignItems:'center',
-        height:verticalScale(70),
-        width:Metrics.ratio(70),
-        alignSelf:'center', 
-        margin:scale(20),
-        }}> 
-    <Image   source={{ uri: `https://amplepoints.com/vendor-data/${product.tbl_vndr_id}/profile/${product.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
-    </View>
-    <Text style={{fontSize:10,fontWeight:'400', color:'black',paddingBottom:Metrics.ratio(10)}}>{product.vendor_name}</Text>
-    <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
-        <Image source={require('../assets/pin.jpg')} style={{width:10,height:10}}/>
-        <Text style={{fontSize:10,fontWeight:'bold',}}>{product.vendor_city}</Text>
-    </View>
-    <View style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start',alignSelf:'flex-start'}}>
-        <Image source={require('../assets/Pin2.png')} style={{width:10,height:10}}/>
-        <Text style={{fontSize:10,fontWeight:'bold', }}>{product.tbl_vndr_zip}</Text>
-    
-        </View>
-    </View>
-  );
-};
-
-const Store=({navigation})=>{
-  const [searchQuery, setSearchQuery] = useState('');
-  // const [filteredProducts, setFilteredProducts] = useState(null);
-  const [amplePoints,setAmplePoints]=useState(0);
-  const route=useRoute();
-  const user_Id=route.params.user_Id;
-  
-  
-  const handleProductPress = (productData) => {
-    const Name=productData.vendor_name
-    const Id=productData.tbl_vndr_id
-   
-    navigation.navigate('DemoScreen',{
-      user_Id,
-      productData,
-      Id,
-      Name,
-    });
-  };
-  useEffect(()=>{
-    getstores();
-    getRewards();
-    setLoading(false)
-  },[storeProducts])
+    getProductDetails();
+  }, [])
   const [storeProducts, setStoreProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const route = useRoute();
+  const user_Id=route.params.user_Id;
 
-const getstores = async () => {
-  try{
-        const apiUrl = 'https://amplepoints.com/apiendpoint/getstores'; 
-        await axios.get(apiUrl)
+	
+  const handleProductPress = (productData) => {
+  const Name=productData.vendor_name
+  const Id=productData.tbl_vndr_id
+ 
+  navigation.navigate('DemoScreen',{
+    user_Id,
+    productData,
+    Id,
+    Name,
+  });
+};
+  const getProductDetails = async () => {
+    try {
+      const apiUrl = 'https://amplepoints.com/apiendpoint/getstores';
+      await axios.get(apiUrl)
         .then(response => {
-          // Handle the successful response
-    
-          if (setStoreProducts && typeof setStoreProducts === 'function') {
-            setStoreProducts(response.data);
-            setLoading(false);
-          }
+          let tempData = [];
+          tempData.push({
+            data: response.data.data,
+          })
+          setStoreProducts(tempData);
 
         })
         .catch(error => {
@@ -88,92 +52,77 @@ const getstores = async () => {
           setLoading(false)
           console.error('Error:', error);
         });
-  }
-  catch(err){
-    setLoading(false);  
-    console.log(err)
     }
-   
-  }
-  const getRewards=async()=>{
-    try{
-      const apiUrl="https://amplepoints.com/apiendpoint/getuserampleandreward?"
-     const Response= await axios.get(apiUrl, {
-        params: {
-          user_id:user_Id,
-        },
-      });
-  
-     if(Response.data &&Response.data.data.user_total_ample)
-     {
-      setAmplePoints(Response.data.data.user_total_ample);
-     }
-    }catch(erro){
-      console.log("Error",erro)
+    catch (err) {
+      setLoading(false);
+      console.log(err.message)
     }
-   }
-    const renderFlatList = (data) => (
-      <View style={{backgroundColor:'white'}}>
-      <FlatList
-        numColumns={3} 
-       data={data}
-       showsVerticalScrollIndicator={false}  // hides the vertical scroll indicator
-       keyExtractor={(item) => item.pid}
-       renderItem={({ item }) => (
-         <TouchableOpacity onPress={() => handleProductPress(item)}>
-           <ProductItem product={item} />
-         </TouchableOpacity>
-       )}
-     />
-     </View>
-   
-    );
-    const chunkArray = (array, chunkSize) => {
-      const chunks = [];
-      for (let i = 0; i < array.length; i += chunkSize) {
-        chunks.push(array.slice(i, i + chunkSize));
-      }
-      return chunks;
-    };
-  
-    
-    return (
+    finally {
+      // Set loading to false when the API call is complete
+      setLoading(false);
+    }
+  }
 
-      <>
+  return (
+    <>
       <View style={styles.rowContainer}>
-      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Brands")}>
-        <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.itemContainer} onPress={()=>navigation.navigate("Mall")}>
-      
-        <Image style={styles.ovalImage2} source={require('../assets/Banner.png')} />
-      
-      </TouchableOpacity>
-      
-    </View>
-  <ScrollView style={{backgroundColor:'#EEEEEE'}}>
-  <View style={{backgroundColor:'#EEEEEE',height:Metrics.ratio(10)}} >  
-    </View>
-    <View style={{backgroundColor:'white'}}>
-    <Spinner
-          visible={loading}
-          size={'large'}
-          textContent={'Loading...'}
-          textStyle={{ color: '#ff3d00' }}
-          
-        />
-  {storeProducts !==null && (
-          
-          renderFlatList(storeProducts.data)
-          
-          
-      
-      )}
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate("Brands")}>
+          <Image style={styles.ovalImage2} source={require('../assets/Banner2.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate("Mall")}>
+
+          <Image style={styles.ovalImage2} source={require('../assets/Banner.png')} />
+
+        </TouchableOpacity>
+
       </View>
-    </ScrollView>
+      <ScrollView style={{ backgroundColor: '#EEEEEE' }}>
+        <View style={{ backgroundColor: '#EEEEEE', height: Metrics.ratio(10) }} >
+        </View>
+        <View style={{ backgroundColor: 'white' }}>
+          <Spinner
+            visible={loading}
+            size={'large'}
+            textContent={'Loading...'}
+            textStyle={{ color: '#ff3d00' }}
+
+          />
+          {storeProducts && storeProducts.length > 0 ?
+            (
+              <GridView sections={storeProducts} handleProductPress={handleProductPress} navigation={navigation} itemDimension={90}>
+                {(item) => {
+                  setRandomColor(backgroundColors[Math.floor(Math.random() * backgroundColors.length)]);
+                  return (
+                    <>
+                      <View style={{
+                        backgroundColor: randomColor, borderRadius: 100, alignContent: 'center',
+                        alignItems: 'center',
+                        height: verticalScale(70),
+                        width: Metrics.ratio(70),
+                        alignSelf: 'center',
+                        margin: scale(5),
+                      }}>
+                        <Image source={{ uri: `https://amplepoints.com/vendor-data/${item.tbl_vndr_id}/profile/${item.vendor_profileimage}` }} style={styles.productImage} resizeMode="cover" />
+                      </View>
+                      <Text style={{ fontSize: 10, fontWeight: '600', color: 'black', textAlign: 'center' }}>{item.vendor_name}</Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Image source={require('../assets/pin.png')} style={{ width: 10, height: 10 }} />
+                        <Text style={{ fontSize: 10, fontWeight: '400', }}>{item.vendor_city}</Text>
+                      </View>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Image source={require('../assets/Pin2.png')} style={{ width: 10, height: 10 }} />
+                        <Text style={{ fontSize: 10, fontWeight: '400', }}>{item.tbl_vndr_zip}</Text>
+                      </View>
+                    </>
+                  )
+                }}
+              </GridView>) : (<></>)
+          }
+        </View>
+      </ScrollView>
     </>
-)
-      }
+  )
+}
 
 const styles=StyleSheet.create({
   ovalImage1: {

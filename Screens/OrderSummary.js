@@ -152,6 +152,7 @@ const OrderSummary = ({ navigation }) => {
 
   const route = useRoute();
   const user_Id = route.params.user_Id;
+  const CompleteProfile = route.params.CompleteProfile;
 
   const [loader, setLoader] = useState(false);
   const [Total, setTotal] = useState(0);
@@ -181,17 +182,18 @@ const OrderSummary = ({ navigation }) => {
   const onCheckout = async () => {
     try {
 
-      const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?user_id=126&total_amount=118.00&order_id=AMPLI9Zd27&customer_name=Hiren Buhecha';
+      const apiUrl = 'https://amplepoints.com/apiendpoint/createpaymentintend?order_id=AMPLI9Zd27';
 
       const response = await axios.get(apiUrl, {
-        user_id: user_Id,
-        total_amount: Total,
-
-
+        params: {
+          user_id: user_Id,
+          total_amount: Total,
+          customer_name: `${CompleteProfile.first_name} ${CompleteProfile.last_name}` || ''
+        }
       });
 
 
-
+console.log("response",response.data.data)
       const key = response.data.data.clientSecret
       const { initResponse } = await initPaymentSheet({
         merchantDisplayName: 'notJust.dev',
@@ -224,14 +226,13 @@ const OrderSummary = ({ navigation }) => {
       const apiUrl = 'https://amplepoints.com/apiendpoint/getordersummary?';
       await axios.get(apiUrl, {
         params: {
-          user_id: user_Id
+          user_id: 126
         }
       })
         .then(response => {
           // Handle the successful response
-          console.log(response.data)
           setStoreProducts(response.data.data.shopping_data);
-          if (response.data.data.shopping_total.final_total) {
+          if (response.data&& response.data.data.shopping_total.final_total) {
             setTotal(response.data.data.shopping_total.final_total)
           }
         })
@@ -246,12 +247,7 @@ const OrderSummary = ({ navigation }) => {
       setLoading(false);
       console.log(err)
     }
-    finally {
-
-      console.log("Store Products", storeProducts)
-      // Set loading to false when the API call is complete
-      setLoading(false);
-    }
+  
   }
   const handleSelectPress = (productId) => {
     setSelectedProductId((prevId) => (prevId === productId ? null : productId));

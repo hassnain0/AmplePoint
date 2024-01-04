@@ -3,15 +3,11 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { SectionGrid } from 'react-native-super-grid';
 
-export default function GridView({ storeProducts, children, handleProductPress, navigation }) {
-  const sections = storeProducts.map((e) => ({
-    data: e.vendor_list,
-    title: e.category_name || null,
-  }));
+export default function GridView({ sections, children, handleProductPress, navigation ,itemDimension}) {
 
   return (
     <SectionGrid
-      itemDimension={90}
+      itemDimension={itemDimension}
       sections={sections}
       style={styles.gridView}
       renderItem={({ item, section, index }) => (

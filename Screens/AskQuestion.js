@@ -20,7 +20,7 @@ const navigate=useNavigation();
   const [selectedImage4, setSelectedImage4] = useState(null);
   const [selectedImage5, setSelectedImage5] = useState(null);
   const [loader, setLoader] = useState(false);
-
+console.log("Item ",route)
   const validation=()=>{
     if(util.stringIsEmpty(message)){
       setLoader(false)
@@ -43,12 +43,12 @@ setLoader(true);
 }
 
 try{
-console.log("")
+
 const apiurl='https://amplepoints.com/apiendpoint/askquestion';
 
 const formData = new FormData();
 formData.append('product_id',item.product_id);
-formData.append('user_id', 38518);
+formData.append('user_id', );
 formData.append('vendor_id', item.vendor_id);
 formData.append('msg_subject', value);
 formData.append('msg_detail', message);
